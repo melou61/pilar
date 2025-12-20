@@ -19,19 +19,24 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
   const userMarkerRef = useRef<any | null>(null);
 
   useEffect(() => {
-    const google = (window as any).google;
-    if (mapRef.current && !googleMap && google) {
-      const map = new google.maps.Map(mapRef.current, {
-        center: { lat: 37.8653, lng: -0.7932 },
-        zoom: 15,
-        disableDefaultUI: true,
-        styles: [
-          { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
-          { featureType: "transit", stylers: [{ visibility: "off" }] }
-        ]
-      });
-      setGoogleMap(map);
-    }
+    const initMap = () => {
+        const google = (window as any).google;
+        if (mapRef.current && !googleMap && google && google.maps) {
+            const map = new google.maps.Map(mapRef.current, {
+                center: { lat: 37.8653, lng: -0.7932 },
+                zoom: 15,
+                disableDefaultUI: true,
+                styles: [
+                    { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+                    { featureType: "transit", stylers: [{ visibility: "off" }] }
+                ]
+            });
+            setGoogleMap(map);
+        } else if (!googleMap) {
+            setTimeout(initMap, 500);
+        }
+    };
+    initMap();
   }, [googleMap]);
 
   useEffect(() => {
@@ -113,109 +118,54 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
 
   return (
     <div className="flex flex-col h-full bg-white relative animate-in fade-in duration-500 overflow-hidden">
-      
-      {/* Figma Designed Header Area - REFINED MATCH */}
       <div className="bg-white border-b border-gray-100 px-6 py-8 flex flex-col gap-6 shadow-sm z-50">
         <div className="flex items-center relative h-12">
-          <button 
-            onClick={() => onNavigate(ViewState.HOME)}
-            className="p-3 -ml-3 text-gray-900 hover:bg-gray-100 rounded-full transition-all z-10"
-          >
+          <button onClick={() => onNavigate(ViewState.HOME)} className="p-3 -ml-3 text-gray-900 hover:bg-gray-100 rounded-full transition-all z-10">
             <ArrowLeft size={36} />
           </button>
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
              <h2 className="font-black text-gray-900 text-[26px] tracking-tight leading-none">Cerca de ti</h2>
-             <p className="text-blue-600 text-[10px] font-black uppercase tracking-[0.25em] mt-2">
-               EXPLORA PILAR DE LA HORADADA
-             </p>
+             <p className="text-blue-600 text-[10px] font-black uppercase tracking-[0.25em] mt-2">EXPLORA PILAR DE LA HORADADA</p>
           </div>
         </div>
         
-        {/* Filter Chips Styled like Figma Screenshot */}
         <div className="flex gap-3 overflow-x-auto no-scrollbar py-2 justify-start sm:justify-center px-2">
-          <button 
-            onClick={() => setFilter('all')}
-            className={`px-7 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm ${
-              filter === 'all' 
-              ? 'bg-[#0f172a] text-white border-[#0f172a]' 
-              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            Todo
-          </button>
-          <button 
-            onClick={() => setFilter('food')}
-            className={`px-5 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm flex items-center gap-2 ${
-              filter === 'food' 
-              ? 'bg-[#0f172a] text-white border-[#0f172a]' 
-              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            <UtensilsCrossed size={16} /> Comer
-          </button>
-          <button 
-            onClick={() => setFilter('shop')}
-            className={`px-5 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm flex items-center gap-2 ${
-              filter === 'shop' 
-              ? 'bg-[#0f172a] text-white border-[#0f172a]' 
-              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            <ShoppingBag size={16} /> Compras
-          </button>
-          <button 
-            onClick={() => setFilter('events')}
-            className={`px-5 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm flex items-center gap-2 ${
-              filter === 'events' 
-              ? 'bg-[#0f172a] text-white border-[#0f172a]' 
-              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            <Calendar size={16} /> Eventos
-          </button>
+          {['all', 'food', 'shop', 'events'].map(f => (
+            <button 
+              key={f}
+              onClick={() => setFilter(f as any)}
+              className={`px-7 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm capitalize ${
+                filter === f 
+                ? 'bg-[#0f172a] text-white border-[#0f172a]' 
+                : 'bg-white text-gray-700 border-gray-200'
+              }`}
+            >
+              {f === 'all' ? 'Todo' : f === 'food' ? 'Comer' : f === 'shop' ? 'Tiendas' : 'Eventos'}
+            </button>
+          ))}
         </div>
       </div>
 
       <div className="relative flex-1">
-        <div ref={mapRef} className="absolute inset-0 z-0 bg-gray-50" />
+        <div ref={mapRef} style={{ height: '100%', width: '100%' }} className="bg-gray-50" />
         
-        <button 
-          onClick={handleLocateMe}
-          className={`absolute ${selectedItem ? 'bottom-[420px]' : 'bottom-10'} right-8 z-10 bg-white text-blue-600 p-6 rounded-[24px] shadow-2xl hover:scale-110 active:scale-90 transition-all border border-gray-50`}
-        >
+        <button onClick={handleLocateMe} className={`absolute ${selectedItem ? 'bottom-[420px]' : 'bottom-10'} right-8 z-10 bg-white text-blue-600 p-6 rounded-[24px] shadow-2xl hover:scale-110 active:scale-90 transition-all border border-gray-50`}>
            <Navigation size={32} className={isLocating ? 'animate-pulse' : ''} />
         </button>
 
-        {/* Selected Item Card (Narrow 3-row design) */}
         {selectedItem && (
           <div className="absolute bottom-8 left-8 right-8 z-20 animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-xs mx-auto ring-1 ring-black/5">
-              
               <div className="relative h-44 w-full">
                 <img src={selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl} className="w-full h-full object-cover" alt="" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <button 
-                  onClick={() => setSelectedItem(null)} 
-                  className="absolute top-4 right-4 p-2.5 bg-white/20 backdrop-blur-xl text-white rounded-full hover:bg-white/40 transition-all"
-                >
+                <button onClick={() => setSelectedItem(null)} className="absolute top-4 right-4 p-2.5 bg-white/20 backdrop-blur-xl text-white rounded-full hover:bg-white/40 transition-all">
                   <X size={20} />
                 </button>
-                <div className="absolute bottom-4 left-6">
-                   <span className="bg-blue-600 text-white text-[10px] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest shadow-lg">
-                      {selectedItem.category}
-                   </span>
-                </div>
               </div>
 
               <div className="p-8 flex flex-col gap-3">
                 <div className="flex justify-between items-start gap-2">
-                   <h3 className="font-black text-gray-900 text-2xl leading-none truncate">
-                    {selectedItem.name || selectedItem.title}
-                   </h3>
-                   <div className="flex items-center bg-yellow-400 px-2 py-1 rounded-lg shrink-0">
-                      <Star size={10} className="fill-gray-900 mr-1" />
-                      <span className="text-[10px] font-black text-gray-900">{selectedItem.rating || '4.5'}</span>
-                   </div>
+                   <h3 className="font-black text-gray-900 text-2xl leading-none truncate">{selectedItem.name || selectedItem.title}</h3>
                 </div>
                 <p className="text-gray-500 text-sm flex items-start gap-2 font-medium">
                   <MapPin size={16} className="text-blue-500 shrink-0 mt-0.5" />
@@ -232,8 +182,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
                   }}
                   className="w-full py-5 bg-blue-600 text-white rounded-[24px] font-black text-base shadow-xl shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-3"
                 >
-                  Ver Detalles
-                  <ArrowRight size={20} />
+                  Ver Detalles <ArrowRight size={20} />
                 </button>
               </div>
             </div>

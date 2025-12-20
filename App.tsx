@@ -113,24 +113,29 @@ const App: React.FC = () => {
     { id: ViewState.EVENTS, label: t.menu.events, icon: Calendar },
   ];
 
-  // FIXED HOME MAP WIDGET
   const HomeMapWidget = () => {
     const miniMapRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      const google = (window as any).google;
-      if (miniMapRef.current && google) {
-        new google.maps.Map(miniMapRef.current, {
-          center: { lat: 37.8653, lng: -0.7932 },
-          zoom: 14,
-          disableDefaultUI: true,
-          gestureHandling: 'none',
-          styles: [
-            { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#d1d5db" }] }
-          ]
-        });
-      }
+        const initMap = () => {
+            const google = (window as any).google;
+            if (miniMapRef.current && google && google.maps) {
+                new google.maps.Map(miniMapRef.current, {
+                    center: { lat: 37.8653, lng: -0.7932 },
+                    zoom: 14,
+                    disableDefaultUI: true,
+                    gestureHandling: 'none',
+                    styles: [
+                        { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+                        { featureType: "water", elementType: "geometry", stylers: [{ color: "#d1d5db" }] }
+                    ]
+                });
+            } else {
+                // If google maps is not yet loaded, retry in 500ms
+                setTimeout(initMap, 500);
+            }
+        };
+        initMap();
     }, []);
 
     return (
@@ -138,7 +143,7 @@ const App: React.FC = () => {
         onClick={() => handleNavigate(ViewState.MAP)}
         className="relative h-72 w-full rounded-[48px] overflow-hidden border-8 border-white shadow-2xl group cursor-pointer"
       >
-        <div ref={miniMapRef} className="absolute inset-0 bg-gray-100 h-full w-full" />
+        <div ref={miniMapRef} style={{ height: '100%', width: '100%' }} className="bg-gray-100" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
         <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between text-white">
            <div>
@@ -155,7 +160,6 @@ const App: React.FC = () => {
 
   const renderHome = () => (
     <div className="space-y-12 pb-40 animate-in fade-in duration-700">
-      {/* Immersive Hero */}
       <div className="relative h-[85vh] w-full overflow-hidden">
         {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
@@ -187,16 +191,14 @@ const App: React.FC = () => {
       </div>
       
       <div className="max-w-4xl mx-auto px-6 space-y-16">
-        {/* Mapa Vivo Widget */}
         <div>
            <div className="flex justify-between items-center mb-8 px-2">
               <h3 className="font-black text-gray-900 text-3xl tracking-tight">Mapa en vivo</h3>
-              <button onClick={() => handleNavigate(ViewState.MAP)} className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-4 py-2 rounded-full">Abrir pantalla completa</button>
+              <button onClick={() => handleNavigate(ViewState.MAP)} className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-4 py-2 rounded-full">Pantalla completa</button>
            </div>
            <HomeMapWidget />
         </div>
 
-        {/* Fiestas y Charangas */}
         <div>
           <div className="flex justify-between items-center mb-10 px-2">
             <div>
@@ -227,10 +229,6 @@ const App: React.FC = () => {
                        <Calendar size={20} className="text-blue-500" />
                        {event.date}
                     </div>
-                    <div className="flex items-center gap-3 text-gray-400 font-black text-xs uppercase tracking-[0.2em]">
-                       <MapPin size={20} className="text-red-500" />
-                       Pilar de la Horadada
-                    </div>
                   </div>
                 </div>
               </div>
@@ -243,7 +241,6 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc] font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
-      {/* Dynamic Header */}
       {currentView !== ViewState.MAP && currentView !== ViewState.AI_CHAT && (
         <Header 
           onMenuClick={() => setSidebarOpen(true)} 
@@ -256,7 +253,6 @@ const App: React.FC = () => {
         />
       )}
 
-      {/* Floating Bottom Nav */}
       <nav className="fixed bottom-8 left-8 right-8 h-20 bg-white/80 backdrop-blur-3xl rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-[100] flex items-center justify-around px-6 border border-white/40 ring-1 ring-black/5 animate-in slide-in-from-bottom-20 duration-1000">
         {bottomNavItems.map(item => {
           const isActive = currentView === item.id;
@@ -318,7 +314,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="space-y-4">
                   <h2 className="text-4xl font-black text-gray-900 tracking-tight">Tu Perfil</h2>
-                  <p className="text-gray-500 max-w-xs mx-auto text-lg leading-tight">Inicia sesión para guardar tus lugares favoritos.</p>
+                  <p className="text-gray-500 max-w-xs mx-auto text-lg leading-tight">Inicia sesión para guardar tus favoritos.</p>
                 </div>
                 <button 
                    onClick={() => setLoginOpen(true)}

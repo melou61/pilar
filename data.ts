@@ -20,7 +20,7 @@ export const MOCK_EVENTS: Event[] = [
     id: 'f1',
     title: 'Fiestas Patronales del Pilar',
     category: 'TRADICIÓN',
-    date: 'Octubre 2025',
+    date: '1 - 21 Octubre 2025',
     location: 'Todo el municipio',
     description: 'La festividad más importante con ofrenda de flores, desfiles y grandes conciertos gratuitos.',
     imageUrl: 'https://images.unsplash.com/photo-1514525253344-99a42994060c?auto=format&fit=crop&w=1200&q=80',
@@ -57,7 +57,6 @@ export const MOCK_EVENTS: Event[] = [
   }
 ];
 
-// Added missing ACTIVITIES_LIST to resolve compilation error in ActivitiesView.tsx
 export const ACTIVITIES_LIST = [
   {
     id: 'a1',
@@ -76,24 +75,6 @@ export const ACTIVITIES_LIST = [
     location: 'Cauce del Río Seco',
     rating: 4.9,
     image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: 'a3',
-    title: 'Deportes Náuticos',
-    category: 'DEPORTE',
-    description: 'Paddle surf, vela y kayak en las cristalinas aguas de nuestras playas.',
-    location: 'Puerto Deportivo',
-    rating: 4.7,
-    image: 'https://images.unsplash.com/photo-1544551763-47a0159f963f?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: 'a4',
-    title: 'Golf Lo Romero',
-    category: 'DEPORTE',
-    description: 'Uno de los campos de golf más prestigiosos de la zona, conocido como "La Isla del Golf".',
-    location: 'Lo Romero Golf',
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=800&q=80'
   }
 ];
 
@@ -108,7 +89,7 @@ export const COMMERCIAL_CENSUS: CensusCategory[] = [
         address: 'Calle Mayor, 12', 
         phone: '965 35 10 10', 
         category: 'Ropa y Complementos',
-        description: 'Boutique exclusiva con marcas nacionales e internacionales. Tendencias mediterráneas.',
+        description: 'Boutique exclusiva con marcas nacionales e internacionales.',
         rating: 4.9,
         priceRange: '€€',
         featuredItems: ['Vestidos de Lino', 'Bolsos Artesanos'],
@@ -131,36 +112,19 @@ export const DINING_CENSUS: CensusCategory[] = [
             {
                 id: 'el-puerto',
                 name: 'Mesón El Puerto',
-                address: 'Av. del Puerto, 45 (Torre)',
+                address: 'Av. del Puerto, 45',
                 phone: '965 35 22 88',
                 category: 'Pescados y Arroces',
-                description: 'Especialistas en Caldero del Mar Menor y Arroz a Banda frente al mar.',
+                description: 'Especialistas en Caldero del Mar Menor.',
                 rating: 4.8,
                 priceRange: '€€€',
-                featuredItems: ['Arroz a Banda', 'Caldero del Pilar', 'Fritura de la Bahía'],
+                featuredItems: ['Arroz a Banda', 'Caldero'],
                 reviewCount: 890,
                 isOpen: true,
                 hours: { weekdays: '13:00 - 16:30, 20:00 - 23:30', weekend: '13:00 - 17:00' },
                 images: ['https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80'],
                 lat: 37.8640,
                 lng: -0.7850
-            },
-            {
-                id: 'tapas-plaza',
-                name: 'La Plaza Tapas',
-                address: 'Plaza de la Iglesia, 2',
-                phone: '965 35 15 15',
-                category: 'Tapas y Cañas',
-                description: 'El corazón de la tapa en el centro del pueblo. Ambiente joven y tradicional.',
-                rating: 4.5,
-                priceRange: '€',
-                featuredItems: ['Montaditos Variados', 'Patatas Bravas PH', 'Caña Bien Tirada'],
-                reviewCount: 420,
-                isOpen: true,
-                hours: { weekdays: '08:00 - 00:00', weekend: '09:00 - 02:00' },
-                images: ['https://images.unsplash.com/photo-1515443961218-1523678885b8?auto=format&fit=crop&w=800&q=80'],
-                lat: 37.8660,
-                lng: -0.7925
             }
         ]
     }
