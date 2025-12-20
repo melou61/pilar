@@ -17,13 +17,15 @@ export enum ViewState {
   MAP = 'MAP',
   CONTACT = 'CONTACT',
   ADMIN = 'ADMIN',
-  AI_CHAT = 'AI_CHAT'
+  AI_CHAT = 'AI_CHAT',
+  PROFILE = 'PROFILE'
 }
 
 export interface NavItem {
   id: ViewState;
   label: string;
   icon: LucideIcon;
+  isMain?: boolean;
 }
 
 export interface Language {
@@ -38,10 +40,10 @@ export interface Ad {
   imageUrl: string;
   linkUrl: string;
   position: 'page-top' | 'page-bottom' | 'menu-top' | 'menu-bottom';
-  startDate: string; // ISO Date YYYY-MM-DD
-  endDate: string;   // ISO Date YYYY-MM-DD
+  startDate: string; 
+  endDate: string;   
   isActive: boolean;
-  category?: 'General' | 'Commerce' | 'Tourism'; // For filtering by admin role
+  category?: 'General' | 'Commerce' | 'Tourism';
 }
 
 export interface Event {
@@ -55,8 +57,9 @@ export interface Event {
   imageUrl: string;
   lat?: number;
   lng?: number;
-  startDateTime?: string; // ISO 8601 format: YYYYMMDDTHHmmss
-  endDateTime?: string;   // ISO 8601 format: YYYYMMDDTHHmmss
+  isFestival?: boolean; // New flag for festivals/charangas
+  startDateTime?: string; 
+  endDateTime?: string;   
 }
 
 export interface Promotion {
@@ -64,7 +67,7 @@ export interface Promotion {
   description: string;
   discountCode?: string;
   expiresAt?: string;
-  beaconUuid?: string; // Link to physical hardware (UUID/Major/Minor)
+  beaconUuid?: string;
 }
 
 export interface CensusItem {
@@ -77,6 +80,8 @@ export interface CensusItem {
   rating: number;
   reviewCount: number;
   isOpen: boolean;
+  priceRange?: '€' | '€€' | '€€€' | '€€€€'; // New: Price indicator
+  featuredItems?: string[]; // New: Top dishes or products
   images: string[];
   website?: string;
   socials?: {
@@ -90,7 +95,7 @@ export interface CensusItem {
   };
   lat?: number;
   lng?: number;
-  promotion?: Promotion; // New field for Beacon/Geofencing
+  promotion?: Promotion;
 }
 
 export interface CensusCategory {

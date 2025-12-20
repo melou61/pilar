@@ -17,8 +17,8 @@ export const EventsView: React.FC<EventsViewProps> = ({ t, events, onShare, onAd
   const [selectedEventId, setSelectedEventId] = useState<string | null>(initialEventId || null);
   const [activeCategory, setActiveCategory] = useState('all');
 
-  // Fix: Explicitly type categories as string array to avoid 'unknown' type errors during mapping
-  const categories: string[] = ['all', ...Array.from(new Set(events.map(e => e.category.toLowerCase())))];
+  // Fix: Explicitly type categories as string array and cast Array.from result to string[] to avoid 'unknown' type errors during mapping
+  const categories: string[] = ['all', ...(Array.from(new Set(events.map(e => e.category.toLowerCase()))) as string[])];
 
   const filteredEvents = events.filter(event => {
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
