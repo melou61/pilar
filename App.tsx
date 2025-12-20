@@ -49,7 +49,7 @@ const INITIAL_ADS: Ad[] = [
     id: '1',
     clientName: 'Restaurante El Puerto',
     position: 'page-top',
-    imageUrl: 'https://images.unsplash.com/photo-1544124499-58ec526df938?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1550966841-3ee7adac1661?auto=format&fit=crop&w=800&q=80',
     linkUrl: '#',
     startDate: '2024-01-01',
     endDate: '2025-12-31',
@@ -131,12 +131,13 @@ const App: React.FC = () => {
 
   const renderHome = () => (
     <div className="space-y-6 pb-20">
-      <div className="relative h-[70vh] max-h-[600px] w-full overflow-hidden sm:rounded-b-3xl">
+      <div className="relative h-[70vh] max-h-[600px] w-full overflow-hidden sm:rounded-b-3xl bg-gray-200">
         {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentHeroIndex ? 'opacity-100' : 'opacity-0'}`}>
                 <img src={img} alt="Pilar Hero" className="w-full h-full object-cover" />
             </div>
         ))}
+        {/* Figma Design Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-8 text-white pb-20">
           <div className="absolute top-8 right-6 bg-[#facc15] text-[#713f12] px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm flex items-center gap-2 shadow-xl border border-white/20">
             <Sun className="fill-[#713f12]" size={18} />
@@ -152,6 +153,7 @@ const App: React.FC = () => {
           <p className="text-white text-lg max-w-sm drop-shadow-lg font-medium leading-snug">
             {t.hero.subtitle}
           </p>
+          {/* Pagination Indicators */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
             {heroImages.map((_, idx) => (
               <div key={idx} className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === currentHeroIndex ? 'bg-white w-6' : 'bg-white/40'}`} />
@@ -162,49 +164,54 @@ const App: React.FC = () => {
       
       <div className="px-4 -mt-10 relative z-10">
         <div className="grid grid-cols-4 gap-3">
-             <button onClick={() => handleNavigate(ViewState.MAP)} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-gray-100">
+             <button onClick={() => handleNavigate(ViewState.MAP)} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-gray-100 hover:scale-105 transition-transform">
                 <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-600"><MapIcon size={20} /></div>
-                <span className="text-[10px] font-bold text-gray-700 uppercase">Mapa</span>
+                <span className="text-[10px] font-bold text-gray-700 uppercase tracking-tight">Mapa</span>
             </button>
-            <button onClick={() => handleNavigate(ViewState.BEACHES)} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-gray-100">
+            <button onClick={() => handleNavigate(ViewState.BEACHES)} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-gray-100 hover:scale-105 transition-transform">
                 <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600"><Waves size={20} /></div>
-                <span className="text-[10px] font-bold text-gray-700 uppercase">{t.hero.beaches}</span>
+                <span className="text-[10px] font-bold text-gray-700 uppercase tracking-tight">{t.hero.beaches}</span>
             </button>
-            <button onClick={() => handleNavigate(ViewState.EVENTS)} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-gray-100">
+            <button onClick={() => handleNavigate(ViewState.EVENTS)} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-gray-100 hover:scale-105 transition-transform">
                 <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center text-purple-600"><Calendar size={20} /></div>
-                <span className="text-[10px] font-bold text-gray-700 uppercase">{t.hero.events}</span>
+                <span className="text-[10px] font-bold text-gray-700 uppercase tracking-tight">{t.hero.events}</span>
             </button>
-            <button onClick={() => handleNavigate(ViewState.SHOPPING)} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-gray-100">
+            <button onClick={() => handleNavigate(ViewState.SHOPPING)} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center gap-2 border border-gray-100 hover:scale-105 transition-transform">
                 <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center text-orange-600"><ShoppingBag size={20} /></div>
-                <span className="text-[10px] font-bold text-gray-700 uppercase">{t.hero.commerce}</span>
+                <span className="text-[10px] font-bold text-gray-700 uppercase tracking-tight">{t.hero.commerce}</span>
             </button>
         </div>
       </div>
 
       <div className="px-4">
-        <button onClick={() => handleNavigate(ViewState.CITIZEN_SERVICES)} className="w-full bg-blue-600 rounded-2xl p-5 flex items-center justify-between text-white shadow-xl">
+        <button onClick={() => handleNavigate(ViewState.CITIZEN_SERVICES)} className="w-full bg-blue-600 rounded-2xl p-5 flex items-center justify-between text-white shadow-xl hover:bg-blue-700 transition-colors">
             <div className="flex items-center gap-4">
                 <div className="bg-white/20 p-3 rounded-xl"><Landmark size={28} /></div>
-                <div className="text-left font-bold">Ayuntamiento 24h</div>
+                <div className="text-left font-bold text-base">Ayuntamiento 24h</div>
             </div>
             <ArrowRight size={20} />
          </button>
       </div>
 
-      <div className="px-4"><AdSpot ads={ads} position="page-top" /></div>
+      <div className="px-4">
+        <AdSpot ads={ads} position="page-top" />
+      </div>
       
       <div className="px-4">
-        <h3 className="font-bold text-gray-900 text-xl mb-4">{t.sections.events.title}</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-bold text-gray-900 text-xl tracking-tight">{t.sections.events.title}</h3>
+          <button onClick={() => handleNavigate(ViewState.EVENTS)} className="text-blue-600 text-xs font-bold uppercase hover:underline">Ver todos</button>
+        </div>
         <div className="space-y-4">
           {events.slice(0, 2).map(event => (
-            <div key={event.id} onClick={() => { setCurrentView(ViewState.EVENTS); setSelectedEventId(event.id); window.scrollTo(0,0); }} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex cursor-pointer">
-              <div className="w-1/3 aspect-square relative">
+            <div key={event.id} onClick={() => { setCurrentView(ViewState.EVENTS); setSelectedEventId(event.id); window.scrollTo(0,0); }} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex cursor-pointer hover:shadow-md transition-shadow">
+              <div className="w-1/3 aspect-square relative bg-gray-100">
                 <img src={event.imageUrl} alt="" className="w-full h-full object-cover" />
               </div>
-              <div className="w-2/3 p-4">
-                <span className="text-[10px] font-bold text-blue-600 uppercase mb-1 block">{event.category}</span>
+              <div className="w-2/3 p-4 flex flex-col justify-center">
+                <span className="text-[10px] font-bold text-blue-600 uppercase mb-1 block tracking-wider">{event.category}</span>
                 <h4 className="font-bold text-gray-900 leading-tight text-base line-clamp-2">{event.title}</h4>
-                <p className="text-xs text-gray-500 mt-2 flex items-center gap-1"><Calendar size={14} /> {event.date}</p>
+                <p className="text-xs text-gray-500 mt-2 flex items-center gap-1"><Calendar size={14} className="text-blue-400" /> {event.date}</p>
               </div>
             </div>
           ))}
@@ -214,12 +221,15 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-white font-sans">
-      <Header onMenuClick={() => setSidebarOpen(true)} onLoginClick={() => setLoginOpen(true)} onSearchClick={() => setSearchOpen(true)} onLogoClick={() => handleNavigate(ViewState.HOME)} currentLang={currentLang} onLanguageChange={setCurrentLang} languages={languages} />
+    <div className="h-full flex flex-col bg-white font-sans">
+      {currentView !== ViewState.MAP && (
+        <Header onMenuClick={() => setSidebarOpen(true)} onLoginClick={() => setLoginOpen(true)} onSearchClick={() => setSearchOpen(true)} onLogoClick={() => handleNavigate(ViewState.HOME)} currentLang={currentLang} onLanguageChange={setCurrentLang} languages={languages} />
+      )}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />
       <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
-      <main className="flex-1 w-full max-w-md mx-auto sm:max-w-xl md:max-w-2xl lg:max-w-4xl bg-white shadow-xl my-0 sm:my-6 min-h-screen sm:rounded-2xl overflow-hidden relative">
+      
+      <main className={`flex-1 w-full max-w-md mx-auto sm:max-w-xl md:max-w-2xl lg:max-w-4xl bg-white flex flex-col ${currentView === ViewState.MAP ? 'h-full' : 'shadow-xl my-0 sm:my-6 sm:rounded-2xl overflow-hidden relative'}`}>
          {currentView === ViewState.HOME && renderHome()}
          {currentView === ViewState.BEACHES && <BeachesView t={t} />}
          {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} />}
@@ -229,7 +239,7 @@ const App: React.FC = () => {
          {currentView === ViewState.EVENTS && <div className="p-4">Eventos View</div>}
          {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} onLogout={() => setCurrentView(ViewState.HOME)} currentUserRole={adminRole} />}
       </main>
-      <Footer t={t.footer} />
+      {currentView !== ViewState.MAP && <Footer t={t.footer} />}
     </div>
   );
 };
