@@ -32,8 +32,10 @@ const languages: Language[] = [
 ];
 
 const INITIAL_ADS: Ad[] = [
-  { id: '1', clientName: 'Restaurante El Puerto', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1550966841-3ee7adac1661?auto=format&fit=crop&w=800&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true }
+  { id: '1', clientName: 'Mesón El Puerto', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true }
 ];
+
+declare const L: any; // Leaflet Global
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>(ViewState.HOME);
@@ -117,41 +119,47 @@ const App: React.FC = () => {
     const miniMapRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const initMap = () => {
-            const google = (window as any).google;
-            if (miniMapRef.current && google && google.maps) {
-                new google.maps.Map(miniMapRef.current, {
-                    center: { lat: 37.8653, lng: -0.7932 },
-                    zoom: 14,
-                    disableDefaultUI: true,
-                    gestureHandling: 'none',
-                    styles: [
-                        { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
-                        { featureType: "water", elementType: "geometry", stylers: [{ color: "#d1d5db" }] }
-                    ]
-                });
-            } else {
-                // If google maps is not yet loaded, retry in 500ms
-                setTimeout(initMap, 500);
-            }
-        };
-        initMap();
+        if (miniMapRef.current && typeof L !== 'undefined') {
+            const map = L.map(miniMapRef.current, {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                touchZoom: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false
+            }).setView([37.8653, -0.7932], 14);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+            // Add a custom marker for Pilar
+            L.circleMarker([37.8653, -0.7932], {
+                radius: 6,
+                fillColor: '#2563eb',
+                color: '#ffffff',
+                weight: 2,
+                fillOpacity: 1
+            }).addTo(map);
+
+            return () => {
+                map.remove();
+            };
+        }
     }, []);
 
     return (
       <div 
         onClick={() => handleNavigate(ViewState.MAP)}
-        className="relative h-72 w-full rounded-[48px] overflow-hidden border-8 border-white shadow-2xl group cursor-pointer"
+        className="relative h-80 w-full rounded-[60px] overflow-hidden border-8 border-white shadow-2xl group cursor-pointer"
       >
-        <div ref={miniMapRef} style={{ height: '100%', width: '100%' }} className="bg-gray-100" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
-        <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between text-white">
+        <div ref={miniMapRef} className="w-full h-full bg-gray-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+        <div className="absolute bottom-10 left-10 right-10 flex items-center justify-between text-white z-10">
            <div>
-              <h4 className="font-black text-2xl mb-1">Mapa del Pilar</h4>
-              <p className="text-white/80 text-xs font-black uppercase tracking-[0.2em]">Cerca de ti hoy</p>
+              <h4 className="font-black text-3xl mb-1 tracking-tighter">Explora el Pilar</h4>
+              <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.3em]">Cerca de ti hoy</p>
            </div>
-           <div className="w-14 h-14 bg-white text-blue-600 rounded-[20px] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-              <MapIcon size={28} />
+           <div className="w-16 h-16 bg-white text-blue-600 rounded-[24px] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+              <MapIcon size={32} />
            </div>
         </div>
       </div>
@@ -159,29 +167,30 @@ const App: React.FC = () => {
   };
 
   const renderHome = () => (
-    <div className="space-y-12 pb-40 animate-in fade-in duration-700">
+    <div className="space-y-16 pb-44 animate-in fade-in duration-700">
+      {/* Immersive Hero */}
       <div className="relative h-[85vh] w-full overflow-hidden">
         {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
                 <img src={img} alt="Hero" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-[#f8fafc]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#f8fafc]" />
             </div>
         ))}
         
-        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-32">
+        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-36">
           <div className="max-w-4xl mx-auto w-full">
-            <div className="flex items-center gap-3 text-sm font-black mb-6 uppercase tracking-[0.4em] text-blue-400 drop-shadow-lg">
+            <div className="flex items-center gap-3 text-sm font-black mb-8 uppercase tracking-[0.4em] text-blue-400 drop-shadow-lg">
               <MapPin size={24} />
-              {t.hero.location}
+              PILAR DE LA HORADADA
             </div>
-            <h2 className="text-7xl sm:text-9xl font-black mb-8 leading-[0.8] tracking-tighter drop-shadow-2xl">
+            <h2 className="text-8xl sm:text-[140px] font-black mb-10 leading-[0.8] tracking-tighter drop-shadow-2xl">
               Vive<br/>el Pilar
             </h2>
-            <p className="text-white/95 text-xl max-w-sm drop-shadow-xl font-medium leading-tight opacity-95 mb-10">
-              {t.hero.subtitle}
+            <p className="text-white/95 text-2xl max-w-md drop-shadow-xl font-medium leading-tight opacity-90 mb-12">
+              Donde el sol ilumina la historia y el mar abraza tus sentidos.
             </p>
             <div className="flex gap-4">
-               <button onClick={() => handleNavigate(ViewState.AI_CHAT)} className="bg-white text-gray-900 px-10 py-5 rounded-[24px] font-black text-base flex items-center gap-3 shadow-2xl hover:scale-105 transition-all">
+               <button onClick={() => handleNavigate(ViewState.AI_CHAT)} className="bg-white text-gray-900 px-12 py-6 rounded-[32px] font-black text-lg flex items-center gap-3 shadow-2xl hover:scale-105 transition-all">
                   <Sparkles size={24} className="text-blue-600" />
                   Hablar con la IA
                </button>
@@ -190,45 +199,45 @@ const App: React.FC = () => {
         </div>
       </div>
       
-      <div className="max-w-4xl mx-auto px-6 space-y-16">
+      <div className="max-w-5xl mx-auto px-6 space-y-24">
+        {/* Mapa Vivo */}
         <div>
-           <div className="flex justify-between items-center mb-8 px-2">
-              <h3 className="font-black text-gray-900 text-3xl tracking-tight">Mapa en vivo</h3>
-              <button onClick={() => handleNavigate(ViewState.MAP)} className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-4 py-2 rounded-full">Pantalla completa</button>
+           <div className="flex justify-between items-center mb-10 px-4">
+              <h3 className="font-black text-gray-900 text-4xl tracking-tighter">Tu entorno</h3>
+              <button onClick={() => handleNavigate(ViewState.MAP)} className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-6 py-3 rounded-full">Pantalla completa</button>
            </div>
            <HomeMapWidget />
         </div>
 
+        {/* Fiestas y Charangas */}
         <div>
-          <div className="flex justify-between items-center mb-10 px-2">
+          <div className="flex justify-between items-center mb-12 px-4">
             <div>
-              <h3 className="font-black text-gray-900 text-4xl tracking-tight mb-2">Fiestas y Tradición</h3>
-              <p className="text-gray-500 font-medium">El alma del Pilar: desfiles, charangas y alegría.</p>
+              <h3 className="font-black text-gray-900 text-5xl tracking-tighter mb-4">Tradición Viva</h3>
+              <p className="text-gray-500 text-xl font-medium">Fiestas, charangas y alegría pilarera.</p>
             </div>
           </div>
           
-          <div className="space-y-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {events.filter(e => e.isFestival).map((event) => (
               <div 
                 key={event.id} 
                 onClick={() => handleSearchNavigate(ViewState.EVENTS, event.id)} 
-                className="bg-white rounded-[56px] shadow-2xl shadow-gray-200/60 border border-gray-50 overflow-hidden cursor-pointer hover:-translate-y-3 transition-all duration-500 group"
+                className="bg-white rounded-[64px] shadow-2xl shadow-gray-200/50 border border-gray-100 overflow-hidden cursor-pointer hover:-translate-y-4 transition-all duration-500 group"
               >
                 <div className="aspect-[16/10] relative overflow-hidden">
                   <img src={event.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" />
-                  <div className="absolute top-10 left-10 bg-white/95 backdrop-blur-xl px-6 py-3 rounded-2xl text-[12px] font-black uppercase tracking-[0.3em] text-blue-600 shadow-2xl">
+                  <div className="absolute top-8 left-8 bg-white/95 backdrop-blur-xl px-6 py-3 rounded-3xl text-[11px] font-black uppercase tracking-[0.3em] text-blue-600 shadow-2xl">
                     {event.category}
                   </div>
                 </div>
                 <div className="p-12">
-                  <h4 className="font-black text-gray-900 text-5xl leading-[0.9] tracking-tighter mb-8">
+                  <h4 className="font-black text-gray-900 text-4xl leading-none tracking-tighter mb-8 group-hover:text-blue-600 transition-colors">
                     {event.title}
                   </h4>
-                  <div className="flex items-center gap-10">
-                    <div className="flex items-center gap-3 text-gray-400 font-black text-xs uppercase tracking-[0.2em]">
+                  <div className="flex items-center gap-4 text-gray-400 font-black text-xs uppercase tracking-widest">
                        <Calendar size={20} className="text-blue-500" />
                        {event.date}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -241,6 +250,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc] font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
+      {/* Header Condicional */}
       {currentView !== ViewState.MAP && currentView !== ViewState.AI_CHAT && (
         <Header 
           onMenuClick={() => setSidebarOpen(true)} 
@@ -253,26 +263,27 @@ const App: React.FC = () => {
         />
       )}
 
-      <nav className="fixed bottom-8 left-8 right-8 h-20 bg-white/80 backdrop-blur-3xl rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-[100] flex items-center justify-around px-6 border border-white/40 ring-1 ring-black/5 animate-in slide-in-from-bottom-20 duration-1000">
+      {/* Floating Bottom Nav - FIXED */}
+      <nav className="fixed bottom-10 left-10 right-10 h-24 bg-white/80 backdrop-blur-3xl rounded-[45px] shadow-[0_25px_60px_rgba(0,0,0,0.12)] z-[100] flex items-center justify-around px-8 border border-white/40 ring-1 ring-black/5 animate-in slide-in-from-bottom-20 duration-1000">
         {bottomNavItems.map(item => {
           const isActive = currentView === item.id;
           return (
             <button
               key={item.id}
               onClick={() => handleNavigate(item.id)}
-              className={`relative flex flex-col items-center justify-center gap-1 transition-all ${item.isMain ? '-translate-y-6' : ''}`}
+              className={`relative flex flex-col items-center justify-center transition-all ${item.isMain ? '-translate-y-10' : ''}`}
             >
               <div className={`
                 ${item.isMain 
-                  ? 'w-16 h-16 bg-[#0f172a] text-white rounded-[24px] shadow-2xl shadow-gray-900/40 ring-4 ring-white' 
-                  : 'p-3'} 
-                ${isActive && !item.isMain ? 'text-blue-600 scale-110' : 'text-gray-400'} 
+                  ? 'w-20 h-20 bg-[#0f172a] text-white rounded-[32px] shadow-2xl shadow-gray-900/40 ring-8 ring-white' 
+                  : 'p-4'} 
+                ${isActive && !item.isMain ? 'text-blue-600 scale-125' : 'text-gray-400'} 
                 flex items-center justify-center transition-all duration-300
               `}>
-                <item.icon size={item.isMain ? 32 : 24} className={isActive && !item.isMain ? 'fill-blue-50' : ''} />
+                <item.icon size={item.isMain ? 40 : 28} className={isActive && !item.isMain ? 'fill-blue-50' : ''} />
               </div>
               {!item.isMain && (
-                <span className={`text-[9px] font-black uppercase tracking-widest transition-opacity duration-300 ${isActive ? 'text-blue-600 opacity-100' : 'text-gray-400 opacity-0'}`}>
+                <span className={`text-[10px] font-black uppercase tracking-widest transition-all duration-300 mt-1 ${isActive ? 'text-blue-600 opacity-100' : 'text-gray-400 opacity-0'}`}>
                   {item.label}
                 </span>
               )}
@@ -308,19 +319,19 @@ const App: React.FC = () => {
          {currentView === ViewState.AI_CHAT && <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
          
          {currentView === ViewState.PROFILE && (
-            <div className="p-8 pt-32 text-center space-y-8 animate-in fade-in zoom-in duration-500">
-                <div className="w-32 h-32 bg-gray-100 rounded-[40px] mx-auto flex items-center justify-center text-gray-300 shadow-inner">
-                   <User size={64} />
+            <div className="p-12 pt-40 text-center space-y-12 animate-in fade-in zoom-in duration-500">
+                <div className="w-40 h-40 bg-gray-100 rounded-[50px] mx-auto flex items-center justify-center text-gray-300 shadow-inner">
+                   <User size={80} />
                 </div>
-                <div className="space-y-4">
-                  <h2 className="text-4xl font-black text-gray-900 tracking-tight">Tu Perfil</h2>
-                  <p className="text-gray-500 max-w-xs mx-auto text-lg leading-tight">Inicia sesión para guardar tus favoritos.</p>
+                <div className="space-y-6">
+                  <h2 className="text-5xl font-black text-gray-900 tracking-tighter">Tu Espacio</h2>
+                  <p className="text-gray-500 max-w-xs mx-auto text-xl font-medium leading-tight">Inicia sesión para guardar tus rincones favoritos.</p>
                 </div>
                 <button 
                    onClick={() => setLoginOpen(true)}
-                   className="w-full max-w-xs px-12 py-5 bg-[#0f172a] text-white rounded-3xl font-black text-lg shadow-2xl hover:bg-black transition-all"
+                   className="w-full max-w-sm px-12 py-6 bg-[#0f172a] text-white rounded-[32px] font-black text-xl shadow-2xl hover:bg-black transition-all"
                 >
-                   Iniciar Sesión
+                   Entrar ahora
                 </button>
             </div>
          )}

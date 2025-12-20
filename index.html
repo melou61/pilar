@@ -8,7 +8,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Google Maps API -->
+    <!-- Leaflet (Reliable Map Fallback) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Google Maps API (Primary, but error-prone if unactivated) -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeG7eTitfS-Q-p2gdYwDt4t6W2nIlIl_g&libraries=places"></script>
      
     <style>
@@ -20,8 +24,11 @@
           -ms-overflow-style: none;
           scrollbar-width: none;
       }
-      /* Ensure Google Maps takes full height */
+      /* Ensure Map containers have height */
       #root, body, html { height: 100%; margin: 0; }
+      .leaflet-container { width: 100%; height: 100%; z-index: 1; border-radius: inherit; }
+      /* Custom Mediterranean Leaflet Theme */
+      .leaflet-tile { filter: grayscale(10%) contrast(105%); }
     </style>
   <script type="importmap">
 {

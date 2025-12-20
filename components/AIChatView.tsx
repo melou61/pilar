@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
+import { GoogleGenAI, Chat } from "@google/genai";
 import { Send, ArrowLeft, Bot, User, Sparkles } from './Icons';
 
 interface Message {
@@ -15,32 +15,30 @@ interface AIChatViewProps {
 
 export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', text: t.ai_guide.welcome }
+    { role: 'model', text: '¡Hola! Soy PH Concierge. Conozco todos los rincones, restaurantes y fiestas de Pilar de la Horadada. ¿En qué puedo ayudarte hoy?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   
-  // Ref to hold the active chat session for persistence
+  // Ref to hold the active chat session for real context memory
   const chatSessionRef = useRef<Chat | null>(null);
 
   useEffect(() => {
-    // Initialize chat session on mount
+    // Initialize persistent chat session with system instructions
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
-        systemInstruction: `Eres PH Concierge, el asistente experto y sofisticado de Pilar de la Horadada. 
-        CONOCES:
-        - Todas las playas (Higuericas, Mil Palmeras, etc.) y sus servicios.
-        - Todos los restaurantes (Mesón El Puerto para arroces, bares de tapas en la plaza).
-        - Calendario de Fiestas: Patronales en Octubre, Romería en Junio, Charangas en Agosto.
-        - Servicios: Ayuntamiento 24h, Pinar de Campoverde, Río Seco.
-        REGLAS DE CONVERSACIÓN:
-        - Mantén una conversación real, no eres solo una base de datos.
-        - Recuerda lo que el usuario te ha dicho antes.
-        - Sé amable, servicial y usa emojis mediterráneos.
-        - Si no sabes algo, invita al usuario a visitar la oficina de turismo en Plaza Campoamor.`,
+        systemInstruction: `Eres PH Concierge, el asistente experto de Pilar de la Horadada. 
+        CONOCES TODO SOBRE:
+        - Playas: Higuericas (dunas), Mil Palmeras (servicios), El Conde (Torre Vigía).
+        - Gastronomía: Caldero en Mesón El Puerto ($$$), Tapas en la Plaza ($).
+        - Fiestas: Charangas en Agosto, Patronales en Octubre.
+        ESTILO:
+        - Eres elegante, servicial y experto.
+        - Recuerda lo que te ha dicho el usuario antes.
+        - Usa emojis (🥘, 🌊, ⛪, 🎺).`,
       },
     });
     chatSessionRef.current = chat;
@@ -61,15 +59,21 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
 
     try {
       const result = await chatSessionRef.current.sendMessage({ message: userMessage });
-      const text = result.text || "Lo siento, me he distraído con el mar. ¿Qué me decías?";
+      const text = result.text || "Lo siento, me he distraído con el mar del Pilar. ¿Me repites?";
       setMessages(prev => [...prev, { role: 'model', text }]);
     } catch (error) {
       console.error("AI Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "He tenido un pequeño problema de conexión. ¡Intentémoslo de nuevo! 🌊" }]);
+      setMessages(prev => [...prev, { role: 'model', text: "He tenido un pequeño corte de conexión. ¡Prueba de nuevo! 🌊" }]);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const suggestions = [
+    "¿Cuándo son las charangas?",
+    "¿Dónde comer un buen arroz?",
+    "¿Qué playa tiene más servicios?"
+  ];
 
   return (
     <div className="flex flex-col h-screen bg-[#f8fafc] animate-in slide-in-from-right duration-500">
@@ -84,17 +88,17 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
           </div>
           <div>
             <h2 className="font-black text-gray-900 text-lg leading-none">PH Concierge</h2>
-            <span className="text-[10px] text-green-500 font-black uppercase tracking-widest">En línea ahora</span>
+            <span className="text-[10px] text-green-500 font-black uppercase tracking-widest">En línea - Inteligencia Real</span>
           </div>
         </div>
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-8 space-y-8 pb-40">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-8 space-y-8 pb-44">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
             <div className={`flex gap-4 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${msg.role === 'user' ? 'bg-gray-200' : 'bg-[#0f172a] text-white shadow-blue-500/20'}`}>
+              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${msg.role === 'user' ? 'bg-gray-200' : 'bg-[#0f172a] text-white'}`}>
                 {msg.role === 'user' ? <User size={20} /> : <Bot size={20} />}
               </div>
               <div className={`p-5 rounded-[28px] text-[15px] leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-white text-gray-900 rounded-tr-none border border-gray-100' : 'bg-[#0f172a] text-white rounded-tl-none font-medium'}`}>
@@ -105,34 +109,29 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
         ))}
         {isLoading && (
           <div className="flex justify-start animate-in fade-in duration-300">
-            <div className="flex gap-4 max-w-[85%]">
-              <div className="w-10 h-10 rounded-2xl bg-[#0f172a] text-white flex items-center justify-center shrink-0">
-                <Bot size={20} />
-              </div>
-              <div className="p-5 rounded-[28px] bg-blue-50 text-blue-600 rounded-tl-none flex items-center gap-2">
+            <div className="p-5 rounded-[28px] bg-blue-50 text-blue-600 rounded-tl-none flex items-center gap-2">
                 <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" />
                 <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:0.2s]" />
                 <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:0.4s]" />
-              </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Input Bar */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-3xl border-t border-gray-100">
-        <div className="max-w-4xl mx-auto">
+      {/* Persistent Input */}
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-3xl border-t border-gray-100 z-30">
+        <div className="max-w-4xl mx-auto space-y-4">
           {messages.length < 3 && (
-            <div className="flex gap-2 overflow-x-auto no-scrollbar py-2 mb-4">
-                {["¿Qué fiestas hay?", "¿Mejor sitio para comer?", "¿Estado de playas?"].map((s, idx) => (
-                    <button 
-                        key={idx}
-                        onClick={() => handleSend(s)}
-                        className="px-5 py-3 bg-gray-100 rounded-2xl text-[12px] font-black text-gray-700 whitespace-nowrap shadow-sm hover:bg-blue-600 hover:text-white transition-all"
-                    >
-                        {s}
-                    </button>
-                ))}
+            <div className="flex gap-2 overflow-x-auto no-scrollbar py-2">
+              {suggestions.map((s, idx) => (
+                <button 
+                  key={idx}
+                  onClick={() => handleSend(s)}
+                  className="px-5 py-3 bg-gray-100 rounded-2xl text-[12px] font-black text-gray-700 whitespace-nowrap shadow-sm hover:bg-blue-600 hover:text-white transition-all"
+                >
+                  {s}
+                </button>
+              ))}
             </div>
           )}
           
@@ -142,13 +141,13 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Pregúntame lo que quieras..."
+              placeholder="Escribe tu pregunta aquí..."
               className="flex-1 px-6 py-5 bg-gray-100 border-none rounded-[28px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:bg-white transition-all text-base shadow-inner"
             />
             <button 
               onClick={() => handleSend()}
               disabled={!input.trim() || isLoading}
-              className="w-16 h-16 bg-blue-600 text-white rounded-[24px] flex items-center justify-center hover:bg-blue-700 active:scale-95 transition-all shadow-xl shadow-blue-500/30 disabled:opacity-50"
+              className="w-16 h-16 bg-blue-600 text-white rounded-[24px] flex items-center justify-center hover:bg-blue-700 active:scale-95 transition-all shadow-xl shadow-blue-500/30"
             >
               <Send size={24} />
             </button>

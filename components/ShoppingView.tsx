@@ -1,8 +1,9 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Search, MapPin, Phone, Tag, ChevronRight, ArrowLeft, Star, Globe, Share2, Filter, Navigation, MapIcon, Facebook, Instagram, Twitter } from './Icons';
+import React, { useState, useEffect } from 'react';
+import { Star, ChevronRight } from './Icons';
 import { COMMERCIAL_CENSUS, DINING_CENSUS } from '../data';
 import { CensusItem } from '../types';
+import { BusinessDetailView } from './BusinessDetailView';
 
 interface ShoppingViewProps {
   t: any;
@@ -10,7 +11,6 @@ interface ShoppingViewProps {
 }
 
 export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, highlightedBusinessId }) => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedBusiness, setSelectedBusiness] = useState<CensusItem | null>(null);
   
   const allBusinesses = [...COMMERCIAL_CENSUS.flatMap(c => c.items), ...DINING_CENSUS.flatMap(c => c.items)];
@@ -20,97 +20,59 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, highlightedBusine
       const found = allBusinesses.find(b => b.id === highlightedBusinessId);
       if (found) setSelectedBusiness(found);
     }
-  }, [highlightedBusinessId]);
-
-  const BusinessDetail = ({ business, onClose }: { business: CensusItem, onClose: () => void }) => (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col animate-in slide-in-from-bottom duration-500 overflow-y-auto pb-32">
-        {/* Gallery */}
-        <div className="relative h-96 w-full">
-            <img src={business.images[0]} className="w-full h-full object-cover" />
-            <button onClick={onClose} className="absolute top-8 left-8 w-14 h-14 bg-white/20 backdrop-blur-xl text-white rounded-full flex items-center justify-center">
-                <ArrowLeft size={28} />
-            </button>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-            <div className="absolute bottom-10 left-10 text-white">
-                <div className="flex items-center gap-2 mb-2">
-                    <span className="bg-blue-600 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest">{business.category}</span>
-                    <span className="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-xl text-sm font-black">{business.priceRange}</span>
-                </div>
-                <h1 className="text-5xl font-black tracking-tight">{business.name}</h1>
-            </div>
-        </div>
-
-        <div className="p-10 space-y-12 max-w-3xl mx-auto">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-yellow-500">
-                    <Star size={24} className="fill-current" />
-                    <span className="text-2xl font-black text-gray-900">{business.rating}</span>
-                    <span className="text-gray-400 font-medium ml-2">({business.reviewCount} reseñas)</span>
-                </div>
-                <div className="flex gap-4">
-                    <a href={`tel:${business.phone}`} className="w-14 h-14 bg-blue-50 text-blue-600 rounded-[20px] flex items-center justify-center"><Phone size={24} /></a>
-                    <button className="w-14 h-14 bg-blue-50 text-blue-600 rounded-[20px] flex items-center justify-center"><MapIcon size={24} /></button>
-                </div>
-            </div>
-
-            <div>
-                <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Sobre nosotros</h3>
-                <p className="text-gray-600 text-lg leading-relaxed font-medium">{business.description}</p>
-            </div>
-
-            {business.featuredItems && (
-                <div>
-                    <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Recomendados</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {business.featuredItems.map(item => (
-                            <div key={item} className="p-6 bg-gray-50 rounded-3xl border border-gray-100 flex items-center justify-between">
-                                <span className="font-black text-gray-900">{item}</span>
-                                <div className="text-blue-600"><Star size={16} /></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            <div>
-                <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Ubicación y Contacto</h3>
-                <div className="space-y-4">
-                    <p className="flex items-center gap-3 text-gray-900 font-bold"><MapPin size={20} className="text-blue-500" /> {business.address}</p>
-                    <p className="flex items-center gap-3 text-gray-900 font-bold"><Phone size={20} className="text-blue-500" /> {business.phone}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-  );
+  }, [highlightedBusinessId, allBusinesses]);
 
   return (
-    <div className="bg-gray-50 min-h-screen px-6 py-12 pb-40">
-        {selectedBusiness && <BusinessDetail business={selectedBusiness} onClose={() => setSelectedBusiness(null)} />}
-        <h2 className="text-4xl font-black text-gray-900 tracking-tight mb-8">Directorio Comercial</h2>
-        <div className="grid grid-cols-1 gap-6">
+    <div className="bg-[#f8fafc] min-h-screen px-6 py-16 pb-44 animate-in fade-in duration-300">
+        {selectedBusiness && (
+          <BusinessDetailView 
+            business={selectedBusiness} 
+            onClose={() => setSelectedBusiness(null)} 
+            t={t.business} 
+          />
+        )}
+        
+        <div className="mb-12 px-4">
+          <h2 className="text-5xl font-black text-gray-900 tracking-tighter mb-2">Guía de Comercio</h2>
+          <p className="text-gray-500 font-medium text-lg">Descubre los mejores negocios locales del Pilar.</p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-10">
             {allBusinesses.map(biz => (
                 <div 
                     key={biz.id} 
                     onClick={() => setSelectedBusiness(biz)}
-                    className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-xl shadow-gray-200/40 flex h-48 group cursor-pointer"
+                    className="bg-white rounded-[50px] overflow-hidden border border-gray-100 shadow-2xl shadow-gray-200/40 flex h-60 group cursor-pointer hover:-translate-y-2 transition-all duration-500"
                 >
-                    <div className="w-48 h-full overflow-hidden">
-                        <img src={biz.images[0]} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <div className="w-60 h-full overflow-hidden shrink-0">
+                        <img 
+                          src={biz.images && biz.images.length > 0 ? biz.images[0] : 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80'} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                          alt={biz.name} 
+                        />
                     </div>
-                    <div className="flex-1 p-8 flex flex-col justify-between">
+                    <div className="flex-1 p-10 flex flex-col justify-between">
                         <div>
                             <div className="flex justify-between items-start">
-                                <h4 className="font-black text-2xl text-gray-900">{biz.name}</h4>
-                                <span className="text-blue-600 font-black text-sm">{biz.priceRange}</span>
+                                <h4 className="font-black text-3xl text-gray-900 tracking-tighter leading-none">{biz.name}</h4>
+                                {biz.priceRange && (
+                                  <span className="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-2xl font-black text-sm">
+                                    {biz.priceRange}
+                                  </span>
+                                )}
                             </div>
-                            <p className="text-gray-400 text-xs font-black uppercase tracking-widest mt-1">{biz.category}</p>
+                            <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mt-3">{biz.category}</p>
+                            <p className="text-sm text-gray-500 mt-4 line-clamp-2 font-medium">{biz.description}</p>
                         </div>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5 text-yellow-500">
-                                <Star size={14} className="fill-current" />
-                                <span className="text-sm font-black text-gray-900">{biz.rating}</span>
+                        <div className="flex items-center justify-between border-t border-gray-50 pt-6">
+                            <div className="flex items-center gap-2 text-yellow-500">
+                                <Star size={20} className="fill-current" />
+                                <span className="text-lg font-black text-gray-900">{biz.rating}</span>
+                                <span className="text-xs text-gray-400 font-bold ml-1 uppercase">({biz.reviewCount})</span>
                             </div>
-                            <div className="text-blue-600 font-black text-xs uppercase tracking-widest">Ver más</div>
+                            <div className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-5 py-2.5 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-all flex items-center gap-2">
+                                Ver ficha <ChevronRight size={14} />
+                            </div>
                         </div>
                     </div>
                 </div>

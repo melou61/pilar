@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { MapPin, Navigation, X, ArrowLeft, Calendar, UtensilsCrossed, ShoppingBag, Star, ArrowRight } from './Icons';
+import { MapPin, Navigation, X, ArrowLeft, Star, ArrowRight, AlertTriangle } from './Icons';
 import { COMMERCIAL_CENSUS, DINING_CENSUS, MOCK_EVENTS } from '../data';
 import { ViewState } from '../types';
 
@@ -9,42 +9,40 @@ interface MapViewProps {
   onNavigate: (view: ViewState, id?: string) => void;
 }
 
+declare const L: any; // Leaflet Global
+
 export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const [googleMap, setGoogleMap] = useState<any | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const [leafletMap, setLeafletMap] = useState<any | null>(null);
   const [filter, setFilter] = useState<'all' | 'food' | 'shop' | 'events'>('all');
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const markersRef = useRef<any[]>([]);
-  const userMarkerRef = useRef<any | null>(null);
 
   useEffect(() => {
-    const initMap = () => {
-        const google = (window as any).google;
-        if (mapRef.current && !googleMap && google && google.maps) {
-            const map = new google.maps.Map(mapRef.current, {
-                center: { lat: 37.8653, lng: -0.7932 },
-                zoom: 15,
-                disableDefaultUI: true,
-                styles: [
-                    { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
-                    { featureType: "transit", stylers: [{ visibility: "off" }] }
-                ]
-            });
-            setGoogleMap(map);
-        } else if (!googleMap) {
-            setTimeout(initMap, 500);
-        }
-    };
-    initMap();
-  }, [googleMap]);
+    if (mapContainerRef.current && !leafletMap && typeof L !== 'undefined') {
+      const map = L.map(mapContainerRef.current, {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([37.8653, -0.7932], 15);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+      }).addTo(map);
+
+      setLeafletMap(map);
+
+      return () => {
+        map.remove();
+      };
+    }
+  }, []);
 
   useEffect(() => {
-    if (!googleMap) return;
-    const google = (window as any).google;
-    if (!google) return;
+    if (!leafletMap || typeof L === 'undefined') return;
 
-    markersRef.current.forEach(m => m.setMap(null));
+    // Clear existing markers
+    markersRef.current.forEach(m => m.remove());
     markersRef.current = [];
 
     const itemsToAdd: any[] = [];
@@ -60,54 +58,45 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
 
     itemsToAdd.forEach(item => {
       if (item.lat && item.lng) {
-        const marker = new google.maps.Marker({
-          position: { lat: item.lat, lng: item.lng },
-          map: googleMap,
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: item.color,
-            fillOpacity: 1,
-            strokeWeight: 4,
-            strokeColor: '#FFFFFF',
-            scale: 11
-          }
+        // Create custom DivIcon for better styling
+        const icon = L.divIcon({
+          className: 'custom-div-icon',
+          html: `<div style="background-color: ${item.color}; width: 22px; height: 22px; border: 3px solid white; border-radius: 50%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);"></div>`,
+          iconSize: [22, 22],
+          iconAnchor: [11, 11]
         });
 
-        marker.addListener('click', () => {
+        const marker = L.marker([item.lat, item.lng], { icon }).addTo(leafletMap);
+        
+        marker.on('click', () => {
           setSelectedItem(item);
-          googleMap.panTo({ lat: item.lat!, lng: item.lng! });
-          googleMap.panBy(0, -120);
+          leafletMap.flyTo([item.lat, item.lng], 16, {
+            duration: 0.8
+          });
         });
 
         markersRef.current.push(marker);
       }
     });
-  }, [googleMap, filter]);
+  }, [leafletMap, filter]);
 
   const handleLocateMe = () => {
     setIsLocating(true);
-    const google = (window as any).google;
-    if (navigator.geolocation && google) {
+    if (navigator.geolocation && leafletMap) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const pos = { lat: position.coords.latitude, lng: position.coords.longitude };
-          if (userMarkerRef.current) userMarkerRef.current.setPosition(pos);
-          else {
-            userMarkerRef.current = new google.maps.Marker({
-              position: pos,
-              map: googleMap,
-              icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                fillColor: '#3b82f6',
-                fillOpacity: 1,
-                strokeWeight: 4,
-                strokeColor: '#FFFFFF',
-                scale: 8
-              }
-            });
-          }
-          googleMap?.setZoom(16);
-          googleMap?.panTo(pos);
+          const { latitude, longitude } = position.coords;
+          leafletMap.flyTo([latitude, longitude], 16);
+          
+          // Add temporary user location marker
+          L.circleMarker([latitude, longitude], {
+            radius: 8,
+            fillColor: '#3b82f6',
+            color: '#ffffff',
+            weight: 3,
+            fillOpacity: 0.8
+          }).addTo(leafletMap);
+          
           setIsLocating(false);
         },
         () => setIsLocating(false),
@@ -147,15 +136,18 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
       </div>
 
       <div className="relative flex-1">
-        <div ref={mapRef} style={{ height: '100%', width: '100%' }} className="bg-gray-50" />
+        <div ref={mapContainerRef} className="w-full h-full bg-gray-50" />
         
-        <button onClick={handleLocateMe} className={`absolute ${selectedItem ? 'bottom-[420px]' : 'bottom-10'} right-8 z-10 bg-white text-blue-600 p-6 rounded-[24px] shadow-2xl hover:scale-110 active:scale-90 transition-all border border-gray-50`}>
-           <Navigation size={32} className={isLocating ? 'animate-pulse' : ''} />
+        <button 
+          onClick={handleLocateMe} 
+          className={`absolute ${selectedItem ? 'bottom-[420px]' : 'bottom-10'} right-8 z-[1000] bg-white text-blue-600 p-6 rounded-[24px] shadow-2xl hover:scale-110 active:scale-90 transition-all border border-gray-50`}
+        >
+          <Navigation size={32} className={isLocating ? 'animate-pulse' : ''} />
         </button>
 
         {selectedItem && (
-          <div className="absolute bottom-8 left-8 right-8 z-20 animate-in slide-in-from-bottom-20 duration-500">
-            <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-xs mx-auto ring-1 ring-black/5">
+          <div className="absolute bottom-8 left-8 right-8 z-[1001] animate-in slide-in-from-bottom-20 duration-500">
+            <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto ring-1 ring-black/5">
               <div className="relative h-44 w-full">
                 <img src={selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl} className="w-full h-full object-cover" alt="" />
                 <button onClick={() => setSelectedItem(null)} className="absolute top-4 right-4 p-2.5 bg-white/20 backdrop-blur-xl text-white rounded-full hover:bg-white/40 transition-all">
@@ -192,4 +184,3 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
     </div>
   );
 };
-export default MapView;
