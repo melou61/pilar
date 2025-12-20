@@ -4,7 +4,7 @@ import { ViewState, NavItem, Ad, Event, Language, AdminRole, CensusItem, Promoti
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
   ShoppingBag, Calendar, MessageSquare, MapPin, Sun, Info, ArrowRight, ArrowLeft,
-  Search, Phone, Tag, Share2, Heart, Briefcase, MapIcon, Landmark, CalendarPlus, Zap
+  Search, Phone, Tag, Share2, Heart, Briefcase, MapIcon, Landmark, CalendarPlus, Zap, Sparkles
 } from './components/Icons';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -20,6 +20,9 @@ import { DiningView } from './components/DiningView';
 import { CitizenServicesView } from './components/CitizenServicesView';
 import { MapView } from './components/MapView';
 import { NewsView } from './components/NewsView';
+import { EventsView } from './components/EventsView';
+import { AIChatView } from './components/AIChatView';
+import { ShareModal } from './components/ShareModal';
 import { translations } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -37,6 +40,8 @@ const App: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isSearchOpen, setSearchOpen] = useState(false);
+  const [isShareOpen, setShareOpen] = useState(false);
+  const [shareData, setShareData] = useState({ title: '', text: '', url: '' });
   const [currentLang, setCurrentLang] = useState<Language>(languages[0]); 
   const [ads] = useState<Ad[]>(INITIAL_ADS);
   const [events] = useState<Event[]>(MOCK_EVENTS);
@@ -68,12 +73,27 @@ const App: React.FC = () => {
   const handleSearchNavigate = (view: ViewState, id?: string) => {
     setCurrentView(view);
     if (view === ViewState.SHOPPING) setSelectedBusinessId(id || null);
-    if (view === ViewState.EVENTS && id) setSelectedEventId(id);
+    if (view === ViewState.EVENTS) setSelectedEventId(id || null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleShare = (event: Event) => {
+    setShareData({
+      title: event.title,
+      text: event.description,
+      url: window.location.href
+    });
+    setShareOpen(true);
+  };
+
+  const handleAddToCalendar = (e: React.MouseEvent, event: Event) => {
+    e.stopPropagation();
+    alert(`Añadiendo "${event.title}" a tu calendario...`);
   };
 
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
+    { id: ViewState.AI_CHAT, label: t.menu.ai, icon: Sparkles },
     { id: ViewState.MAP, label: 'Mapa Interactivo', icon: MapIcon },
     { id: ViewState.CITIZEN_SERVICES, label: 'Ayuntamiento 24h', icon: Landmark },
     { id: ViewState.NEWS, label: t.menu.news, icon: Newspaper },
@@ -140,13 +160,35 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 space-y-12">
-        <button onClick={() => handleNavigate(ViewState.CITIZEN_SERVICES)} className="w-full bg-blue-600 rounded-[32px] p-8 flex items-center justify-between text-white shadow-2xl hover:bg-blue-700 transition-all transform hover:scale-[1.01] group">
+      <div className="max-w-4xl mx-auto px-6 space-y-8">
+        {/* AI Guide CTA */}
+        <button 
+          onClick={() => handleNavigate(ViewState.AI_CHAT)} 
+          className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 rounded-[32px] p-10 flex items-center justify-between text-white shadow-2xl hover:shadow-blue-500/20 transition-all group overflow-hidden relative"
+        >
+            <div className="absolute right-0 top-0 opacity-10 translate-x-10 -translate-y-10 group-hover:translate-x-8 group-hover:-translate-y-8 transition-transform">
+              <Sparkles size={200} className="fill-white" />
+            </div>
+            <div className="flex items-center gap-6 relative z-10">
+                <div className="bg-white/10 p-5 rounded-2xl group-hover:bg-white/20 transition-colors shadow-xl backdrop-blur-sm">
+                  <Sparkles size={40} className="fill-white" />
+                </div>
+                <div className="text-left">
+                  <div className="font-black text-3xl tracking-tight mb-1">{t.ai_guide.title}</div>
+                  <div className="text-blue-100 text-sm font-medium opacity-80">{t.ai_guide.subtitle}</div>
+                </div>
+            </div>
+            <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-blue-600 transition-all shadow-xl backdrop-blur-sm relative z-10">
+              <ArrowRight size={32} />
+            </div>
+         </button>
+
+        <button onClick={() => handleNavigate(ViewState.CITIZEN_SERVICES)} className="w-full bg-white rounded-[32px] p-8 flex items-center justify-between text-gray-900 shadow-xl hover:bg-gray-50 transition-all border border-gray-100 group">
             <div className="flex items-center gap-6">
-                <div className="bg-white/10 p-5 rounded-2xl group-hover:bg-white/20 transition-colors"><Landmark size={36} /></div>
+                <div className="bg-blue-50 p-5 rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors"><Landmark size={36} /></div>
                 <div className="text-left font-black text-2xl tracking-tight">Ayuntamiento 24h</div>
             </div>
-            <ArrowRight size={28} />
+            <ArrowRight size={28} className="text-gray-300 group-hover:text-blue-600 group-hover:translate-x-2 transition-all" />
          </button>
 
         <AdSpot ads={ads} position="page-top" />
@@ -214,6 +256,8 @@ const App: React.FC = () => {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />
       <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
+      <ShareModal isOpen={isShareOpen} onClose={() => setShareOpen(false)} data={shareData} t={t.share} />
+      
       <main className={`flex-1 w-full flex flex-col relative ${currentView === ViewState.MAP ? 'h-screen' : ''}`}>
          {currentView === ViewState.HOME && renderHome()}
          {currentView === ViewState.BEACHES && <BeachesView t={t} />}
@@ -223,8 +267,19 @@ const App: React.FC = () => {
          {currentView === ViewState.SHOPPING && <ShoppingView t={t} highlightedBusinessId={selectedBusinessId} />}
          {currentView === ViewState.CITIZEN_SERVICES && <CitizenServicesView t={t} />}
          {currentView === ViewState.NEWS && <NewsView t={t} />}
+         {currentView === ViewState.EVENTS && (
+           <EventsView 
+              t={t} 
+              events={events} 
+              onShare={handleShare} 
+              onAddToCalendar={handleAddToCalendar} 
+              initialEventId={selectedEventId} 
+           />
+         )}
+         {currentView === ViewState.AI_CHAT && <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
       </main>
-      {currentView !== ViewState.MAP && <Footer t={t.footer} />}
+      
+      {currentView !== ViewState.MAP && currentView !== ViewState.AI_CHAT && <Footer t={t.footer} />}
     </div>
   );
 };

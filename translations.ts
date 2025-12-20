@@ -13,7 +13,8 @@ const en = {
       services: 'Services',
       events: 'Events',
       forum: 'Forum',
-      title: 'Menu'
+      title: 'Menu',
+      ai: 'AI Local Guide'
     },
     hero: {
       subtitle: 'A Mediterranean Treasure on the Costa Blanca',
@@ -34,6 +35,13 @@ const en = {
       beaches: { title: 'Beaches', desc: 'Over 4km of pristine Mediterranean coastline with Blue Flag certified beaches' },
       forum: { title: 'Community Forum', desc: 'Connect with locals and visitors, share experiences, and get travel tips' },
       highlights: 'Highlights'
+    },
+    ai_guide: {
+      title: 'Pilar AI Guide',
+      subtitle: 'Ask me anything about our town, beaches, or events!',
+      placeholder: 'Where is the best place to eat tapas?',
+      welcome: 'Hello! I am your local AI guide. How can I help you discover Pilar de la Horadada today?',
+      thinking: 'Thinking...',
     },
     business: {
       open: 'Open Now',
@@ -176,7 +184,8 @@ const en = {
         services: 'Servicios',
         events: 'Eventos',
         forum: 'Foro',
-        title: 'Menú'
+        title: 'Menú',
+        ai: 'Guía IA Local'
       },
       hero: {
         subtitle: 'Un Tesoro Mediterráneo en la Costa Blanca',
@@ -197,6 +206,13 @@ const en = {
         beaches: { title: 'Playas', desc: 'Más de 4km de costa mediterránea prístina con playas certificadas con Bandera Azul' },
         forum: { title: 'Foro Comunitario', desc: 'Conéctate con locales y visitantes, comparte experiencias y obtén consejos de viaje' },
         highlights: 'Destacados'
+      },
+      ai_guide: {
+        title: 'Guía IA Pilar',
+        subtitle: '¡Pregúntame lo que quieras sobre nuestro pueblo!',
+        placeholder: '¿Dónde comer las mejores tapas?',
+        welcome: '¡Hola! Soy tu guía IA local. ¿Cómo puedo ayudarte a descubrir Pilar de la Horadada hoy?',
+        thinking: 'Pensando...',
       },
       business: {
         open: 'Abierto Ahora',
@@ -362,8 +378,8 @@ const en = {
     },
     hi: {
       ...en,
-      menu: { ...en.menu, home: 'घर', news: 'समाचार', beaches: 'समुद्र तट', sightseeing: 'दर्शनीय स्थल', activities: 'गतिविधियां', dining: 'भोजन', shopping: 'खरीदारी', events: 'कार्यक्रम', forum: 'मंच', title: 'मेन्यू', health: 'स्वास्थ्य', services: 'सेवाएं' },
-      common: { ...en.common, share: 'साझा करें', back: 'वापस', searchPlaceholder: 'खोजें...' }
+      menu: { ...en.menu, home: 'घर', news: 'समाचार', beaches: 'समुद्र तट', sightseeing: 'दर्शनीय स्थल', activities: 'गतिविधियां', dining: 'भोजन', shopping: 'खरीदारी', events: 'कार्यक्रम', forum: 'मंच', title: '메뉴', health: 'स्वास्थ्य', services: 'सेवाएं' },
+      common: { ...en.common, share: 'साझा करें', back: 'वाপस', searchPlaceholder: 'खोजें...' }
     },
     tr: {
       ...en,

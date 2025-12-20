@@ -54,6 +54,7 @@ import {
   Building2,
   // Admin User Icons
   Users,
+  User,
   UserPlus,
   UserX,
   Shield,
@@ -93,7 +94,10 @@ import {
   // Calendar Actions
   CalendarPlus,
   // Beacon Icons
-  Zap
+  Zap,
+  // Missing Icons for AI Chat and App
+  Sparkles,
+  Bot
 } from 'lucide-react';
 
 export {
@@ -149,6 +153,7 @@ export {
   Sprout,
   Building2,
   Users,
+  User,
   UserPlus,
   UserX,
   Shield,
@@ -181,5 +186,7 @@ export {
   Thermometer,
   Wind,
   CalendarPlus,
-  Zap
+  Zap,
+  Sparkles,
+  Bot
 };

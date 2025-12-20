@@ -1,3 +1,4 @@
+
 import { LucideIcon } from 'lucide-react';
 
 export enum ViewState {
@@ -15,7 +16,8 @@ export enum ViewState {
   CITIZEN_SERVICES = 'CITIZEN_SERVICES',
   MAP = 'MAP',
   CONTACT = 'CONTACT',
-  ADMIN = 'ADMIN'
+  ADMIN = 'ADMIN',
+  AI_CHAT = 'AI_CHAT'
 }
 
 export interface NavItem {
