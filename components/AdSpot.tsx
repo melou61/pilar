@@ -4,52 +4,31 @@ import { Ad } from '../types';
 
 interface AdSpotProps {
   ads: Ad[];
-  position: 'page-top' | 'page-bottom' | 'menu-top' | 'menu-bottom';
-  className?: string;
+  position?: string;
   label?: string;
 }
 
-export const AdSpot: React.FC<AdSpotProps> = ({ ads, position, className = '', label = 'Patrocinado' }) => {
-  const today = new Date().toISOString().split('T')[0];
-  const activeAds = ads.filter(ad => ad.position === position && ad.isActive && ad.startDate <= today && ad.endDate >= today);
+export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top' }) => {
+  const activeAds = ads.filter(ad => ad.position === position && ad.isActive);
 
   if (activeAds.length === 0) {
     return (
-      <div className={`w-full ${className} my-3`}>
-         <a href="mailto:publicidad@pilarhoradada.com" className="group relative block overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-300">
-            <div className="absolute top-0 right-0 bg-blue-50/95 backdrop-blur-[2px] px-2 py-0.5 rounded-bl-lg border-l border-b border-blue-100 z-10"><span className="text-[9px] text-blue-600 font-medium tracking-widest uppercase">Disponible</span></div>
-            <div className="relative aspect-[4/1] sm:aspect-[3/1] w-full overflow-hidden bg-gray-50">
-              <img src="https://images.unsplash.com/photo-1554124499-58ec526df938?auto=format&fit=crop&w=800&q=80" alt="Espacio Disponible" className="h-full w-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-500" />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/5 transition-colors">
-                 <div className="bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full shadow-sm border border-white/50 transform group-hover:scale-105 transition-transform flex flex-col items-center">
-                    <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">Tu Marca Aquí</span>
-                    <span className="text-[10px] text-gray-500 hidden sm:block">Contacta con nosotros</span>
-                 </div>
-              </div>
-            </div>
-         </a>
+      <div className="w-full my-4">
+         <div className="relative aspect-[4/1] w-full overflow-hidden rounded-xl border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-400 font-bold text-sm">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1000&q=80" className="absolute inset-0 w-full h-full object-cover opacity-20" alt="" />
+            <span className="relative z-10">Publicidad Disponible</span>
+         </div>
       </div>
     );
   }
 
-  const maxAds = position.includes('menu') ? 1 : 2;
-  const displayAds = activeAds.slice(0, maxAds);
-  const isSingleColumn = position.includes('menu') || displayAds.length === 1;
-  const gridClass = isSingleColumn ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2';
-
   return (
-    <div className={`w-full ${className} my-3`}>
-      <div className={`grid gap-3 ${gridClass}`}>
-        {displayAds.map((ad, index) => (
-          <a key={ad.id} href={ad.linkUrl} target="_blank" rel="noopener noreferrer" className={`group relative block overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-300 ${!position.includes('menu') && index === 1 ? 'hidden sm:block' : 'block'}`}>
-            <div className="absolute top-0 right-0 bg-gray-50/95 backdrop-blur-[2px] px-2 py-0.5 rounded-bl-lg border-l border-b border-gray-100 z-10"><span className="text-[9px] text-gray-400 font-medium tracking-widest uppercase">{label}</span></div>
-            <div className="relative aspect-[4/1] sm:aspect-[3/1] w-full overflow-hidden bg-gray-50">
-              <img src={ad.imageUrl} alt={ad.clientName} className="h-full w-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
+    <div className="w-full my-4 grid gap-3">
+        {activeAds.slice(0, 1).map(ad => (
+          <a key={ad.id} href={ad.linkUrl} target="_blank" rel="noreferrer" className="block relative aspect-[4/1] overflow-hidden rounded-xl border border-gray-100 shadow-sm">
+             <img src={ad.imageUrl} alt={ad.clientName} className="w-full h-full object-cover" />
           </a>
         ))}
-      </div>
     </div>
   );
 };
