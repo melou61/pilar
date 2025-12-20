@@ -2,16 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pilar App</title>
-    
-    <!-- PWA / Standalone Mode Configuration (Hides Browser Header) -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Pilar App">
-    <meta name="theme-color" content="#ffffff">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -21,12 +13,7 @@
      crossorigin=""/>
      
     <style>
-      body { 
-        font-family: 'Inter', sans-serif; 
-        background-color: #f3f4f6;
-        /* Prevent pull-to-refresh on mobile to feel more native */
-        overscroll-behavior-y: none; 
-      }
+      body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
       /* Hide scrollbar for clean mobile look */
       .no-scrollbar::-webkit-scrollbar {
           display: none;
@@ -50,6 +37,22 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
+
+    <!-- Google Analytics (gtag.js) -->
+    <!-- Replace G-XXXXXXXXXX with your actual Tracking ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    <!-- Google AdSense -->
+    <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your actual Publisher ID -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
 </head>
   <body>
     <div id="root"></div>
