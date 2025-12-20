@@ -130,7 +130,7 @@ const App: React.FC = () => {
   };
 
   const renderHome = () => (
-    <div className="space-y-6 pb-20">
+    <div className="space-y-6 pb-20 overflow-y-auto h-full">
       <div className="relative h-[70vh] max-h-[600px] w-full overflow-hidden sm:rounded-b-3xl bg-gray-200">
         {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentHeroIndex ? 'opacity-100' : 'opacity-0'}`}>
@@ -221,24 +221,46 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="h-full flex flex-col bg-white font-sans">
+    <div className="fixed inset-0 flex flex-col bg-white font-sans overflow-hidden">
       {currentView !== ViewState.MAP && (
-        <Header onMenuClick={() => setSidebarOpen(true)} onLoginClick={() => setLoginOpen(true)} onSearchClick={() => setSearchOpen(true)} onLogoClick={() => handleNavigate(ViewState.HOME)} currentLang={currentLang} onLanguageChange={setCurrentLang} languages={languages} />
+        <Header 
+          onMenuClick={() => setSidebarOpen(true)} 
+          onLoginClick={() => setLoginOpen(true)} 
+          onSearchClick={() => setSearchOpen(true)} 
+          onLogoClick={() => handleNavigate(ViewState.HOME)} 
+          currentLang={currentLang} 
+          onLanguageChange={setCurrentLang} 
+          languages={languages} 
+        />
       )}
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
+      
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        onClose={() => setSidebarOpen(false)} 
+        menuItems={menuItems} 
+        currentView={currentView} 
+        onNavigate={handleNavigate} 
+        ads={ads} 
+        title={t.menu.title} 
+        sponsoredText={t.common.sponsored} 
+      />
+      
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />
       <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
       
-      <main className={`flex-1 w-full max-w-md mx-auto sm:max-w-xl md:max-w-2xl lg:max-w-4xl bg-white flex flex-col ${currentView === ViewState.MAP ? 'h-full' : 'shadow-xl my-0 sm:my-6 sm:rounded-2xl overflow-hidden relative'}`}>
+      <main className={`flex-1 w-full max-w-md mx-auto sm:max-w-xl md:max-w-2xl lg:max-w-4xl bg-white flex flex-col relative overflow-hidden ${currentView === ViewState.MAP ? '' : 'shadow-xl'}`}>
          {currentView === ViewState.HOME && renderHome()}
-         {currentView === ViewState.BEACHES && <BeachesView t={t} />}
-         {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} />}
+         {currentView === ViewState.BEACHES && <div className="overflow-y-auto h-full"><BeachesView t={t} /></div>}
+         {currentView === ViewState.SIGHTSEEING && <div className="overflow-y-auto h-full"><SightseeingView t={t} /></div>}
          {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleSearchNavigate} />}
-         {currentView === ViewState.DINING && <DiningView t={t} />}
-         {currentView === ViewState.SHOPPING && <ShoppingView t={t} highlightedBusinessId={selectedBusinessId} />}
-         {currentView === ViewState.EVENTS && <div className="p-4">Eventos View</div>}
-         {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} onLogout={() => setCurrentView(ViewState.HOME)} currentUserRole={adminRole} />}
+         {currentView === ViewState.DINING && <div className="overflow-y-auto h-full"><DiningView t={t} /></div>}
+         {currentView === ViewState.SHOPPING && <div className="overflow-y-auto h-full"><ShoppingView t={t} highlightedBusinessId={selectedBusinessId} /></div>}
+         {currentView === ViewState.EVENTS && <div className="p-4 overflow-y-auto h-full">Eventos View</div>}
+         {currentView === ViewState.CITIZEN_SERVICES && <div className="overflow-y-auto h-full"><CitizenServicesView t={t} /></div>}
+         {currentView === ViewState.NEWS && <div className="overflow-y-auto h-full"><NewsView t={t} /></div>}
+         {currentView === ViewState.ADMIN && <div className="overflow-y-auto h-full"><AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} onLogout={() => setCurrentView(ViewState.HOME)} currentUserRole={adminRole} /></div>}
       </main>
+      
       {currentView !== ViewState.MAP && <Footer t={t.footer} />}
     </div>
   );
