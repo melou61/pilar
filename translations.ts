@@ -89,7 +89,7 @@ const en = {
       links: 'Quick Links',
       follow: 'Follow Us',
       desc: 'Stay updated with the latest news, events and activities in Pilar de la Horadada',
-      rights: '© 2025 Pilar de la Horadada Tourism | Experience the Mediterranean at its finest'
+      rights: '© 2025 Pilar de la Horadada Tourism | Experience the Mediterranean at its finest. App built and managed by https://vortexdigital-AI. Com'
     },
     beaches_page: {
         title: 'Our Beaches',
@@ -252,7 +252,7 @@ const en = {
         links: 'Enlaces Rápidos',
         follow: 'Síguenos',
         desc: 'Mantente actualizado con las últimas noticias, eventos y actividades en Pilar de la Horadada',
-        rights: '© 2025 Turismo Pilar de la Horadada | Experimenta el Mediterráneo en su máxima expresión'
+        rights: '© 2025 Turismo Pilar de la Horadada | Experimenta el Mediterráneo en su máxima expresión. App construida y dirigida por https://vortexdigital-AI. Com'
       },
       beaches_page: {
         title: 'Nuestras Playas',
@@ -371,3 +371,4 @@ const en = {
       common: { ...en.common, share: 'Paylaş', back: 'Geri', searchPlaceholder: 'Ara...' }
     }
   };
+    

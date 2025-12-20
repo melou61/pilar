@@ -1,10 +1,9 @@
+
 import React from 'react';
-import { 
-  History, Sprout, Building2, Trophy, Plane, TreePine, Bike, MapPin 
-} from './Icons';
+import { History, Sprout, TrendingUp, Trophy, TreePine, MapPin } from './Icons';
 
 interface SightseeingViewProps {
-  t: any; // Translation object
+  t: any;
 }
 
 export const SightseeingView: React.FC<SightseeingViewProps> = ({ t }) => {
@@ -16,119 +15,80 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t }) => {
       {/* Hero Section */}
       <div className="relative h-64 overflow-hidden">
         <img 
-          src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2000&q=80" 
-          alt="Pilar Nature" 
+          src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2000&q=80" 
+          alt="Pinar Nature" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-center p-6">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
            <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2 drop-shadow-md">
-                {content.title}
-              </h1>
-              <p className="text-white/90 font-medium max-w-lg mx-auto leading-relaxed">
-                {content.subtitle}
-              </p>
+              <h1 className="text-3xl font-bold text-white mb-2">{content.title}</h1>
+              <p className="text-white/80 text-sm max-w-md">{content.subtitle}</p>
            </div>
         </div>
       </div>
 
-      {/* Narrative Timeline */}
-      <div className="px-6 py-10 max-w-3xl mx-auto">
-         <div className="relative border-l-2 border-blue-100 pl-8 space-y-10 ml-4">
-            {/* Past */}
-            <div className="relative">
-               <div className="absolute -left-[41px] bg-amber-100 p-2 rounded-full text-amber-600 border-4 border-white shadow-sm">
-                  <History size={20} />
-               </div>
-               <h3 className="text-xl font-bold text-gray-900 mb-2">{content.timeline.past.title}</h3>
-               <p className="text-gray-600 leading-relaxed text-sm">
-                 {content.timeline.past.desc}
-               </p>
-            </div>
+      <div className="px-5 py-8 space-y-12 max-w-2xl mx-auto">
+          {/* Timeline Section */}
+          <div className="space-y-8">
+              <div className="relative pl-8 border-l-2 border-blue-100 space-y-12">
+                  <div className="relative">
+                      <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-white shadow-sm" />
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                        <History size={18} className="text-blue-600" />
+                        {content.timeline.past.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">{content.timeline.past.desc}</p>
+                  </div>
+                  
+                  <div className="relative">
+                      <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-white shadow-sm" />
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                        <Sprout size={18} className="text-green-600" />
+                        {content.timeline.present.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">{content.timeline.present.desc}</p>
+                  </div>
 
-            {/* Present */}
-            <div className="relative">
-               <div className="absolute -left-[41px] bg-blue-100 p-2 rounded-full text-blue-600 border-4 border-white shadow-sm">
-                  <Sprout size={20} />
-               </div>
-               <h3 className="text-xl font-bold text-gray-900 mb-2">{content.timeline.present.title}</h3>
-               <p className="text-gray-600 leading-relaxed text-sm">
-                 {content.timeline.present.desc}
-               </p>
-            </div>
-
-            {/* Future */}
-            <div className="relative">
-               <div className="absolute -left-[41px] bg-green-100 p-2 rounded-full text-green-600 border-4 border-white shadow-sm">
-                  <Building2 size={20} />
-               </div>
-               <h3 className="text-xl font-bold text-gray-900 mb-2">{content.timeline.future.title}</h3>
-               <p className="text-gray-600 leading-relaxed text-sm">
-                 {content.timeline.future.desc}
-               </p>
-            </div>
-         </div>
-      </div>
-
-      {/* Highlights Grid: Golf, Nature, Connections */}
-      <div className="px-4 pb-12 space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900 px-2 mb-4">Descubre Más</h2>
+                  <div className="relative">
+                      <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-white shadow-sm animate-pulse" />
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                        <TrendingUp size={18} className="text-purple-600" />
+                        {content.timeline.future.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">{content.timeline.future.desc}</p>
+                  </div>
+              </div>
+          </div>
 
           {/* Golf Card */}
           <div className="bg-white rounded-2xl shadow-lg shadow-green-900/5 overflow-hidden border border-gray-100">
              <div className="h-40 relative">
-                <img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=1000&q=80" className="w-full h-full object-cover" alt="Golf" />
-                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full text-green-700">
-                    <Trophy size={20} />
+                <img src="https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1000&q=80" className="w-full h-full object-cover" alt="Golf Lo Romero" />
+                <div className="absolute top-3 left-3 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-green-700 uppercase">
+                    Premium Golf
                 </div>
              </div>
              <div className="p-5">
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{content.golf.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                    {content.golf.desc}
-                </p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <Trophy size={20} className="text-yellow-500" />
+                    {content.golf.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{content.golf.desc}</p>
              </div>
           </div>
 
-          {/* Nature Card */}
-          <div className="bg-white rounded-2xl shadow-lg shadow-green-900/5 overflow-hidden border border-gray-100 flex">
-             <div className="w-1/3 relative">
-                <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover" alt="Nature" />
-             </div>
-             <div className="w-2/3 p-5 flex flex-col justify-center">
-                 <div className="flex items-center gap-2 mb-2 text-green-600">
-                    <TreePine size={18} />
-                    <Bike size={18} />
-                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">{content.nature.title}</h3>
-                <p className="text-gray-600 text-xs leading-relaxed">
-                    {content.nature.desc}
-                </p>
-             </div>
-          </div>
-
-          {/* Connectivity Card */}
-          <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100 relative overflow-hidden">
-             <div className="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4">
-                 <Plane size={100} />
-             </div>
-             <div className="relative z-10">
-                <div className="flex items-center gap-2 mb-3 text-blue-800">
-                    <Plane size={20} />
-                    <h3 className="text-lg font-bold">{content.connectivity.title}</h3>
-                </div>
-                <p className="text-blue-900/70 text-sm leading-relaxed mb-4">
-                    {content.connectivity.desc}
-                </p>
-                <div className="flex gap-4">
-                    <div className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-900">
-                        <MapPin size={12} /> ALC (40')
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-900">
-                        <MapPin size={12} /> RMU (35')
-                    </div>
-                </div>
-             </div>
+          {/* Nature & Info Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                  <TreePine size={32} className="text-blue-600 mb-3" />
+                  <h4 className="font-bold text-gray-900 mb-2">{content.nature.title}</h4>
+                  <p className="text-gray-600 text-xs leading-relaxed">{content.nature.desc}</p>
+              </div>
+              <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100">
+                  <MapPin size={32} className="text-orange-600 mb-3" />
+                  <h4 className="font-bold text-gray-900 mb-2">{content.connectivity.title}</h4>
+                  <p className="text-gray-600 text-xs leading-relaxed">{content.connectivity.desc}</p>
+              </div>
           </div>
 
       </div>
