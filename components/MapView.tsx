@@ -114,38 +114,65 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
   return (
     <div className="flex flex-col h-full bg-white relative animate-in fade-in duration-500 overflow-hidden">
       
-      {/* Tall Header Area */}
-      <div className="bg-white border-b border-gray-100 px-8 py-10 flex flex-col gap-6 shadow-sm z-50">
-        <div className="flex items-center">
+      {/* Figma Designed Header Area - REFINED MATCH */}
+      <div className="bg-white border-b border-gray-100 px-6 py-8 flex flex-col gap-6 shadow-sm z-50">
+        <div className="flex items-center relative h-12">
           <button 
             onClick={() => onNavigate(ViewState.HOME)}
-            className="p-3 -ml-4 text-gray-800 hover:bg-gray-100 rounded-2xl transition-all"
+            className="p-3 -ml-3 text-gray-900 hover:bg-gray-100 rounded-full transition-all z-10"
           >
             <ArrowLeft size={36} />
           </button>
-          <div className="flex-1 text-center pr-8">
-             <h2 className="font-black text-gray-900 text-3xl tracking-tight">Cerca de ti</h2>
-             <p className="text-blue-600 text-xs font-black uppercase tracking-widest mt-1">Explora Pilar de la Horadada</p>
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+             <h2 className="font-black text-gray-900 text-[26px] tracking-tight leading-none">Cerca de ti</h2>
+             <p className="text-blue-600 text-[10px] font-black uppercase tracking-[0.25em] mt-2">
+               EXPLORA PILAR DE LA HORADADA
+             </p>
           </div>
         </div>
         
-        <div className="flex gap-3 overflow-x-auto no-scrollbar py-2">
-          {['all', 'food', 'shop', 'events'].map((f) => (
-            <button 
-              key={f}
-              onClick={() => setFilter(f as any)}
-              className={`px-6 py-3 rounded-2xl text-sm font-black transition-all border shadow-sm flex items-center gap-2 whitespace-nowrap ${
-                filter === f 
-                ? 'bg-gray-900 text-white border-gray-900 shadow-xl shadow-gray-200 scale-105' 
-                : 'bg-white text-gray-500 border-gray-100 hover:border-gray-200'
-              }`}
-            >
-              {f === 'all' && "Todo"}
-              {f === 'food' && <><UtensilsCrossed size={16} /> Comer</>}
-              {f === 'shop' && <><ShoppingBag size={16} /> Compras</>}
-              {f === 'events' && <><Calendar size={16} /> Eventos</>}
-            </button>
-          ))}
+        {/* Filter Chips Styled like Figma Screenshot */}
+        <div className="flex gap-3 overflow-x-auto no-scrollbar py-2 justify-start sm:justify-center px-2">
+          <button 
+            onClick={() => setFilter('all')}
+            className={`px-7 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm ${
+              filter === 'all' 
+              ? 'bg-[#0f172a] text-white border-[#0f172a]' 
+              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            Todo
+          </button>
+          <button 
+            onClick={() => setFilter('food')}
+            className={`px-5 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm flex items-center gap-2 ${
+              filter === 'food' 
+              ? 'bg-[#0f172a] text-white border-[#0f172a]' 
+              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            <UtensilsCrossed size={16} /> Comer
+          </button>
+          <button 
+            onClick={() => setFilter('shop')}
+            className={`px-5 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm flex items-center gap-2 ${
+              filter === 'shop' 
+              ? 'bg-[#0f172a] text-white border-[#0f172a]' 
+              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            <ShoppingBag size={16} /> Compras
+          </button>
+          <button 
+            onClick={() => setFilter('events')}
+            className={`px-5 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm flex items-center gap-2 ${
+              filter === 'events' 
+              ? 'bg-[#0f172a] text-white border-[#0f172a]' 
+              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            <Calendar size={16} /> Eventos
+          </button>
         </div>
       </div>
 
@@ -159,12 +186,11 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
            <Navigation size={32} className={isLocating ? 'animate-pulse' : ''} />
         </button>
 
-        {/* Selected Item Card (3 Rows / Narrow) */}
+        {/* Selected Item Card (Narrow 3-row design) */}
         {selectedItem && (
           <div className="absolute bottom-8 left-8 right-8 z-20 animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-xs mx-auto ring-1 ring-black/5">
               
-              {/* Row 1: Header/Visual */}
               <div className="relative h-44 w-full">
                 <img src={selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl} className="w-full h-full object-cover" alt="" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -181,7 +207,6 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
                 </div>
               </div>
 
-              {/* Row 2: Info Body */}
               <div className="p-8 flex flex-col gap-3">
                 <div className="flex justify-between items-start gap-2">
                    <h3 className="font-black text-gray-900 text-2xl leading-none truncate">
@@ -196,14 +221,8 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
                   <MapPin size={16} className="text-blue-500 shrink-0 mt-0.5" />
                   <span className="line-clamp-2">{selectedItem.address || selectedItem.location}</span>
                 </p>
-                {selectedItem.description && (
-                  <p className="text-gray-400 text-xs mt-1 line-clamp-2 leading-relaxed italic">
-                    {selectedItem.description}
-                  </p>
-                )}
               </div>
 
-              {/* Row 3: Action Footer */}
               <div className="px-8 pb-8">
                 <button 
                   onClick={() => {

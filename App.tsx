@@ -39,7 +39,7 @@ const App: React.FC = () => {
   const [isSearchOpen, setSearchOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState<Language>(languages[0]); 
   const [ads] = useState<Ad[]>(INITIAL_ADS);
-  const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
+  const [events] = useState<Event[]>(MOCK_EVENTS);
   const [selectedBusinessId, setSelectedBusinessId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
@@ -95,7 +95,7 @@ const App: React.FC = () => {
         ))}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/20 to-transparent flex flex-col justify-end p-12 text-white pb-24">
           <div className="flex flex-col max-w-4xl mx-auto w-full">
-            <div className="absolute top-12 right-12 bg-[#facc15] text-[#713f12] px-6 py-3 rounded-full font-black text-sm flex items-center gap-3 shadow-2xl border-4 border-white/40 ring-1 ring-black/5 animate-bounce">
+            <div className="absolute top-12 right-12 bg-[#facc15] text-[#713f12] px-6 py-3 rounded-full font-black text-sm flex items-center gap-3 shadow-2xl border-4 border-white/40 ring-1 ring-black/5">
               <Sun className="fill-[#713f12]" size={20} />
               {t.hero.sun}
             </div>
@@ -111,7 +111,6 @@ const App: React.FC = () => {
             </p>
           </div>
         </div>
-        {/* Indicators */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-3">
           {heroImages.map((_, idx) => (
             <div key={idx} className={`h-1.5 rounded-full transition-all duration-500 ${idx === currentHeroIndex ? 'bg-white w-10' : 'bg-white/30 w-3'}`} />
@@ -141,7 +140,6 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Content Area */}
       <div className="max-w-4xl mx-auto px-6 space-y-12">
         <button onClick={() => handleNavigate(ViewState.CITIZEN_SERVICES)} className="w-full bg-blue-600 rounded-[32px] p-8 flex items-center justify-between text-white shadow-2xl hover:bg-blue-700 transition-all transform hover:scale-[1.01] group">
             <div className="flex items-center gap-6">
@@ -153,24 +151,43 @@ const App: React.FC = () => {
 
         <AdSpot ads={ads} position="page-top" />
 
+        {/* PRÓXIMOS EVENTOS - FIGMA MATCH */}
         <div>
           <div className="flex justify-between items-center mb-8 px-2">
-            <h3 className="font-black text-gray-900 text-3xl tracking-tight">{t.sections.events.title}</h3>
-            <button onClick={() => handleNavigate(ViewState.EVENTS)} className="text-blue-600 text-sm font-black uppercase tracking-widest hover:underline">Explorar más</button>
+            <h3 className="font-black text-gray-900 text-[32px] tracking-tight">Próximos Eventos</h3>
+            <button 
+              onClick={() => handleNavigate(ViewState.EVENTS)} 
+              className="text-blue-600 text-xs font-black uppercase tracking-[0.1em] hover:underline"
+            >
+              EXPLORAR MÁS
+            </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {events.slice(0, 2).map(event => (
-              <div key={event.id} onClick={() => handleSearchNavigate(ViewState.EVENTS, event.id)} className="bg-white rounded-[32px] shadow-xl border border-gray-100 overflow-hidden cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all group">
-                <div className="aspect-[16/10] relative overflow-hidden">
-                  <img src={event.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur text-blue-600 text-[10px] font-black px-3 py-1 rounded-lg uppercase tracking-widest">
-                    {event.category}
+              <div 
+                key={event.id} 
+                onClick={() => handleSearchNavigate(ViewState.EVENTS, event.id)} 
+                className="bg-white rounded-[40px] shadow-sm border border-gray-100 overflow-hidden cursor-pointer hover:shadow-xl transition-all group flex flex-col"
+              >
+                <div className="aspect-[16/10] relative overflow-hidden border-b border-gray-100">
+                  <img 
+                    src={event.imageUrl} 
+                    alt="" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                  />
+                  <div className="absolute top-6 left-6 flex items-center gap-2">
+                    <span className="text-blue-600 text-[11px] font-black uppercase tracking-[0.2em] drop-shadow-sm">
+                      {event.category}
+                    </span>
                   </div>
                 </div>
-                <div className="p-8">
-                  <h4 className="font-black text-gray-900 text-xl mb-3 line-clamp-2">{event.title}</h4>
-                  <div className="flex items-center gap-2 text-gray-400 font-bold text-xs uppercase tracking-widest">
-                    <Calendar size={16} className="text-blue-500" /> {event.date}
+                <div className="p-10 pt-8 space-y-4">
+                  <h4 className="font-black text-gray-900 text-[26px] leading-tight tracking-tight">
+                    {event.title}
+                  </h4>
+                  <div className="flex items-center gap-2.5 text-gray-400 font-bold text-[12px] uppercase tracking-[0.15em]">
+                    <Calendar size={18} className="text-blue-600" />
+                    {event.date}
                   </div>
                 </div>
               </div>
@@ -194,11 +211,9 @@ const App: React.FC = () => {
           languages={languages} 
         />
       )}
-      
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />
       <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
-      
       <main className={`flex-1 w-full flex flex-col relative ${currentView === ViewState.MAP ? 'h-screen' : ''}`}>
          {currentView === ViewState.HOME && renderHome()}
          {currentView === ViewState.BEACHES && <BeachesView t={t} />}
@@ -209,7 +224,6 @@ const App: React.FC = () => {
          {currentView === ViewState.CITIZEN_SERVICES && <CitizenServicesView t={t} />}
          {currentView === ViewState.NEWS && <NewsView t={t} />}
       </main>
-      
       {currentView !== ViewState.MAP && <Footer t={t.footer} />}
     </div>
   );
