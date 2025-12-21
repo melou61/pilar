@@ -1,3 +1,4 @@
+
 import { 
   Home, 
   Newspaper, 
@@ -97,7 +98,9 @@ import {
   Zap,
   // Missing Icons for AI Chat and App
   Sparkles,
-  Bot
+  Bot,
+  // Adding Edit3 for administrative features
+  Edit3
 } from 'lucide-react';
 
 export {
@@ -188,5 +191,6 @@ export {
   CalendarPlus,
   Zap,
   Sparkles,
-  Bot
+  Bot,
+  Edit3
 };

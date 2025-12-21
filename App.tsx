@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ViewState, NavItem, Ad, Event, Language, AdminRole, Promotion } from './types';
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
-  ShoppingBag, Calendar, MapPin, Search, MapIcon, Landmark, Sparkles, User
+  ShoppingBag, Calendar, MapPin, Search, MapIcon, Landmark, Sparkles, User, LogOut
 } from './components/Icons';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -34,7 +34,7 @@ const INITIAL_ADS: Ad[] = [
   { id: '1', clientName: 'Mesón El Puerto', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true }
 ];
 
-declare const L: any; // Leaflet Global para el mini-mapa
+declare const L: any; 
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>(ViewState.HOME);
@@ -45,6 +45,11 @@ const App: React.FC = () => {
   const [shareData, setShareData] = useState({ title: '', text: '', url: '' });
   const [currentLang, setCurrentLang] = useState<Language>(languages[0]); 
   
+  // Auth States
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<'USER' | 'ADMIN'>('USER');
+  const [userName, setUserName] = useState('');
+
   const [ads, setAds] = useState<Ad[]>(INITIAL_ADS);
   const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
   const [beaconPromotions, setBeaconPromotions] = useState<Record<string, Promotion>>({});
@@ -74,6 +79,26 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserRole('USER');
+    setUserName('');
+    handleNavigate(ViewState.HOME);
+    setSidebarOpen(false);
+  };
+
+  const handleLogin = (role: 'USER' | 'ADMIN' = 'USER') => {
+    setIsLoggedIn(true);
+    setUserRole(role);
+    setUserName(role === 'ADMIN' ? 'Administrador' : 'Usuario Pilar');
+    setLoginOpen(false);
+    if (role === 'ADMIN') {
+        handleNavigate(ViewState.ADMIN);
+    } else {
+        handleNavigate(ViewState.PROFILE);
+    }
+  };
+
   const handleSearchNavigate = (view: ViewState, id?: string) => {
     setCurrentView(view);
     if (view === ViewState.SHOPPING) setSelectedBusinessId(id || null);
@@ -95,7 +120,6 @@ const App: React.FC = () => {
     { id: ViewState.EVENTS, label: t.menu.events, icon: Calendar },
   ];
 
-  // Componente interno para el Widget de Mapa en la Home
   const HomeMapWidget = () => {
     const miniMapRef = useRef<HTMLDivElement>(null);
     const widgetInstance = useRef<any>(null);
@@ -156,7 +180,6 @@ const App: React.FC = () => {
 
   const renderHome = () => (
     <div className="space-y-16 pb-24 animate-in fade-in duration-700">
-      {/* HERO SECTION */}
       <div className="relative h-[85vh] w-full overflow-hidden">
         {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
@@ -188,7 +211,6 @@ const App: React.FC = () => {
       </div>
       
       <div className="max-w-5xl mx-auto px-6 space-y-24">
-        {/* SECCIÓN TU ENTORNO (MAPA) */}
         <div className="animate-in slide-in-from-bottom duration-1000">
            <div className="flex justify-between items-center mb-10 px-4">
               <h3 className="font-black text-gray-900 text-4xl tracking-tighter">Tu entorno</h3>
@@ -197,7 +219,6 @@ const App: React.FC = () => {
            <HomeMapWidget />
         </div>
 
-        {/* SECCIÓN TRADICIÓN VIVA (EVENTOS) */}
         <div>
           <div className="flex justify-between items-center mb-12 px-4">
             <div>
@@ -214,11 +235,7 @@ const App: React.FC = () => {
                 className="bg-white rounded-[56px] shadow-2xl shadow-gray-200/50 border border-gray-100 overflow-hidden cursor-pointer hover:-translate-y-4 transition-all duration-500 group"
               >
                 <div className="aspect-[16/10] relative overflow-hidden bg-gray-100">
-                  <img 
-                    src={event.imageUrl} 
-                    alt={event.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" 
-                  />
+                  <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" />
                   <div className="absolute top-8 left-8 bg-white/95 backdrop-blur-xl px-6 py-3 rounded-3xl text-[11px] font-black uppercase tracking-[0.3em] text-blue-600 shadow-2xl">
                     {event.category}
                   </div>
@@ -237,7 +254,6 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* CORAZÓN DEL MEDITERRÁNEO */}
         <div className="text-center py-20">
            <h3 className="text-5xl font-black text-gray-900 mb-6 tracking-tighter">Corazón del Mediterráneo</h3>
            <p className="text-gray-500 max-w-2xl mx-auto font-medium text-xl leading-relaxed">
@@ -263,17 +279,25 @@ const App: React.FC = () => {
         t={t}
       />
 
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        onClose={() => setSidebarOpen(false)} 
+        menuItems={menuItems} 
+        currentView={currentView} 
+        onNavigate={handleNavigate} 
+        ads={ads} 
+        title={t.menu.title} 
+        sponsoredText={t.common.sponsored}
+        isLoggedIn={isLoggedIn}
+        onLogout={handleLogout}
+      />
       
       <div className="relative z-[7000]">
         <LoginModal 
           isOpen={isLoginOpen} 
           onClose={() => setLoginOpen(false)} 
-          onLogin={() => setLoginOpen(false)} 
-          onLoginSuperAdmin={() => {
-            setLoginOpen(false);
-            handleNavigate(ViewState.ADMIN);
-          }} 
+          onLogin={() => handleLogin('USER')} 
+          onLoginSuperAdmin={() => handleLogin('ADMIN')} 
           t={t.auth} 
         />
         <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
@@ -307,7 +331,7 @@ const App: React.FC = () => {
               setAds={setAds} 
               events={events} 
               setEvents={setEvents} 
-              onLogout={() => handleNavigate(ViewState.HOME)}
+              onLogout={handleLogout}
               currentUserRole="SUPER_ADMIN"
               beaconPromotions={beaconPromotions}
               setBeaconPromotions={setBeaconPromotions}
@@ -316,19 +340,33 @@ const App: React.FC = () => {
 
          {currentView === ViewState.PROFILE && (
             <div className="p-12 pt-40 text-center space-y-12 animate-in fade-in zoom-in duration-500">
-                <div className="w-40 h-40 bg-gray-100 rounded-[50px] mx-auto flex items-center justify-center text-gray-300 shadow-inner">
+                <div className={`w-40 h-40 ${isLoggedIn ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-300'} rounded-[50px] mx-auto flex items-center justify-center shadow-inner`}>
                    <User size={80} />
                 </div>
                 <div className="space-y-6">
-                  <h2 className="text-5xl font-black text-gray-900 tracking-tighter">Tu Perfil</h2>
-                  <p className="text-gray-500 max-w-xs mx-auto text-xl font-medium leading-tight">Inicia sesión para guardar tus rincones favoritos del Pilar.</p>
+                  <h2 className="text-5xl font-black text-gray-900 tracking-tighter">
+                      {isLoggedIn ? `Hola, ${userName}` : 'Tu Perfil'}
+                  </h2>
+                  <p className="text-gray-500 max-w-xs mx-auto text-xl font-medium leading-tight">
+                      {isLoggedIn ? 'Bienvenido a tu rincón personal del Pilar.' : 'Inicia sesión para guardar tus rincones favoritos del Pilar.'}
+                  </p>
                 </div>
-                <button 
-                   onClick={() => setLoginOpen(true)}
-                   className="w-full max-w-sm px-12 py-6 bg-blue-600 text-white rounded-[32px] font-black text-xl shadow-2xl hover:bg-blue-700 transition-all"
-                >
-                   Entrar ahora
-                </button>
+                {isLoggedIn ? (
+                    <button 
+                        onClick={handleLogout}
+                        className="w-full max-w-sm px-12 py-6 bg-red-50 text-red-600 rounded-[32px] font-black text-xl shadow-xl hover:bg-red-100 transition-all flex items-center justify-center gap-3 mx-auto"
+                    >
+                        <LogOut size={24} />
+                        Cerrar Sesión
+                    </button>
+                ) : (
+                    <button 
+                        onClick={() => setLoginOpen(true)}
+                        className="w-full max-w-sm px-12 py-6 bg-blue-600 text-white rounded-[32px] font-black text-xl shadow-2xl hover:bg-blue-700 transition-all mx-auto"
+                    >
+                        Entrar ahora
+                    </button>
+                )}
             </div>
          )}
       </main>

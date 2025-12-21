@@ -22,7 +22,8 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) =
   const chatSessionRef = useRef<Chat | null>(null);
 
   useEffect(() => {
-    const ai = new GoogleGenAI({ apiKey: "AIzaSyDeG7eTitfS-Q-p2gdYwDt4t6W2nIlIl_g" });
+    // FIX: Initializing GoogleGenAI using process.env.API_KEY as mandated by guidelines
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
@@ -53,6 +54,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) =
 
     try {
       const result = await chatSessionRef.current.sendMessage({ message: userMessage });
+      // FIX: Accessing .text property directly instead of calling it as a function
       const text = result.text || "Lo siento, no he podido procesar eso. ¿Puedes repetir?";
       setMessages(prev => [...prev, { role: 'model', text }]);
     } catch (error) {
