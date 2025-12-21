@@ -19,10 +19,14 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const markersRef = useRef<any[]>([]);
+  const isDestroyedRef = useRef(false);
 
   useEffect(() => {
-    // Pequeño retardo para asegurar que el contenedor DOM tenga dimensiones finales
-    const timer = setTimeout(() => {
+    isDestroyedRef.current = false;
+    let checkInterval: any;
+    
+    const initMap = () => {
+      if (isDestroyedRef.current) return;
       if (mapContainerRef.current && !mapInstanceRef.current && typeof L !== 'undefined') {
         try {
           const map = L.map(mapContainerRef.current, {
@@ -34,33 +38,69 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
             maxZoom: 19,
           }).addTo(map);
 
-          // Forzamos el renderizado de los tiles
-          setTimeout(() => {
+          // Forzamos el renderizado inmediato y posterior con chequeo
+          if (map && map.invalidateSize) {
             map.invalidateSize();
-          }, 100);
+            setTimeout(() => {
+              if (mapInstanceRef.current && !isDestroyedRef.current) {
+                mapInstanceRef.current.invalidateSize();
+              }
+            }, 500);
+          }
 
           mapInstanceRef.current = map;
           setLeafletMap(map);
+          clearInterval(checkInterval);
         } catch (err) {
           console.error("Leaflet Init Error:", err);
         }
       }
-    }, 300);
+    };
+
+    // Intentar inicializar con retardo inicial
+    const initialTimer = setTimeout(initMap, 100);
+
+    // Intervalo de seguridad
+    checkInterval = setInterval(initMap, 1000);
+
+    // ResizeObserver con chequeo de destrucción
+    const resizeObserver = new ResizeObserver(() => {
+        if (mapInstanceRef.current && !isDestroyedRef.current) {
+            try {
+              mapInstanceRef.current.invalidateSize();
+            } catch (e) {
+              // Ignore resize errors during unmount
+            }
+        }
+    });
+
+    if (mapContainerRef.current) {
+        resizeObserver.observe(mapContainerRef.current);
+    }
 
     return () => {
-      clearTimeout(timer);
+      isDestroyedRef.current = true;
+      clearTimeout(initialTimer);
+      clearInterval(checkInterval);
+      resizeObserver.disconnect();
       if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
+        try {
+          mapInstanceRef.current.remove();
+        } catch (e) {
+          console.warn("Error removing map instance", e);
+        }
         mapInstanceRef.current = null;
       }
     };
   }, []);
 
   useEffect(() => {
-    if (!leafletMap || typeof L === 'undefined') return;
+    if (!leafletMap || typeof L === 'undefined' || isDestroyedRef.current) return;
 
     // Limpiar marcadores previos
-    markersRef.current.forEach(m => m.remove());
+    markersRef.current.forEach(m => {
+        try { m.remove(); } catch(e) {}
+    });
     markersRef.current = [];
 
     const itemsToAdd: any[] = [];
@@ -75,33 +115,37 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
     }
 
     itemsToAdd.forEach(item => {
-      if (item.lat && item.lng) {
-        const icon = L.divIcon({
-          className: 'custom-div-icon',
-          html: `<div style="background-color: ${item.color}; width: 22px; height: 22px; border: 3px solid white; border-radius: 50%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);"></div>`,
-          iconSize: [22, 22],
-          iconAnchor: [11, 11]
-        });
+      if (item.lat && item.lng && !isDestroyedRef.current) {
+        try {
+            const icon = L.divIcon({
+              className: 'custom-div-icon',
+              html: `<div style="background-color: ${item.color}; width: 22px; height: 22px; border: 3px solid white; border-radius: 50%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);"></div>`,
+              iconSize: [22, 22],
+              iconAnchor: [11, 11]
+            });
 
-        const marker = L.marker([item.lat, item.lng], { icon }).addTo(leafletMap);
-        
-        marker.on('click', () => {
-          setSelectedItem(item);
-          leafletMap.flyTo([item.lat, item.lng], 16, {
-            duration: 0.8
-          });
-        });
+            const marker = L.marker([item.lat, item.lng], { icon }).addTo(leafletMap);
+            
+            marker.on('click', () => {
+              if (isDestroyedRef.current) return;
+              setSelectedItem(item);
+              leafletMap.flyTo([item.lat, item.lng], 16, {
+                duration: 0.8
+              });
+            });
 
-        markersRef.current.push(marker);
+            markersRef.current.push(marker);
+        } catch (e) {}
       }
     });
   }, [leafletMap, filter]);
 
   const handleLocateMe = () => {
     setIsLocating(true);
-    if (navigator.geolocation && leafletMap) {
+    if (navigator.geolocation && leafletMap && !isDestroyedRef.current) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          if (isDestroyedRef.current || !leafletMap) return;
           const { latitude, longitude } = position.coords;
           leafletMap.flyTo([latitude, longitude], 16);
           
@@ -151,10 +195,18 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
         </div>
       </div>
 
-      <div className="relative flex-1">
-        {/* Contenedor del Mapa con altura forzada mediante min-h */}
-        <div ref={mapContainerRef} className="w-full h-full min-h-[400px] bg-gray-50 z-0" />
+      <div className="relative flex-1 bg-gray-100">
+        {/* Contenedor del Mapa */}
+        <div ref={mapContainerRef} className="w-full h-full min-h-[400px] z-10" />
         
+        {/* Placeholder mientras carga */}
+        {!leafletMap && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-50 flex-col gap-4">
+                <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Cargando mapa interactivo...</p>
+            </div>
+        )}
+
         <button 
           onClick={handleLocateMe} 
           className={`absolute ${selectedItem ? 'bottom-[420px]' : 'bottom-10'} right-8 z-[1000] bg-white text-blue-600 p-6 rounded-[24px] shadow-2xl hover:scale-110 active:scale-90 transition-all border border-gray-50`}
@@ -166,7 +218,12 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
           <div className="absolute bottom-8 left-8 right-8 z-[1001] animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto ring-1 ring-black/5">
               <div className="relative h-44 w-full">
-                <img src={selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl} className="w-full h-full object-cover" alt="" />
+                <img 
+                    src={selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl} 
+                    className="w-full h-full object-cover" 
+                    alt="" 
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=1200&q=80' }}
+                />
                 <button onClick={() => setSelectedItem(null)} className="absolute top-4 right-4 p-2.5 bg-white/20 backdrop-blur-xl text-white rounded-full hover:bg-white/40 transition-all">
                   <X size={20} />
                 </button>

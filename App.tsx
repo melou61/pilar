@@ -118,38 +118,55 @@ const App: React.FC = () => {
   const HomeMapWidget = () => {
     const miniMapRef = useRef<HTMLDivElement>(null);
     const widgetInstance = useRef<any>(null);
+    const isDestroyedWidget = useRef(false);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
+        isDestroyedWidget.current = false;
+        let timer: any;
+        const initWidget = () => {
+            if (isDestroyedWidget.current) return;
             if (miniMapRef.current && !widgetInstance.current && typeof L !== 'undefined') {
-                const map = L.map(miniMapRef.current, {
-                    zoomControl: false,
-                    attributionControl: false,
-                    dragging: false,
-                    touchZoom: false,
-                    scrollWheelZoom: false,
-                    doubleClickZoom: false
-                }).setView([37.8653, -0.7932], 14);
+                try {
+                    const map = L.map(miniMapRef.current, {
+                        zoomControl: false,
+                        attributionControl: false,
+                        dragging: false,
+                        touchZoom: false,
+                        scrollWheelZoom: false,
+                        doubleClickZoom: false
+                    }).setView([37.8653, -0.7932], 14);
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-                L.circleMarker([37.8653, -0.7932], {
-                    radius: 6,
-                    fillColor: '#2563eb',
-                    color: '#ffffff',
-                    weight: 2,
-                    fillOpacity: 1
-                }).addTo(map);
+                    L.circleMarker([37.8653, -0.7932], {
+                        radius: 6,
+                        fillColor: '#2563eb',
+                        color: '#ffffff',
+                        weight: 2,
+                        fillOpacity: 1
+                    }).addTo(map);
 
-                setTimeout(() => { map.invalidateSize(); }, 200);
-                widgetInstance.current = map;
+                    setTimeout(() => { 
+                      if (map && !isDestroyedWidget.current && map.invalidateSize) {
+                        map.invalidateSize(); 
+                      }
+                    }, 300);
+                    widgetInstance.current = map;
+                } catch (e) {
+                  console.warn("HomeMapWidget init error", e);
+                }
             }
-        }, 500);
+        };
+
+        timer = setTimeout(initWidget, 500);
 
         return () => {
+            isDestroyedWidget.current = true;
             clearTimeout(timer);
             if (widgetInstance.current) {
-                widgetInstance.current.remove();
+                try {
+                  widgetInstance.current.remove();
+                } catch (e) {}
                 widgetInstance.current = null;
             }
         };
@@ -158,9 +175,9 @@ const App: React.FC = () => {
     return (
       <div 
         onClick={() => handleNavigate(ViewState.MAP)}
-        className="relative h-80 w-full rounded-[60px] overflow-hidden border-8 border-white shadow-2xl group cursor-pointer"
+        className="relative h-80 w-full rounded-[60px] overflow-hidden border-8 border-white shadow-2xl group cursor-pointer bg-gray-50"
       >
-        <div ref={miniMapRef} className="w-full h-full bg-gray-100 min-h-[300px]" />
+        <div ref={miniMapRef} className="w-full h-full min-h-[300px]" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
         <div className="absolute bottom-10 left-10 right-10 flex items-center justify-between text-white z-10">
            <div>
