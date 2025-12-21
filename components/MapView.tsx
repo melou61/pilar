@@ -155,20 +155,24 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
 
   return (
     <div className="flex flex-col h-full bg-white relative animate-in fade-in duration-500 overflow-hidden">
-      {/* Filtros flotantes */}
       <div className="absolute top-4 left-0 right-0 z-[500] flex justify-center px-4">
         <div className="bg-white/90 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-2">
-          {['all', 'food', 'shop', 'events'].map(f => (
+          {[
+            { id: 'all', label: t.menu.home },
+            { id: 'food', label: t.menu.dining },
+            { id: 'shop', label: t.menu.shopping },
+            { id: 'events', label: t.menu.events }
+          ].map(f => (
             <button 
-              key={f}
-              onClick={() => setFilter(f as any)}
+              key={f.id}
+              onClick={() => setFilter(f.id as any)}
               className={`px-6 py-2 rounded-full text-[11px] font-black transition-all capitalize ${
-                filter === f 
+                filter === f.id 
                 ? 'bg-[#0f172a] text-white shadow-lg' 
                 : 'bg-transparent text-gray-500 hover:bg-gray-50'
               }`}
             >
-              {f === 'all' ? 'Todo' : f === 'food' ? 'Comer' : f === 'shop' ? 'Tiendas' : 'Eventos'}
+              {f.label}
             </button>
           ))}
         </div>
@@ -180,7 +184,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
         {!leafletMap && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-50 flex-col gap-4">
                 <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Mapa del Pilar...</p>
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">{t.ai_guide.thinking}</p>
             </div>
         )}
 
@@ -199,7 +203,6 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
                     src={selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl} 
                     className="w-full h-full object-cover" 
                     alt="" 
-                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=1200&q=80' }}
                 />
                 <button onClick={() => setSelectedItem(null)} className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-xl text-white rounded-full">
                   <X size={18} />
@@ -220,7 +223,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
                   }}
                   className="w-full py-4 bg-blue-600 text-white rounded-[20px] font-black text-sm shadow-xl hover:bg-blue-700 transition-all"
                 >
-                  Ver Ficha
+                  {t.common.details}
                 </button>
               </div>
             </div>

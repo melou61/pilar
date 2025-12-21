@@ -68,6 +68,10 @@ export interface Promotion {
   discountCode?: string;
   expiresAt?: string;
   beaconUuid?: string;
+  beaconHardwareId?: string; // ID Físico (Major/Minor)
+  proximityRange?: 'IMMEDIATE' | 'NEAR' | 'FAR'; // Lejanía
+  frequencyMinutes?: number; // Veces por hora (Cooldown)
+  dailyLimit?: number; // Máximo por día
 }
 
 export interface CensusItem {

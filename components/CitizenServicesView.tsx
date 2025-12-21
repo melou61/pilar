@@ -52,7 +52,7 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
         <div className="bg-white w-full max-w-lg rounded-t-[40px] sm:rounded-[40px] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-in slide-in-from-bottom duration-500">
           <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
             <h3 className="text-xl font-black text-gray-900 tracking-tighter">
-              {activeModal === 'appointment' ? 'Solicitar Cita Previa' : 'Reportar Incidencia'}
+              {activeModal === 'appointment' ? t.citizen_services.appointment : t.citizen_services.incidents}
             </h3>
             <button onClick={() => setActiveModal('none')} className="p-2 hover:bg-gray-100 rounded-full text-gray-400 transition-colors">
               <X size={24} />
@@ -122,7 +122,6 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
 
   const handleDownload = (name: string) => {
     setLoading(true);
-    // Simular descarga
     setTimeout(() => {
       setLoading(false);
       alert(`Descargando: ${name}.pdf`);
@@ -133,7 +132,6 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
     <div className="bg-[#f8fafc] min-h-screen pb-44 animate-in fade-in duration-500 overflow-x-hidden">
       {renderModal()}
       
-      {/* Header Estilo Moderno */}
       <div className="bg-[#0f172a] px-8 pt-16 pb-24 text-white relative overflow-hidden rounded-b-[60px] shadow-2xl">
         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10">
@@ -141,15 +139,14 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
             <Landmark size={20} />
             Sede Electrónica
           </div>
-          <h1 className="text-5xl font-black tracking-tighter mb-4">Pilar 24h</h1>
+          <h1 className="text-5xl font-black tracking-tighter mb-4">{t.citizen_services.title}</h1>
           <p className="text-white/60 text-lg font-medium leading-tight max-w-sm">
-            Tus gestiones municipales a un solo clic, sin colas y desde cualquier lugar.
+            {t.citizen_services.subtitle}
           </p>
         </div>
       </div>
 
       <div className="px-6 -mt-12 space-y-10">
-        {/* Quick Actions Grid - Botones Gigantes y Funcionales */}
         <div className="grid grid-cols-2 gap-6">
           <button 
             onClick={() => setActiveModal('appointment')}
@@ -159,7 +156,7 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
               <CalendarCheck size={32} />
             </div>
             <div>
-              <span className="font-black text-gray-900 text-sm block tracking-tighter">Cita Previa</span>
+              <span className="font-black text-gray-900 text-sm block tracking-tighter">{t.citizen_services.appointment}</span>
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Reservar Turno</span>
             </div>
           </button>
@@ -172,20 +169,19 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
               <Camera size={32} />
             </div>
             <div>
-              <span className="font-black text-gray-900 text-sm block tracking-tighter">Incidencias</span>
-              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Avisar al Ayto.</span>
+              <span className="font-black text-gray-900 text-sm block tracking-tighter">{t.citizen_services.incidents}</span>
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">{t.citizen_services.report}</span>
             </div>
           </button>
         </div>
 
-        {/* Frequent Tasks List - Interactivo */}
         <div className="animate-in slide-in-from-bottom duration-700 delay-150">
-          <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-6 px-4">Trámites más usados</h3>
+          <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-6 px-4">{t.citizen_services.frequent}</h3>
           <div className="bg-white rounded-[40px] border border-gray-100 shadow-2xl shadow-gray-200/40 overflow-hidden">
             {[
-              { id: 'padrón', label: 'Volante de Empadronamiento', icon: <FileText className="text-blue-500" /> },
-              { id: 'tasas', label: 'Pago de Tasas e Impuestos', icon: <Landmark className="text-orange-500" /> },
-              { id: 'obras', label: 'Licencia Obra Menor', icon: <MapPin className="text-green-500" /> }
+              { id: 'padrón', label: t.citizen_services.certificate, icon: <FileText className="text-blue-500" /> },
+              { id: 'tasas', label: t.citizen_services.taxes, icon: <Landmark className="text-orange-500" /> },
+              { id: 'obras', label: t.citizen_services.licenses, icon: <MapPin className="text-green-500" /> }
             ].map((task) => (
               <button 
                 key={task.id}
@@ -206,7 +202,6 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
           </div>
         </div>
 
-        {/* Chat / Support - Funcionalidad Sugerida */}
         <div className="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[50px] p-10 text-white relative overflow-hidden shadow-2xl shadow-blue-500/20 group">
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-4">
@@ -229,18 +224,6 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
           <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-10 translate-y-10 group-hover:scale-110 transition-transform duration-1000">
             <Landmark size={240} />
           </div>
-        </div>
-
-        {/* Contact Info */}
-        <div className="p-10 text-center space-y-4 bg-gray-100/50 rounded-[40px] border border-white/50">
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Atención Presencial (OAC)</p>
-          <div className="space-y-1">
-            <h4 className="font-black text-xl text-gray-900 tracking-tighter">Plaza Campoamor, 2</h4>
-            <p className="text-gray-500 font-medium text-sm">Lunes a Viernes • 08:30 - 14:30</p>
-          </div>
-          <a href="tel:965352225" className="inline-block px-8 py-3 bg-white text-blue-600 rounded-full font-black text-xs uppercase tracking-widest shadow-sm border border-gray-200">
-            Llamar: 965 35 22 25
-          </a>
         </div>
       </div>
     </div>

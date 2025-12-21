@@ -1,28 +1,30 @@
 
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronRight, Heart } from './Icons';
-import { COMMERCIAL_CENSUS, DINING_CENSUS } from '../data';
 import { CensusItem } from '../types';
 import { BusinessDetailView } from './BusinessDetailView';
 
 interface ShoppingViewProps {
   t: any;
+  businesses: CensusItem[];
   highlightedBusinessId?: string | null;
   favorites: string[];
   toggleFavorite: (id: string) => void;
 }
 
-export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, highlightedBusinessId, favorites, toggleFavorite }) => {
+export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highlightedBusinessId, favorites, toggleFavorite }) => {
   const [selectedBusiness, setSelectedBusiness] = useState<CensusItem | null>(null);
   
-  const allBusinesses = [...COMMERCIAL_CENSUS.flatMap(c => c.items), ...DINING_CENSUS.flatMap(c => c.items)];
+  // Filtramos solo los que son categoría de compras si fuera necesario, 
+  // pero aquí mostramos el censo comercial completo que recibe la App.
+  const shops = businesses.filter(b => b.category.toLowerCase().includes('comercio') || b.category.toLowerCase().includes('moda') || b.category.toLowerCase().includes('compra'));
 
   useEffect(() => {
     if (highlightedBusinessId) {
-      const found = allBusinesses.find(b => b.id === highlightedBusinessId);
+      const found = businesses.find(b => b.id === highlightedBusinessId);
       if (found) setSelectedBusiness(found);
     }
-  }, [highlightedBusinessId, allBusinesses]);
+  }, [highlightedBusinessId, businesses]);
 
   return (
     <div className="bg-[#f8fafc] min-h-screen px-6 py-16 pb-44 animate-in fade-in duration-300">
@@ -37,12 +39,12 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, highlightedBusine
         )}
         
         <div className="mb-12 px-4">
-          <h2 className="text-5xl font-black text-gray-900 tracking-tighter mb-2">Guía de Comercio</h2>
-          <p className="text-gray-500 font-medium text-lg">Descubre los mejores negocios locales del Pilar.</p>
+          <h2 className="text-5xl font-black text-gray-900 tracking-tighter mb-2">{t.sections.shopping.title}</h2>
+          <p className="text-gray-500 font-medium text-lg">{t.sections.shopping.desc}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-10">
-            {allBusinesses.map(biz => {
+            {shops.map(biz => {
                 const isFav = favorites.includes(biz.id);
                 return (
                     <div 
@@ -52,7 +54,7 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, highlightedBusine
                     >
                         <button 
                             onClick={(e) => { e.stopPropagation(); toggleFavorite(biz.id); }}
-                            className={`absolute top-6 left-6 z-10 w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isFav ? 'bg-red-500 text-white' : 'bg-white/80 backdrop-blur-md text-gray-400 hover:text-red-500'}`}
+                            className={`absolute top-6 left-6 z-10 w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isFav ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 backdrop-blur-md text-gray-400 hover:text-red-500'}`}
                         >
                             <Heart size={20} className={isFav ? 'fill-current' : ''} />
                         </button>
@@ -84,7 +86,7 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, highlightedBusine
                                     <span className="text-xs text-gray-400 font-bold ml-1 uppercase">({biz.reviewCount})</span>
                                 </div>
                                 <div className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-5 py-2.5 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-all flex items-center gap-2">
-                                    Ver ficha <ChevronRight size={14} />
+                                    {t.common.details} <ChevronRight size={14} />
                                 </div>
                             </div>
                         </div>

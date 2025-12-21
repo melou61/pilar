@@ -30,9 +30,10 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isLangOpen, setIsLangOpen] = useState(false);
 
+  // Perfección: Se eliminan las etiquetas hardcoded para usar el objeto de traducción 't'
   const navItems = [
     { id: ViewState.HOME, icon: Home, color: 'text-blue-600', bg: 'bg-blue-50', label: t.menu.home },
-    { id: ViewState.MAP, icon: MapIcon, color: 'text-orange-500', bg: 'bg-orange-50', label: 'Mapa' },
+    { id: ViewState.MAP, icon: MapIcon, color: 'text-orange-500', bg: 'bg-orange-50', label: t.menu.map },
     { id: ViewState.AI_CHAT, icon: Sparkles, color: 'text-purple-600', bg: 'bg-purple-50', label: t.menu.ai },
     { id: ViewState.EVENTS, icon: Calendar, color: 'text-red-500', bg: 'bg-red-50', label: t.menu.events },
     { id: ViewState.PROFILE, icon: User, color: 'text-emerald-600', bg: 'bg-emerald-50', label: t.menu.profile },
@@ -66,12 +67,12 @@ export const Header: React.FC<HeaderProps> = ({
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
                 className={`
-                  relative px-2 sm:px-4 h-12 flex flex-col items-center justify-center rounded-xl transition-all duration-300 min-w-[55px] sm:min-w-[85px]
+                  relative px-2 sm:px-4 h-12 flex flex-col items-center justify-center rounded-xl transition-all duration-300 min-w-[55px] sm:min-w-[90px]
                   ${isActive ? `${item.bg} ${item.color} shadow-sm` : 'text-gray-400 hover:text-gray-600 hover:bg-white'}
                 `}
               >
                 <Icon size={isActive ? 20 : 18} strokeWidth={isActive ? 3 : 2} />
-                <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-tight mt-0.5">
+                <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-tight mt-0.5 text-center leading-none">
                   {item.label}
                 </span>
                 {isActive && (
@@ -119,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button 
             onClick={(e) => { e.stopPropagation(); onSearchClick(); }} 
             className="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all border border-gray-100 shadow-sm"
-            title="Buscar hoy"
+            title="Buscar"
           >
             <Search size={20} />
           </button>
@@ -127,7 +128,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button 
             onClick={(e) => { e.stopPropagation(); onLoginClick(); }} 
             className="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all border border-gray-100 shadow-sm"
-            title="Mi Cuenta"
+            title="Cuenta"
           >
             <LogIn size={20} />
           </button>

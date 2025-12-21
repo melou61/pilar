@@ -15,9 +15,10 @@ interface SidebarProps {
   sponsoredText: string;
   isLoggedIn: boolean;
   onLogout: () => void;
+  t: any;
 }
 
-const WeatherWidget = () => {
+const WeatherWidget = ({ t }: { t: any }) => {
   const [weather, setWeather] = useState<{temp: number, wind: number, code: number} | null>(null);
 
   useEffect(() => {
@@ -44,13 +45,6 @@ const WeatherWidget = () => {
     return <Sun size={24} className="text-yellow-500" />;
   };
 
-  const getWeatherLabel = (code: number) => {
-    if (code <= 1) return 'Soleado';
-    if (code <= 3) return 'Nublado';
-    if (code <= 67) return 'Lluvia';
-    return 'Soleado';
-  };
-
   return (
     <div className="mx-4 mt-2 mb-2 p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100 flex items-center justify-between shadow-sm">
       <div className="flex items-center gap-3">
@@ -58,10 +52,9 @@ const WeatherWidget = () => {
            {getWeatherIcon(weather.code)}
         </div>
         <div>
-           <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Pilar Horadada</div>
+           <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Pilar de la Horadada</div>
            <div className="text-lg font-black text-gray-800 leading-none mt-0.5">
              {weather.temp}°C
-             <span className="text-[10px] font-bold text-gray-400 ml-2 uppercase tracking-widest">{getWeatherLabel(weather.code)}</span>
            </div>
         </div>
       </div>
@@ -74,7 +67,7 @@ const WeatherWidget = () => {
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
-  isOpen, onClose, menuItems, currentView, onNavigate, ads, title, sponsoredText, isLoggedIn, onLogout
+  isOpen, onClose, menuItems, currentView, onNavigate, ads, title, sponsoredText, isLoggedIn, onLogout, t
 }) => {
   if (!isOpen) return null;
 
@@ -94,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         <nav className="flex-1 overflow-y-auto py-2 space-y-4 no-scrollbar">
-          <WeatherWidget />
+          <WeatherWidget t={t} />
 
           <div className="px-4">
              <AdSpot ads={ads} position="menu-top" label={sponsoredText} />
@@ -130,14 +123,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-red-50 text-red-600 font-black hover:bg-red-100 transition-all border border-red-100"
                 >
                   <LogOut size={20} />
-                  <span className="flex-1 text-left text-sm uppercase tracking-widest">Cerrar Sesión</span>
+                  <span className="flex-1 text-left text-sm uppercase tracking-widest">{t.profile?.logout || 'Logout'}</span>
                 </button>
              </div>
           )}
-          
-          <div className="px-4">
-             <AdSpot ads={ads} position="menu-bottom" label={sponsoredText} />
-          </div>
         </nav>
 
         <div className="p-8 bg-gray-50 border-t border-gray-100">
