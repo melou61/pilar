@@ -22,6 +22,7 @@ import { EventsView } from './components/EventsView';
 import { AIChatView } from './components/AIChatView';
 import { ShareModal } from './components/ShareModal';
 import { AdminDashboard } from './components/AdminDashboard';
+import { BeaconModal } from './components/BeaconModal';
 import { translations } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -55,11 +56,14 @@ const App: React.FC = () => {
   const [ads, setAds] = useState<Ad[]>(INITIAL_ADS);
   const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
   
-  // Estado dinámico para el censo de negocios (Fusionamos shops y restaurantes para gestión centralizada)
   const [businesses, setBusinesses] = useState<CensusItem[]>(() => [
     ...COMMERCIAL_CENSUS.flatMap(c => c.items),
     ...DINING_CENSUS.flatMap(c => c.items)
   ]);
+
+  // Gestión de Detección de Beacons
+  const [detectedBeaconShop, setDetectedBeaconShop] = useState<CensusItem | null>(null);
+  const seenBeacons = useRef<Set<string>>(new Set());
 
   const [selectedBusinessId, setSelectedBusinessId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
@@ -77,6 +81,23 @@ const App: React.FC = () => {
     const interval = setInterval(() => setCurrentHeroIndex((prev) => (prev + 1) % heroImages.length), 8000);
     return () => clearInterval(interval);
   }, []);
+
+  // MOTOR DE SIMULACIÓN DE PROXIMIDAD (Detectar Beacons recién configurados)
+  useEffect(() => {
+    // Escaneamos si hay comercios con promoción que no hayamos visto todavía en esta sesión
+    const findUnseenBeacon = () => {
+        const shopsWithPromo = businesses.filter(b => b.promotion && !seenBeacons.current.has(b.id));
+        if (shopsWithPromo.length > 0 && !detectedBeaconShop) {
+            // Simulamos que el usuario "camina cerca" tras 3 segundos de configurar o navegar
+            const timer = setTimeout(() => {
+                setDetectedBeaconShop(shopsWithPromo[0]);
+                seenBeacons.current.add(shopsWithPromo[0].id);
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    };
+    findUnseenBeacon();
+  }, [businesses, detectedBeaconShop]);
 
   const handleNavigate = (view: ViewState) => {
     setCurrentView(view);
@@ -116,6 +137,11 @@ const App: React.FC = () => {
     if (view === ViewState.SHOPPING) setSelectedBusinessId(id || null);
     if (view === ViewState.EVENTS) setSelectedEventId(id || null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const triggerManualBeaconTest = (shopId: string) => {
+    const shop = businesses.find(b => b.id === shopId);
+    if (shop) setDetectedBeaconShop(shop);
   };
 
   const menuItems: NavItem[] = [
@@ -161,10 +187,17 @@ const App: React.FC = () => {
         t={t}
       />
       
-      <div className="relative z-[7000]">
+      <div className="relative z-[9000]">
         <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={(userData) => handleLogin('USER', userData)} onLoginSuperAdmin={() => handleLogin('ADMIN')} t={t} />
         <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} businesses={businesses} t={t} />
         <ShareModal isOpen={isShareOpen} onClose={() => setShareOpen(false)} data={shareData} t={t.share} />
+        {detectedBeaconShop && (
+            <BeaconModal 
+                isOpen={!!detectedBeaconShop} 
+                onClose={() => setDetectedBeaconShop(null)} 
+                shop={detectedBeaconShop} 
+            />
+        )}
       </div>
       
       <main className={`flex-1 w-full flex flex-col relative pt-20 ${currentView === ViewState.MAP ? 'h-[calc(100vh-80px)]' : ''} ${currentView === ViewState.AI_CHAT ? 'h-[calc(100vh-80px)] overflow-hidden' : ''}`}>
@@ -245,6 +278,7 @@ const App: React.FC = () => {
              businesses={businesses} setBusinesses={setBusinesses}
              onLogout={handleLogout} 
              currentUserRole="SUPER_ADMIN" 
+             onTestBeacon={triggerManualBeaconTest}
            />
          )}
 
