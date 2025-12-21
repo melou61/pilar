@@ -21,11 +21,9 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   
-  // Ref to hold the active chat session for real context memory
   const chatSessionRef = useRef<Chat | null>(null);
 
   useEffect(() => {
-    // Initialize persistent chat session with system instructions
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
@@ -88,13 +86,13 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
           </div>
           <div>
             <h2 className="font-black text-gray-900 text-lg leading-none">PH Concierge</h2>
-            <span className="text-[10px] text-green-500 font-black uppercase tracking-widest">En línea - Inteligencia Real</span>
+            <span className="text-[10px] text-green-500 font-black uppercase tracking-widest">En línea</span>
           </div>
         </div>
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-8 space-y-8 pb-44">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-8 space-y-8 pb-48">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
             <div className={`flex gap-4 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
@@ -118,22 +116,20 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
         )}
       </div>
 
-      {/* Persistent Input */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-3xl border-t border-gray-100 z-30">
+      {/* Persistent Input - Improved Visibility */}
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/95 backdrop-blur-3xl border-t border-gray-100 z-[60]">
         <div className="max-w-4xl mx-auto space-y-4">
-          {messages.length < 3 && (
-            <div className="flex gap-2 overflow-x-auto no-scrollbar py-2">
-              {suggestions.map((s, idx) => (
-                <button 
-                  key={idx}
-                  onClick={() => handleSend(s)}
-                  className="px-5 py-3 bg-gray-100 rounded-2xl text-[12px] font-black text-gray-700 whitespace-nowrap shadow-sm hover:bg-blue-600 hover:text-white transition-all"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          )}
+          <div className="flex gap-2 overflow-x-auto no-scrollbar py-2">
+            {suggestions.map((s, idx) => (
+              <button 
+                key={idx}
+                onClick={() => handleSend(s)}
+                className="px-5 py-3 bg-gray-100 rounded-2xl text-[12px] font-black text-gray-700 whitespace-nowrap shadow-sm hover:bg-blue-600 hover:text-white transition-all"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
           
           <div className="relative flex gap-3 items-center">
             <input 
@@ -142,12 +138,12 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack }) => {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Escribe tu pregunta aquí..."
-              className="flex-1 px-6 py-5 bg-gray-100 border-none rounded-[28px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:bg-white transition-all text-base shadow-inner"
+              className="flex-1 px-6 py-5 bg-gray-100 border-none rounded-[28px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:bg-white transition-all text-base shadow-inner text-gray-900 placeholder-gray-500 font-medium"
             />
             <button 
               onClick={() => handleSend()}
               disabled={!input.trim() || isLoading}
-              className="w-16 h-16 bg-blue-600 text-white rounded-[24px] flex items-center justify-center hover:bg-blue-700 active:scale-95 transition-all shadow-xl shadow-blue-500/30"
+              className="w-16 h-16 bg-blue-600 text-white rounded-[24px] flex items-center justify-center hover:bg-blue-700 active:scale-95 transition-all shadow-xl shadow-blue-500/30 disabled:opacity-50"
             >
               <Send size={24} />
             </button>

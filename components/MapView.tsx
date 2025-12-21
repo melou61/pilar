@@ -13,6 +13,7 @@ declare const L: any; // Leaflet Global
 
 export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
   const [leafletMap, setLeafletMap] = useState<any | null>(null);
   const [filter, setFilter] = useState<'all' | 'food' | 'shop' | 'events'>('all');
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
@@ -20,28 +21,45 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
   const markersRef = useRef<any[]>([]);
 
   useEffect(() => {
-    if (mapContainerRef.current && !leafletMap && typeof L !== 'undefined') {
-      const map = L.map(mapContainerRef.current, {
-        zoomControl: false,
-        attributionControl: false
-      }).setView([37.8653, -0.7932], 15);
+    // Pequeño retardo para asegurar que el contenedor DOM tenga dimensiones finales
+    const timer = setTimeout(() => {
+      if (mapContainerRef.current && !mapInstanceRef.current && typeof L !== 'undefined') {
+        try {
+          const map = L.map(mapContainerRef.current, {
+            zoomControl: false,
+            attributionControl: false
+          }).setView([37.8653, -0.7932], 15);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-      }).addTo(map);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+          }).addTo(map);
 
-      setLeafletMap(map);
+          // Forzamos el renderizado de los tiles
+          setTimeout(() => {
+            map.invalidateSize();
+          }, 100);
 
-      return () => {
-        map.remove();
-      };
-    }
+          mapInstanceRef.current = map;
+          setLeafletMap(map);
+        } catch (err) {
+          console.error("Leaflet Init Error:", err);
+        }
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
     if (!leafletMap || typeof L === 'undefined') return;
 
-    // Clear existing markers
+    // Limpiar marcadores previos
     markersRef.current.forEach(m => m.remove());
     markersRef.current = [];
 
@@ -58,7 +76,6 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
 
     itemsToAdd.forEach(item => {
       if (item.lat && item.lng) {
-        // Create custom DivIcon for better styling
         const icon = L.divIcon({
           className: 'custom-div-icon',
           html: `<div style="background-color: ${item.color}; width: 22px; height: 22px; border: 3px solid white; border-radius: 50%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);"></div>`,
@@ -88,7 +105,6 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
           const { latitude, longitude } = position.coords;
           leafletMap.flyTo([latitude, longitude], 16);
           
-          // Add temporary user location marker
           L.circleMarker([latitude, longitude], {
             radius: 8,
             fillColor: '#3b82f6',
@@ -136,7 +152,8 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
       </div>
 
       <div className="relative flex-1">
-        <div ref={mapContainerRef} className="w-full h-full bg-gray-50" />
+        {/* Contenedor del Mapa con altura forzada mediante min-h */}
+        <div ref={mapContainerRef} className="w-full h-full min-h-[400px] bg-gray-50 z-0" />
         
         <button 
           onClick={handleLocateMe} 

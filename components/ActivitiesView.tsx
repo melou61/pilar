@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ACTIVITIES_LIST } from '../data';
 import { Star, MapPin, ChevronRight, Activity } from './Icons';
@@ -8,7 +9,7 @@ interface ActivitiesViewProps {
 
 export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t }) => {
   return (
-    <div className="bg-white min-h-screen pb-20 animate-in fade-in duration-300">
+    <div className="bg-white min-h-screen pb-44 animate-in fade-in duration-300">
       <div className="px-4 py-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
             <Activity className="text-blue-600" />

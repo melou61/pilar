@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MOCK_NEWS } from '../data';
 import { Rss, Facebook, Instagram, Newspaper, ExternalLink, Calendar, Filter, Megaphone, Share2 } from './Icons';
@@ -34,7 +35,7 @@ export const NewsView: React.FC<NewsViewProps> = ({ t }) => {
     : MOCK_NEWS.filter(n => n.sourceType === filter);
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-20 animate-in fade-in duration-300">
+    <div className="bg-gray-50 min-h-screen pb-44 animate-in fade-in duration-300">
       
       {/* Header Hub */}
       <div className="bg-white px-6 pt-6 pb-4 border-b border-gray-200">

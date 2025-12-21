@@ -117,33 +117,42 @@ const App: React.FC = () => {
 
   const HomeMapWidget = () => {
     const miniMapRef = useRef<HTMLDivElement>(null);
+    const widgetInstance = useRef<any>(null);
 
     useEffect(() => {
-        if (miniMapRef.current && typeof L !== 'undefined') {
-            const map = L.map(miniMapRef.current, {
-                zoomControl: false,
-                attributionControl: false,
-                dragging: false,
-                touchZoom: false,
-                scrollWheelZoom: false,
-                doubleClickZoom: false
-            }).setView([37.8653, -0.7932], 14);
+        const timer = setTimeout(() => {
+            if (miniMapRef.current && !widgetInstance.current && typeof L !== 'undefined') {
+                const map = L.map(miniMapRef.current, {
+                    zoomControl: false,
+                    attributionControl: false,
+                    dragging: false,
+                    touchZoom: false,
+                    scrollWheelZoom: false,
+                    doubleClickZoom: false
+                }).setView([37.8653, -0.7932], 14);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-            // Add a custom marker for Pilar
-            L.circleMarker([37.8653, -0.7932], {
-                radius: 6,
-                fillColor: '#2563eb',
-                color: '#ffffff',
-                weight: 2,
-                fillOpacity: 1
-            }).addTo(map);
+                L.circleMarker([37.8653, -0.7932], {
+                    radius: 6,
+                    fillColor: '#2563eb',
+                    color: '#ffffff',
+                    weight: 2,
+                    fillOpacity: 1
+                }).addTo(map);
 
-            return () => {
-                map.remove();
-            };
-        }
+                setTimeout(() => { map.invalidateSize(); }, 200);
+                widgetInstance.current = map;
+            }
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+            if (widgetInstance.current) {
+                widgetInstance.current.remove();
+                widgetInstance.current = null;
+            }
+        };
     }, []);
 
     return (
@@ -151,12 +160,12 @@ const App: React.FC = () => {
         onClick={() => handleNavigate(ViewState.MAP)}
         className="relative h-80 w-full rounded-[60px] overflow-hidden border-8 border-white shadow-2xl group cursor-pointer"
       >
-        <div ref={miniMapRef} className="w-full h-full bg-gray-100" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+        <div ref={miniMapRef} className="w-full h-full bg-gray-100 min-h-[300px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
         <div className="absolute bottom-10 left-10 right-10 flex items-center justify-between text-white z-10">
            <div>
-              <h4 className="font-black text-3xl mb-1 tracking-tighter">Explora el Pilar</h4>
-              <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.3em]">Cerca de ti hoy</p>
+              <h4 className="font-black text-3xl mb-1 tracking-tighter text-white drop-shadow-lg">Explora el Pilar</h4>
+              <p className="text-white/90 text-[10px] font-black uppercase tracking-[0.3em] drop-shadow-md">Cerca de ti hoy</p>
            </div>
            <div className="w-16 h-16 bg-white text-blue-600 rounded-[24px] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
               <MapIcon size={32} />
@@ -168,7 +177,6 @@ const App: React.FC = () => {
 
   const renderHome = () => (
     <div className="space-y-16 pb-44 animate-in fade-in duration-700">
-      {/* Immersive Hero */}
       <div className="relative h-[85vh] w-full overflow-hidden">
         {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
@@ -200,7 +208,6 @@ const App: React.FC = () => {
       </div>
       
       <div className="max-w-5xl mx-auto px-6 space-y-24">
-        {/* Mapa Vivo */}
         <div>
            <div className="flex justify-between items-center mb-10 px-4">
               <h3 className="font-black text-gray-900 text-4xl tracking-tighter">Tu entorno</h3>
@@ -209,7 +216,6 @@ const App: React.FC = () => {
            <HomeMapWidget />
         </div>
 
-        {/* Fiestas y Charangas */}
         <div>
           <div className="flex justify-between items-center mb-12 px-4">
             <div>
@@ -225,8 +231,15 @@ const App: React.FC = () => {
                 onClick={() => handleSearchNavigate(ViewState.EVENTS, event.id)} 
                 className="bg-white rounded-[64px] shadow-2xl shadow-gray-200/50 border border-gray-100 overflow-hidden cursor-pointer hover:-translate-y-4 transition-all duration-500 group"
               >
-                <div className="aspect-[16/10] relative overflow-hidden">
-                  <img src={event.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" />
+                <div className="aspect-[16/10] relative overflow-hidden bg-gray-100">
+                  <img 
+                    src={event.imageUrl} 
+                    alt={event.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" 
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=1200&q=80';
+                    }}
+                  />
                   <div className="absolute top-8 left-8 bg-white/95 backdrop-blur-xl px-6 py-3 rounded-3xl text-[11px] font-black uppercase tracking-[0.3em] text-blue-600 shadow-2xl">
                     {event.category}
                   </div>
@@ -250,7 +263,6 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc] font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
-      {/* Header Condicional */}
       {currentView !== ViewState.MAP && currentView !== ViewState.AI_CHAT && (
         <Header 
           onMenuClick={() => setSidebarOpen(true)} 
@@ -263,34 +275,35 @@ const App: React.FC = () => {
         />
       )}
 
-      {/* Floating Bottom Nav - FIXED */}
-      <nav className="fixed bottom-10 left-10 right-10 h-24 bg-white/80 backdrop-blur-3xl rounded-[45px] shadow-[0_25px_60px_rgba(0,0,0,0.12)] z-[100] flex items-center justify-around px-8 border border-white/40 ring-1 ring-black/5 animate-in slide-in-from-bottom-20 duration-1000">
-        {bottomNavItems.map(item => {
-          const isActive = currentView === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => handleNavigate(item.id)}
-              className={`relative flex flex-col items-center justify-center transition-all ${item.isMain ? '-translate-y-10' : ''}`}
-            >
-              <div className={`
-                ${item.isMain 
-                  ? 'w-20 h-20 bg-[#0f172a] text-white rounded-[32px] shadow-2xl shadow-gray-900/40 ring-8 ring-white' 
-                  : 'p-4'} 
-                ${isActive && !item.isMain ? 'text-blue-600 scale-125' : 'text-gray-400'} 
-                flex items-center justify-center transition-all duration-300
-              `}>
-                <item.icon size={item.isMain ? 40 : 28} className={isActive && !item.isMain ? 'fill-blue-50' : ''} />
-              </div>
-              {!item.isMain && (
-                <span className={`text-[10px] font-black uppercase tracking-widest transition-all duration-300 mt-1 ${isActive ? 'text-blue-600 opacity-100' : 'text-gray-400 opacity-0'}`}>
-                  {item.label}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </nav>
+      {currentView !== ViewState.MAP && currentView !== ViewState.AI_CHAT && (
+        <nav className="fixed bottom-10 left-10 right-10 h-24 bg-white/80 backdrop-blur-3xl rounded-[45px] shadow-[0_25px_60px_rgba(0,0,0,0.12)] z-[100] flex items-center justify-around px-8 border border-white/40 ring-1 ring-black/5 animate-in slide-in-from-bottom-20 duration-1000">
+          {bottomNavItems.map(item => {
+            const isActive = currentView === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleNavigate(item.id)}
+                className={`relative flex flex-col items-center justify-center transition-all ${item.isMain ? '-translate-y-10' : ''}`}
+              >
+                <div className={`
+                  ${item.isMain 
+                    ? 'w-20 h-20 bg-[#0f172a] text-white rounded-[32px] shadow-2xl shadow-gray-900/40 ring-8 ring-white' 
+                    : 'p-4'} 
+                  ${isActive && !item.isMain ? 'text-blue-600 scale-125' : 'text-gray-400'} 
+                  flex items-center justify-center transition-all duration-300
+                `}>
+                  <item.icon size={item.isMain ? 40 : 28} className={isActive && !item.isMain ? 'fill-blue-50' : ''} />
+                </div>
+                {!item.isMain && (
+                  <span className={`text-[10px] font-black uppercase tracking-widest transition-all duration-300 mt-1 ${isActive ? 'text-blue-600 opacity-100' : 'text-gray-400 opacity-0'}`}>
+                    {item.label}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+      )}
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />

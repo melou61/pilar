@@ -40,7 +40,7 @@ export const EventsView: React.FC<EventsViewProps> = ({ t, events, onShare, onAd
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-20 animate-in fade-in duration-300">
+    <div className="bg-gray-50 min-h-screen pb-44 animate-in fade-in duration-300">
       <div className="bg-white px-6 pt-6 pb-4 border-b border-gray-100">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{t.sections.events.title}</h1>
         <p className="text-sm text-gray-500">{t.sections.events.desc}</p>
@@ -83,8 +83,15 @@ export const EventsView: React.FC<EventsViewProps> = ({ t, events, onShare, onAd
               onClick={() => setSelectedEventId(event.id)}
               className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer"
             >
-              <div className="h-40 overflow-hidden relative">
-                <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div className="h-40 overflow-hidden relative bg-gray-100">
+                <img 
+                  src={event.imageUrl} 
+                  alt={event.title} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=1200&q=80';
+                  }}
+                />
                 <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-blue-700 uppercase tracking-widest shadow-sm">
                    {event.category}
                 </div>

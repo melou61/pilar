@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   CalendarCheck, FileText, HelpCircle, MessageSquare, 
@@ -10,7 +11,7 @@ interface CitizenServicesViewProps {
 
 export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) => {
   return (
-    <div className="bg-white min-h-screen pb-20 animate-in fade-in duration-300">
+    <div className="bg-white min-h-screen pb-44 animate-in fade-in duration-300">
       <div className="bg-blue-700 px-6 pt-8 pb-12 text-white rounded-b-3xl shadow-lg">
         <h1 className="text-2xl font-bold mb-2 flex items-center gap-2">
             <Landmark />
