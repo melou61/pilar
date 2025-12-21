@@ -10,7 +10,7 @@ import { Sidebar } from './components/Sidebar';
 import { LoginModal } from './components/LoginModal';
 import { Footer } from './components/Footer';
 import { ShoppingView } from './components/ShoppingView';
-import { SearchModal } from './components/SearchModal';
+import { SearchView } from './components/SearchView';
 import { BeachesView } from './components/BeachesView';
 import { SightseeingView } from './components/SightseeingView';
 import { DiningView } from './components/DiningView'; 
@@ -29,7 +29,74 @@ import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 const languages: Language[] = [
   { code: 'es', label: 'Español', flag: '🇪🇸' },
   { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'zh', label: '中文 (简体)', flag: '🇨🇳' },
+  { code: 'zh', label: '中文', flag: '🇨🇳' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', label: 'Português', flag: '🇵🇹' },
+  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+  { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'ja', label: '日本語', flag: '🇯🇵' },
+  { code: 'ko', label: '한국어', flag: '🇰🇷' },
+  { code: 'nl', label: 'Nederlands', flag: '🇳🇱' },
+  { code: 'sv', label: 'Svenska', flag: '🇸🇪' },
+  { code: 'no', label: 'Norsk', flag: '🇳🇴' },
+  { code: 'da', label: 'Dansk', flag: '🇩🇰' },
+  { code: 'fi', label: 'Suomi', flag: '🇫🇮' },
+  { code: 'pl', label: 'Polski', flag: '🇵🇱' },
+  { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+  { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'th', label: 'ไทย', flag: '🇹🇭' },
+  { code: 'el', label: 'Ελληνικά', flag: '🇬🇷' },
+  { code: 'cs', label: 'Čeština', flag: '🇨🇿' },
+  { code: 'hu', label: 'Magyar', flag: '🇭🇺' },
+  { code: 'ro', label: 'Română', flag: '🇷🇴' },
+  { code: 'uk', label: 'Українська', flag: '🇺🇦' },
+  { code: 'he', label: 'עברית', flag: '🇮🇱' },
+  { code: 'id', label: 'Bahasa Indonesia', flag: '🇮🇩' },
+  { code: 'ms', label: 'Bahasa Melayu', flag: '🇲🇾' },
+  { code: 'bn', label: 'বাংলা', flag: '🇧🇩' },
+  { code: 'pa', label: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
+  { code: 'gu', label: 'ગુજરાતી', flag: '🇮🇳' },
+  { code: 'ta', label: 'தமிழ்', flag: '🇮🇳' },
+  { code: 'te', label: 'తెలుగు', flag: '🇮🇳' },
+  { code: 'kn', label: 'ಕನ್ನಡ', flag: '🇮🇳' },
+  { code: 'ml', label: 'മലയാളം', flag: '🇮🇳' },
+  { code: 'mr', label: 'मराठी', flag: '🇮🇳' },
+  { code: 'ur', label: 'اردو', flag: '🇵🇰' },
+  { code: 'fa', label: 'فارسی', flag: '🇮🇷' },
+  { code: 'sw', label: 'Kiswahili', flag: '🇰🇪' },
+  { code: 'am', label: 'አማርኛ', flag: '🇪🇹' },
+  { code: 'yo', label: 'Yorùbá', flag: '🇳🇬' },
+  { code: 'ig', label: 'Igbo', flag: '🇳🇬' },
+  { code: 'ha', label: 'Hausa', flag: '🇳🇬' },
+  { code: 'zu', label: 'isiZulu', flag: '🇿🇦' },
+  { code: 'xh', label: 'isiXhosa', flag: '🇿🇦' },
+  { code: 'af', label: 'Afrikaans', flag: '🇿🇦' },
+  { code: 'bg', label: 'Български', flag: '🇧🇬' },
+  { code: 'sr', label: 'Српски', flag: '🇷🇸' },
+  { code: 'hr', label: 'Hrvatski', flag: '🇭🇷' },
+  { code: 'sk', label: 'Slovenčina', flag: '🇸🇰' },
+  { code: 'sl', label: 'Slovenščina', flag: '🇸🇮' },
+  { code: 'et', label: 'Eesti', flag: '🇪🇪' },
+  { code: 'lv', label: 'Latviešu', flag: '🇱🇻' },
+  { code: 'lt', label: 'Lietuvių', flag: '🇱🇹' },
+  { code: 'is', label: 'Íslenska', flag: '🇮🇸' },
+  { code: 'ga', label: 'Gaeilge', flag: '🇮🇪' },
+  { code: 'mt', label: 'Malti', flag: '🇲🇹' },
+  { code: 'sq', label: 'Shqip', flag: '🇦🇱' },
+  { code: 'mk', label: 'Македонски', flag: '🇲🇰' },
+  { code: 'ka', label: 'ქართული', flag: '🇬🇪' },
+  { code: 'hy', label: 'Հայերեն', flag: '🇦🇲' },
+  { code: 'az', label: 'Azərbaycanca', flag: '🇦🇿' },
+  { code: 'kk', label: 'Қазақ тілі', flag: '🇰🇿' },
+  { code: 'uz', label: 'Oʻzbekcha', flag: '🇺🇿' },
+  { code: 'ky', label: 'Кыргызча', flag: '🇰🇬' },
+  { code: 'mn', label: 'Монгол', flag: '🇲🇳' },
+  { code: 'km', label: 'ខ្មែر', flag: '🇰🇭' },
+  { code: 'lo', label: 'ລາວ', flag: '🇱🇦' },
+  { code: 'my', label: 'ဗမာစာ', flag: '🇲🇲' }
 ];
 
 const INITIAL_ADS: Ad[] = [
@@ -40,9 +107,9 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>(ViewState.HOME);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
-  const [isSearchOpen, setSearchOpen] = useState(false);
   const [isShareOpen, setShareOpen] = useState(false);
   const [shareData, setShareData] = useState({ title: '', text: '', url: '' });
+  
   const [currentLang, setCurrentLang] = useState<Language>(languages[0]); 
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -61,7 +128,6 @@ const App: React.FC = () => {
     ...DINING_CENSUS.flatMap(c => c.items)
   ]);
 
-  // Gestión de Detección de Beacons
   const [detectedBeaconShop, setDetectedBeaconShop] = useState<CensusItem | null>(null);
   const seenBeacons = useRef<Set<string>>(new Set());
 
@@ -69,7 +135,9 @@ const App: React.FC = () => {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
 
-  const t = translations[currentLang.code as keyof typeof translations] || translations.es;
+  // Lógica de traducción robusta con 3 niveles de fallback
+  // 1. Idioma elegido -> 2. Inglés -> 3. Español
+  const t = translations[currentLang.code] || translations.en || translations.es;
 
   const heroImages = [
     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80',
@@ -82,13 +150,10 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // MOTOR DE SIMULACIÓN DE PROXIMIDAD (Detectar Beacons recién configurados)
   useEffect(() => {
-    // Escaneamos si hay comercios con promoción que no hayamos visto todavía en esta sesión
     const findUnseenBeacon = () => {
         const shopsWithPromo = businesses.filter(b => b.promotion && !seenBeacons.current.has(b.id));
         if (shopsWithPromo.length > 0 && !detectedBeaconShop) {
-            // Simulamos que el usuario "camina cerca" tras 3 segundos de configurar o navegar
             const timer = setTimeout(() => {
                 setDetectedBeaconShop(shopsWithPromo[0]);
                 seenBeacons.current.add(shopsWithPromo[0].id);
@@ -163,7 +228,7 @@ const App: React.FC = () => {
       <Header 
         onMenuClick={() => setSidebarOpen(true)} 
         onLoginClick={() => setLoginOpen(true)} 
-        onSearchClick={() => setSearchOpen(true)} 
+        onSearchClick={() => handleNavigate(ViewState.SEARCH)} 
         onLogoClick={() => handleNavigate(ViewState.HOME)} 
         currentLang={currentLang} 
         onLanguageChange={setCurrentLang} 
@@ -189,7 +254,6 @@ const App: React.FC = () => {
       
       <div className="relative z-[9000]">
         <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={(userData) => handleLogin('USER', userData)} onLoginSuperAdmin={() => handleLogin('ADMIN')} t={t} />
-        <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} businesses={businesses} t={t} />
         <ShareModal isOpen={isShareOpen} onClose={() => setShareOpen(false)} data={shareData} t={t.share} />
         {detectedBeaconShop && (
             <BeaconModal 
@@ -200,10 +264,10 @@ const App: React.FC = () => {
         )}
       </div>
       
-      <main className={`flex-1 w-full flex flex-col relative pt-20 ${currentView === ViewState.MAP ? 'h-[calc(100vh-80px)]' : ''} ${currentView === ViewState.AI_CHAT ? 'h-[calc(100vh-80px)] overflow-hidden' : ''}`}>
+      <main className={`flex-1 w-full flex flex-col relative pt-20 ${currentView === ViewState.MAP ? 'h-[calc(100vh-80px)]' : ''} ${currentView === ViewState.AI_CHAT || currentView === ViewState.SEARCH ? 'h-[calc(100vh-80px)] overflow-hidden' : ''}`}>
          {currentView === ViewState.HOME && (
-           <div className="space-y-16 pb-24 animate-in fade-in duration-700">
-             <div className="relative h-[85vh] w-full overflow-hidden">
+           <div className="space-y-16 pb-24 animate-in fade-in duration-700 flex flex-col flex-1">
+             <div className="relative h-[85vh] w-full overflow-hidden flex-shrink-0">
                {heroImages.map((img, index) => (
                    <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
                        <img src={img} alt="Hero" className="w-full h-full object-cover" />
@@ -228,7 +292,7 @@ const App: React.FC = () => {
                </div>
              </div>
              
-             <div className="max-w-5xl mx-auto px-6 space-y-24">
+             <div className="max-w-5xl mx-auto px-6 space-y-24 w-full">
                 <div className="flex justify-between items-center px-4">
                    <h3 className="font-black text-gray-900 text-4xl tracking-tighter">{t.common.nearby}</h3>
                    <button onClick={() => handleNavigate(ViewState.MAP)} className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-6 py-3 rounded-full">{t.common.fullMap}</button>
@@ -236,26 +300,30 @@ const App: React.FC = () => {
                 <div>
                    <h3 className="font-black text-gray-900 text-5xl tracking-tighter mb-4 px-4">{t.sections.tradition?.title}</h3>
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 px-4">
-                     {events.filter(e => e.isFestival).map((event) => (
-                       <div key={event.id} onClick={() => handleSearchNavigate(ViewState.EVENTS, event.id)} className="bg-white rounded-[56px] shadow-2xl border border-gray-100 overflow-hidden cursor-pointer hover:-translate-y-4 transition-all duration-500 group">
-                         <div className="aspect-[16/10] relative overflow-hidden bg-gray-100">
-                           <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" />
-                         </div>
-                         <div className="p-10">
-                           <h4 className="font-black text-gray-900 text-3xl leading-none tracking-tighter mb-6">{event.title}</h4>
-                           <div className="flex items-center gap-4 text-gray-400 font-black text-[11px] uppercase tracking-widest">
-                             <Calendar size={18} className="text-blue-500" />
-                             {event.date}
+                     {events.filter(e => e.isFestival).map((event) => {
+                       const translatedContent = t.events_data?.[event.id] || event;
+                       return (
+                         <div key={event.id} onClick={() => handleSearchNavigate(ViewState.EVENTS, event.id)} className="bg-white rounded-[56px] shadow-2xl border border-gray-100 overflow-hidden cursor-pointer hover:-translate-y-4 transition-all duration-500 group">
+                           <div className="aspect-[16/10] relative overflow-hidden bg-gray-100">
+                             <img src={event.imageUrl} alt={translatedContent.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" />
+                           </div>
+                           <div className="p-10">
+                             <h4 className="font-black text-gray-900 text-3xl leading-none tracking-tighter mb-6">{translatedContent.title}</h4>
+                             <div className="flex items-center gap-4 text-gray-400 font-black text-[11px] uppercase tracking-widest">
+                               <Calendar size={18} className="text-blue-500" />
+                               {translatedContent.date}
+                             </div>
                            </div>
                          </div>
-                       </div>
-                     ))}
+                       );
+                     })}
                    </div>
                 </div>
              </div>
            </div>
          )}
          
+         {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleSearchNavigate} />}
          {currentView === ViewState.BEACHES && <BeachesView t={t} />}
          {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} />}
          {currentView === ViewState.ACTIVITIES && <ActivitiesView t={t} />}
@@ -269,7 +337,7 @@ const App: React.FC = () => {
          {currentView === ViewState.EVENTS && (
            <EventsView t={t} events={events} onShare={(ev) => { setShareData({title: ev.title, text: ev.description, url: window.location.href}); setShareOpen(true); }} onAddToCalendar={() => {}} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={toggleMyEvent} />
          )}
-         {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} onBack={() => handleNavigate(ViewState.HOME)} />}
+         {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} langLabel={currentLang.label} onBack={() => handleNavigate(ViewState.HOME)} />}
          
          {currentView === ViewState.ADMIN && (
            <AdminDashboard 

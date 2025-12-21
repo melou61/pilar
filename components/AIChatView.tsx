@@ -12,9 +12,10 @@ interface AIChatViewProps {
   t: any;
   onBack: () => void;
   langCode: string;
+  langLabel: string;
 }
 
-export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) => {
+export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, langLabel }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +27,8 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) =
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
-        systemInstruction: t.ai_guide.system,
+        // Dinámicamente pedimos a la IA que use el idioma seleccionado
+        systemInstruction: `${t.ai_guide.system} IMPORTANT: Always respond in ${langLabel}. Ensure perfect grammar and cultural sensitivity for this specific language.`,
       },
     });
     chatSessionRef.current = chat;
@@ -34,7 +36,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) =
     setMessages([
       { role: 'model', text: t.ai_guide.welcome }
     ]);
-  }, [langCode, t.ai_guide.system, t.ai_guide.welcome]);
+  }, [langCode, langLabel, t.ai_guide.system, t.ai_guide.welcome]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -53,11 +55,11 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) =
 
     try {
       const result = await chatSessionRef.current.sendMessage({ message: userMessage });
-      const text = result.text || "Lo siento, no he podido procesar eso. ¿Puedes repetir?";
+      const text = result.text || "I'm sorry, I couldn't process that.";
       setMessages(prev => [...prev, { role: 'model', text }]);
     } catch (error) {
       console.error("AI Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "Parece que tengo problemas de conexión. ¡Inténtalo de nuevo! 🌊" }]);
+      setMessages(prev => [...prev, { role: 'model', text: "Connectivity issues. Please try again! 🌊" }]);
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +91,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) =
         </div>
       </div>
 
-      {/* Area de Mensajes - Flex-1 para ocupar el espacio central */}
+      {/* Area de Mensajes */}
       <div 
         ref={scrollRef} 
         className="flex-1 overflow-y-auto px-6 py-8 space-y-8 no-scrollbar"
@@ -122,10 +124,9 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) =
         )}
       </div>
 
-      {/* Pie de Chat - Fijo al fondo pero no absoluto para no solapar */}
+      {/* Pie de Chat */}
       <div className="shrink-0 bg-white border-t border-gray-100 px-6 py-6 pb-10">
         <div className="max-w-4xl mx-auto space-y-4">
-          {/* Sugerencias */}
           <div className="flex gap-2 overflow-x-auto no-scrollbar py-1">
             {t.ai_guide.suggestions.map((s: string, idx: number) => (
               <button 
@@ -138,7 +139,6 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode }) =
             ))}
           </div>
           
-          {/* Input Principal */}
           <div className="relative flex gap-3 items-center">
             <input 
               type="text" 

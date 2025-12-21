@@ -18,7 +18,8 @@ export enum ViewState {
   CONTACT = 'CONTACT',
   ADMIN = 'ADMIN',
   AI_CHAT = 'AI_CHAT',
-  PROFILE = 'PROFILE'
+  PROFILE = 'PROFILE',
+  SEARCH = 'SEARCH'
 }
 
 export interface NavItem {

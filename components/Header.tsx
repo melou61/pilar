@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { Menu, LogIn, Search, Home, MapIcon, Sparkles, Calendar, User, Globe } from './Icons';
+// Added X to the list of imported icons
+import { Menu, LogIn, Search, Home, MapIcon, Sparkles, Calendar, User, Globe, ChevronRight, X } from './Icons';
 import { Language, ViewState } from '../types';
 
 interface HeaderProps {
@@ -30,7 +31,6 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isLangOpen, setIsLangOpen] = useState(false);
 
-  // Perfección: Se eliminan las etiquetas hardcoded para usar el objeto de traducción 't'
   const navItems = [
     { id: ViewState.HOME, icon: Home, color: 'text-blue-600', bg: 'bg-blue-50', label: t.menu.home },
     { id: ViewState.MAP, icon: MapIcon, color: 'text-orange-500', bg: 'bg-orange-50', label: t.menu.map },
@@ -98,20 +98,27 @@ export const Header: React.FC<HeaderProps> = ({
             {isLangOpen && (
               <>
                 <div className="fixed inset-0 z-[210]" onClick={() => setIsLangOpen(false)} />
-                <div className="absolute top-12 right-0 w-48 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[220] animate-in fade-in slide-in-from-top-2 max-h-72 overflow-y-auto no-scrollbar">
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => {
-                        onLanguageChange(lang);
-                        setIsLangOpen(false);
-                      }}
-                      className={`flex items-center gap-3 px-4 py-3 w-full hover:bg-gray-50 text-left text-xs transition-colors ${currentLang.code === lang.code ? 'bg-blue-50 text-blue-600 font-bold' : 'text-gray-700'}`}
-                    >
-                      <span className="text-xl">{lang.flag}</span>
-                      <span className="flex-1">{lang.label}</span>
-                    </button>
-                  ))}
+                <div className="absolute top-12 right-0 w-64 sm:w-72 bg-white rounded-3xl shadow-2xl border border-gray-100 py-4 z-[220] animate-in fade-in slide-in-from-top-2">
+                  <div className="px-5 pb-3 border-b border-gray-100 flex items-center justify-between mb-2">
+                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Seleccionar Idioma</span>
+                     <X size={14} className="text-gray-300 cursor-pointer" onClick={() => setIsLangOpen(false)} />
+                  </div>
+                  <div className="max-h-96 overflow-y-auto no-scrollbar px-2">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          onLanguageChange(lang);
+                          setIsLangOpen(false);
+                        }}
+                        className={`flex items-center gap-3 px-4 py-3 w-full hover:bg-blue-50/50 rounded-xl text-left text-xs transition-colors mb-1 ${currentLang.code === lang.code ? 'bg-blue-50 text-blue-600 font-bold' : 'text-gray-700'}`}
+                      >
+                        <span className="text-lg grayscale-0">{lang.flag}</span>
+                        <span className="flex-1 font-bold">{lang.label}</span>
+                        {currentLang.code === lang.code && <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </>
             )}
