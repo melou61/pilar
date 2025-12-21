@@ -42,6 +42,13 @@ const en = {
       placeholder: 'Tell me about the best beach bars...',
       welcome: 'Welcome! I am your PH Concierge. How can I help you enjoy Pilar today?',
       thinking: 'Thinking...',
+      online: 'Online',
+      system: 'You are PH Concierge, the expert assistant of Pilar de la Horadada. You know everything about beaches (Higuericas, Mil Palmeras), Gastronomy (Mesón El Puerto, La Plaza), and Festivals. Respond in English.',
+      suggestions: [
+        "When are the festivals?",
+        "Where to eat good rice?",
+        "Best beach for kids?"
+      ]
     },
     business: {
       open: 'Open',
@@ -184,6 +191,13 @@ const en = {
         placeholder: 'Dime un buen sitio para cenar...',
         welcome: '¡Hola! Soy PH Concierge. ¿Cómo puedo ayudarte a disfrutar del Pilar hoy?',
         thinking: 'Pensando...',
+        online: 'En línea',
+        system: 'Eres PH Concierge, el asistente experto de Pilar de la Horadada. Conoces todo sobre playas (Higuericas, Mil Palmeras), gastronomía y fiestas. Responde en español.',
+        suggestions: [
+          "¿Cuándo son las charangas?",
+          "¿Dónde comer un buen arroz?",
+          "¿Qué playa tiene servicios?"
+        ]
       },
       business: {
         open: 'Abierto',

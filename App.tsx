@@ -93,14 +93,6 @@ const App: React.FC = () => {
     alert(`Añadiendo "${event.title}" a tu calendario...`);
   };
 
-  const bottomNavItems: NavItem[] = [
-    { id: ViewState.HOME, label: t.menu.home, icon: Home },
-    { id: ViewState.MAP, label: 'Mapa', icon: MapIcon },
-    { id: ViewState.AI_CHAT, label: 'Guía IA', icon: Sparkles, isMain: true },
-    { id: ViewState.EVENTS, label: 'Eventos', icon: Calendar },
-    { id: ViewState.PROFILE, label: 'Perfil', icon: User },
-  ];
-
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
     { id: ViewState.AI_CHAT, label: t.menu.ai, icon: Sparkles },
@@ -193,7 +185,7 @@ const App: React.FC = () => {
   };
 
   const renderHome = () => (
-    <div className="space-y-16 pb-44 animate-in fade-in duration-700">
+    <div className="space-y-16 pb-24 animate-in fade-in duration-700">
       <div className="relative h-[85vh] w-full overflow-hidden">
         {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
@@ -211,7 +203,10 @@ const App: React.FC = () => {
             <h2 className="text-8xl sm:text-[140px] font-black mb-10 leading-[0.8] tracking-tighter drop-shadow-2xl">
               Vive<br/>el Pilar
             </h2>
-            <p className="text-white/95 text-2xl max-w-md drop-shadow-xl font-medium leading-tight opacity-90 mb-12">
+            <p 
+              className="text-white text-2xl max-w-md font-bold leading-tight mb-12"
+              style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.8)' }}
+            >
               Donde el sol ilumina la historia y el mar abraza tus sentidos.
             </p>
             <div className="flex gap-4">
@@ -280,54 +275,25 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc] font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
-      {currentView !== ViewState.MAP && currentView !== ViewState.AI_CHAT && (
-        <Header 
-          onMenuClick={() => setSidebarOpen(true)} 
-          onLoginClick={() => setLoginOpen(true)} 
-          onSearchClick={() => setSearchOpen(true)} 
-          onLogoClick={() => handleNavigate(ViewState.HOME)} 
-          currentLang={currentLang} 
-          onLanguageChange={setCurrentLang} 
-          languages={languages} 
-        />
-      )}
-
-      {currentView !== ViewState.MAP && currentView !== ViewState.AI_CHAT && (
-        <nav className="fixed bottom-10 left-10 right-10 h-24 bg-white/80 backdrop-blur-3xl rounded-[45px] shadow-[0_25px_60px_rgba(0,0,0,0.12)] z-[100] flex items-center justify-around px-8 border border-white/40 ring-1 ring-black/5 animate-in slide-in-from-bottom-20 duration-1000">
-          {bottomNavItems.map(item => {
-            const isActive = currentView === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleNavigate(item.id)}
-                className={`relative flex flex-col items-center justify-center transition-all ${item.isMain ? '-translate-y-10' : ''}`}
-              >
-                <div className={`
-                  ${item.isMain 
-                    ? 'w-20 h-20 bg-[#0f172a] text-white rounded-[32px] shadow-2xl shadow-gray-900/40 ring-8 ring-white' 
-                    : 'p-4'} 
-                  ${isActive && !item.isMain ? 'text-blue-600 scale-125' : 'text-gray-400'} 
-                  flex items-center justify-center transition-all duration-300
-                `}>
-                  <item.icon size={item.isMain ? 40 : 28} className={isActive && !item.isMain ? 'fill-blue-50' : ''} />
-                </div>
-                {!item.isMain && (
-                  <span className={`text-[10px] font-black uppercase tracking-widest transition-all duration-300 mt-1 ${isActive ? 'text-blue-600 opacity-100' : 'text-gray-400 opacity-0'}`}>
-                    {item.label}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
-      )}
+      <Header 
+        onMenuClick={() => setSidebarOpen(true)} 
+        onLoginClick={() => setLoginOpen(true)} 
+        onSearchClick={() => setSearchOpen(true)} 
+        onLogoClick={() => handleNavigate(ViewState.HOME)} 
+        currentLang={currentLang} 
+        onLanguageChange={setCurrentLang} 
+        languages={languages} 
+        currentView={currentView}
+        onNavigate={handleNavigate}
+        t={t}
+      />
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />
       <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
       <ShareModal isOpen={isShareOpen} onClose={() => setShareOpen(false)} data={shareData} t={t.share} />
       
-      <main className={`flex-1 w-full flex flex-col relative ${currentView === ViewState.MAP ? 'h-screen' : ''}`}>
+      <main className={`flex-1 w-full flex flex-col relative ${currentView === ViewState.MAP ? 'h-[calc(100vh-80px)]' : ''} ${currentView === ViewState.AI_CHAT ? 'h-[calc(100vh-80px)] overflow-hidden' : ''}`}>
          {currentView === ViewState.HOME && renderHome()}
          {currentView === ViewState.BEACHES && <BeachesView t={t} />}
          {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} />}
@@ -346,7 +312,7 @@ const App: React.FC = () => {
               initialEventId={selectedEventId} 
            />
          )}
-         {currentView === ViewState.AI_CHAT && <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
+         {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} onBack={() => handleNavigate(ViewState.HOME)} />}
          
          {currentView === ViewState.PROFILE && (
             <div className="p-12 pt-40 text-center space-y-12 animate-in fade-in zoom-in duration-500">
@@ -367,7 +333,7 @@ const App: React.FC = () => {
          )}
       </main>
       
-      {currentView !== ViewState.MAP && currentView !== ViewState.AI_CHAT && <Footer t={t.footer} />}
+      <Footer t={t.footer} />
     </div>
   );
 };

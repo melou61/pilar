@@ -38,7 +38,6 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
             maxZoom: 19,
           }).addTo(map);
 
-          // Forzamos el renderizado inmediato y posterior con chequeo
           if (map && map.invalidateSize) {
             map.invalidateSize();
             setTimeout(() => {
@@ -57,20 +56,14 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
       }
     };
 
-    // Intentar inicializar con retardo inicial
     const initialTimer = setTimeout(initMap, 100);
-
-    // Intervalo de seguridad
     checkInterval = setInterval(initMap, 1000);
 
-    // ResizeObserver con chequeo de destrucción
     const resizeObserver = new ResizeObserver(() => {
         if (mapInstanceRef.current && !isDestroyedRef.current) {
             try {
               mapInstanceRef.current.invalidateSize();
-            } catch (e) {
-              // Ignore resize errors during unmount
-            }
+            } catch (e) {}
         }
     });
 
@@ -86,9 +79,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
       if (mapInstanceRef.current) {
         try {
           mapInstanceRef.current.remove();
-        } catch (e) {
-          console.warn("Error removing map instance", e);
-        }
+        } catch (e) {}
         mapInstanceRef.current = null;
       }
     };
@@ -97,7 +88,6 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
   useEffect(() => {
     if (!leafletMap || typeof L === 'undefined' || isDestroyedRef.current) return;
 
-    // Limpiar marcadores previos
     markersRef.current.forEach(m => {
         try { m.remove(); } catch(e) {}
     });
@@ -148,7 +138,6 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
           if (isDestroyedRef.current || !leafletMap) return;
           const { latitude, longitude } = position.coords;
           leafletMap.flyTo([latitude, longitude], 16);
-          
           L.circleMarker([latitude, longitude], {
             radius: 8,
             fillColor: '#3b82f6',
@@ -156,7 +145,6 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
             weight: 3,
             fillOpacity: 0.8
           }).addTo(leafletMap);
-          
           setIsLocating(false);
         },
         () => setIsLocating(false),
@@ -167,26 +155,17 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
 
   return (
     <div className="flex flex-col h-full bg-white relative animate-in fade-in duration-500 overflow-hidden">
-      <div className="bg-white border-b border-gray-100 px-6 py-8 flex flex-col gap-6 shadow-sm z-50">
-        <div className="flex items-center relative h-12">
-          <button onClick={() => onNavigate(ViewState.HOME)} className="p-3 -ml-3 text-gray-900 hover:bg-gray-100 rounded-full transition-all z-10">
-            <ArrowLeft size={36} />
-          </button>
-          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-             <h2 className="font-black text-gray-900 text-[26px] tracking-tight leading-none">Cerca de ti</h2>
-             <p className="text-blue-600 text-[10px] font-black uppercase tracking-[0.25em] mt-2">EXPLORA PILAR DE LA HORADADA</p>
-          </div>
-        </div>
-        
-        <div className="flex gap-3 overflow-x-auto no-scrollbar py-2 justify-start sm:justify-center px-2">
+      {/* Filtros flotantes */}
+      <div className="absolute top-4 left-0 right-0 z-[500] flex justify-center px-4">
+        <div className="bg-white/90 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-2">
           {['all', 'food', 'shop', 'events'].map(f => (
             <button 
               key={f}
               onClick={() => setFilter(f as any)}
-              className={`px-7 py-3 rounded-2xl text-[13px] font-black transition-all border shadow-sm capitalize ${
+              className={`px-6 py-2 rounded-full text-[11px] font-black transition-all capitalize ${
                 filter === f 
-                ? 'bg-[#0f172a] text-white border-[#0f172a]' 
-                : 'bg-white text-gray-700 border-gray-200'
+                ? 'bg-[#0f172a] text-white shadow-lg' 
+                : 'bg-transparent text-gray-500 hover:bg-gray-50'
               }`}
             >
               {f === 'all' ? 'Todo' : f === 'food' ? 'Comer' : f === 'shop' ? 'Tiendas' : 'Eventos'}
@@ -196,59 +175,52 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate }) => {
       </div>
 
       <div className="relative flex-1 bg-gray-100">
-        {/* Contenedor del Mapa */}
         <div ref={mapContainerRef} className="w-full h-full min-h-[400px] z-10" />
         
-        {/* Placeholder mientras carga */}
         {!leafletMap && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-50 flex-col gap-4">
                 <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Cargando mapa interactivo...</p>
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Mapa del Pilar...</p>
             </div>
         )}
 
         <button 
           onClick={handleLocateMe} 
-          className={`absolute ${selectedItem ? 'bottom-[420px]' : 'bottom-10'} right-8 z-[1000] bg-white text-blue-600 p-6 rounded-[24px] shadow-2xl hover:scale-110 active:scale-90 transition-all border border-gray-50`}
+          className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[1000] bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl hover:scale-110 active:scale-90 transition-all border border-gray-50`}
         >
-          <Navigation size={32} className={isLocating ? 'animate-pulse' : ''} />
+          <Navigation size={28} className={isLocating ? 'animate-pulse' : ''} />
         </button>
 
         {selectedItem && (
           <div className="absolute bottom-8 left-8 right-8 z-[1001] animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto ring-1 ring-black/5">
-              <div className="relative h-44 w-full">
+              <div className="relative h-40 w-full">
                 <img 
                     src={selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl} 
                     className="w-full h-full object-cover" 
                     alt="" 
                     onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=1200&q=80' }}
                 />
-                <button onClick={() => setSelectedItem(null)} className="absolute top-4 right-4 p-2.5 bg-white/20 backdrop-blur-xl text-white rounded-full hover:bg-white/40 transition-all">
-                  <X size={20} />
+                <button onClick={() => setSelectedItem(null)} className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-xl text-white rounded-full">
+                  <X size={18} />
                 </button>
               </div>
 
-              <div className="p-8 flex flex-col gap-3">
-                <div className="flex justify-between items-start gap-2">
-                   <h3 className="font-black text-gray-900 text-2xl leading-none truncate">{selectedItem.name || selectedItem.title}</h3>
-                </div>
-                <p className="text-gray-500 text-sm flex items-start gap-2 font-medium">
-                  <MapPin size={16} className="text-blue-500 shrink-0 mt-0.5" />
-                  <span className="line-clamp-2">{selectedItem.address || selectedItem.location}</span>
+              <div className="p-6">
+                <h3 className="font-black text-gray-900 text-xl leading-none truncate mb-2">{selectedItem.name || selectedItem.title}</h3>
+                <p className="text-gray-500 text-xs flex items-center gap-2 font-medium mb-6">
+                  <MapPin size={14} className="text-blue-500 shrink-0" />
+                  <span className="truncate">{selectedItem.address || selectedItem.location}</span>
                 </p>
-              </div>
-
-              <div className="px-8 pb-8">
                 <button 
                   onClick={() => {
                     if (selectedItem.type === 'EVENT') onNavigate(ViewState.EVENTS, selectedItem.id);
                     else if (selectedItem.type === 'FOOD') onNavigate(ViewState.DINING);
                     else onNavigate(ViewState.SHOPPING, selectedItem.id);
                   }}
-                  className="w-full py-5 bg-blue-600 text-white rounded-[24px] font-black text-base shadow-xl shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-3"
+                  className="w-full py-4 bg-blue-600 text-white rounded-[20px] font-black text-sm shadow-xl hover:bg-blue-700 transition-all"
                 >
-                  Ver Detalles <ArrowRight size={20} />
+                  Ver Ficha
                 </button>
               </div>
             </div>
