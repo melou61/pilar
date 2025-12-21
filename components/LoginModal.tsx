@@ -1,11 +1,11 @@
 
-import React, { useState } from 'react';
-import { X, LogIn, ShieldCheck, UserPlus, Check } from './Icons';
+import React, { useState, useEffect } from 'react';
+import { X, LogIn, ShieldCheck, UserPlus, Check, AlertTriangle } from './Icons';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogin: () => void;
+  onLogin: (userData?: { name: string, email: string }) => void;
   onLoginSuperAdmin: () => void;
   t: any;
 }
@@ -14,37 +14,76 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
   const [view, setView] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Intentar recuperar el usuario registrado de la sesión actual
+  const getStoredUser = () => {
+    const stored = localStorage.getItem('pilar_user_db');
+    return stored ? JSON.parse(stored) : null;
+  };
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-        alert("Por favor, completa todos los campos.");
-        return;
-    }
-    
-    setIsSuccess(true);
-    setTimeout(() => {
-        onLogin();
+    setError(null);
+
+    // 1. Verificar Admin de la Demo
+    if (email.toLowerCase() === 'admin@pilarhoradada.com' && password === 'admin') {
+      setIsSuccess(true);
+      setTimeout(() => {
+        onLoginSuperAdmin();
         setIsSuccess(false);
-        setView('login');
-        setEmail('');
-        setPassword('');
-    }, 1200);
+        resetForm();
+      }, 800);
+      return;
+    }
+
+    // 2. Verificar Usuario registrado en LocalStorage
+    const dbUser = getStoredUser();
+    if (dbUser && email.toLowerCase() === dbUser.email.toLowerCase() && password === dbUser.pass) {
+      setIsSuccess(true);
+      setTimeout(() => {
+        onLogin({ name: dbUser.name, email: dbUser.email });
+        setIsSuccess(false);
+        resetForm();
+      }, 800);
+      return;
+    }
+
+    // 3. Error detallado
+    setError("Credenciales incorrectas. Si te acabas de registrar, usa ese mismo email y contraseña.");
   };
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name || !email || !password) {
+        setError("Todos los campos son obligatorios.");
+        return;
+    }
+
+    // Guardar permanentemente en el navegador para esta sesión
+    const userData = { name, email, pass: password };
+    localStorage.setItem('pilar_user_db', JSON.stringify(userData));
+    
     setIsSuccess(true);
     setTimeout(() => {
-        alert("¡Cuenta pilarera creada! Ahora puedes entrar con tus datos.");
-        setIsSuccess(false);
-        setView('login');
-        setEmail('');
-        setPassword('');
-    }, 1500);
+      setIsSuccess(false);
+      setView('login');
+      setError(null);
+      // Mantenemos el email para que solo tenga que poner la contraseña
+      setPassword(''); 
+      alert("¡Registro completado! Ya puedes entrar con tus datos.");
+    }, 1000);
+  };
+
+  const resetForm = () => {
+    setEmail('');
+    setPassword('');
+    setName('');
+    setError(null);
   };
 
   return (
@@ -69,9 +108,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
            </div>
         </div>
         
-        <p className="text-gray-500 text-sm mb-8 font-medium leading-tight">
-          {view === 'login' ? t.loginSubtitle : 'Forma parte de la comunidad más activa de la Costa Blanca.'}
+        <p className="text-gray-500 text-sm mb-6 font-medium leading-tight">
+          {view === 'login' ? 'Entra para gestionar tus favoritos y agenda.' : 'Regístrate para guardar tus sitios favoritos del Pilar.'}
         </p>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600 animate-in shake duration-300">
+            <AlertTriangle size={20} className="shrink-0" />
+            <p className="text-[11px] font-bold leading-tight">{error}</p>
+          </div>
+        )}
 
         {view === 'login' && (
             <button
@@ -80,7 +126,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
                 className="w-full py-5 mb-8 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-100 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
             >
                 <ShieldCheck size={20} />
-                Acceso Administrador Demo
+                Acceso Admin Rápido
             </button>
         )}
 
@@ -95,11 +141,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
         <form className="space-y-6" onSubmit={view === 'login' ? handleSubmit : handleRegister}>
           {view === 'register' && (
              <div>
-                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Nombre Completo</label>
+                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Nombre Completo</label>
                 <input 
                   required 
                   type="text" 
-                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:bg-white focus:border-emerald-500 transition-all text-base font-bold text-gray-900 placeholder-gray-400" 
                   placeholder="Tu nombre" 
                 />
@@ -107,8 +154,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
           )}
 
           <div>
-            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">
-              {t.email}
+            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">
+              Email
             </label>
             <input 
               required
@@ -117,12 +164,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
               autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:bg-white focus:border-blue-600 transition-all text-base font-bold text-gray-900 placeholder-gray-400"
-              placeholder="tu@email.com"
+              placeholder="Ej: tu@email.com"
             />
           </div>
 
           <div>
-            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">
+            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">
               Contraseña
             </label>
             <input 
@@ -132,7 +179,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:bg-white focus:border-blue-600 transition-all text-base font-bold text-gray-900 placeholder-gray-400"
-              placeholder="••••••••"
+              placeholder="Mín. 4 caracteres"
             />
           </div>
 
@@ -145,7 +192,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
                 : view === 'login' ? 'bg-[#0f172a] text-white hover:bg-black shadow-gray-200' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-200'
             }`}
           >
-            {isSuccess ? <Check size={20} /> : view === 'login' ? 'Entrar' : 'Unirme ahora'}
+            {isSuccess ? <Check size={20} /> : view === 'login' ? 'Entrar' : 'Registrarme'}
           </button>
         </form>
 
@@ -155,7 +202,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
             </span>
             <button 
                 type="button"
-                onClick={() => setView(view === 'login' ? 'register' : 'login')}
+                onClick={() => {
+                  setView(view === 'login' ? 'register' : 'login');
+                  setError(null);
+                }}
                 className={`text-xs font-black uppercase tracking-widest ml-2 ${view === 'login' ? 'text-blue-600' : 'text-emerald-600'}`}
             >
                 {view === 'login' ? 'Regístrate' : 'Accede'}

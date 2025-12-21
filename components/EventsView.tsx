@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Event } from '../types';
-import { Search, Calendar, MapPin, ChevronRight, Filter, ArrowLeft } from './Icons';
+import { Search, Calendar, MapPin, ChevronRight, Filter, ArrowLeft, Bookmark } from './Icons';
 import { EventDetailView } from './EventDetailView';
 
 interface EventsViewProps {
@@ -10,14 +10,17 @@ interface EventsViewProps {
   onShare: (event: Event) => void;
   onAddToCalendar: (e: React.MouseEvent, event: Event) => void;
   initialEventId?: string | null;
+  myEvents?: string[];
+  toggleMyEvent?: (id: string) => void;
 }
 
-export const EventsView: React.FC<EventsViewProps> = ({ t, events, onShare, onAddToCalendar, initialEventId }) => {
+export const EventsView: React.FC<EventsViewProps> = ({ 
+    t, events, onShare, onAddToCalendar, initialEventId, myEvents = [], toggleMyEvent 
+}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(initialEventId || null);
   const [activeCategory, setActiveCategory] = useState('all');
 
-  // Fix: Explicitly type categories as string array and cast Array.from result to string[] to avoid 'unknown' type errors during mapping
   const categories: string[] = ['all', ...(Array.from(new Set(events.map(e => e.category.toLowerCase()))) as string[])];
 
   const filteredEvents = events.filter(event => {
@@ -77,44 +80,54 @@ export const EventsView: React.FC<EventsViewProps> = ({ t, events, onShare, onAd
 
       <div className="px-4 py-6 space-y-4">
         {filteredEvents.length > 0 ? (
-          filteredEvents.map(event => (
-            <div 
-              key={event.id}
-              onClick={() => setSelectedEventId(event.id)}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer"
-            >
-              <div className="h-40 overflow-hidden relative bg-gray-100">
-                <img 
-                  src={event.imageUrl} 
-                  alt={event.title} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=1200&q=80';
-                  }}
-                />
-                <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-blue-700 uppercase tracking-widest shadow-sm">
-                   {event.category}
+          filteredEvents.map(event => {
+            const isSaved = myEvents.includes(event.id);
+            return (
+                <div 
+                    key={event.id}
+                    onClick={() => setSelectedEventId(event.id)}
+                    className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow group cursor-pointer relative"
+                >
+                    <button 
+                        onClick={(e) => { e.stopPropagation(); toggleMyEvent?.(event.id); }}
+                        className={`absolute top-3 right-3 z-10 w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isSaved ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white/90 backdrop-blur-md text-gray-400 hover:text-emerald-500 shadow-sm'}`}
+                    >
+                        <Bookmark size={18} className={isSaved ? 'fill-current' : ''} />
+                    </button>
+
+                    <div className="h-40 overflow-hidden relative bg-gray-100">
+                        <img 
+                            src={event.imageUrl} 
+                            alt={event.title} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=1200&q=80';
+                            }}
+                        />
+                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-blue-700 uppercase tracking-widest shadow-sm">
+                        {event.category}
+                        </div>
+                    </div>
+                    <div className="p-5">
+                        <h3 className="font-bold text-gray-900 text-lg mb-2">{event.title}</h3>
+                        <div className="space-y-2 mb-4">
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                            <Calendar size={14} className="text-blue-500" />
+                            {event.date}
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                            <MapPin size={14} className="text-red-500" />
+                            {event.location}
+                        </div>
+                        </div>
+                        <div className="flex items-center justify-between text-blue-600 text-sm font-bold border-t border-gray-50 pt-4">
+                        <span>Saber más</span>
+                        <ChevronRight size={18} />
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div className="p-5">
-                <h3 className="font-bold text-gray-900 text-lg mb-2">{event.title}</h3>
-                <div className="space-y-2 mb-4">
-                   <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Calendar size={14} className="text-blue-500" />
-                      {event.date}
-                   </div>
-                   <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <MapPin size={14} className="text-red-500" />
-                      {event.location}
-                   </div>
-                </div>
-                <div className="flex items-center justify-between text-blue-600 text-sm font-bold border-t border-gray-50 pt-4">
-                   <span>Saber más</span>
-                   <ChevronRight size={18} />
-                </div>
-              </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="text-center py-20 text-gray-400">
             <Calendar size={48} className="mx-auto mb-4 opacity-10" />

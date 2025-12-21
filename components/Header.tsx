@@ -31,18 +31,17 @@ export const Header: React.FC<HeaderProps> = ({
   const [isLangOpen, setIsLangOpen] = useState(false);
 
   const navItems = [
-    { id: ViewState.HOME, icon: Home, color: 'text-blue-600', bg: 'bg-blue-50', label: 'Inicio' },
+    { id: ViewState.HOME, icon: Home, color: 'text-blue-600', bg: 'bg-blue-50', label: t.menu.home },
     { id: ViewState.MAP, icon: MapIcon, color: 'text-orange-500', bg: 'bg-orange-50', label: 'Mapa' },
-    { id: ViewState.AI_CHAT, icon: Sparkles, color: 'text-purple-600', bg: 'bg-purple-50', label: 'Guía IA' },
-    { id: ViewState.EVENTS, icon: Calendar, color: 'text-red-500', bg: 'bg-red-50', label: 'Eventos' },
-    { id: ViewState.PROFILE, icon: User, color: 'text-emerald-600', bg: 'bg-emerald-50', label: 'Mi Pilar' },
+    { id: ViewState.AI_CHAT, icon: Sparkles, color: 'text-purple-600', bg: 'bg-purple-50', label: t.menu.ai },
+    { id: ViewState.EVENTS, icon: Calendar, color: 'text-red-500', bg: 'bg-red-50', label: t.menu.events },
+    { id: ViewState.PROFILE, icon: User, color: 'text-emerald-600', bg: 'bg-emerald-50', label: t.menu.profile },
   ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[200] bg-white border-b border-gray-100 shadow-md h-20 w-full flex items-center">
       <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between gap-4">
         
-        {/* LOGO RESTAURADO: Dos líneas (Gusta más al usuario) */}
         <div 
           className="flex items-center gap-3 cursor-pointer shrink-0 group" 
           onClick={onLogoClick}
@@ -58,7 +57,6 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* NAVEGACIÓN CENTRAL: Pareja y con etiquetas */}
         <nav className="flex items-center bg-gray-50 border border-gray-100 rounded-2xl p-1 gap-1">
           {navItems.map((item) => {
             const isActive = currentView === item.id;
@@ -84,10 +82,8 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </nav>
 
-        {/* UTILIDADES DERECHA: Bola de idioma, lupa, login, menú */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           
-          {/* Bola de Idioma */}
           <div className="relative">
             <button 
               onClick={() => setIsLangOpen(!isLangOpen)}
@@ -101,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({
             {isLangOpen && (
               <>
                 <div className="fixed inset-0 z-[210]" onClick={() => setIsLangOpen(false)} />
-                <div className="absolute top-12 right-0 w-40 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[220] animate-in fade-in slide-in-from-top-2">
+                <div className="absolute top-12 right-0 w-48 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[220] animate-in fade-in slide-in-from-top-2 max-h-72 overflow-y-auto no-scrollbar">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
@@ -111,8 +107,8 @@ export const Header: React.FC<HeaderProps> = ({
                       }}
                       className={`flex items-center gap-3 px-4 py-3 w-full hover:bg-gray-50 text-left text-xs transition-colors ${currentLang.code === lang.code ? 'bg-blue-50 text-blue-600 font-bold' : 'text-gray-700'}`}
                     >
-                      <span>{lang.flag}</span>
-                      <span>{lang.label}</span>
+                      <span className="text-xl">{lang.flag}</span>
+                      <span className="flex-1">{lang.label}</span>
                     </button>
                   ))}
                 </div>
@@ -120,7 +116,6 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* Lupa (Búsqueda) */}
           <button 
             onClick={(e) => { e.stopPropagation(); onSearchClick(); }} 
             className="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all border border-gray-100 shadow-sm"
@@ -129,7 +124,6 @@ export const Header: React.FC<HeaderProps> = ({
             <Search size={20} />
           </button>
 
-          {/* Login (Acceso) */}
           <button 
             onClick={(e) => { e.stopPropagation(); onLoginClick(); }} 
             className="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all border border-gray-100 shadow-sm"
@@ -138,7 +132,6 @@ export const Header: React.FC<HeaderProps> = ({
             <LogIn size={20} />
           </button>
 
-          {/* Menú (Tres rayas) */}
           <button 
             onClick={(e) => { e.stopPropagation(); onMenuClick(); }} 
             className="w-11 h-11 flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md shadow-blue-100 ml-1"

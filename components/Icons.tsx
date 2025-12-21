@@ -37,7 +37,6 @@ import {
   Video,
   Star,
   Clock,
-  // New Icons for Beaches
   Umbrella,
   Accessibility, 
   Flag,
@@ -45,7 +44,6 @@ import {
   Car,
   Droplets,
   LifeBuoy,
-  // New Icons for Sightseeing/Nature
   Plane,
   TreePine,
   Bike,
@@ -53,13 +51,11 @@ import {
   History,
   Sprout,
   Building2,
-  // Admin User Icons
   Users,
   User,
   UserPlus,
   UserX,
   Shield,
-  // Admin Dashboard Icons
   Trash2,
   Plus,
   Image,
@@ -69,10 +65,8 @@ import {
   AlertCircle,
   Layers,
   AlertTriangle,
-  // New Section Icons
   Heart,
   Briefcase,
-  // Map and Services Icons
   Map as MapIcon,
   Navigation,
   FileText,
@@ -81,26 +75,21 @@ import {
   Landmark,
   Camera,
   Send,
-  // News Aggregator Icons
   Rss,
   Megaphone,
   Radio,
   ExternalLink,
   Filter,
-  // Weather Icons
   Cloud,
   CloudRain,
   Thermometer,
   Wind,
-  // Calendar Actions
   CalendarPlus,
-  // Beacon Icons
   Zap,
-  // Missing Icons for AI Chat and App
   Sparkles,
   Bot,
-  // Adding Edit3 for administrative features
-  Edit3
+  Edit3,
+  Bookmark
 } from 'lucide-react';
 
 export {
@@ -192,5 +181,6 @@ export {
   Zap,
   Sparkles,
   Bot,
-  Edit3
+  Edit3,
+  Bookmark
 };

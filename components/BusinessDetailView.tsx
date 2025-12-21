@@ -1,15 +1,19 @@
 
 import React from 'react';
 import { CensusItem } from '../types';
-import { ArrowLeft, MapPin, Phone, Star, Share2, Clock, Globe, X } from './Icons';
+import { ArrowLeft, MapPin, Phone, Star, Share2, Clock, Globe, X, Heart } from './Icons';
 
 interface BusinessDetailViewProps {
   business: CensusItem;
   onClose: () => void;
   t: any;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
-export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({ business, onClose, t }) => {
+export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({ 
+    business, onClose, t, isFavorite, onToggleFavorite 
+}) => {
   return (
     <div className="fixed inset-0 z-[110] bg-white flex flex-col animate-in slide-in-from-bottom duration-500 overflow-y-auto pb-44">
       {/* Gallery Hero */}
@@ -25,6 +29,14 @@ export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({ business
             className="w-14 h-14 bg-white/20 backdrop-blur-2xl text-white rounded-full flex items-center justify-center border border-white/20 hover:bg-white/40 transition-all"
           >
             <ArrowLeft size={30} />
+          </button>
+        </div>
+        <div className="absolute top-10 right-10">
+          <button 
+            onClick={onToggleFavorite} 
+            className={`w-14 h-14 rounded-full flex items-center justify-center transition-all border shadow-2xl ${isFavorite ? 'bg-red-500 text-white border-red-500' : 'bg-white/20 backdrop-blur-2xl text-white border-white/20 hover:bg-white/40'}`}
+          >
+            <Heart size={30} className={isFavorite ? 'fill-current' : ''} />
           </button>
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
