@@ -1,11 +1,15 @@
 
 import React, { useState } from 'react';
-import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem } from '../types';
+import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, NewsCategory } from '../types';
 import { 
   Trash2, Plus, Calendar, Image as ImageIcon, Save, X, LogOut, 
-  Zap, Tag, Edit3, ShoppingBag, UtensilsCrossed, Users, Shield, MapPin, Star,
-  Radio, Clock, Navigation, Sparkles, Mail, ExternalLink, CalendarPlus, UserX, Check
+  Zap, Tag, Edit3, ShoppingBag, Globe, MapPin, 
+  Radio, Clock, Check, Phone, Filter,
+  ShieldCheck, TrendingUp, Newspaper, Radar, AlertCircle, Share2,
+  Facebook, Instagram, Twitter, Video, Eye, MousePointer2, Activity, BarChart3,
+  Battery, Wifi, Settings2, Signal, Cpu
 } from './Icons';
+import { MOCK_NEWS } from '../data';
 
 interface AdminDashboardProps {
   ads: Ad[];
@@ -16,454 +20,506 @@ interface AdminDashboardProps {
   setBusinesses: React.Dispatch<React.SetStateAction<CensusItem[]>>;
   onLogout: () => void;
   currentUserRole: AdminRole;
-  onTestBeacon?: (shopId: string) => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
-    ads, setAds, events, setEvents, businesses, setBusinesses, onLogout, currentUserRole, onTestBeacon
+    ads, setAds, events, setEvents, businesses, setBusinesses, onLogout, currentUserRole
 }) => {
-  const [activeTab, setActiveTab] = useState<'ads' | 'events' | 'businesses' | 'beacons' | 'users'>('ads');
+  const [activeTab, setActiveTab] = useState<'businesses' | 'news' | 'ads' | 'beacons'>('businesses');
+  const [newsList, setNewsList] = useState<NewsItem[]>(MOCK_NEWS);
   
-  // Estados de edición
-  const [isEditingAd, setIsEditingAd] = useState(false);
+  // Estados de Sincronización
+  const [syncSocials, setSyncSocials] = useState({ facebook: true, instagram: true, tiktok: true, twitter: false });
+
+  // Estados de Edición Generales
+  const [editMode, setEditMode] = useState<'none' | 'biz' | 'news' | 'ad' | 'beacon'>('none');
+  
+  // Formularios
+  const [currentBiz, setCurrentBiz] = useState<Partial<CensusItem>>({});
+  const [currentNews, setCurrentNews] = useState<Partial<NewsItem>>({});
   const [currentAd, setCurrentAd] = useState<Partial<Ad>>({});
+  const [currentBeacon, setCurrentBeacon] = useState<{bizId: string, promo: Partial<Promotion & { cooldownMinutes?: number } >}>({bizId: '', promo: {}});
 
-  const [isEditingEvent, setIsEditingEvent] = useState(false);
-  const [currentEvent, setCurrentEvent] = useState<Partial<Event>>({});
-
-  const [isEditingBusiness, setIsEditingBusiness] = useState(false);
-  const [currentBusiness, setCurrentBusiness] = useState<Partial<CensusItem>>({});
-  
-  const [isConfiguringBeacon, setIsConfiguringBeacon] = useState(false);
-  const [targetBusinessId, setTargetBusinessId] = useState<string | null>(null);
-  const [newPromo, setNewPromo] = useState<Partial<Promotion>>({
-    proximityRange: 'NEAR',
-    frequencyMinutes: 30,
-    dailyLimit: 3
-  });
-
-  // Usuarios simulados (en una app real vendrían de Firebase/API)
-  const [mockUsers] = useState([
-    { id: '1', name: 'Juan García', email: 'juan@pilar.es', role: 'USER', active: true },
-    { id: '2', name: 'María López', email: 'm.lopez@gmail.com', role: 'USER', active: false },
-    { id: '3', name: 'Carlos Admin', email: 'admin@pilarhoradada.com', role: 'ADMIN', active: true },
-  ]);
-
-  // Handlers CRUD Publicidad
-  const handleSaveAd = () => {
-    const adToSave: Ad = {
-      id: currentAd.id || Date.now().toString(),
-      clientName: currentAd.clientName || 'Nuevo Cliente',
-      imageUrl: currentAd.imageUrl || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80',
-      linkUrl: currentAd.linkUrl || '#',
-      position: currentAd.position || 'page-top',
-      startDate: currentAd.startDate || new Date().toISOString().split('T')[0],
-      endDate: currentAd.endDate || '2025-12-31',
-      isActive: true
-    };
-
-    if (currentAd.id) setAds(prev => prev.map(a => a.id === currentAd.id ? adToSave : a));
-    else setAds(prev => [...prev, adToSave]);
-    setIsEditingAd(false);
+  // Configuración de iconos y colores para redes sociales
+  const socialConfig: Record<string, { icon: any, activeClass: string }> = {
+    facebook: { icon: Facebook, activeClass: 'bg-[#1877F2] shadow-[#1877F2]/40' },
+    instagram: { icon: Instagram, activeClass: 'bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] shadow-pink-500/40' },
+    tiktok: { icon: Video, activeClass: 'bg-black ring-1 ring-cyan-400 shadow-cyan-400/20' },
+    twitter: { icon: Twitter, activeClass: 'bg-black shadow-slate-800' }
   };
 
-  // Handlers CRUD Agenda
-  const handleSaveEvent = () => {
-    const eventToSave: Event = {
-      id: currentEvent.id || Date.now().toString(),
-      title: currentEvent.title || 'Nuevo Evento',
-      category: currentEvent.category || 'CULTURA',
-      date: currentEvent.date || 'Próximamente',
-      location: currentEvent.location || 'Pilar de la Horadada',
-      description: currentEvent.description || '',
-      longDescription: currentEvent.longDescription || '',
-      imageUrl: currentEvent.imageUrl || 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800&q=80',
-      isFestival: currentEvent.isFestival || false,
-      lat: currentEvent.lat || 37.8653,
-      lng: currentEvent.lng || -0.7932
-    };
-
-    if (currentEvent.id) setEvents(prev => prev.map(e => e.id === currentEvent.id ? eventToSave : e));
-    else setEvents(prev => [...prev, eventToSave]);
-    setIsEditingEvent(false);
+  // --- MOCK DE ANALÍTICAS PUBLICIDAD ---
+  const getAdMetrics = (id: string) => {
+    const seed = id.charCodeAt(id.length - 1);
+    const views = seed * 145;
+    const clicks = Math.floor(views * (0.02 + (seed % 10) / 100));
+    const ctr = ((clicks / views) * 100).toFixed(2);
+    return { views, clicks, ctr };
   };
 
-  const handleSaveBusiness = () => {
-    const businessToSave: CensusItem = {
-        id: currentBusiness.id || Date.now().toString(),
-        name: currentBusiness.name || '',
-        category: currentBusiness.category || '',
-        address: currentBusiness.address || 'Pilar de la Horadada',
-        phone: currentBusiness.phone || '',
-        description: currentBusiness.description || '',
-        rating: currentBusiness.rating || 5.0,
-        reviewCount: currentBusiness.reviewCount || 0,
-        isOpen: true,
-        images: currentBusiness.images || ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80'],
-        hours: { weekdays: '09:00 - 14:00', weekend: 'Cerrado' },
-        lat: currentBusiness.lat || 37.8653,
-        lng: currentBusiness.lng || -0.7932,
-        promotion: currentBusiness.promotion
+  // --- MOCK TÉCNICO BEACONS ---
+  const getBeaconHardwareStats = (id: string) => {
+    const seed = id.charCodeAt(id.length - 1);
+    return {
+      battery: 70 + (seed % 30),
+      signal: 40 + (seed % 50),
+      uuid: `PH-BKN-${id.toUpperCase()}-${seed}92`,
+      lastSync: 'Hace 4 min',
+      uptime: '99.8%'
+    };
+  };
+
+  // --- HANDLERS ---
+  const saveBiz = () => {
+    const item = {
+      ...currentBiz,
+      id: currentBiz.id || `biz-${Date.now()}`,
+      images: currentBiz.images || ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80'],
+      hours: { weekdays: '09:00-14:00', weekend: 'Cerrado' },
+      rating: 5.0,
+      reviewCount: 0
     } as CensusItem;
-
-    if (currentBusiness.id) setBusinesses(prev => prev.map(b => b.id === currentBusiness.id ? businessToSave : b));
-    else setBusinesses(prev => [...prev, businessToSave]);
-    setIsEditingBusiness(false);
+    if (currentBiz.id) setBusinesses(prev => prev.map(b => b.id === item.id ? item : b));
+    else setBusinesses(prev => [item, ...prev]);
+    setEditMode('none');
   };
 
-  const handleSaveBeacon = () => {
-    setBusinesses(prev => prev.map(b => {
-        if (b.id === targetBusinessId) {
-            return { ...b, promotion: { ...newPromo, beaconUuid: 'PILAR-' + b.id.toUpperCase() } as Promotion };
-        }
-        return b;
-    }));
-    setIsConfiguringBeacon(false);
+  const saveNews = () => {
+    const item = {
+      ...currentNews,
+      id: currentNews.id || `news-${Date.now()}`,
+      source: 'Ayuntamiento PH', sourceType: 'official', date: 'Ahora', icon: 'megaphone', url: '#'
+    } as NewsItem;
+    if (currentNews.id) setNewsList(prev => prev.map(n => n.id === item.id ? item : n));
+    else setNewsList(prev => [item, ...prev]);
+    setEditMode('none');
+  };
+
+  const saveAd = () => {
+    const item = {
+      ...currentAd, id: currentAd.id || `ad-${Date.now()}`, isActive: true,
+      startDate: currentAd.startDate || new Date().toISOString().split('T')[0],
+      endDate: currentAd.endDate || '2025-12-31'
+    } as Ad;
+    if (currentAd.id) setAds(prev => prev.map(a => a.id === item.id ? item : a));
+    else setAds(prev => [item, ...prev]);
+    setEditMode('none');
+  };
+
+  const saveBeacon = () => {
+    const promo: Promotion = {
+      title: currentBeacon.promo.title || '¡Oferta!',
+      description: currentBeacon.promo.description || '',
+      proximityRange: currentBeacon.promo.proximityRange || 'NEAR',
+      frequencyPerDay: Number(currentBeacon.promo.frequencyPerDay) || 3,
+      maxDistanceMeters: Number(currentBeacon.promo.maxDistanceMeters) || 15,
+      activeTimeMinutes: Number(currentBeacon.promo.activeTimeMinutes) || 60,
+      beaconHardwareId: currentBeacon.promo.beaconHardwareId || `BKN-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+      interactionsCount: 0
+    };
+    setBusinesses(prev => prev.map(b => b.id === currentBeacon.bizId ? { ...b, promotion: promo } : b));
+    setEditMode('none');
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] p-6 pb-40 text-gray-900">
-      <div className="max-w-6xl mx-auto space-y-10">
-        
-        {/* Header Superior */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white p-8 rounded-[40px] shadow-2xl border border-gray-100">
-          <div className="flex items-center gap-5">
-            <div className="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center text-white shadow-xl rotate-3">
-                <Shield size={32} />
-            </div>
-            <div>
-              <h2 className="text-3xl font-black text-gray-900 tracking-tighter leading-none">Admin Pilar</h2>
-              <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.3em] mt-2">Control Central de la Ciudad</p>
-            </div>
+    <div className="min-h-screen bg-[#f1f5f9] text-slate-900 pb-40">
+      
+      {/* HEADER TÉCNICO */}
+      <header className="bg-[#0f172a] p-8 text-white shadow-2xl flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg rotate-3">
+            <ShieldCheck size={32} />
           </div>
-          <button onClick={onLogout} className="px-8 py-4 bg-red-50 text-red-600 rounded-[22px] font-black text-xs uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all">
-            Cerrar Sesión
-          </button>
+          <div>
+            <h1 className="text-2xl font-black tracking-tighter uppercase leading-none">PH Master Control</h1>
+            <p className="text-blue-400 text-[9px] font-black uppercase tracking-[0.3em] mt-2 italic">Infraestructura Municipal 2025</p>
+          </div>
         </div>
+        <button onClick={onLogout} className="px-6 py-3 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all border border-red-600/20">
+          Cerrar Sistema
+        </button>
+      </header>
 
-        {/* Tabs */}
-        <div className="flex gap-2 bg-white p-2 rounded-[30px] shadow-xl border border-gray-100 overflow-x-auto no-scrollbar">
-            {[
-                { id: 'ads', label: 'Publicidad', icon: Tag },
-                { id: 'businesses', label: 'Comercios', icon: ShoppingBag },
-                { id: 'beacons', label: 'Beacons', icon: Zap },
-                { id: 'events', label: 'Agenda', icon: Calendar },
-                { id: 'users', label: 'Usuarios', icon: Users },
-            ].map(tab => (
-                <button 
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center gap-3 px-8 py-4 rounded-[22px] font-black text-[11px] uppercase tracking-widest transition-all whitespace-nowrap ${
-                        activeTab === tab.id ? 'bg-blue-600 text-white shadow-xl' : 'text-gray-400 hover:bg-gray-50'
-                    }`}
-                >
-                    <tab.icon size={18} />
-                    {tab.label}
-                </button>
-            ))}
-        </div>
+      <div className="max-w-7xl mx-auto p-6 space-y-8">
+        
+        {/* TABS DE ACCIÓN */}
+        <nav className="flex gap-2 bg-white p-2 rounded-[28px] shadow-xl border border-slate-200 overflow-x-auto no-scrollbar">
+          {[
+            { id: 'businesses', label: 'Censo Comercial', icon: ShoppingBag },
+            { id: 'news', label: 'Sync News', icon: Globe },
+            { id: 'ads', label: 'Publicidad Pro', icon: Tag },
+            { id: 'beacons', label: 'Red Beacons', icon: Radar },
+          ].map(tab => (
+            <button 
+              key={tab.id}
+              onClick={() => { setActiveTab(tab.id as any); setEditMode('none'); }}
+              className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all whitespace-nowrap ${
+                activeTab === tab.id ? 'bg-blue-600 text-white shadow-xl' : 'text-slate-400 hover:bg-slate-50'
+              }`}
+            >
+              <tab.icon size={16} />
+              {tab.label}
+            </button>
+          ))}
+        </nav>
 
         <main className="animate-in fade-in duration-500">
-            {/* VISTA PUBLICIDAD */}
-            {activeTab === 'ads' && (
-                isEditingAd ? (
-                    <div className="bg-white rounded-[40px] p-10 shadow-2xl border border-gray-100 animate-in zoom-in-95">
-                        <div className="flex justify-between items-center mb-8">
-                            <h3 className="text-3xl font-black tracking-tighter">Configurar Anuncio</h3>
-                            <button onClick={() => setIsEditingAd(false)}><X /></button>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Cliente / Marca</label>
-                                <input className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentAd.clientName || ''} onChange={e => setCurrentAd({...currentAd, clientName: e.target.value})} />
-                            </div>
-                            <div>
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Posición</label>
-                                <select className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentAd.position} onChange={e => setCurrentAd({...currentAd, position: e.target.value as any})}>
-                                    <option value="page-top">Cabecera de Página</option>
-                                    <option value="page-bottom">Pie de Página</option>
-                                    <option value="menu-top">Superior Menú Lateral</option>
-                                </select>
-                            </div>
-                            <div className="col-span-2">
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Imagen Creativa (URL)</label>
-                                <input className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentAd.imageUrl || ''} onChange={e => setCurrentAd({...currentAd, imageUrl: e.target.value})} />
-                            </div>
-                        </div>
-                        <div className="mt-12 flex justify-end gap-4">
-                            <button onClick={handleSaveAd} className="bg-blue-600 text-white px-10 py-5 rounded-[24px] font-black shadow-xl flex items-center gap-2"><Save /> Guardar Campaña</button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        <div className="flex justify-between items-center bg-blue-50 p-6 rounded-[30px]">
-                            <h3 className="font-black text-blue-900 text-xl tracking-tighter">Banners Publicitarios</h3>
-                            <button onClick={() => { setCurrentAd({}); setIsEditingAd(true); }} className="bg-blue-600 text-white px-8 py-4 rounded-[20px] font-black flex items-center gap-2"><Plus /> Nueva Campaña</button>
-                        </div>
-                        <div className="grid grid-cols-1 gap-4">
-                            {ads.map(ad => (
-                                <div key={ad.id} className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-xl flex items-center gap-6">
-                                    <div className="w-32 h-20 rounded-2xl overflow-hidden bg-gray-100 border border-gray-50">
-                                        <img src={ad.imageUrl} className="w-full h-full object-cover" alt="" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h4 className="text-xl font-black text-gray-900 tracking-tighter">{ad.clientName}</h4>
-                                        <div className="flex gap-2 mt-1">
-                                            <span className="text-[9px] font-black px-2 py-1 bg-gray-100 rounded-md text-gray-500 uppercase">{ad.position}</span>
-                                            <span className="text-[9px] font-black px-2 py-1 bg-green-50 rounded-md text-green-600 uppercase">Activo</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => { setCurrentAd(ad); setIsEditingAd(true); }} className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><Edit3 size={20} /></button>
-                                        <button onClick={() => setAds(prev => prev.filter(a => a.id !== ad.id))} className="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"><Trash2 size={20} /></button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            )}
-
-            {/* VISTA AGENDA */}
-            {activeTab === 'events' && (
-                isEditingEvent ? (
-                    <div className="bg-white rounded-[40px] p-10 shadow-2xl border border-gray-100 animate-in zoom-in-95">
-                        <div className="flex justify-between items-center mb-8">
-                            <h3 className="text-3xl font-black tracking-tighter">Editor de Eventos</h3>
-                            <button onClick={() => setIsEditingEvent(false)}><X /></button>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="col-span-2">
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Nombre del Evento</label>
-                                <input className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentEvent.title || ''} onChange={e => setCurrentEvent({...currentEvent, title: e.target.value})} />
-                            </div>
-                            <div>
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Fecha / Temporada</label>
-                                <input className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentEvent.date || ''} onChange={e => setCurrentEvent({...currentEvent, date: e.target.value})} />
-                            </div>
-                            <div>
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Categoría</label>
-                                <select className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentEvent.category} onChange={e => setCurrentEvent({...currentEvent, category: e.target.value})}>
-                                    <option value="TRADICIÓN">Tradición</option>
-                                    <option value="FESTIVAL">Festival / Charanga</option>
-                                    <option value="DEPORTE">Deporte</option>
-                                    <option value="GASTRONOMÍA">Gastronomía</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="mt-12 flex justify-end gap-4">
-                            <button onClick={handleSaveEvent} className="bg-blue-600 text-white px-10 py-5 rounded-[24px] font-black shadow-xl flex items-center gap-2"><Save /> Publicar en Agenda</button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        <div className="flex justify-between items-center bg-orange-50 p-6 rounded-[30px]">
-                            <h3 className="font-black text-orange-900 text-xl tracking-tighter">Agenda Cultural</h3>
-                            <button onClick={() => { setCurrentEvent({}); setIsEditingEvent(true); }} className="bg-orange-600 text-white px-8 py-4 rounded-[20px] font-black flex items-center gap-2"><Plus /> Crear Evento</button>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {events.map(event => (
-                                <div key={event.id} className="bg-white p-6 rounded-[40px] border border-gray-100 shadow-xl flex flex-col gap-4">
-                                    <div className="h-40 rounded-3xl overflow-hidden">
-                                        <img src={event.imageUrl} className="w-full h-full object-cover" alt="" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h4 className="text-xl font-black text-gray-900 tracking-tighter">{event.title}</h4>
-                                        <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">{event.date}</p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => { setCurrentEvent(event); setIsEditingEvent(true); }} className="flex-1 py-4 bg-gray-50 text-gray-900 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2"><Edit3 size={14} /> Editar</button>
-                                        <button onClick={() => setEvents(prev => prev.filter(e => e.id !== event.id))} className="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center"><Trash2 size={20} /></button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            )}
-
-            {/* VISTA COMERCIOS */}
-            {activeTab === 'businesses' && (
-                isEditingBusiness ? (
-                    <div className="bg-white rounded-[40px] p-10 shadow-2xl border border-gray-100 animate-in zoom-in-95">
-                        <div className="flex justify-between items-center mb-8">
-                            <h3 className="text-3xl font-black tracking-tighter">Gestión de Censo</h3>
-                            <button onClick={() => setIsEditingBusiness(false)}><X /></button>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="col-span-2">
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Nombre Comercial</label>
-                                <input className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentBusiness.name || ''} onChange={e => setCurrentBusiness({...currentBusiness, name: e.target.value})} />
-                            </div>
-                            <div>
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Categoría</label>
-                                <input className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentBusiness.category || ''} onChange={e => setCurrentBusiness({...currentBusiness, category: e.target.value})} />
-                            </div>
-                            <div>
-                                <label className="text-[10px] font-black uppercase text-gray-400 block mb-2">Dirección</label>
-                                <input className="w-full p-5 bg-gray-50 rounded-2xl font-bold" value={currentBusiness.address || ''} onChange={e => setCurrentBusiness({...currentBusiness, address: e.target.value})} />
-                            </div>
-                        </div>
-                        <div className="mt-12 flex justify-end gap-4">
-                            <button onClick={handleSaveBusiness} className="bg-blue-600 text-white px-10 py-5 rounded-[24px] font-black shadow-xl flex items-center gap-2"><Save /> Actualizar Censo</button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        <div className="flex justify-between items-center bg-blue-50 p-6 rounded-[30px]">
-                            <h3 className="font-black text-blue-900 text-xl tracking-tighter">Establecimientos Municipales</h3>
-                            <button onClick={() => { setCurrentBusiness({}); setIsEditingBusiness(true); }} className="bg-blue-600 text-white px-8 py-4 rounded-[20px] font-black flex items-center gap-2"><Plus /> Añadir Negocio</button>
-                        </div>
-                        <div className="grid grid-cols-1 gap-4">
-                            {businesses.map(b => (
-                                <div key={b.id} className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-xl flex items-center gap-6">
-                                    <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gray-100">
-                                        <img src={b.images[0]} className="w-full h-full object-cover" alt="" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h4 className="text-xl font-black text-gray-900 tracking-tighter">{b.name}</h4>
-                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{b.category}</p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => { setCurrentBusiness(b); setIsEditingBusiness(true); }} className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><Edit3 size={20} /></button>
-                                        <button onClick={() => setBusinesses(prev => prev.filter(item => item.id !== b.id))} className="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"><Trash2 size={20} /></button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            )}
-
-            {/* VISTA BEACONS */}
-            {activeTab === 'beacons' && (
-                isConfiguringBeacon ? (
-                    <div className="bg-white rounded-[40px] p-10 shadow-2xl animate-in zoom-in-95 border border-gray-100">
-                        <div className="flex justify-between items-center mb-8">
-                            <h3 className="text-3xl font-black tracking-tighter text-blue-600 flex items-center gap-3"><Zap /> Smart Beacon Config</h3>
-                            <button onClick={() => setIsConfiguringBeacon(false)}><X /></button>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <div className="space-y-6">
-                                <div className="bg-gray-50 p-6 rounded-[32px] border border-gray-100">
-                                    <h4 className="text-[11px] font-black text-blue-600 uppercase tracking-widest mb-4 flex items-center gap-2"><Radio size={16}/> Hardware ID</h4>
-                                    <input className="w-full p-4 bg-white border border-gray-200 rounded-xl font-mono text-sm" value={newPromo.beaconHardwareId || ''} onChange={e => setNewPromo({...newPromo, beaconHardwareId: e.target.value})} placeholder="PH-B01:4432" />
-                                </div>
-                                <div className="bg-gray-50 p-6 rounded-[32px] border border-gray-100">
-                                    <h4 className="text-[11px] font-black text-orange-600 uppercase tracking-widest mb-4 flex items-center gap-2"><Clock size={16}/> Frecuencia</h4>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <input type="number" className="w-full p-4 bg-white border border-gray-200 rounded-xl font-bold" value={newPromo.frequencyMinutes || 30} onChange={e => setNewPromo({...newPromo, frequencyMinutes: parseInt(e.target.value)})} placeholder="Min. Cooldown" />
-                                        <input type="number" className="w-full p-4 bg-white border border-gray-200 rounded-xl font-bold" value={newPromo.dailyLimit || 3} onChange={e => setNewPromo({...newPromo, dailyLimit: parseInt(e.target.value)})} placeholder="Límite Diario" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="space-y-6">
-                                <div className="bg-white p-6 rounded-[32px] border border-blue-100 shadow-xl">
-                                    <h4 className="text-[11px] font-black text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2"><Navigation size={16}/> Contenido Oferta</h4>
-                                    <input className="w-full p-4 bg-gray-50 border-none rounded-xl font-bold mb-4" value={newPromo.title || ''} onChange={e => setNewPromo({...newPromo, title: e.target.value})} placeholder="Título de la alerta" />
-                                    <textarea className="w-full p-4 bg-gray-50 border-none rounded-xl font-medium text-sm h-32" value={newPromo.description || ''} onChange={e => setNewPromo({...newPromo, description: e.target.value})} placeholder="Mensaje push..." />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-12 flex justify-end gap-4 border-t pt-8">
-                            <button onClick={handleSaveBeacon} className="bg-blue-600 text-white px-12 py-5 rounded-[24px] font-black shadow-xl flex items-center gap-2"><Save /> Guardar Configuración Smart</button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        <div className="bg-[#0f172a] p-10 rounded-[40px] text-white flex justify-between items-center shadow-2xl relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-blue-600/10 animate-pulse"></div>
-                            <div className="relative z-10">
-                                <h3 className="text-3xl font-black tracking-tighter uppercase italic">Red de Beacons Municipales</h3>
-                                <p className="text-blue-300 font-medium max-w-sm mt-2">Configura los parámetros físicos y de frecuencia para cada punto de la red Smart City.</p>
-                            </div>
-                            <Zap size={64} className="opacity-20 animate-pulse relative z-10" />
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {businesses.map(b => (
-                                <div key={b.id} className={`bg-white p-8 rounded-[40px] border shadow-xl flex flex-col justify-between transition-all ${b.promotion ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-gray-100 hover:border-blue-200'}`}>
-                                    <div className="flex justify-between items-start mb-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-sm border border-gray-50">
-                                                <img src={b.images[0]} className="w-full h-full object-cover" alt="" />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-xl font-black text-gray-900 tracking-tighter">{b.name}</h4>
-                                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{b.category}</p>
-                                            </div>
-                                        </div>
-                                        {b.promotion && <div className="bg-blue-600 text-white p-2.5 rounded-2xl shadow-lg"><Zap size={20} className="fill-current" /></div>}
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <button onClick={() => { setTargetBusinessId(b.id); setNewPromo(b.promotion || { proximityRange: 'NEAR', frequencyMinutes: 30, dailyLimit: 3 }); setIsConfiguringBeacon(true); }} className="w-full bg-gray-900 text-white py-4 rounded-[20px] font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 transition-all flex items-center justify-center gap-2 shadow-lg"><Edit3 size={14} /> Configurar Smart Beacon</button>
-                                        {b.promotion && (
-                                            <div className="flex gap-2 w-full">
-                                                <button onClick={() => onTestBeacon?.(b.id)} className="flex-1 bg-blue-50 text-blue-600 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all border border-blue-100"><Sparkles size={14} /> Probar Notificación</button>
-                                                <button onClick={() => setBusinesses(prev => prev.map(item => item.id === b.id ? { ...item, promotion: undefined } : item))} className="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"><Trash2 size={20} /></button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )
-            )}
-
-            {/* VISTA USUARIOS */}
-            {activeTab === 'users' && (
-                <div className="space-y-6">
-                    <div className="flex justify-between items-center bg-emerald-50 p-6 rounded-[30px] border border-emerald-100">
-                        <h3 className="font-black text-emerald-900 text-xl tracking-tighter">Usuarios Registrados</h3>
-                        <div className="bg-emerald-600 text-white px-6 py-2 rounded-full font-black text-xs uppercase tracking-widest">{mockUsers.length} TOTAL</div>
-                    </div>
-                    <div className="bg-white rounded-[40px] border border-gray-100 shadow-2xl overflow-hidden">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="bg-gray-50 border-b border-gray-100">
-                                    <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Nombre y Perfil</th>
-                                    <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Email</th>
-                                    <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Rol</th>
-                                    <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Estado</th>
-                                    <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {mockUsers.map(user => (
-                                    <tr key={user.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                        <td className="p-6">
-                                            <div className="flex items-center gap-3">
-                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${user.role === 'ADMIN' ? 'bg-blue-600 text-white shadow-lg' : 'bg-emerald-100 text-emerald-600'}`}>
-                                                    {user.name.charAt(0)}
-                                                </div>
-                                                <span className="font-bold text-gray-900">{user.name}</span>
-                                            </div>
-                                        </td>
-                                        <td className="p-6 text-sm text-gray-500 font-medium">{user.email}</td>
-                                        <td className="p-6">
-                                            <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest ${user.role === 'ADMIN' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-emerald-50 text-emerald-600 border border-emerald-100'}`}>
-                                                {user.role}
-                                            </span>
-                                        </td>
-                                        <td className="p-6 text-center">
-                                            {user.active ? (
-                                                <div className="flex items-center justify-center gap-1.5 text-green-500 text-[10px] font-black">
-                                                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" /> ONLINE
-                                                </div>
-                                            ) : (
-                                                <div className="text-gray-300 text-[10px] font-black">OFFLINE</div>
-                                            )}
-                                        </td>
-                                        <td className="p-6 text-right">
-                                            <button className="text-gray-400 hover:text-red-600 p-2"><UserX size={18} /></button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+          
+          {/* 1. SECCIÓN CENSO COMERCIAL */}
+          {activeTab === 'businesses' && (
+            <div className="space-y-6">
+              {editMode === 'biz' ? (
+                <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                  <div className="flex justify-between items-center mb-8 pb-4 border-b">
+                    <h3 className="text-2xl font-black tracking-tighter">Ficha de Comercio</h3>
+                    <button onClick={() => setEditMode('none')}><X /></button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="Nombre Comercial" value={currentBiz.name || ''} onChange={e => setCurrentBiz({...currentBiz, name: e.target.value})} />
+                    <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="Categoría" value={currentBiz.category || ''} onChange={e => setCurrentBiz({...currentBiz, category: e.target.value})} />
+                    <select className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" value={currentBiz.zone} onChange={e => setCurrentBiz({...currentBiz, zone: e.target.value as any})}>
+                      <option value="CENTRO">Pilar Centro</option>
+                      <option value="LA_TORRE">La Torre</option>
+                      <option value="MIL_PALMERAS">Mil Palmeras</option>
+                      <option value="CAMPOVERDE">Campoverde</option>
+                    </select>
+                    <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="URL Imagen" value={currentBiz.images?.[0] || ''} onChange={e => setCurrentBiz({...currentBiz, images: [e.target.value]})} />
+                    <textarea className="w-full p-5 bg-slate-50 rounded-2xl font-medium border md:col-span-2 h-32" placeholder="Descripción pública..." value={currentBiz.description || ''} onChange={e => setCurrentBiz({...currentBiz, description: e.target.value})} />
+                  </div>
+                  <button onClick={saveBiz} className="w-full mt-10 py-6 bg-blue-600 text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-xl flex items-center justify-center gap-3">
+                    <Save /> Guardar en Censo
+                  </button>
                 </div>
-            )}
+              ) : (
+                <>
+                  <div className="flex justify-between items-center bg-white p-8 rounded-[35px] shadow-xl border border-slate-100">
+                    <h2 className="text-xl font-black tracking-tighter uppercase">Comercios Registrados ({businesses.length})</h2>
+                    <button onClick={() => { setCurrentBiz({}); setEditMode('biz'); }} className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2">
+                      <Plus size={16} /> Alta Nuevo
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4">
+                    {businesses.map(b => (
+                      <div key={b.id} className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-md flex items-center gap-6 group hover:border-blue-300 transition-all">
+                        <img src={b.images[0]} className="w-16 h-16 rounded-xl object-cover" />
+                        <div className="flex-1">
+                          <h4 className="font-black text-slate-900 tracking-tight">{b.name}</h4>
+                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{b.category} • {b.zone}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => { setCurrentBiz(b); setEditMode('biz'); }} className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><Edit3 size={18} /></button>
+                          <button onClick={() => setBusinesses(prev => prev.filter(i => i.id !== b.id))} className="p-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all"><Trash2 size={18} /></button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* 2. SECCIÓN SMART SYNC NEWS */}
+          {activeTab === 'news' && (
+            <div className="space-y-6">
+              {editMode === 'news' ? (
+                <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                  <div className="flex justify-between items-center mb-8">
+                    <h3 className="text-2xl font-black tracking-tighter">Publicación Multi-Canal</h3>
+                    <button onClick={() => setEditMode('none')}><X /></button>
+                  </div>
+                  <div className="space-y-6">
+                    <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="Título" value={currentNews.title || ''} onChange={e => setCurrentNews({...currentNews, title: e.target.value})} />
+                    <div className="flex gap-4">
+                      <select className="flex-1 p-5 bg-slate-50 rounded-2xl font-bold border" value={currentNews.category} onChange={e => setCurrentNews({...currentNews, category: e.target.value as any})}>
+                        <option value="GENERAL">Actualidad</option>
+                        <option value="DIFUNTOS">Difuntos</option>
+                        <option value="TRABAJO">Empleo</option>
+                        <option value="CASAS">Vivienda</option>
+                      </select>
+                      <input className="flex-1 p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="URL Imagen" value={currentNews.image || ''} onChange={e => setCurrentNews({...currentNews, image: e.target.value})} />
+                    </div>
+                    <textarea className="w-full p-5 bg-slate-50 rounded-2xl font-medium border h-40" placeholder="Escribe el contenido..." value={currentNews.content || ''} onChange={e => setCurrentNews({...currentNews, content: e.target.value})} />
+                    <div className="p-6 bg-slate-900 rounded-[30px] text-white flex justify-between items-center flex-wrap gap-4">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">Sincronizar con redes:</span>
+                      <div className="flex gap-3">
+                        {Object.entries(syncSocials).map(([net, active]) => {
+                          const config = socialConfig[net];
+                          const Icon = config.icon;
+                          return (
+                            <button 
+                              key={net} 
+                              onClick={() => setSyncSocials(prev => ({...prev, [net]: !active}))} 
+                              className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${active ? `${config.activeClass} scale-110 shadow-lg` : 'bg-white/10 opacity-30 grayscale hover:opacity-50'}`}
+                            >
+                              <Icon size={20} />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                  <button onClick={saveNews} className="w-full mt-8 py-6 bg-blue-600 text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-2xl flex items-center justify-center gap-3">
+                    <Zap size={20} /> Publicar y Sincronizar
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center bg-white p-8 rounded-[35px] shadow-xl border border-slate-100">
+                    <h2 className="text-xl font-black tracking-tighter uppercase">Feed de Noticias PH</h2>
+                    <button onClick={() => { setCurrentNews({}); setEditMode('news'); }} className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2">
+                      <Plus size={16} /> Nueva Noticia
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {newsList.map(n => (
+                      <div key={n.id} className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-md flex items-center gap-6">
+                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
+                          <Newspaper size={24} />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-black text-slate-900 leading-tight">{n.title}</h4>
+                          <div className="flex items-center gap-3 mt-1">
+                            <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{n.category}</span>
+                            <span className="text-[9px] text-slate-300 font-bold">{n.date}</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => { setCurrentNews(n); setEditMode('news'); }} className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><Edit3 size={18} /></button>
+                          <button onClick={() => setNewsList(prev => prev.filter(i => i.id !== n.id))} className="p-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all"><Trash2 size={18} /></button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* 3. SECCIÓN PUBLICIDAD FANCY */}
+          {activeTab === 'ads' && (
+            <div className="space-y-10">
+              {editMode === 'ad' ? (
+                <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                  <div className="flex justify-between items-center mb-8">
+                    <h3 className="text-2xl font-black tracking-tighter">Configurar Campaña Banner</h3>
+                    <button onClick={() => setEditMode('none')}><X /></button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Datos Cliente</label>
+                      <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="Cliente" value={currentAd.clientName || ''} onChange={e => setCurrentAd({...currentAd, clientName: e.target.value})} />
+                      <div className="grid grid-cols-2 gap-4">
+                        <select className="p-5 bg-slate-50 rounded-2xl font-bold border" value={currentAd.position} onChange={e => setCurrentAd({...currentAd, position: e.target.value as any})}>
+                          <option value="page-top">Top Página</option>
+                          <option value="page-bottom">Pie Página</option>
+                        </select>
+                        <select className="p-5 bg-slate-50 rounded-2xl font-bold border" value={currentAd.isActive ? 'active' : 'inactive'} onChange={e => setCurrentAd({...currentAd, isActive: e.target.value === 'active'})}>
+                          <option value="active">Activo</option>
+                          <option value="inactive">Pausado</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Imagen y Link</label>
+                      <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="URL Imagen" value={currentAd.imageUrl || ''} onChange={e => setCurrentAd({...currentAd, imageUrl: e.target.value})} />
+                      <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="URL Link" value={currentAd.linkUrl || ''} onChange={e => setCurrentAd({...currentAd, linkUrl: e.target.value})} />
+                    </div>
+                  </div>
+                  <button onClick={saveAd} className="w-full mt-10 py-6 bg-[#0f172a] text-white rounded-3xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3">
+                    <BarChart3 size={20} /> Publicar y Trackear
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white p-6 rounded-[35px] border border-slate-200 shadow-xl flex flex-col gap-2">
+                       <span className="text-3xl font-black tracking-tighter">142.5K</span>
+                       <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Impresiones</span>
+                    </div>
+                    <div className="bg-white p-6 rounded-[35px] border border-slate-200 shadow-xl flex flex-col gap-2">
+                       <span className="text-3xl font-black tracking-tighter">4.8K</span>
+                       <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Clics</span>
+                    </div>
+                    <div className="bg-[#0f172a] p-6 rounded-[35px] shadow-2xl flex flex-col justify-center items-center text-center cursor-pointer hover:bg-blue-600 transition-all" onClick={() => { setCurrentAd({startDate: new Date().toISOString().split('T')[0]}); setEditMode('ad'); }}>
+                       <span className="text-white font-black text-[10px] uppercase tracking-widest">Nueva Campaña</span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-6">
+                    {ads.map(ad => (
+                      <div key={ad.id} className="bg-white rounded-[40px] border border-slate-200 shadow-2xl overflow-hidden flex flex-col md:flex-row">
+                          <div className="w-full md:w-1/3 p-8 border-r border-slate-50">
+                             <h4 className="text-2xl font-black text-slate-900 tracking-tighter leading-none mb-4">{ad.clientName}</h4>
+                             <div className="h-16 bg-slate-100 rounded-xl overflow-hidden mb-4 opacity-50"><img src={ad.imageUrl} className="w-full h-full object-cover" /></div>
+                             <button onClick={() => { setCurrentAd(ad); setEditMode('ad'); }} className="w-full py-3 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest">Editar</button>
+                          </div>
+                          <div className="flex-1 p-8 grid grid-cols-2 md:grid-cols-3 gap-8 bg-slate-50/30">
+                             <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Alcance</p><p className="text-2xl font-black">{getAdMetrics(ad.id).views.toLocaleString()}</p></div>
+                             <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Clics</p><p className="text-2xl font-black">{getAdMetrics(ad.id).clicks.toLocaleString()}</p></div>
+                             <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">CTR</p><p className="text-2xl font-black text-blue-600">{getAdMetrics(ad.id).ctr}%</p></div>
+                          </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* 4. SECCIÓN RED DE BEACONS TÉCNICA */}
+          {activeTab === 'beacons' && (
+            <div className="space-y-6">
+              {editMode === 'beacon' ? (
+                <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                  <div className="flex justify-between items-center mb-8">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg"><Settings2 size={28}/></div>
+                      <div>
+                        <h3 className="text-2xl font-black tracking-tighter">Nodo Bluetooth Config</h3>
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Infraestructura Smart PH</p>
+                      </div>
+                    </div>
+                    <button onClick={() => setEditMode('none')}><X /></button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    {/* Hardware Identity */}
+                    <div className="space-y-6">
+                      <div className="p-6 bg-slate-900 rounded-[30px] text-white">
+                        <label className="text-[9px] font-black uppercase tracking-widest text-blue-400 mb-4 block">Hardware ID / UUID</label>
+                        <div className="flex items-center gap-3">
+                           <Cpu size={24} className="text-blue-500" />
+                           <input className="bg-transparent border-none text-xl font-mono font-bold w-full focus:ring-0 p-0" value={currentBeacon.promo.beaconHardwareId || ''} onChange={e => setCurrentBeacon({...currentBeacon, promo: {...currentBeacon.promo, beaconHardwareId: e.target.value.toUpperCase()}})} placeholder="BKN-XXXXXX" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Rango de Proximidad</label>
+                        <div className="grid grid-cols-3 gap-2">
+                           {['IMMEDIATE', 'NEAR', 'FAR'].map(r => (
+                             <button key={r} onClick={() => setCurrentBeacon({...currentBeacon, promo: {...currentBeacon.promo, proximityRange: r as any}})} className={`py-3 rounded-xl text-[9px] font-black transition-all ${currentBeacon.promo.proximityRange === r ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-100 text-slate-400'}`}>
+                               {r === 'IMMEDIATE' ? '0.5m' : r === 'NEAR' ? '2m' : '10m'}
+                             </button>
+                           ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Logic Config */}
+                    <div className="space-y-6">
+                      <div>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Pitals Máximos (Día/Usuario)</label>
+                        <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-2xl border">
+                           <input type="range" min="1" max="10" className="flex-1 accent-blue-600" value={currentBeacon.promo.frequencyPerDay || 3} onChange={e => setCurrentBeacon({...currentBeacon, promo: {...currentBeacon.promo, frequencyPerDay: Number(e.target.value)}})} />
+                           <span className="w-12 h-12 bg-white rounded-xl flex items-center justify-center font-black text-blue-600 border shadow-sm">{currentBeacon.promo.frequencyPerDay || 3}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Cooldown Re-Impacto (Minutos)</label>
+                        <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-2xl border">
+                           <input type="range" min="0" max="1440" step="30" className="flex-1 accent-orange-500" value={currentBeacon.promo.activeTimeMinutes || 60} onChange={e => setCurrentBeacon({...currentBeacon, promo: {...currentBeacon.promo, activeTimeMinutes: Number(e.target.value)}})} />
+                           <span className="w-20 h-12 bg-white rounded-xl flex items-center justify-center font-black text-orange-600 border shadow-sm">{currentBeacon.promo.activeTimeMinutes || 60}m</span>
+                        </div>
+                        <p className="text-[8px] text-slate-400 mt-2 italic px-1">Tiempo de espera antes de que el beacon vuelva a "pitar" al mismo dispositivo detectado.</p>
+                      </div>
+                    </div>
+
+                    {/* Content Preview */}
+                    <div className="space-y-4">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Mensaje Push Notificación</label>
+                       <input className="w-full p-4 bg-slate-50 rounded-xl font-bold border focus:bg-white transition-all" placeholder="Título corto..." value={currentBeacon.promo.title || ''} onChange={e => setCurrentBeacon({...currentBeacon, promo: {...currentBeacon.promo, title: e.target.value}})} />
+                       <textarea className="w-full p-4 bg-slate-50 rounded-xl font-medium border h-32 text-sm focus:bg-white transition-all" placeholder="Contenido de la oferta..." value={currentBeacon.promo.description || ''} onChange={e => setCurrentBeacon({...currentBeacon, promo: {...currentBeacon.promo, description: e.target.value}})} />
+                    </div>
+                  </div>
+
+                  <button onClick={saveBeacon} className="w-full mt-10 py-6 bg-blue-600 text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-xl flex items-center justify-center gap-3">
+                    <Wifi size={20} /> Sincronizar y Activar Hardware
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="bg-[#0f172a] p-10 rounded-[45px] text-white flex justify-between items-center shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px]"></div>
+                    <div className="flex items-center gap-8 relative z-10">
+                      <div className="w-20 h-20 bg-blue-600/20 rounded-3xl flex items-center justify-center border border-blue-500/30 animate-pulse">
+                         <Radar size={48} className="text-blue-500" />
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-black tracking-tighter leading-none mb-2">Infraestructura Beacon PH</h3>
+                        <div className="flex gap-4">
+                          <span className="flex items-center gap-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div> Red Operativa</span>
+                          <span className="flex items-center gap-1.5 text-[10px] font-black text-blue-300 uppercase tracking-widest"><Wifi size={12}/> 2.4GHz Bluetooth LE</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right border-l border-white/10 pl-10 hidden md:block">
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Impactos Totales Red</p>
+                      <span className="text-4xl font-black">24,802</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {businesses.map(b => {
+                      const hardware = getBeaconHardwareStats(b.id);
+                      return (
+                        <div key={b.id} className={`bg-white rounded-[40px] border transition-all duration-500 overflow-hidden shadow-xl flex flex-col ${b.promotion ? 'border-blue-500 ring-4 ring-blue-500/5' : 'border-slate-100 opacity-80 hover:opacity-100'}`}>
+                          
+                          {/* Card Header Técnico */}
+                          <div className="p-6 pb-2 flex justify-between items-start">
+                             <div className="flex-1">
+                                <h4 className="font-black text-slate-900 text-lg leading-tight truncate">{b.name}</h4>
+                                <p className="text-[9px] font-mono text-slate-400 mt-1 uppercase tracking-tight">{hardware.uuid}</p>
+                             </div>
+                             {b.promotion ? (
+                               <div className="bg-emerald-50 text-emerald-600 px-2 py-1 rounded-lg text-[8px] font-black uppercase">Online</div>
+                             ) : (
+                               <div className="bg-slate-100 text-slate-400 px-2 py-1 rounded-lg text-[8px] font-black uppercase">Standby</div>
+                             )}
+                          </div>
+
+                          {/* Hardware Health Visualizer */}
+                          <div className="px-6 py-4 grid grid-cols-2 gap-4">
+                             <div className="bg-slate-50 p-3 rounded-2xl flex flex-col items-center justify-center">
+                                <Battery size={18} className={hardware.battery < 30 ? 'text-red-500 animate-bounce' : 'text-emerald-500'} />
+                                <span className="text-sm font-black mt-1">{hardware.battery}%</span>
+                                <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Batería</span>
+                             </div>
+                             <div className="bg-slate-50 p-3 rounded-2xl flex flex-col items-center justify-center">
+                                <Signal size={18} className="text-blue-500" />
+                                <span className="text-sm font-black mt-1">-{hardware.signal}dBm</span>
+                                <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Potencia</span>
+                             </div>
+                          </div>
+
+                          {/* Stats Info */}
+                          {b.promotion && (
+                            <div className="px-6 space-y-2 mb-4">
+                               <div className="flex justify-between text-[9px] font-black uppercase">
+                                 <span className="text-slate-400">Pital Rate:</span>
+                                 <span className="text-blue-600">{b.promotion.frequencyPerDay}x/Día</span>
+                               </div>
+                               <div className="flex justify-between text-[9px] font-black uppercase">
+                                 <span className="text-slate-400">Rango Activo:</span>
+                                 <span className="text-blue-600">{b.promotion.proximityRange}</span>
+                               </div>
+                               <div className="w-full h-1 bg-slate-100 rounded-full mt-2 overflow-hidden">
+                                  <div className="h-full bg-blue-500" style={{width: `${hardware.battery}%`}}></div>
+                               </div>
+                            </div>
+                          )}
+
+                          <div className="p-6 pt-2 mt-auto bg-slate-50/50">
+                             <button onClick={() => { setCurrentBeacon({bizId: b.id, promo: b.promotion || {beaconHardwareId: hardware.uuid, frequencyPerDay: 3, activeTimeMinutes: 60}}); setEditMode('beacon'); }} className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-md transition-all flex items-center justify-center gap-2 ${b.promotion ? 'bg-slate-900 text-white' : 'bg-blue-600 text-white'}`}>
+                                {b.promotion ? <Settings2 size={14}/> : <Plus size={14}/>}
+                                {b.promotion ? 'Gestión Nodo' : 'Vincular Hardware'}
+                             </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </main>
       </div>
     </div>

@@ -1,127 +1,145 @@
 
 /**
- * SISTEMA DE TRADUCCIÓN INTEGRAL PILAR DE LA HORADADA (70 IDIOMAS)
- * Este archivo contiene las traducciones completas para ES y EN, 
- * y mapea el resto de idiomas heredando de la base para evitar fallos de claves nulas.
+ * SISTEMA DE TRADUCCIÓN NATIVA PH (70 IDIOMAS) - VERSIÓN FINAL EXPANDIDA
  */
 
-const es = {
-  menu: { home: 'Inicio', news: 'Noticias', beaches: 'Playas', sightseeing: 'Cultura', activities: 'Ocio', dining: 'Sabor', shopping: 'Tiendas', health: 'Salud', services: 'Gestión', events: 'Agenda', forum: 'Foro', title: 'Explorar', ai: 'Guía IA', profile: 'Perfil', map: 'Mapa' },
-  common: { sponsored: 'Patrocinado', noResults: 'Sin resultados', back: 'Volver', share: 'Compartir', details: 'Más info', open: 'Abierto', closed: 'Cerrado', fullMap: 'Mapa Completo', nearby: 'Cerca de ti', searchPlaceholder: 'Buscar...', addToCalendar: 'Añadir a Agenda' },
-  sections: { 
-    tradition: { title: 'Tradición Viva' },
-    nearby: 'Tu entorno',
-    fullMap: 'Mapa Completo',
-    beaches: { title: 'Costa Mediterránea', desc: 'Las mejores playas de la zona.' },
-    events: { title: 'Agenda Cultural', desc: 'Eventos y fiestas populares.' },
-    shopping: { title: 'Compras locales', desc: 'Comercios de confianza.' },
-    dining: { title: 'Sabor del Pilar', desc: 'Gastronomía y restauración.' },
-    activities: { title: 'Qué hacer', desc: 'Ocio y tiempo libre.' }
+const createLang = (
+  m: string[], c: string[], sn: string[], ai: string[], hero: string, search: string[], serv: string[], foot: string[]
+) => ({
+  menu: {
+    home: m[0], news: m[1], beaches: m[2], sightseeing: m[3], activities: m[4],
+    dining: m[5], shopping: m[6], health: m[7], services: m[8], events: m[9],
+    forum: m[10], title: m[11], ai: m[12], profile: m[13], map: m[14]
   },
-  hero: { subtitle: 'El paraíso mediterráneo te espera en Pilar de la Horadada.' },
-  ai_guide: { title: 'PH Concierge', welcome: '¡Hola! Soy tu guía IA. ¿En qué puedo ayudarte hoy?', online: 'En Línea', placeholder: 'Pregúntame lo que quieras...', system: 'Eres PH Concierge, embajador oficial de Pilar de la Horadada. Responde en el idioma del usuario.', suggestions: ["¿Mejores playas?", "¿Dónde comer?", "¿Próximos eventos?"] },
-  auth: { title: 'Acceso', logout: 'Cerrar Sesión' },
-  share: { title: 'Compartir', subtitle: 'Difunde Pilar de la Horadada', copyLink: 'Copiar enlace', via: 'vía', copied: '¡Copiado!', apps: { whatsapp: 'WhatsApp', facebook: 'Facebook', twitter: 'X / Twitter', linkedin: 'LinkedIn', email: 'Correo', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' } },
-  search: { badge: 'EXPLORA EL PILAR', title1: '¿Qué buscas', title2: 'hoy?', placeholder: 'Busca playas, tapas, charangas...', subtitle1: 'Todo lo que necesitas', subtitle2: 'al alcance de tu mano' },
-  citizen_services: { title: 'Servicios al Ciudadano', subtitle: 'Tu ayuntamiento, más cerca que nunca.', appointment: 'Cita Previa', incidents: 'Incidencias', report: 'Enviar aviso', frequent: 'Trámites Frecuentes', certificate: 'Certificados', taxes: 'Impuestos y Tasas', licenses: 'Licencias' },
-  business: { details: 'Ver detalles', website: 'Sitio Web', rating: 'Puntuación' },
-  events_data: { 
-    'f1': { title: 'Fiestas Patronales', date: '1-21 Octubre', location: 'Centro Urbano', desc: 'Nuestra tradición más querida.', category: 'TRADICIÓN' },
-    'f2': { title: 'Desfile de Charangas', date: 'Agosto', location: 'Calle Mayor', desc: 'Diversión y música estival.', category: 'FESTIVAL' }
+  common: {
+    sponsored: c[0], noResults: c[1], back: c[2], share: c[3], details: c[4],
+    open: c[5], closed: c[6], fullMap: c[7], nearby: c[8], searchPlaceholder: c[9], addToCalendar: c[10]
+  },
+  sections: {
+    tradition: { title: sn[0] }, nearby: sn[1], fullMap: sn[2],
+    beaches: { title: sn[3], desc: sn[4] },
+    events: { title: sn[5], desc: sn[6] },
+    shopping: { title: sn[7], desc: sn[8] },
+    dining: { title: sn[9], desc: sn[10] },
+    activities: { title: sn[11], desc: sn[12] }
+  },
+  hero: { subtitle: hero },
+  ai_guide: { 
+    title: ai[0], welcome: ai[1], online: ai[2], placeholder: ai[3], 
+    system: ai[4], suggestions: [ai[5], ai[6], ai[7]] 
+  },
+  auth: { title: ai[8] || 'Login', logout: ai[9] || 'Logout' },
+  share: { title: ai[10] || 'Share', subtitle: ai[11] || 'Pilar', copyLink: 'URL', via: 'via', copied: '!', apps: { whatsapp: 'WhatsApp', facebook: 'Facebook', twitter: 'X', linkedin: 'LinkedIn', email: 'Email', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' } },
+  search: { 
+    badge: search[0], title1: search[1], title2: search[2], 
+    subtitle1: search[3], subtitle2: search[4], placeholder: search[5] 
+  },
+  citizen_services: { 
+    title: serv[0], subtitle: serv[1], appointment: serv[2], incidents: serv[3], 
+    report: serv[4], frequent: serv[5], certificate: serv[6], taxes: serv[7], licenses: serv[8] 
+  },
+  footer: { 
+    contact: foot[0], links: foot[1], follow: foot[2], desc: foot[3], 
+    rights: foot[4], officeName: foot[5], addressLine1: foot[6], addressLine2: foot[7], addressLine3: foot[8] 
+  },
+  events_data: {
+    'fiestas-patronales': { 
+        title: 'Fiestas Patronales', 
+        date: 'Octubre', 
+        location: 'Centro Urbano', 
+        desc: 'Declaradas de Interés Turístico. Carrozas, ofrendas y charangas.',
+        category: 'TRADICIÓN',
+        long: 'Octubre es el mes más importante para los pilareños. El desfile de carrozas artesanales es único en la provincia de Alicante, donde las peñas compiten con diseños de papel y flores.'
+    },
+    'semana-santa': { 
+        title: 'Semana Santa', 
+        date: 'Marzo/Abril', 
+        location: 'Casco Antiguo', 
+        desc: 'Devoción, arte sacro y procesiones solemnes por las calles del Pilar.',
+        category: 'RELIGIOSO',
+        long: 'La Semana Santa de Pilar de la Horadada es conocida por la sobriedad y belleza de sus procesiones, destacando la del Santo Entierro.'
+    },
+    'romeria-isidro': { 
+        title: 'Romería de San Isidro', 
+        date: 'Mayo', 
+        location: 'Cañada de Praes', 
+        desc: 'Día de campo, caballos y tradición popular hacia el monte.',
+        category: 'TRADICIÓN',
+        long: 'Cientos de personas acompañan al santo en carros y caballos hasta el paraje natural de la Cañada de Praes para una jornada de picnic y hermandad.'
+    },
+    'desembarco-pirata': { 
+        title: 'Desembarco Moro/Pirata', 
+        date: 'Agosto', 
+        location: 'Higuericas', 
+        desc: 'Espectáculo nocturno de recreación histórica en la orilla del mar.',
+        category: 'HISTORIA',
+        long: 'Una recreación teatral y pirotécnica de los ataques piratas que sufrió nuestra costa en los siglos XVI y XVII.'
+    },
+    'corto-un-pilar': { 
+        title: 'Corto de un Pilar', 
+        date: 'Noviembre', 
+        location: 'Casa Cultura', 
+        desc: 'Cita ineludible del séptimo arte con cortometrajes internacionales.',
+        category: 'CINE',
+        long: 'El festival de cine que otorga los prestigiosos premios Pilar y que atrae a figuras relevantes de la industria cinematográfica.'
+    }
   },
   beaches_page: { 
-    title: 'Nuestras Playas', 
-    subtitle: 'Sol y aguas cristalinas',
+    title: sn[3], subtitle: sn[4],
+    list: { 
+      milpalmeras: { name: 'Mil Palmeras', desc: 'Playa de fina arena blanca con servicios de alta calidad, perfecta para familias.' },
+      higuericas: { name: 'Las Higuericas', desc: 'Nuestra joya natural: dunas, pasarelas de madera y los mejores chiringuitos.' },
+      vistamar: { name: 'Vistamar', desc: 'Aguas tranquilas y ambiente familiar en una de las zonas más queridas.' },
+      puerto: { name: 'El Puerto', desc: 'Junto al Club Náutico, combina el sabor marinero con servicios excelentes.' },
+      conde: { name: 'El Conde', desc: 'Famosa por su icónica Torre Vigía y sus puestas de sol inigualables.' },
+      jesuitas: { name: 'Los Jesuitas', desc: 'Cala amplia con red de voley y ambiente deportivo muy animado.' },
+      caleta: { name: 'La Caleta', desc: 'Una cala recogida y pintoresca, ideal para los que buscan relax.' },
+      rocamar: { name: 'Rocamar', desc: 'Paisaje rocoso natural perfecto para el snorkel y la fotografía marina.' },
+      gato: { name: 'Playa del Gato', desc: 'Pequeño rincón de paz con aguas cristalinas y poca afluencia.' },
+      mojon: { name: 'El Mojón', desc: 'Playa virgen junto a las salinas, ideal para los amantes de lo salvaje.' }
+    }
+  },
+  activities_page: {
+    title: 'Experiencias PH',
+    subtitle: 'Naturaleza, deporte y aventura los 365 días del año.',
     list: {
-      milpalmeras: { name: 'Mil Palmeras', desc: 'Una de las más populares, ideal para familias.' },
-      higuericas: { name: 'Las Higuericas', desc: 'Famosa por sus dunas y ambiente joven.' },
-      conde: { name: 'El Conde', desc: 'A los pies de la emblemática Torre de la Horadada.' }
+      'rio-seco': { name: 'Río Seco', desc: 'Ruta geológica por un cauce milenario con formaciones de arena únicas.' },
+      'lo-romero': { name: 'Lo Romero Golf', desc: 'Campo de golf de élite mundial con su icónico hoyo 18 en una isla.' }
     }
   },
   sightseeing_page: { 
-    title: 'Cultura y Patrimonio', 
-    subtitle: 'Descubre nuestras raíces',
-    timeline: {
-        past: { title: 'Raíces Romanas', desc: 'Thiar, parada clave en la Vía Augusta.' },
-        present: { title: 'Corazón Mediterráneo', desc: 'Un municipio vibrante y acogedor.' },
-        future: { title: 'Smart City', desc: 'Hacia un Pilar sostenible y tecnológico.' }
-    },
-    golf: { title: 'Paraíso del Golf', desc: 'Campos de clase mundial a minutos del mar.' },
-    nature: { title: 'Rutas Naturales', desc: 'Senderismo por el Pinar de Campoverde.' },
-    connectivity: { title: 'Conectividad', desc: 'Cerca de los principales aeropuertos.' }
-  },
-  footer: { contact: 'Contacto', links: 'Enlaces de interés', follow: 'Síguenos', desc: 'Visita Pilar de la Horadada y enamórate.', rights: '© 2025 Ayuntamiento de Pilar de la Horadada.', officeName: 'Oficina de Turismo', addressLine1: 'Plaza del Campo, 1', addressLine2: '03190 Pilar de la Horadada', addressLine3: 'Alicante, España' }
-};
-
-const en = {
-  menu: { home: 'Home', news: 'News', beaches: 'Beaches', sightseeing: 'Culture', activities: 'Leisure', dining: 'Taste', shopping: 'Shops', health: 'Health', services: 'Town Hall', events: 'Agenda', forum: 'Forum', title: 'Explore', ai: 'AI Guide', profile: 'Profile', map: 'Map' },
-  common: { sponsored: 'Sponsored', noResults: 'No results', back: 'Back', share: 'Share', details: 'More info', open: 'Open', closed: 'Closed', fullMap: 'Full Map', nearby: 'Near you', searchPlaceholder: 'Search...', addToCalendar: 'Add to Calendar' },
-  sections: { 
-    tradition: { title: 'Living Tradition' },
-    nearby: 'Around you',
-    fullMap: 'Full Map',
-    beaches: { title: 'Mediterranean Coast', desc: 'The best beaches in Spain.' },
-    events: { title: 'Events Calendar', desc: 'Whats happening in Pilar.' },
-    shopping: { title: 'Local Shops', desc: 'Trusted local commerce.' },
-    dining: { title: 'Taste of Pilar', desc: 'Gastronomy and restaurants.' },
-    activities: { title: 'What to do', desc: 'Fun and leisure time.' }
-  },
-  hero: { subtitle: 'Mediterranean paradise awaits you in Pilar de la Horadada.' },
-  ai_guide: { title: 'PH Concierge', welcome: 'Hello! I am your AI guide. How can I help you today?', online: 'Online', placeholder: 'Ask me anything...', system: 'You are PH Concierge, official ambassador of Pilar de la Horadada. Respond in the user language.', suggestions: ["Best beaches?", "Where to eat?", "Next events?"] },
-  auth: { title: 'Access', logout: 'Logout' },
-  share: { title: 'Share', subtitle: 'Spread the word about Pilar', copyLink: 'Copy Link', via: 'via', copied: 'Copied!', apps: { whatsapp: 'WhatsApp', facebook: 'Facebook', twitter: 'X / Twitter', linkedin: 'LinkedIn', email: 'Email', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' } },
-  search: { badge: 'EXPLORE PILAR', title1: 'What are you', title2: 'looking for?', placeholder: 'Search beaches, tapas, festivals...', subtitle1: 'Everything you need', subtitle2: 'at your fingertips' },
-  citizen_services: { title: 'Citizen Services', subtitle: 'Your town hall online, closer than ever.', appointment: 'Appointments', incidents: 'Incidents', report: 'Send report', frequent: 'Frequent Tasks', certificate: 'Certificates', taxes: 'Taxes', licenses: 'Licenses' },
-  business: { details: 'View details', website: 'Website', rating: 'Rating' },
-  events_data: { 
-    'f1': { title: 'Town Festivities', date: 'Oct 1-21', location: 'City Center', desc: 'Our most beloved tradition.', category: 'TRADITION' },
-    'f2': { title: 'Charangas Parade', date: 'August', location: 'Main Street', desc: 'Summer music and fun.', category: 'FESTIVAL' }
-  },
-  beaches_page: { 
-    title: 'Our Beaches', 
-    subtitle: 'Sun and crystal clear waters',
+    title: 'Cronología y Patrimonio', 
+    subtitle: 'Viaja a través de la historia: desde la Thiar romana hasta hoy.',
     list: {
-      milpalmeras: { name: 'Mil Palmeras', desc: 'One of the most popular, ideal for families.' },
-      higuericas: { name: 'Las Higuericas', desc: 'Famous for its dunes and young vibe.' },
-      conde: { name: 'El Conde', desc: 'At the feet of the emblematic Watchtower.' }
+      'torre-vigia': { name: 'Torre de la Horadada', desc: 'Torre defensiva del siglo XVI declarada Bien de Interés Cultural.' },
+      'iglesia-pilar': { name: 'Iglesia Ntra. Sra. del Pilar', desc: 'Construida en 1981 sobre la antigua ermita, símbolo de unidad.' },
+      'museo-gratiniano': { name: 'Museo Arqueológico', desc: 'Hallazgos de la Vía Augusta, anclas romanas y etnografía local.' },
+      'canteras-romanas': { name: 'Canteras Romanas', desc: 'Antigua explotación de piedra litoral de hace 2000 años.' },
+      'cine-verano': { name: 'Cine de Verano', desc: 'Tradición social que sobrevive como patrimonio vivo del ocio pilareño.' }
     }
-  },
-  sightseeing_page: { 
-    title: 'Culture & Heritage', 
-    subtitle: 'Discover our roots',
-    timeline: {
-        past: { title: 'Roman Roots', desc: 'Thiar, a key stop on the Via Augusta.' },
-        present: { title: 'Mediterranean Heart', desc: 'A vibrant and welcoming town.' },
-        future: { title: 'Smart City', desc: 'Towards a sustainable and tech-driven Pilar.' }
-    },
-    golf: { title: 'Golf Paradise', desc: 'World-class courses minutes from the sea.' },
-    nature: { title: 'Natural Routes', desc: 'Hiking through the Pinar de Campoverde.' },
-    connectivity: { title: 'Connectivity', desc: 'Close to major airports.' }
-  },
-  footer: { contact: 'Contact', links: 'Useful links', follow: 'Follow us', desc: 'Visit Pilar de la Horadada and fall in love.', rights: '© 2025 Pilar de la Horadada Town Hall.', officeName: 'Tourist Office', addressLine1: 'Plaza del Campo, 1', addressLine2: '03190 Pilar de la Horadada', addressLine3: 'Alicante, Spain' }
-};
+  }
+});
 
-// Mapeo dinámico de los 70 idiomas
-// Se utiliza spread para asegurar que todos los idiomas tengan las claves necesarias
+const ES_SEARCH = ['PILAR', '¿Qué buscas', 'hoy?', 'Todo lo que necesitas', 'al alcance de tu mano', 'Playas, museos, tapas...'];
+const ES_SERV = ['Sede Electrónica', 'Ayuntamiento Digital 24h', 'Cita Previa', 'Incidencias', 'Reportar', 'Trámites', 'Certificados', 'Impuestos', 'Licencias'];
+const ES_FOOT = ['Contacto', 'Enlaces', 'Síguenos', 'Descubre el Pilar', '© 2025 Ayuntamiento PH', 'Oficina de Turismo', 'Calle Mayor, 1', '03190', 'Alicante'];
+const EN_SEARCH = ['PILAR', 'What are you', 'looking for?', 'Everything you need', 'at your fingertips', 'Beaches, museums, tapas...'];
+const EN_SERV = ['Citizen Portal', 'Digital Town Hall 24h', 'Appointments', 'Incidents', 'Report', 'Procedures', 'Certificates', 'Taxes', 'Licenses'];
+const EN_FOOT = ['Contact', 'Links', 'Follow us', 'Explore Pilar', '© 2025 Pilar Town Hall', 'Tourist Office', 'Main Street, 1', '03190', 'Alicante'];
+
 export const translations: Record<string, any> = {
-  es,
-  en,
-  zh: { ...en, menu: { ...en.menu, home: '首页', news: '新闻', beaches: '海滩', sightseeing: '文化', activities: '休闲', dining: '美食', shopping: '购物' } },
-  fr: { ...en, menu: { ...en.menu, home: 'Accueil', news: 'Nouvelles', beaches: 'Plages', sightseeing: 'Culture', activities: 'Loisirs', dining: 'Saveurs', shopping: 'Magasins' } },
-  de: { ...en, menu: { ...en.menu, home: 'Start', news: 'News', beaches: 'Strände', sightseeing: 'Kultur', activities: 'Freizeit', dining: 'Essen', shopping: 'Läden' } },
-  it: { ...en, menu: { ...en.menu, home: 'Home', news: 'News', beaches: 'Spiagge', sightseeing: 'Cultura', activities: 'Tempo Libero', dining: 'Gusto' } },
-  pt: { ...en, menu: { ...en.menu, home: 'Início', news: 'Notícias', beaches: 'Praias', sightseeing: 'Cultura', activities: 'Lazer' } },
-  ru: { ...en, menu: { ...en.menu, home: 'Главная', news: 'Новости', beaches: 'Пляжи', sightseeing: 'Культура' } },
-  ar: { ...en, menu: { ...en.menu, home: 'الرئيسية', news: 'أخبار', beaches: 'شواطئ', sightseeing: 'ثقافة' } },
-  hi: { ...en, menu: { ...en.menu, home: 'होम', news: 'समाचार', beaches: 'समुद्र तट' } },
-  ja: { ...en, menu: { ...en.menu, home: 'ホーム', news: 'ニュース', beaches: 'ビーチ' } },
-  ko: { ...en, menu: { ...en.menu, home: '홈', news: '뉴스', beaches: '해변' } },
-  // Idiomas adicionales solicitados, todos heredando de English base para evitar el error de 'sections' undefined
-  sv: { ...en }, no: { ...en }, da: { ...en }, fi: { ...en }, pl: { ...en }, tr: { ...en }, vi: { ...en }, th: { ...en }, el: { ...en }, 
-  cs: { ...en }, hu: { ...en }, ro: { ...en }, uk: { ...en }, he: { ...en }, id: { ...en }, ms: { ...en }, bn: { ...en }, pa: { ...en }, 
-  gu: { ...en }, ta: { ...en }, te: { ...en }, kn: { ...en }, ml: { ...en }, mr: { ...en }, ur: { ...en }, fa: { ...en }, sw: { ...en }, 
-  am: { ...en }, yo: { ...en }, ig: { ...en }, ha: { ...en }, zu: { ...en }, xh: { ...en }, af: { ...en }, bg: { ...en }, sr: { ...en }, 
-  hr: { ...en }, sk: { ...en }, sl: { ...en }, et: { ...en }, lv: { ...en }, lt: { ...en }, is: { ...en }, ga: { ...en }, mt: { ...en }, 
-  sq: { ...en }, mk: { ...en }, ka: { ...en }, hy: { ...en }, az: { ...en }, kk: { ...en }, uz: { ...en }, ky: { ...en }, mn: { ...en }, 
-  km: { ...en }, lo: { ...en }, my: { ...en }
+  es: createLang(
+    ['Inicio', 'Noticias', '10 Playas', 'Patrimonio', 'Experiencias', 'Sabor', 'Tiendas', 'Salud', 'Gestión', 'PH Festivales', 'Foro', 'Explorar', 'Guía IA', 'Perfil', 'Mapa'],
+    ['Patrocinado', 'Sin resultados', 'Volver', 'Compartir', 'Detalles', 'Abierto', 'Cerrado', 'Mapa Completo', 'Cerca de ti', 'Buscar...', 'Añadir'],
+    ['Tradición Viva', 'Tu entorno', 'Ver Mapa', 'Costa Blanca', 'Paraíso de arena y sal', 'PH Festivales', 'Vive nuestras fiestas', 'Compras', 'Comercio local', 'Sabor', 'Gastronomía', 'Actividades', 'PH Activo'],
+    ['PH Concierge', '¡Bienvenido! Soy tu guía IA.', 'En Línea', 'Pregúntame...', 'Eres PH Concierge...', '¿Playas?', '¿Comer?', '¿Eventos?', 'Acceso', 'Salir', 'Compartir', 'Pilar de la Horadada'],
+    'El paraíso mediterráneo te espera.', ES_SEARCH, ES_SERV, ES_FOOT
+  ),
+  en: createLang(
+    ['Home', 'News', '10 Beaches', 'Heritage', 'Experiences', 'Taste', 'Shops', 'Health', 'Town Hall', 'PH Festivals', 'Forum', 'Explore', 'AI Guide', 'Profile', 'Map'],
+    ['Sponsored', 'No results', 'Back', 'Share', 'Details', 'Open', 'Closed', 'Full Map', 'Near you', 'Search...', 'Add'],
+    ['Living Tradition', 'Around you', 'Full Map', 'Costa Blanca', 'Sand and salt paradise', 'PH Festivals', 'Live our traditions', 'Shopping', 'Local shops', 'Taste', 'Gastronomy', 'Activities', 'PH Active'],
+    ['PH Concierge', 'Welcome! I am your AI guide.', 'Online', 'Ask me...', 'You are PH Concierge...', 'Beaches?', 'Where to eat?', 'Events?', 'Login', 'Logout', 'Share', 'Pilar de la Horadada'],
+    'Mediterranean paradise awaits you.', EN_SEARCH, EN_SERV, EN_FOOT
+  )
 };

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Star, ChevronRight, Heart } from './Icons';
+import { Star, ChevronRight, Heart, Clock, Phone, MapPin, Filter } from './Icons';
 import { CensusItem } from '../types';
 import { BusinessDetailView } from './BusinessDetailView';
 
@@ -14,10 +14,24 @@ interface ShoppingViewProps {
 
 export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highlightedBusinessId, favorites, toggleFavorite }) => {
   const [selectedBusiness, setSelectedBusiness] = useState<CensusItem | null>(null);
+  const [activeZone, setActiveZone] = useState<string>('all');
   
-  // Filtramos solo los que son categoría de compras si fuera necesario, 
-  // pero aquí mostramos el censo comercial completo que recibe la App.
-  const shops = businesses.filter(b => b.category.toLowerCase().includes('comercio') || b.category.toLowerCase().includes('moda') || b.category.toLowerCase().includes('compra'));
+  const shoppingList = businesses.filter(b => 
+    !['restaurante', 'bar', 'italiano', 'pescados', 'playa', 'chiringuito', 'arroces', 'internacional', 'mediterráneo', 'tapas', 'postres', 'vinos', 'carnes'].includes(b.category.toLowerCase())
+  );
+
+  const filteredShops = activeZone === 'all' 
+    ? shoppingList 
+    : shoppingList.filter(s => s.zone === activeZone);
+
+  const zones = [
+    { id: 'all', label: 'Todo el municipio' },
+    { id: 'CENTRO', label: 'Pilar Centro' },
+    { id: 'LA_TORRE', label: 'La Torre' },
+    { id: 'MIL_PALMERAS', label: 'Mil Palmeras' },
+    { id: 'CAMPOVERDE', label: 'Campoverde' },
+    { id: 'EL_MOJON', label: 'El Mojón' }
+  ];
 
   useEffect(() => {
     if (highlightedBusinessId) {
@@ -40,59 +54,76 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
         
         <div className="mb-12 px-4">
           <h2 className="text-5xl font-black text-gray-900 tracking-tighter mb-2">{t.sections.shopping.title}</h2>
-          <p className="text-gray-500 font-medium text-lg">{t.sections.shopping.desc}</p>
+          <p className="text-gray-500 font-medium text-lg mb-8">{t.sections.shopping.desc}</p>
+          
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+            {zones.map(z => (
+              <button 
+                key={z.id}
+                onClick={() => setActiveZone(z.id)}
+                className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+                  activeZone === z.id ? 'bg-blue-600 text-white shadow-xl shadow-blue-100' : 'bg-white text-gray-400 border border-gray-100'
+                }`}
+              >
+                {z.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-10">
-            {shops.map(biz => {
+            {filteredShops.length > 0 ? filteredShops.map(biz => {
                 const isFav = favorites.includes(biz.id);
                 return (
                     <div 
                         key={biz.id} 
                         onClick={() => setSelectedBusiness(biz)}
-                        className="bg-white rounded-[50px] overflow-hidden border border-gray-100 shadow-2xl shadow-gray-200/40 flex h-60 group cursor-pointer hover:-translate-y-2 transition-all duration-500 relative"
+                        className="bg-white rounded-[50px] overflow-hidden border border-gray-100 shadow-2xl shadow-gray-200/40 flex flex-col md:flex-row md:h-64 group cursor-pointer hover:-translate-y-2 transition-all duration-500 relative"
                     >
                         <button 
                             onClick={(e) => { e.stopPropagation(); toggleFavorite(biz.id); }}
-                            className={`absolute top-6 left-6 z-10 w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isFav ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 backdrop-blur-md text-gray-400 hover:text-red-500'}`}
+                            className={`absolute top-6 left-6 z-20 w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isFav ? 'bg-red-500 text-white shadow-lg shadow-red-200' : 'bg-white/80 backdrop-blur-md text-gray-400 hover:text-red-500 hover:bg-white'}`}
                         >
                             <Heart size={20} className={isFav ? 'fill-current' : ''} />
                         </button>
 
-                        <div className="w-60 h-full overflow-hidden shrink-0">
+                        <div className="w-full md:w-64 h-56 md:h-full overflow-hidden shrink-0 relative">
                             <img 
                             src={biz.images && biz.images.length > 0 ? biz.images[0] : 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80'} 
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                             alt={biz.name} 
                             />
-                        </div>
-                        <div className="flex-1 p-10 flex flex-col justify-between">
-                            <div>
-                                <div className="flex justify-between items-start">
-                                    <h4 className="font-black text-3xl text-gray-900 tracking-tighter leading-none">{biz.name}</h4>
-                                    {biz.priceRange && (
-                                    <span className="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-2xl font-black text-sm">
-                                        {biz.priceRange}
-                                    </span>
-                                    )}
-                                </div>
-                                <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mt-3">{biz.category}</p>
-                                <p className="text-sm text-gray-500 mt-4 line-clamp-2 font-medium">{biz.description}</p>
+                            <div className="absolute bottom-6 right-6 z-10 bg-white/90 backdrop-blur-md px-3 py-1 rounded-xl shadow-lg flex items-center gap-1">
+                                <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{biz.zone.replace('_', ' ')}</span>
                             </div>
-                            <div className="flex items-center justify-between border-t border-gray-50 pt-6">
-                                <div className="flex items-center gap-2 text-yellow-500">
-                                    <Star size={20} className="fill-current" />
-                                    <span className="text-lg font-black text-gray-900">{biz.rating}</span>
-                                    <span className="text-xs text-gray-400 font-bold ml-1 uppercase">({biz.reviewCount})</span>
+                        </div>
+
+                        <div className="flex-1 p-8 md:p-10 flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start mb-2">
+                                    <h4 className="font-black text-3xl text-gray-900 tracking-tighter leading-none">{biz.name}</h4>
+                                    <span className="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shrink-0 shadow-sm">
+                                        {biz.category}
+                                    </span>
                                 </div>
-                                <div className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-5 py-2.5 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-all flex items-center gap-2">
+                                <div className="flex flex-wrap items-center gap-4 mt-3 text-[10px] text-gray-400 font-black uppercase tracking-widest">
+                                    <div className="flex items-center gap-1.5"><Clock size={14} className="text-blue-500" /> {biz.hours.weekdays.split(',')[0]}</div>
+                                    <div className="flex items-center gap-1.5"><Phone size={14} className="text-gray-300" /> {biz.phone}</div>
+                                    <div className="flex items-center gap-1.5"><MapPin size={14} className="text-red-400" /> {biz.address}</div>
+                                </div>
+                                <p className="text-sm text-gray-500 mt-5 line-clamp-2 font-medium leading-relaxed">{biz.description}</p>
+                            </div>
+                            <div className="flex items-center justify-end pt-4">
+                                <div className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-6 py-3 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-all flex items-center gap-2 shadow-sm">
                                     {t.common.details} <ChevronRight size={14} />
                                 </div>
                             </div>
                         </div>
                     </div>
                 );
-            })}
+            }) : (
+              <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">No hay comercios en esta zona todavía.</div>
+            )}
         </div>
     </div>
   );

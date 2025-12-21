@@ -1,79 +1,126 @@
 
 import React from 'react';
 import { 
-  History, Sprout, Building2, Trophy, Plane, TreePine, Bike, MapPin 
+  History, Building2, MapPin, Sparkles, Landmark, Search, Clock
 } from './Icons';
+import { MOCK_SIGHTSEEING } from '../data';
+import { ViewState } from '../types';
 
 interface SightseeingViewProps {
   t: any;
+  onNavigate?: (view: ViewState, id?: string) => void;
 }
 
-export const SightseeingView: React.FC<SightseeingViewProps> = ({ t }) => {
+export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate }) => {
   const content = t.sightseeing_page;
 
   return (
-    <div className="bg-white min-h-screen pb-20 animate-in fade-in duration-300">
-      <div className="relative h-64 overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=2000&q=80" alt="Pilar Nature" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-center p-6">
-           <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2 drop-shadow-md">{content.title}</h1>
-              <p className="text-white/90 font-medium max-w-lg mx-auto leading-relaxed">{content.subtitle}</p>
-           </div>
+    <div className="bg-[#f8fafc] min-h-screen pb-44 animate-in fade-in duration-500 overflow-x-hidden">
+      {/* Editorial Header */}
+      <div className="bg-[#b45309] px-8 pt-20 pb-24 rounded-b-[60px] shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 text-amber-200 font-black text-[10px] uppercase tracking-[0.4em] mb-4">
+            <Landmark size={20} />
+            PH Heritage
+          </div>
+          <h1 className="text-6xl font-black text-white tracking-tighter mb-4 leading-none">
+            {content.title}
+          </h1>
+          <p className="text-white/80 text-xl font-medium leading-tight max-w-sm">
+            {content.subtitle}
+          </p>
         </div>
       </div>
 
-      <div className="px-6 py-10 max-w-3xl mx-auto">
-         <div className="relative border-l-2 border-blue-100 pl-8 space-y-10 ml-4">
-            <div className="relative">
-               <div className="absolute -left-[41px] bg-amber-100 p-2 rounded-full text-amber-600 border-4 border-white shadow-sm"><History size={20} /></div>
-               <h3 className="text-xl font-bold text-gray-900 mb-2">{content.timeline.past.title}</h3>
-               <p className="text-gray-600 leading-relaxed text-sm">{content.timeline.past.desc}</p>
+      <div className="px-6 -mt-10 space-y-10">
+        {MOCK_SIGHTSEEING.map((site) => {
+          const siteLangData = content.list[site.id as keyof typeof content.list] || { name: site.name, desc: '' };
+          return (
+            <div 
+              key={site.id} 
+              className="bg-white rounded-[56px] shadow-2xl shadow-amber-900/5 overflow-hidden border border-gray-100 group hover:shadow-3xl transition-all duration-500"
+            >
+               <div className="relative h-80 overflow-hidden">
+                  <img 
+                    src={site.image} 
+                    alt={siteLangData.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                  />
+                  
+                  {/* Category Overlay */}
+                  <div className="absolute top-8 left-8">
+                      <div className="bg-amber-600 text-white px-5 py-2.5 rounded-[20px] flex items-center gap-2.5 shadow-2xl border border-white/20">
+                         <Sparkles size={16} className="fill-white" />
+                         <span className="text-[11px] font-black uppercase tracking-widest">{site.category}</span>
+                      </div>
+                  </div>
+
+                  <div className="absolute bottom-8 right-8 bg-white/95 backdrop-blur-md text-amber-700 px-5 py-3 rounded-[24px] flex flex-col items-center shadow-2xl min-w-[80px]">
+                     <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-0.5">Época</span>
+                     <span className="text-xl font-black">{site.century}</span>
+                  </div>
+               </div>
+               
+               <div className="p-10">
+                 <h2 className="text-4xl font-black text-gray-900 tracking-tighter mb-6 leading-none">{siteLangData.name}</h2>
+                 
+                 <p className="text-gray-500 text-lg leading-relaxed mb-10 font-medium italic">
+                    "{siteLangData.desc}"
+                 </p>
+                 
+                 <div className="flex items-center gap-6 mb-10">
+                    <div className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-4 py-2 rounded-xl">
+                       <MapPin size={16} className="text-amber-500" />
+                       Pilar de la Horadada
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px] font-black text-amber-700 uppercase tracking-widest bg-amber-50 px-4 py-2 rounded-xl">
+                       <History size={16} />
+                       BIC Protegido
+                    </div>
+                 </div>
+
+                 <button 
+                    onClick={() => onNavigate?.(ViewState.MAP, site.id)}
+                    className="w-full py-5 bg-[#0f172a] text-white rounded-[32px] font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-2xl hover:bg-amber-800 transition-all active:scale-95"
+                 >
+                    <Search size={22} className="text-amber-400" />
+                    Localizar Monumento
+                 </button>
+               </div>
             </div>
-            <div className="relative">
-               <div className="absolute -left-[41px] bg-blue-100 p-2 rounded-full text-blue-600 border-4 border-white shadow-sm"><Sprout size={20} /></div>
-               <h3 className="text-xl font-bold text-gray-900 mb-2">{content.timeline.present.title}</h3>
-               <p className="text-gray-600 leading-relaxed text-sm">{content.timeline.present.desc}</p>
-            </div>
-            <div className="relative">
-               <div className="absolute -left-[41px] bg-green-100 p-2 rounded-full text-green-600 border-4 border-white shadow-sm"><Building2 size={20} /></div>
-               <h3 className="text-xl font-bold text-gray-900 mb-2">{content.timeline.future.title}</h3>
-               <p className="text-gray-600 leading-relaxed text-sm">{content.timeline.future.desc}</p>
+          );
+        })}
+      </div>
+      
+      {/* Historical Context Section */}
+      <div className="px-6 mt-20 mb-10">
+         <div className="bg-white border border-amber-100 rounded-[50px] p-12 shadow-2xl shadow-amber-900/5 overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50" />
+            <div className="relative z-10">
+               <h3 className="text-3xl font-black mb-8 tracking-tighter text-gray-900">Un legado vivo</h3>
+               <div className="space-y-8">
+                  <div className="flex gap-6">
+                     <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-3xl flex items-center justify-center shrink-0 shadow-sm">
+                        <Clock size={28} />
+                     </div>
+                     <div>
+                        <h4 className="font-black text-gray-900 text-lg tracking-tight">Thiar Romana</h4>
+                        <p className="text-gray-500 text-base font-medium leading-tight">Estación de la Vía Augusta, calzada que unía Roma con Cádiz pasando por nuestro municipio.</p>
+                     </div>
+                  </div>
+                  <div className="flex gap-6">
+                     <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center shrink-0 shadow-sm">
+                        <History size={28} />
+                     </div>
+                     <div>
+                        <h4 className="font-black text-gray-900 text-lg tracking-tight">Defensa Mediterránea</h4>
+                        <p className="text-gray-500 text-base font-medium leading-tight">La Torre de la Horadada protegía a los habitantes de los constantes ataques piratas.</p>
+                     </div>
+                  </div>
+               </div>
             </div>
          </div>
-      </div>
-
-      <div className="px-4 pb-12 space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900 px-2 mb-4">Descubre Más</h2>
-          <div className="bg-white rounded-2xl shadow-lg shadow-green-900/5 overflow-hidden border border-gray-100">
-             <div className="h-40 relative">
-                <img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=1000&q=80" className="w-full h-full object-cover" alt="Golf" />
-                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full text-green-700"><Trophy size={20} /></div>
-             </div>
-             <div className="p-5">
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{content.golf.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{content.golf.desc}</p>
-             </div>
-          </div>
-          <div className="bg-white rounded-2xl shadow-lg shadow-green-900/5 overflow-hidden border border-gray-100 flex">
-             <div className="w-1/3 relative"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover" alt="Nature" /></div>
-             <div className="w-2/3 p-5 flex flex-col justify-center">
-                 <div className="flex items-center gap-2 mb-2 text-green-600"><TreePine size={18} /><Bike size={18} /></div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">{content.nature.title}</h3>
-                <p className="text-gray-600 text-xs leading-relaxed">{content.nature.desc}</p>
-             </div>
-          </div>
-          <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100 relative overflow-hidden">
-             <div className="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4"><Plane size={100} /></div>
-             <div className="relative z-10">
-                <div className="flex items-center gap-2 mb-3 text-blue-800"><Plane size={20} /><h3 className="text-lg font-bold">{content.connectivity.title}</h3></div>
-                <p className="text-blue-900/70 text-sm leading-relaxed mb-4">{content.connectivity.desc}</p>
-                <div className="flex gap-4">
-                    <div className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-900"><MapPin size={12} /> ALC (40')</div>
-                    <div className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-900"><MapPin size={12} /> RMU (35')</div>
-                </div>
-             </div>
-          </div>
       </div>
     </div>
   );

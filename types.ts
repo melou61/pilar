@@ -22,6 +22,8 @@ export enum ViewState {
   SEARCH = 'SEARCH'
 }
 
+export type NewsCategory = 'GENERAL' | 'DIFUNTOS' | 'TRABAJO' | 'CASAS' | 'OTROS';
+
 export interface NavItem {
   id: ViewState;
   label: string;
@@ -58,7 +60,7 @@ export interface Event {
   imageUrl: string;
   lat?: number;
   lng?: number;
-  isFestival?: boolean; // New flag for festivals/charangas
+  isFestival?: boolean; 
   startDateTime?: string; 
   endDateTime?: string;   
 }
@@ -69,10 +71,12 @@ export interface Promotion {
   discountCode?: string;
   expiresAt?: string;
   beaconUuid?: string;
-  beaconHardwareId?: string; // ID Físico (Major/Minor)
-  proximityRange?: 'IMMEDIATE' | 'NEAR' | 'FAR'; // Lejanía
-  frequencyMinutes?: number; // Veces por hora (Cooldown)
-  dailyLimit?: number; // Máximo por día
+  beaconHardwareId?: string;
+  proximityRange: 'IMMEDIATE' | 'NEAR' | 'FAR';
+  frequencyPerDay: number; // Veces de pital
+  maxDistanceMeters: number; // Distancia
+  activeTimeMinutes: number; // Tiempo de validez del mensaje
+  interactionsCount?: number; // Cuántos han "pitado"
 }
 
 export interface CensusItem {
@@ -85,14 +89,17 @@ export interface CensusItem {
   rating: number;
   reviewCount: number;
   isOpen: boolean;
-  priceRange?: '€' | '€€' | '€€€' | '€€€€'; // New: Price indicator
-  featuredItems?: string[]; // New: Top dishes or products
+  zone: 'CENTRO' | 'LA_TORRE' | 'MIL_PALMERAS' | 'CAMPOVERDE' | 'EL_MOJON';
+  priceRange?: '€' | '€€' | '€€€' | '€€€€';
+  featuredItems?: string[];
   images: string[];
+  videoUrl?: string;
   website?: string;
   socials?: {
     facebook?: string;
     instagram?: string;
     twitter?: string;
+    tiktok?: string;
   };
   hours: {
     weekdays: string;
@@ -101,6 +108,20 @@ export interface CensusItem {
   lat?: number;
   lng?: number;
   promotion?: Promotion;
+}
+
+export interface NewsItem {
+  id: string;
+  source: string;
+  sourceType: 'official' | 'social' | 'press';
+  icon: string;
+  date: string;
+  title: string;
+  content: string;
+  image?: string;
+  url: string;
+  category: NewsCategory;
+  isSyncing?: boolean;
 }
 
 export interface CensusCategory {
@@ -117,4 +138,6 @@ export interface AdminUser {
   email: string;
   role: AdminRole;
   createdAt: string;
+  active?: boolean;
+  lastSeen?: string;
 }

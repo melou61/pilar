@@ -89,7 +89,20 @@ import {
   Sparkles,
   Bot,
   Edit3,
-  Bookmark
+  Bookmark,
+  Award,
+  Play,
+  Flower,
+  Mic,
+  MicOff,
+  Radar,
+  MousePointer2,
+  BarChart3,
+  Battery,
+  Wifi,
+  Settings2,
+  Signal,
+  Cpu
 } from 'lucide-react';
 
 export {
@@ -182,5 +195,18 @@ export {
   Sparkles,
   Bot,
   Edit3,
-  Bookmark
+  Bookmark,
+  Award,
+  Play,
+  Flower,
+  Mic,
+  MicOff,
+  Radar,
+  MousePointer2,
+  BarChart3,
+  Battery,
+  Wifi,
+  Settings2,
+  Signal,
+  Cpu
 };

@@ -1,137 +1,134 @@
 
 import React, { useState } from 'react';
 import { MOCK_NEWS } from '../data';
-import { Rss, Facebook, Instagram, Newspaper, ExternalLink, Calendar, Filter, Megaphone, Share2 } from './Icons';
+import { 
+  Rss, Facebook, Instagram, Newspaper, ExternalLink, Calendar, 
+  Filter, Megaphone, Share2, Flower, Briefcase, Home, Info 
+} from './Icons';
+import { NewsCategory } from '../types';
 
 interface NewsViewProps {
   t: any;
 }
 
 export const NewsView: React.FC<NewsViewProps> = ({ t }) => {
-  const [filter, setFilter] = useState<'all' | 'social' | 'press' | 'official'>('all');
+  const [activeCategory, setActiveCategory] = useState<NewsCategory | 'ALL'>('ALL');
 
-  // Helper to map icon string to Component
-  const getIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'facebook': return <Facebook size={16} />;
-      case 'instagram': return <Instagram size={16} />;
-      case 'newspaper': return <Newspaper size={16} />;
-      case 'calendar': return <Calendar size={16} />;
-      default: return <Rss size={16} />;
+  const getCategoryIcon = (cat: NewsCategory) => {
+    switch (cat) {
+      case 'DIFUNTOS': return <Flower size={18} className="text-gray-500" />;
+      case 'TRABAJO': return <Briefcase size={18} className="text-emerald-600" />;
+      case 'CASAS': return <Home size={18} className="text-blue-600" />;
+      case 'OTROS': return <Info size={18} className="text-orange-500" />;
+      default: return <Megaphone size={18} className="text-blue-600" />;
     }
   };
 
-  const getColor = (sourceType: string) => {
-      switch (sourceType) {
-          case 'social': return 'bg-blue-100 text-blue-700';
-          case 'press': return 'bg-orange-100 text-orange-700';
-          case 'official': return 'bg-purple-100 text-purple-700';
-          default: return 'bg-gray-100 text-gray-700';
-      }
+  const getCategoryColor = (cat: NewsCategory) => {
+    switch (cat) {
+      case 'DIFUNTOS': return 'bg-gray-50 border-gray-200';
+      case 'TRABAJO': return 'bg-emerald-50 border-emerald-100';
+      case 'CASAS': return 'bg-blue-50 border-blue-100';
+      case 'OTROS': return 'bg-orange-50 border-orange-100';
+      default: return 'bg-blue-50 border-blue-100';
+    }
   };
 
-  const filteredNews = filter === 'all' 
+  const filteredNews = activeCategory === 'ALL' 
     ? MOCK_NEWS 
-    : MOCK_NEWS.filter(n => n.sourceType === filter);
+    : MOCK_NEWS.filter(n => n.category === activeCategory);
+
+  const categories: {id: NewsCategory | 'ALL', label: string}[] = [
+    { id: 'ALL', label: 'Todo' },
+    { id: 'GENERAL', label: 'Actualidad' },
+    { id: 'DIFUNTOS', label: 'Difuntos' },
+    { id: 'TRABAJO', label: 'Empleo' },
+    { id: 'CASAS', label: 'Vivienda' },
+    { id: 'OTROS', label: 'Otros' },
+  ];
 
   return (
     <div className="bg-gray-50 min-h-screen pb-44 animate-in fade-in duration-300">
       
-      {/* Header Hub */}
-      <div className="bg-white px-6 pt-6 pb-4 border-b border-gray-200">
-         <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2 mb-1">
-            <Megaphone className="text-blue-600" />
-            {t.menu.news}
-         </h1>
-         <p className="text-xs text-gray-500">
-            Toda la actualidad de Pilar de la Horadada en un solo lugar.
-         </p>
+      {/* Editorial Header */}
+      <div className="bg-white px-8 pt-12 pb-10 border-b border-gray-100 shadow-sm">
+         <div className="max-w-4xl mx-auto">
+            <h1 className="text-5xl font-black text-gray-900 tracking-tighter mb-2 flex items-center gap-4">
+                <Newspaper className="text-blue-600" size={48} />
+                {t.menu.news}
+            </h1>
+            <p className="text-gray-500 font-medium text-lg max-w-md">
+                Toda la información relevante de Pilar de la Horadada, actualizada minuto a minuto.
+            </p>
 
-         {/* Sources Preview (Saving Time) */}
-         <div className="flex items-center gap-2 mt-4 overflow-x-auto no-scrollbar pb-2">
-            <div className="flex -space-x-2">
-               <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white border-2 border-white shadow-sm z-30"><Facebook size={14} /></div>
-               <div className="w-8 h-8 rounded-full bg-pink-600 flex items-center justify-center text-white border-2 border-white shadow-sm z-20"><Instagram size={14} /></div>
-               <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white border-2 border-white shadow-sm z-10"><Newspaper size={14} /></div>
+            {/* Categorías Slider */}
+            <div className="flex gap-3 overflow-x-auto no-scrollbar mt-10 pb-2">
+                {categories.map(cat => (
+                    <button 
+                        key={cat.id}
+                        onClick={() => setActiveCategory(cat.id)}
+                        className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${
+                            activeCategory === cat.id 
+                            ? 'bg-[#0f172a] text-white border-[#0f172a] shadow-xl' 
+                            : 'bg-gray-50 text-gray-400 border-gray-100 hover:border-blue-200'
+                        }`}
+                    >
+                        {cat.label}
+                    </button>
+                ))}
             </div>
-            <span className="text-[10px] text-gray-400 font-medium ml-2">Fuentes conectadas</span>
          </div>
       </div>
 
-      {/* Filters */}
-      <div className="sticky top-0 z-10 bg-gray-50/95 backdrop-blur-sm px-4 py-3 flex gap-2 overflow-x-auto no-scrollbar border-b border-gray-100">
-          <button 
-             onClick={() => setFilter('all')}
-             className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors ${filter === 'all' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-200'}`}
-          >
-             Todo
-          </button>
-          <button 
-             onClick={() => setFilter('social')}
-             className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors ${filter === 'social' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-200'}`}
-          >
-             Redes Sociales
-          </button>
-          <button 
-             onClick={() => setFilter('press')}
-             className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors ${filter === 'press' ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-gray-600 border-gray-200'}`}
-          >
-             Prensa Local
-          </button>
-          <button 
-             onClick={() => setFilter('official')}
-             className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition-colors ${filter === 'official' ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-600 border-gray-200'}`}
-          >
-             Agenda Oficial
-          </button>
-      </div>
-
       {/* Feed List */}
-      <div className="px-4 py-4 space-y-4">
-          {filteredNews.map((news) => (
-             <article key={news.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                 <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getColor(news.sourceType)}`}>
-                           {getIcon(news.icon)}
+      <div className="max-w-4xl mx-auto px-6 py-12 space-y-10">
+          {filteredNews.length > 0 ? filteredNews.map((news) => (
+             <article key={news.id} className={`bg-white rounded-[45px] p-8 shadow-2xl shadow-gray-200/40 border border-gray-50 transition-all hover:-translate-y-1`}>
+                 <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-inner ${getCategoryColor(news.category)}`}>
+                           {getCategoryIcon(news.category)}
                         </div>
                         <div>
-                           <h4 className="text-xs font-bold text-gray-900">{news.source}</h4>
-                           <span className="text-[10px] text-gray-400">{news.date}</span>
+                           <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{news.source}</h4>
+                           <span className="text-xs font-bold text-blue-600">{news.date}</span>
                         </div>
                     </div>
-                    <button className="text-gray-400 hover:text-blue-600">
-                        <Share2 size={16} />
-                    </button>
+                    <div className="flex gap-2">
+                        <button className="w-10 h-10 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition-all">
+                            <Share2 size={18} />
+                        </button>
+                    </div>
                  </div>
 
+                 <h2 className="text-3xl font-black text-gray-900 mb-4 tracking-tighter leading-tight">
+                    {news.title}
+                 </h2>
+
                  {news.image && (
-                    <div className="rounded-xl overflow-hidden mb-3 h-48 w-full">
+                    <div className="rounded-[35px] overflow-hidden mb-6 h-64 w-full shadow-inner border border-gray-100">
                        <img src={news.image} alt={news.title} className="w-full h-full object-cover" />
                     </div>
                  )}
 
-                 <h2 className="text-lg font-bold text-gray-900 mb-2 leading-tight">
-                    {news.title}
-                 </h2>
-                 <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                 <p className="text-lg text-gray-500 mb-8 leading-relaxed font-medium">
                     {news.content}
                  </p>
 
-                 <div className="flex items-center justify-between border-t border-gray-50 pt-3">
-                    <span className="text-[10px] font-bold uppercase text-gray-400 tracking-wider">
-                       {news.sourceType === 'social' ? 'Facebook Post' : news.sourceType === 'official' ? 'Evento Oficial' : 'Noticia Web'}
+                 <div className="flex items-center justify-between border-t border-gray-50 pt-8">
+                    <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border ${getCategoryColor(news.category)}`}>
+                       #{news.category}
                     </span>
-                    <button className="flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline">
-                       Leer completo <ExternalLink size={12} />
+                    <button className="flex items-center gap-2 text-sm font-black text-[#0f172a] hover:gap-3 transition-all uppercase tracking-widest">
+                       Leer más <ExternalLink size={16} />
                     </button>
                  </div>
              </article>
-          ))}
-
-          <div className="text-center py-6">
-             <p className="text-xs text-gray-400">Has llegado al final de la actualidad de hoy.</p>
-          </div>
+          )) : (
+            <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">
+                No hay publicaciones en esta categoría hoy.
+            </div>
+          )}
       </div>
 
     </div>
