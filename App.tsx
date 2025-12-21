@@ -1,16 +1,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ViewState, NavItem, Ad, Event, Language, AdminRole } from './types';
+import { ViewState, NavItem, Ad, Event, Language, AdminRole, Promotion } from './types';
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
-  ShoppingBag, Calendar, MessageSquare, MapPin, Sun, Info, ArrowRight, ArrowLeft,
-  Search, Phone, Tag, Share2, Heart, Briefcase, MapIcon, Landmark, CalendarPlus, Zap, Sparkles, User, Bot, Globe, FileText, Star
+  ShoppingBag, Calendar, MapPin, Search, MapIcon, Landmark, Sparkles, User
 } from './components/Icons';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { LoginModal } from './components/LoginModal';
 import { Footer } from './components/Footer';
-import { AdSpot } from './components/AdSpot';
 import { ShoppingView } from './components/ShoppingView';
 import { SearchModal } from './components/SearchModal';
 import { BeachesView } from './components/BeachesView';
@@ -23,6 +21,7 @@ import { NewsView } from './components/NewsView';
 import { EventsView } from './components/EventsView';
 import { AIChatView } from './components/AIChatView';
 import { ShareModal } from './components/ShareModal';
+import { AdminDashboard } from './components/AdminDashboard';
 import { translations } from './translations';
 import { MOCK_EVENTS } from './data';
 
@@ -35,7 +34,7 @@ const INITIAL_ADS: Ad[] = [
   { id: '1', clientName: 'Mesón El Puerto', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true }
 ];
 
-declare const L: any; // Leaflet Global
+declare const L: any; // Leaflet Global para el mini-mapa
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>(ViewState.HOME);
@@ -45,8 +44,11 @@ const App: React.FC = () => {
   const [isShareOpen, setShareOpen] = useState(false);
   const [shareData, setShareData] = useState({ title: '', text: '', url: '' });
   const [currentLang, setCurrentLang] = useState<Language>(languages[0]); 
-  const [ads] = useState<Ad[]>(INITIAL_ADS);
-  const [events] = useState<Event[]>(MOCK_EVENTS);
+  
+  const [ads, setAds] = useState<Ad[]>(INITIAL_ADS);
+  const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
+  const [beaconPromotions, setBeaconPromotions] = useState<Record<string, Promotion>>({});
+
   const [selectedBusinessId, setSelectedBusinessId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
@@ -79,20 +81,6 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleShare = (event: Event) => {
-    setShareData({
-      title: event.title,
-      text: event.description,
-      url: window.location.href
-    });
-    setShareOpen(true);
-  };
-
-  const handleAddToCalendar = (e: React.MouseEvent, event: Event) => {
-    e.stopPropagation();
-    alert(`Añadiendo "${event.title}" a tu calendario...`);
-  };
-
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
     { id: ViewState.AI_CHAT, label: t.menu.ai, icon: Sparkles },
@@ -107,58 +95,40 @@ const App: React.FC = () => {
     { id: ViewState.EVENTS, label: t.menu.events, icon: Calendar },
   ];
 
+  // Componente interno para el Widget de Mapa en la Home
   const HomeMapWidget = () => {
     const miniMapRef = useRef<HTMLDivElement>(null);
     const widgetInstance = useRef<any>(null);
-    const isDestroyedWidget = useRef(false);
 
     useEffect(() => {
-        isDestroyedWidget.current = false;
-        let timer: any;
-        const initWidget = () => {
-            if (isDestroyedWidget.current) return;
-            if (miniMapRef.current && !widgetInstance.current && typeof L !== 'undefined') {
-                try {
-                    const map = L.map(miniMapRef.current, {
-                        zoomControl: false,
-                        attributionControl: false,
-                        dragging: false,
-                        touchZoom: false,
-                        scrollWheelZoom: false,
-                        doubleClickZoom: false
-                    }).setView([37.8653, -0.7932], 14);
+        if (miniMapRef.current && !widgetInstance.current && typeof L !== 'undefined') {
+            try {
+                const map = L.map(miniMapRef.current, {
+                    zoomControl: false,
+                    attributionControl: false,
+                    dragging: false,
+                    touchZoom: false,
+                    scrollWheelZoom: false,
+                    doubleClickZoom: false
+                }).setView([37.8653, -0.7932], 14);
 
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-                    L.circleMarker([37.8653, -0.7932], {
-                        radius: 6,
-                        fillColor: '#2563eb',
-                        color: '#ffffff',
-                        weight: 2,
-                        fillOpacity: 1
-                    }).addTo(map);
+                L.circleMarker([37.8653, -0.7932], {
+                    radius: 6,
+                    fillColor: '#2563eb',
+                    color: '#ffffff',
+                    weight: 2,
+                    fillOpacity: 1
+                }).addTo(map);
 
-                    setTimeout(() => { 
-                      if (map && !isDestroyedWidget.current && map.invalidateSize) {
-                        map.invalidateSize(); 
-                      }
-                    }, 300);
-                    widgetInstance.current = map;
-                } catch (e) {
-                  console.warn("HomeMapWidget init error", e);
-                }
-            }
-        };
-
-        timer = setTimeout(initWidget, 500);
-
+                setTimeout(() => map.invalidateSize(), 300);
+                widgetInstance.current = map;
+            } catch (e) {}
+        }
         return () => {
-            isDestroyedWidget.current = true;
-            clearTimeout(timer);
             if (widgetInstance.current) {
-                try {
-                  widgetInstance.current.remove();
-                } catch (e) {}
+                widgetInstance.current.remove();
                 widgetInstance.current = null;
             }
         };
@@ -167,17 +137,17 @@ const App: React.FC = () => {
     return (
       <div 
         onClick={() => handleNavigate(ViewState.MAP)}
-        className="relative h-80 w-full rounded-[60px] overflow-hidden border-8 border-white shadow-2xl group cursor-pointer bg-gray-50"
+        className="relative h-80 w-full rounded-[50px] overflow-hidden border-8 border-white shadow-2xl group cursor-pointer bg-gray-50"
       >
-        <div ref={miniMapRef} className="w-full h-full min-h-[300px]" />
+        <div ref={miniMapRef} className="w-full h-full" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
-        <div className="absolute bottom-10 left-10 right-10 flex items-center justify-between text-white z-10">
+        <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between text-white z-10">
            <div>
-              <h4 className="font-black text-3xl mb-1 tracking-tighter text-white drop-shadow-lg">Explora el Pilar</h4>
-              <p className="text-white/90 text-[10px] font-black uppercase tracking-[0.3em] drop-shadow-md">Cerca de ti hoy</p>
+              <h4 className="font-black text-2xl mb-1 tracking-tighter">Explora el Pilar</h4>
+              <p className="text-white/80 text-[9px] font-black uppercase tracking-widest">Cerca de ti hoy</p>
            </div>
-           <div className="w-16 h-16 bg-white text-blue-600 rounded-[24px] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-              <MapIcon size={32} />
+           <div className="w-14 h-14 bg-white text-blue-600 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+              <MapIcon size={28} />
            </div>
         </div>
       </div>
@@ -186,6 +156,7 @@ const App: React.FC = () => {
 
   const renderHome = () => (
     <div className="space-y-16 pb-24 animate-in fade-in duration-700">
+      {/* HERO SECTION */}
       <div className="relative h-[85vh] w-full overflow-hidden">
         {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
@@ -203,10 +174,7 @@ const App: React.FC = () => {
             <h2 className="text-8xl sm:text-[140px] font-black mb-10 leading-[0.8] tracking-tighter drop-shadow-2xl">
               Vive<br/>el Pilar
             </h2>
-            <p 
-              className="text-white text-2xl max-w-md font-bold leading-tight mb-12"
-              style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.8)' }}
-            >
+            <p className="text-white text-2xl max-w-md font-bold leading-tight mb-12 drop-shadow-lg">
               Donde el sol ilumina la historia y el mar abraza tus sentidos.
             </p>
             <div className="flex gap-4">
@@ -220,7 +188,8 @@ const App: React.FC = () => {
       </div>
       
       <div className="max-w-5xl mx-auto px-6 space-y-24">
-        <div>
+        {/* SECCIÓN TU ENTORNO (MAPA) */}
+        <div className="animate-in slide-in-from-bottom duration-1000">
            <div className="flex justify-between items-center mb-10 px-4">
               <h3 className="font-black text-gray-900 text-4xl tracking-tighter">Tu entorno</h3>
               <button onClick={() => handleNavigate(ViewState.MAP)} className="text-blue-600 font-black text-xs uppercase tracking-widest bg-blue-50 px-6 py-3 rounded-full">Pantalla completa</button>
@@ -228,6 +197,7 @@ const App: React.FC = () => {
            <HomeMapWidget />
         </div>
 
+        {/* SECCIÓN TRADICIÓN VIVA (EVENTOS) */}
         <div>
           <div className="flex justify-between items-center mb-12 px-4">
             <div>
@@ -241,33 +211,38 @@ const App: React.FC = () => {
               <div 
                 key={event.id} 
                 onClick={() => handleSearchNavigate(ViewState.EVENTS, event.id)} 
-                className="bg-white rounded-[64px] shadow-2xl shadow-gray-200/50 border border-gray-100 overflow-hidden cursor-pointer hover:-translate-y-4 transition-all duration-500 group"
+                className="bg-white rounded-[56px] shadow-2xl shadow-gray-200/50 border border-gray-100 overflow-hidden cursor-pointer hover:-translate-y-4 transition-all duration-500 group"
               >
                 <div className="aspect-[16/10] relative overflow-hidden bg-gray-100">
                   <img 
                     src={event.imageUrl} 
                     alt={event.title} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" 
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548574505-12737441edb2?auto=format&fit=crop&w=1200&q=80';
-                    }}
                   />
                   <div className="absolute top-8 left-8 bg-white/95 backdrop-blur-xl px-6 py-3 rounded-3xl text-[11px] font-black uppercase tracking-[0.3em] text-blue-600 shadow-2xl">
                     {event.category}
                   </div>
                 </div>
-                <div className="p-12">
-                  <h4 className="font-black text-gray-900 text-4xl leading-none tracking-tighter mb-8 group-hover:text-blue-600 transition-colors">
+                <div className="p-10">
+                  <h4 className="font-black text-gray-900 text-3xl leading-none tracking-tighter mb-6 group-hover:text-blue-600 transition-colors">
                     {event.title}
                   </h4>
                   <div className="flex items-center gap-4 text-gray-400 font-black text-xs uppercase tracking-widest">
-                       <Calendar size={20} className="text-blue-500" />
+                       <Calendar size={18} className="text-blue-500" />
                        {event.date}
                   </div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* CORAZÓN DEL MEDITERRÁNEO */}
+        <div className="text-center py-20">
+           <h3 className="text-5xl font-black text-gray-900 mb-6 tracking-tighter">Corazón del Mediterráneo</h3>
+           <p className="text-gray-500 max-w-2xl mx-auto font-medium text-xl leading-relaxed">
+             {t.hero.subtitle}
+           </p>
         </div>
       </div>
     </div>
@@ -290,9 +265,17 @@ const App: React.FC = () => {
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
       
-      {/* CAPA DE MODALES: Se sube el z-index para evitar solapamientos visuales */}
       <div className="relative z-[7000]">
-        <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />
+        <LoginModal 
+          isOpen={isLoginOpen} 
+          onClose={() => setLoginOpen(false)} 
+          onLogin={() => setLoginOpen(false)} 
+          onLoginSuperAdmin={() => {
+            setLoginOpen(false);
+            handleNavigate(ViewState.ADMIN);
+          }} 
+          t={t.auth} 
+        />
         <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
         <ShareModal isOpen={isShareOpen} onClose={() => setShareOpen(false)} data={shareData} t={t.share} />
       </div>
@@ -311,13 +294,26 @@ const App: React.FC = () => {
            <EventsView 
               t={t} 
               events={events} 
-              onShare={handleShare} 
-              onAddToCalendar={handleAddToCalendar} 
+              onShare={(ev) => { setShareData({title: ev.title, text: ev.description, url: window.location.href}); setShareOpen(true); }} 
+              onAddToCalendar={() => {}} 
               initialEventId={selectedEventId} 
            />
          )}
          {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} onBack={() => handleNavigate(ViewState.HOME)} />}
          
+         {currentView === ViewState.ADMIN && (
+           <AdminDashboard 
+              ads={ads} 
+              setAds={setAds} 
+              events={events} 
+              setEvents={setEvents} 
+              onLogout={() => handleNavigate(ViewState.HOME)}
+              currentUserRole="SUPER_ADMIN"
+              beaconPromotions={beaconPromotions}
+              setBeaconPromotions={setBeaconPromotions}
+           />
+         )}
+
          {currentView === ViewState.PROFILE && (
             <div className="p-12 pt-40 text-center space-y-12 animate-in fade-in zoom-in duration-500">
                 <div className="w-40 h-40 bg-gray-100 rounded-[50px] mx-auto flex items-center justify-center text-gray-300 shadow-inner">
@@ -337,7 +333,7 @@ const App: React.FC = () => {
          )}
       </main>
       
-      <Footer t={t.footer} />
+      {currentView !== ViewState.ADMIN && <Footer t={t.footer} />}
     </div>
   );
 };
