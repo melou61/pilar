@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { NavItem, ViewState, Ad } from '../types';
 import { X, ChevronRight, Sun, Cloud, CloudRain, Wind, Thermometer } from './Icons';
@@ -90,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+    <div className="fixed inset-0 z-[300] flex justify-end">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" 
@@ -125,7 +126,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={() => onNavigate(item.id)}
                     className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all ${
                       isActive 
-                        ? 'bg-blue-50 text-blue-600 font-medium' 
+                        ? 'bg-blue-600 text-white font-medium' 
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
                   >

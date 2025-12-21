@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Menu, LogIn, Search, Home, MapIcon, Sparkles, Calendar, User } from './Icons';
+import { Menu, LogIn, Search, Home, MapIcon, Sparkles, Calendar, User, Globe } from './Icons';
 import { Language, ViewState } from '../types';
 
 interface HeaderProps {
@@ -31,30 +31,35 @@ export const Header: React.FC<HeaderProps> = ({
   const [isLangOpen, setIsLangOpen] = useState(false);
 
   const navItems = [
-    { id: ViewState.HOME, icon: Home, color: 'text-blue-600', bg: 'bg-blue-50', label: t.menu.home },
+    { id: ViewState.HOME, icon: Home, color: 'text-blue-600', bg: 'bg-blue-50', label: 'Inicio' },
     { id: ViewState.MAP, icon: MapIcon, color: 'text-orange-500', bg: 'bg-orange-50', label: 'Mapa' },
-    { id: ViewState.AI_CHAT, icon: Sparkles, color: 'text-purple-600', bg: 'bg-purple-50', isSpecial: true, label: 'IA' },
+    { id: ViewState.AI_CHAT, icon: Sparkles, color: 'text-purple-600', bg: 'bg-purple-50', label: 'Guía IA' },
     { id: ViewState.EVENTS, icon: Calendar, color: 'text-red-500', bg: 'bg-red-50', label: 'Eventos' },
-    { id: ViewState.PROFILE, icon: User, color: 'text-emerald-600', bg: 'bg-emerald-50', label: 'Mío' },
+    { id: ViewState.PROFILE, icon: User, color: 'text-emerald-600', bg: 'bg-emerald-50', label: 'Mi Pilar' },
   ];
 
   return (
-    <header className="bg-white/95 backdrop-blur-2xl sticky top-0 z-[150] border-b border-gray-100 shadow-sm h-20 flex items-center w-full">
-      {/* Contenedor Max-Width Centrado: Esto soluciona la dispersión en pantallas grandes */}
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+    <header className="fixed top-0 left-0 right-0 z-[200] bg-white border-b border-gray-100 shadow-md h-20 w-full flex items-center">
+      <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between gap-4">
         
-        {/* IZQUIERDA: Marca con Logo Azul */}
-        <div className="flex items-center gap-3 cursor-pointer group shrink-0" onClick={onLogoClick}>
-          <div className="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-200 group-hover:scale-105 transition-transform">
+        {/* LOGO RESTAURADO: Dos líneas (Gusta más al usuario) */}
+        <div 
+          className="flex items-center gap-3 cursor-pointer shrink-0 group" 
+          onClick={onLogoClick}
+        >
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-200 group-hover:rotate-3 transition-transform">
             PH
           </div>
-          <div className="hidden lg:flex flex-col">
-            <h1 className="text-gray-900 font-black text-xs leading-none tracking-tighter uppercase">Pilar de la<br />Horadada</h1>
+          <div className="flex flex-col justify-center">
+            <h1 className="text-gray-900 font-black text-[10px] sm:text-[11px] leading-tight tracking-tighter uppercase whitespace-nowrap">
+              Pilar de la<br />
+              <span className="text-blue-600">Horadada</span>
+            </h1>
           </div>
         </div>
 
-        {/* CENTRO: El Dock de Navegación (Más junto y equilibrado) */}
-        <nav className="flex items-center bg-gray-100/60 rounded-[22px] p-1 gap-0.5 sm:gap-1.5 shadow-inner">
+        {/* NAVEGACIÓN CENTRAL: Pareja y con etiquetas */}
+        <nav className="flex items-center bg-gray-50 border border-gray-100 rounded-2xl p-1 gap-1">
           {navItems.map((item) => {
             const isActive = currentView === item.id;
             const Icon = item.icon;
@@ -63,42 +68,40 @@ export const Header: React.FC<HeaderProps> = ({
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
                 className={`
-                  relative px-3 sm:px-4 h-11 flex items-center justify-center gap-2 rounded-2xl transition-all duration-300
-                  ${isActive ? `${item.bg} ${item.color} shadow-sm scale-105` : 'text-gray-400 hover:text-gray-600 hover:bg-white/50'}
+                  relative px-2 sm:px-4 h-12 flex flex-col items-center justify-center rounded-xl transition-all duration-300 min-w-[55px] sm:min-w-[85px]
+                  ${isActive ? `${item.bg} ${item.color} shadow-sm` : 'text-gray-400 hover:text-gray-600 hover:bg-white'}
                 `}
-                title={item.label}
               >
-                <Icon 
-                  size={isActive ? 20 : 18} 
-                  strokeWidth={isActive ? 3 : 2} 
-                  className={isActive ? 'fill-current/10' : ''} 
-                />
-                <span className={`text-[10px] font-black uppercase tracking-widest hidden md:block ${isActive ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                <Icon size={isActive ? 20 : 18} strokeWidth={isActive ? 3 : 2} />
+                <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-tight mt-0.5">
                   {item.label}
                 </span>
                 {isActive && (
-                  <div className={`absolute -bottom-1 w-1 h-1 rounded-full ${item.color.replace('text-', 'bg-')}`} />
+                  <div className={`absolute -bottom-0.5 w-1 h-1 rounded-full ${item.color.replace('text-', 'bg-')}`} />
                 )}
               </button>
             );
           })}
         </nav>
 
-        {/* DERECHA: Utilidades Agrupadas */}
-        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-          {/* Selector de Idioma Minimalista */}
+        {/* UTILIDADES DERECHA: Bola de idioma, lupa, login, menú */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          
+          {/* Bola de Idioma */}
           <div className="relative">
             <button 
               onClick={() => setIsLangOpen(!isLangOpen)}
-              className="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-xl hover:bg-gray-100 border border-gray-100 transition-all text-sm font-bold"
+              className="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-xl hover:bg-gray-100 border border-gray-100 transition-all text-sm font-bold shadow-sm"
+              title="Cambiar Idioma"
             >
-              {currentLang.flag}
+              <Globe size={18} className="text-blue-600" />
+              <span className="ml-1 text-[10px] hidden sm:block">{currentLang.code.toUpperCase()}</span>
             </button>
             
             {isLangOpen && (
               <>
-                <div className="fixed inset-0 z-40" onClick={() => setIsLangOpen(false)} />
-                <div className="absolute top-14 right-0 w-44 bg-white rounded-3xl shadow-2xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-4">
+                <div className="fixed inset-0 z-[210]" onClick={() => setIsLangOpen(false)} />
+                <div className="absolute top-12 right-0 w-40 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[220] animate-in fade-in slide-in-from-top-2">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
@@ -106,9 +109,9 @@ export const Header: React.FC<HeaderProps> = ({
                         onLanguageChange(lang);
                         setIsLangOpen(false);
                       }}
-                      className={`flex items-center gap-4 px-5 py-3 w-full hover:bg-gray-50 text-left text-sm transition-colors ${currentLang.code === lang.code ? 'bg-blue-50 text-blue-600 font-bold' : 'text-gray-700'}`}
+                      className={`flex items-center gap-3 px-4 py-3 w-full hover:bg-gray-50 text-left text-xs transition-colors ${currentLang.code === lang.code ? 'bg-blue-50 text-blue-600 font-bold' : 'text-gray-700'}`}
                     >
-                      <span className="text-lg">{lang.flag}</span>
+                      <span>{lang.flag}</span>
                       <span>{lang.label}</span>
                     </button>
                   ))}
@@ -117,18 +120,30 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          <button onClick={onSearchClick} className="w-10 h-10 hidden sm:flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-xl transition-all border border-transparent hover:border-gray-200">
+          {/* Lupa (Búsqueda) */}
+          <button 
+            onClick={(e) => { e.stopPropagation(); onSearchClick(); }} 
+            className="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all border border-gray-100 shadow-sm"
+            title="Buscar hoy"
+          >
             <Search size={20} />
           </button>
 
-          <button onClick={onLoginClick} className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-xl transition-all border border-transparent hover:border-gray-200">
+          {/* Login (Acceso) */}
+          <button 
+            onClick={(e) => { e.stopPropagation(); onLoginClick(); }} 
+            className="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all border border-gray-100 shadow-sm"
+            title="Mi Cuenta"
+          >
             <LogIn size={20} />
           </button>
 
-          <div className="w-px h-6 bg-gray-200 mx-1 hidden sm:block" />
-
-          <button onClick={onMenuClick} className="w-10 h-10 flex items-center justify-center text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all shadow-sm">
-            <Menu size={22} />
+          {/* Menú (Tres rayas) */}
+          <button 
+            onClick={(e) => { e.stopPropagation(); onMenuClick(); }} 
+            className="w-11 h-11 flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md shadow-blue-100 ml-1"
+          >
+            <Menu size={24} />
           </button>
         </div>
       </div>

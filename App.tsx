@@ -289,11 +289,14 @@ const App: React.FC = () => {
       />
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} onNavigate={handleNavigate} ads={ads} title={t.menu.title} sponsoredText={t.common.sponsored} />
-      <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />
-      <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
-      <ShareModal isOpen={isShareOpen} onClose={() => setShareOpen(false)} data={shareData} t={t.share} />
       
-      <main className={`flex-1 w-full flex flex-col relative ${currentView === ViewState.MAP ? 'h-[calc(100vh-80px)]' : ''} ${currentView === ViewState.AI_CHAT ? 'h-[calc(100vh-80px)] overflow-hidden' : ''}`}>
+      <div className="relative z-[300]">
+        <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => {}} onLoginSuperAdmin={() => handleNavigate(ViewState.ADMIN)} t={t.auth} />
+        <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} onNavigate={handleSearchNavigate} events={events} t={t} />
+        <ShareModal isOpen={isShareOpen} onClose={() => setShareOpen(false)} data={shareData} t={t.share} />
+      </div>
+      
+      <main className={`flex-1 w-full flex flex-col relative pt-20 ${currentView === ViewState.MAP ? 'h-[calc(100vh-80px)]' : ''} ${currentView === ViewState.AI_CHAT ? 'h-[calc(100vh-80px)] overflow-hidden' : ''}`}>
          {currentView === ViewState.HOME && renderHome()}
          {currentView === ViewState.BEACHES && <BeachesView t={t} />}
          {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} />}
@@ -320,12 +323,12 @@ const App: React.FC = () => {
                    <User size={80} />
                 </div>
                 <div className="space-y-6">
-                  <h2 className="text-5xl font-black text-gray-900 tracking-tighter">Tu Espacio</h2>
-                  <p className="text-gray-500 max-w-xs mx-auto text-xl font-medium leading-tight">Inicia sesión para guardar tus rincones favoritos.</p>
+                  <h2 className="text-5xl font-black text-gray-900 tracking-tighter">Tu Perfil</h2>
+                  <p className="text-gray-500 max-w-xs mx-auto text-xl font-medium leading-tight">Inicia sesión para guardar tus rincones favoritos del Pilar.</p>
                 </div>
                 <button 
                    onClick={() => setLoginOpen(true)}
-                   className="w-full max-w-sm px-12 py-6 bg-[#0f172a] text-white rounded-[32px] font-black text-xl shadow-2xl hover:bg-black transition-all"
+                   className="w-full max-w-sm px-12 py-6 bg-blue-600 text-white rounded-[32px] font-black text-xl shadow-2xl hover:bg-blue-700 transition-all"
                 >
                    Entrar ahora
                 </button>
