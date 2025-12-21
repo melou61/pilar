@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, ChevronRight, Calendar, Tag, MapPin } from './Icons';
 import { COMMERCIAL_CENSUS } from '../data';
@@ -62,7 +63,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose, onNav
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[7000] flex flex-col bg-white animate-in fade-in duration-200">
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-3">
         <button onClick={onClose} className="p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-full">
@@ -86,7 +87,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose, onNav
         {!query && (
           <div className="text-center mt-20 text-gray-400">
              <Search size={48} className="mx-auto mb-4 opacity-20" />
-             <p>Type to search events, shops and services...</p>
+             <p>Escribe para buscar eventos, tiendas y servicios...</p>
           </div>
         )}
 
