@@ -85,17 +85,17 @@ export const EventsView: React.FC<EventsViewProps> = ({
         </div>
       </div>
 
-      {/* Tabs Row - Fix for the visual glitch */}
+      {/* Tabs Row - Refined styling to avoid Figma glitch */}
       <div className="px-6 -mt-10 relative z-20">
         <div className="flex gap-3 overflow-x-auto no-scrollbar py-4 px-2">
           {categories.map(cat => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-8 py-3.5 rounded-[22px] text-[10px] font-black whitespace-nowrap transition-all uppercase tracking-widest border ${
+              className={`px-8 py-3.5 rounded-[22px] text-[10px] font-black whitespace-nowrap transition-all uppercase tracking-widest border border-transparent shadow-lg ${
                 activeCategory === cat.id 
-                ? 'bg-purple-600 text-white border-purple-600 shadow-[0_15px_30px_rgba(147,51,234,0.3)] scale-105' 
-                : 'bg-white text-gray-400 border-white shadow-lg shadow-gray-200/50 hover:border-purple-200'
+                ? 'bg-purple-600 text-white shadow-purple-200/50 scale-105' 
+                : 'bg-white text-gray-400 shadow-gray-100 hover:border-purple-100'
               }`}
             >
               {cat.label}
