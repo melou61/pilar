@@ -1,9 +1,9 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { ViewState, NavItem, Ad, Event, Language, AdminRole, Promotion, CensusItem } from './types';
+import React, { useState, useEffect } from 'react';
+import { ViewState, NavItem, Ad, Event, Language, AdminRole, CensusItem } from './types';
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
-  ShoppingBag, Calendar, MapPin, Search, MapIcon, Landmark, Sparkles, User, LogOut, Edit3, Camera, Save, X, Image as ImageIcon, Heart, ChevronRight, ArrowLeft
+  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck
 } from './components/Icons';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -22,20 +22,15 @@ import { EventsView } from './components/EventsView';
 import { AIChatView } from './components/AIChatView';
 import { HomeView } from './components/HomeView';
 import { AdminDashboard } from './components/AdminDashboard';
-import { translations } from './translations';
+import { ShareModal } from './components/ShareModal';
+import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
-const languages: Language[] = [
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
-  { code: 'pt', label: 'Português', flag: '🇵🇹' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-];
-
 const INITIAL_ADS: Ad[] = [
-  { id: '1', clientName: 'Mesón El Puerto', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true }
+  { id: 'ad-1', clientName: 'Mesón El Puerto', position: 'menu-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true },
+  { id: 'ad-2', clientName: 'Turismo Pilar', position: 'menu-bottom', imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true },
+  { id: 'ad-3', clientName: 'Modas Lucía', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true },
+  { id: 'ad-4', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true }
 ];
 
 const App: React.FC = () => {
@@ -57,6 +52,8 @@ const App: React.FC = () => {
   const [selectedBusinessId, setSelectedBusinessId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [shareData, setShareData] = useState({ title: '', text: '', url: '' });
 
   const t = translations[currentLang.code] || translations.en;
 
@@ -72,6 +69,10 @@ const App: React.FC = () => {
   }, []);
 
   const handleNavigate = (view: ViewState, id?: string) => {
+    if (view === ViewState.ADMIN && userRole !== 'ADMIN') {
+      setLoginOpen(true);
+      return;
+    }
     setCurrentView(view);
     setSidebarOpen(false);
     if (view === ViewState.EVENTS) setSelectedEventId(id || null);
@@ -79,11 +80,17 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleShare = (data: { title: string; text: string; url?: string }) => {
+    setShareData({ title: data.title, text: data.text, url: data.url || window.location.href });
+    setIsShareOpen(true);
+  };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserRole('USER');
     setUserName('');
-    handleNavigate(ViewState.HOME);
+    setCurrentView(ViewState.HOME);
+    setSidebarOpen(false);
   };
 
   const handleLogin = (role: 'USER' | 'ADMIN' = 'USER', userData?: {name: string, email: string}) => {
@@ -91,16 +98,14 @@ const App: React.FC = () => {
     setUserRole(role);
     setUserName(userData?.name || (role === 'ADMIN' ? 'Administrador' : 'Usuario Pilar'));
     setLoginOpen(false);
-    if (role === 'ADMIN') handleNavigate(ViewState.ADMIN);
-    else handleNavigate(ViewState.PROFILE);
+    if (role === 'ADMIN') setCurrentView(ViewState.ADMIN);
+    else setCurrentView(ViewState.PROFILE);
+    setSidebarOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const toggleFavorite = (id: string) => {
     setFavorites(prev => prev.includes(id) ? prev.filter(fid => fid !== id) : [...prev, id]);
-  };
-
-  const toggleMyEvent = (id: string) => {
-    setMyEvents(prev => prev.includes(id) ? prev.filter(eid => eid !== id) : [...prev, id]);
   };
 
   const menuItems: NavItem[] = [
@@ -118,7 +123,7 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] font-sans selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
+    <div key={currentLang.code} className="min-h-screen flex flex-col bg-[#f8fafc] font-sans overflow-x-hidden">
       <Header 
         onMenuClick={() => setSidebarOpen(true)} 
         onLoginClick={() => setLoginOpen(true)} 
@@ -131,7 +136,6 @@ const App: React.FC = () => {
         onNavigate={handleNavigate}
         t={t}
       />
-
       <Sidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setSidebarOpen(false)} 
@@ -145,66 +149,34 @@ const App: React.FC = () => {
         onLogout={handleLogout}
         t={t}
       />
-
-      <LoginModal 
-        isOpen={isLoginOpen} 
-        onClose={() => setLoginOpen(false)} 
-        onLogin={(data) => handleLogin('USER', data)}
-        onLoginSuperAdmin={() => handleLogin('ADMIN')}
-        t={t}
-      />
-      
-      <main className={`flex-1 w-full flex flex-col relative pt-20 ${currentView === ViewState.MAP ? 'h-[calc(100vh-80px)]' : ''}`}>
-         {currentView === ViewState.HOME && (
-           <HomeView 
-             t={t} 
-             events={events} 
-             onNavigate={handleNavigate} 
-             heroImages={heroImages} 
-             currentHeroIndex={currentHeroIndex} 
-           />
-         )}
-         
-         {currentView === ViewState.BEACHES && <BeachesView t={t} onNavigate={handleNavigate} />}
-         {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} onNavigate={handleNavigate} />}
-         {currentView === ViewState.ACTIVITIES && <ActivitiesView t={t} onNavigate={handleNavigate} />}
-         {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleNavigate} businesses={businesses} />}
-         {currentView === ViewState.DINING && <DiningView t={t} businesses={businesses} />}
-         {currentView === ViewState.SHOPPING && <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} />}
+      <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={(data) => handleLogin('USER', data)} onLoginSuperAdmin={() => handleLogin('ADMIN')} t={t} />
+      <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
+      <main className={`flex-1 w-full flex flex-col relative pt-24 ${currentView === ViewState.MAP ? 'h-[calc(100vh-96px)]' : ''}`}>
+         {currentView === ViewState.HOME && <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />}
+         {currentView === ViewState.BEACHES && <BeachesView t={t} onNavigate={handleNavigate} ads={ads} />}
+         {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} />}
+         {currentView === ViewState.ACTIVITIES && <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} />}
+         {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleNavigate} businesses={businesses} ads={ads} />}
+         {currentView === ViewState.DINING && <DiningView t={t} businesses={businesses} ads={ads} />}
+         {currentView === ViewState.SHOPPING && <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} />}
          {currentView === ViewState.CITIZEN_SERVICES && <CitizenServicesView t={t} />}
          {currentView === ViewState.NEWS && <NewsView t={t} />}
-         {currentView === ViewState.EVENTS && <EventsView t={t} events={events} onShare={() => {}} onAddToCalendar={() => {}} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={toggleMyEvent} />}
+         {currentView === ViewState.EVENTS && <EventsView t={t} events={events} onShare={(e) => handleShare({ title: e.title, text: e.description })} onAddToCalendar={() => {}} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={(id) => setMyEvents(prev => prev.includes(id) ? prev.filter(eid => eid !== id) : [...prev, id])} />}
          {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} langLabel={currentLang.label} onBack={() => handleNavigate(ViewState.HOME)} />}
          {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} />}
-         
-         {currentView === ViewState.ADMIN && (
-            <AdminDashboard 
-              ads={ads} 
-              setAds={setAds} 
-              events={events} 
-              setEvents={setEvents} 
-              businesses={businesses} 
-              setBusinesses={setBusinesses} 
-              onLogout={handleLogout} 
-              currentUserRole={userRole as AdminRole} 
-            />
-         )}
-
+         {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as AdminRole} />}
          {currentView === ViewState.PROFILE && (
-            <div className="p-10 text-center animate-in fade-in duration-500">
-               <div className="w-24 h-24 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl font-black">
-                 {userName.charAt(0)}
-               </div>
-               <h2 className="text-4xl font-black mb-4 tracking-tighter">Bienvenido, {userName}</h2>
-               <p className="text-gray-500 font-medium mb-8">Aquí aparecerán tus favoritos y agenda personalizada.</p>
-               <div className="flex justify-center gap-4">
-                 <button onClick={() => handleNavigate(ViewState.HOME)} className="px-8 py-3 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl">Volver al Inicio</button>
-                 <button onClick={handleLogout} className="px-8 py-3 bg-red-50 text-red-600 rounded-2xl font-black uppercase tracking-widest border border-red-100">Salir</button>
+            <div className="p-10 text-center animate-in fade-in duration-500 max-w-4xl mx-auto">
+               <div className="w-24 h-24 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl font-black shadow-inner">{userName.charAt(0)}</div>
+               <h2 className="text-4xl font-black mb-4 tracking-tighter">Hola, {userName}</h2>
+               <p className="text-gray-500 font-medium mb-12">Gestiona tus alertas y favoritos del municipio.</p>
+               <div className="flex flex-col sm:flex-row justify-center gap-4">
+                 <button onClick={() => handleNavigate(ViewState.HOME)} className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-blue-700 transition-all">Explorar</button>
+                 <button onClick={handleLogout} className="px-10 py-4 bg-white text-red-600 rounded-2xl font-black uppercase tracking-widest border-2 border-red-50 hover:bg-red-50 transition-all">Cerrar Sesión</button>
                </div>
             </div>
          )}
       </main>
-      
       {currentView !== ViewState.ADMIN && <Footer t={t} />}
     </div>
   );

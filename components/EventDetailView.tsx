@@ -23,7 +23,7 @@ export const EventDetailView: React.FC<EventDetailViewProps> = ({ event, onBack,
           <ArrowLeft size={24} />
         </button>
         <div className="flex-1 px-4 text-center">
-             <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-0.5">Evento Pilar</span>
+             <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-0.5">{t.event_detail.pilar_event}</span>
              <h2 className="font-black text-gray-900 text-sm truncate uppercase tracking-tighter">{event.title}</h2>
         </div>
         <button 
@@ -61,7 +61,7 @@ export const EventDetailView: React.FC<EventDetailViewProps> = ({ event, onBack,
                         <Calendar size={22} />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">Fecha y Horario</span>
+                        <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">{t.event_detail.date_time}</span>
                         <span className="text-base font-black text-gray-800 tracking-tighter">{event.date}</span>
                     </div>
                 </div>
@@ -70,7 +70,7 @@ export const EventDetailView: React.FC<EventDetailViewProps> = ({ event, onBack,
                         <MapPin size={22} />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-black text-red-300 uppercase tracking-widest">Ubicación Principal</span>
+                        <span className="text-[9px] font-black text-red-300 uppercase tracking-widest">{t.event_detail.main_location}</span>
                         <span className="text-base font-black text-gray-800 tracking-tighter">{event.location}</span>
                     </div>
                 </div>

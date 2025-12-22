@@ -1,15 +1,17 @@
 
 import React, { useState } from 'react';
 import { UtensilsCrossed, Star, MapPin, Clock, Phone, ChevronRight, Heart } from './Icons';
-import { CensusItem } from '../types';
+import { CensusItem, Ad } from '../types';
 import { BusinessDetailView } from './BusinessDetailView';
+import { AdSpot } from './AdSpot';
 
 interface DiningViewProps {
   t: any;
   businesses: CensusItem[];
+  ads: Ad[]; 
 }
 
-export const DiningView: React.FC<DiningViewProps> = ({ t, businesses }) => {
+export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) => {
   const [selectedBusiness, setSelectedBusiness] = useState<CensusItem | null>(null);
   const [activeZone, setActiveZone] = useState<string>('all');
 
@@ -49,6 +51,11 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses }) => {
         <p className="text-gray-500 text-lg font-medium leading-tight max-w-sm mb-8">
             {t.sections.dining.desc}
         </p>
+
+        {/* HUECO 3: page-top */}
+        <div className="mb-8">
+           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+        </div>
 
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
             {zones.map(z => (
@@ -115,6 +122,11 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses }) => {
           )) : (
             <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">No hay restaurantes listados en esta zona todavía.</div>
           )}
+      </div>
+
+      {/* HUECO 4: page-bottom */}
+      <div className="px-6 mt-16 max-w-4xl mx-auto">
+        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
       </div>
     </div>
   );

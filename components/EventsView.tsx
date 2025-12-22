@@ -131,10 +131,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         <div className="absolute top-8 left-8 bg-purple-600 text-white px-5 py-2.5 rounded-[20px] text-[10px] font-black uppercase tracking-[0.2em] shadow-xl border border-white/20">
                            {content.category}
                         </div>
-                        {isPatronal && (
+                        {content.badge && (
                             <div className="absolute bottom-8 left-8 bg-white/95 backdrop-blur-md text-purple-600 px-5 py-2.5 rounded-[20px] flex items-center gap-2 shadow-xl">
                                 <Trophy size={16} />
-                                <span className="text-[10px] font-black uppercase tracking-widest">Interés Provincial</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest">
+                                    {content.badge}
+                                </span>
                             </div>
                         )}
                     </div>

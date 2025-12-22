@@ -1,145 +1,173 @@
 
-/**
- * SISTEMA DE TRADUCCIÓN NATIVA PH (70 IDIOMAS) - VERSIÓN FINAL EXPANDIDA
- */
+export interface Language {
+  code: string;
+  label: string;
+  flag: string;
+}
 
-const createLang = (
-  m: string[], c: string[], sn: string[], ai: string[], hero: string, search: string[], serv: string[], foot: string[]
-) => ({
-  menu: {
-    home: m[0], news: m[1], beaches: m[2], sightseeing: m[3], activities: m[4],
-    dining: m[5], shopping: m[6], health: m[7], services: m[8], events: m[9],
-    forum: m[10], title: m[11], ai: m[12], profile: m[13], map: m[14]
+export const languages: Language[] = [
+  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'en', label: 'English', flag: '🇬🇧' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', label: 'Português', flag: '🇵🇹' },
+  { code: 'zh', label: '简体中文', flag: '🇨🇳' },
+  { code: 'ja', label: '日本語', flag: '🇯🇵' },
+  { code: 'ko', label: '한국어', flag: '🇰🇷' },
+  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+  { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'bn', label: 'বাংলা', flag: '🇧🇩' },
+  { code: 'pa', label: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
+  { code: 'te', label: 'తెలుగు', flag: '🇮🇳' },
+  { code: 'mr', label: 'मराठी', flag: '🇮🇳' },
+  { code: 'ta', label: 'தமிழ்', flag: '🇮🇳' },
+  { code: 'ur', label: 'اردو', flag: '🇵🇰' },
+  { code: 'gu', label: 'ગુજરાતી', flag: '🇮🇳' },
+  { code: 'kn', label: 'ಕನ್ನಡ', flag: '🇮🇳' },
+  { code: 'ml', label: 'മലയാളം', flag: '🇮🇳' },
+  { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+  { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'th', label: 'ไทย', flag: '🇹🇭' },
+  { code: 'id', label: 'Bahasa Indonesia', flag: '🇮🇩' },
+  { code: 'ms', label: 'Bahasa Melayu', flag: '🇲🇾' },
+  { code: 'fa', label: 'فارسی', flag: '🇮🇷' },
+  { code: 'pl', label: 'Polski', flag: '🇵🇱' },
+  { code: 'uk', label: 'Українська', flag: '🇺🇦' },
+  { code: 'ro', label: 'Română', flag: '🇷🇴' },
+  { code: 'nl', label: 'Nederlands', flag: '🇳🇱' },
+  { code: 'el', label: 'Ελληνικά', flag: '🇬🇷' },
+  { code: 'hu', label: 'Magyar', flag: '🇭🇺' },
+  { code: 'sv', label: 'Svenska', flag: '🇸🇪' },
+  { code: 'cs', label: 'Čeština', flag: '🇨🇿' },
+  { code: 'he', label: 'עברית', flag: '🇮🇱' },
+  { code: 'bg', label: 'Български', flag: '🇧🇬' },
+  { code: 'no', label: 'Norsk', flag: '🇳🇴' },
+  { code: 'da', label: 'Dansk', flag: '🇩🇰' },
+  { code: 'fi', label: 'Suomi', flag: '🇫🇮' },
+  { code: 'sk', label: 'Slovenčina', flag: '🇸🇰' },
+  { code: 'hr', label: 'Hrvatski', flag: '🇭🇷' },
+  { code: 'lt', label: 'Lietuvių', flag: '🇱🇹' },
+  { code: 'sl', label: 'Slovenščina', flag: '🇸🇮' },
+  { code: 'lv', label: 'Latviešu', flag: '🇱🇻' },
+  { code: 'et', label: 'Eesti', flag: '🇪🇪' },
+  { code: 'sr', label: 'Српски', flag: '🇷🇸' },
+  { code: 'sq', label: 'Shqip', flag: '🇦🇱' },
+  { code: 'mk', label: 'Македонски', flag: '🇲🇰' },
+  { code: 'ka', label: 'ქართული', flag: '🇬🇪' },
+  { code: 'hy', label: 'Հայերեն', flag: '🇦🇲' },
+  { code: 'az', label: 'Azərbaycan', flag: '🇦🇿' },
+  { code: 'kk', label: 'Қазақ тілі', flag: '🇰🇿' },
+  { code: 'uz', label: 'Oʻzbekcha', flag: '🇺🇿' },
+  { code: 'am', label: 'አማርኛ', flag: '🇪🇹' },
+  { code: 'sw', label: 'Kiswahili', flag: '🇰🇪' },
+  { code: 'af', label: 'Afrikaans', flag: '🇿🇦' },
+  { code: 'zu', label: 'isiZulu', flag: '🇿🇦' },
+  { code: 'yo', label: 'Yorùbá', flag: '🇳🇬' },
+  { code: 'ig', label: 'Igbo', flag: '🇳🇬' },
+  { code: 'ha', label: 'Hausa', flag: '🇳🇬' },
+  { code: 'mt', label: 'Malti', flag: '🇲🇹' },
+  { code: 'is', label: 'Íslenska', flag: '🇮🇸' },
+  { code: 'ga', label: 'Gaeilge', flag: '🇮🇪' },
+  { code: 'km', label: 'ខ្មែរ', flag: '🇰🇭' },
+  { code: 'lo', label: 'ລາວ', flag: '🇱🇦' },
+  { code: 'my', label: 'မြန်မာစာ', flag: '🇲🇲' },
+  { code: 'ps', label: 'پښتو', flag: '🇦🇫' },
+  { code: 'tg', label: 'Тоҷикӣ', flag: '🇹🇯' },
+  { code: 'ky', label: 'Кыргызча', flag: '🇰🇬' },
+  { code: 'tk', label: 'Türkmençe', flag: '🇹🇲' }
+];
+
+const UI_RESOURCES: Record<string, any> = {
+  es: { 
+    m: ['Inicio', 'Noticias', 'Playas', 'Patrimonio', 'Experiencias', 'Gastronomía', 'Tiendas', 'Salud', 'Servicios', 'Eventos', 'Foro', 'PH Explorar', 'Guía IA', 'Perfil', 'Mapa', 'Admin'], 
+    c: ['Patrocinado', 'Sin resultados', 'Volver', 'Compartir', 'Detalles', 'Abierto', 'Cerrado', 'Mapa', 'Cerca', 'Buscar...', 'Añadir', 'Subir', 'Copiar', 'Copiado'], 
+    h: 'Paraíso mediterráneo.', 
+    s: ['Sede Electrónica', 'Ayuntamiento 24h', 'Cita Previa', 'Incidencias', 'Reportar', 'Trámites', 'Certificados', 'Impuestos', 'Licencias'],
+    hp: ['Pilar Vivo', 'Actualidad Local', 'Noticias del Pilar', 'Comunidad Participativa', 'Tu voz importa en el municipio.', 'Pilar en 15s', 'Vistas', 'Galería', 'Momentos', 'Amanecer en Las Higuericas', 'Ruta por Río Seco', 'Tarde de Compras', 'Fiestas del Pilar'],
+    f: ['Contacto', 'Enlaces de interés', 'Síguenos', 'La App oficial del municipio.', 'Oficina de Turismo', 'Calle Mayor, 1', '03190', 'Alicante, España', 'Todos los derechos reservados'],
+    b: ['Costa Blanca Sur', 'Bandera Azul', 'Abierta', '¿Sabías que...?', 'Pilar cuenta con más de 4km de costa virgen.'],
+    search: { badge: 'Buscador Inteligente', title1: 'PILAR DE LA', title2: 'HORADADA', subtitle1: 'Encuentra comercios, eventos', subtitle2: 'y servicios municipales.', placeholder: '¿Qué buscas hoy?' },
+    ai: { welcome: 'Hola, soy tu conserje virtual de Pilar de la Horadada. ¿En qué puedo ayudarte?', system: 'Eres PH Concierge, la guía oficial de Pilar de la Horadada. Habla siempre en español.', suggestions: ['¿Dónde comer?', 'Playas hoy', 'Eventos'] }
   },
-  common: {
-    sponsored: c[0], noResults: c[1], back: c[2], share: c[3], details: c[4],
-    open: c[5], closed: c[6], fullMap: c[7], nearby: c[8], searchPlaceholder: c[9], addToCalendar: c[10]
-  },
-  sections: {
-    tradition: { title: sn[0] }, nearby: sn[1], fullMap: sn[2],
-    beaches: { title: sn[3], desc: sn[4] },
-    events: { title: sn[5], desc: sn[6] },
-    shopping: { title: sn[7], desc: sn[8] },
-    dining: { title: sn[9], desc: sn[10] },
-    activities: { title: sn[11], desc: sn[12] }
-  },
-  hero: { subtitle: hero },
-  ai_guide: { 
-    title: ai[0], welcome: ai[1], online: ai[2], placeholder: ai[3], 
-    system: ai[4], suggestions: [ai[5], ai[6], ai[7]] 
-  },
-  auth: { title: ai[8] || 'Login', logout: ai[9] || 'Logout' },
-  share: { title: ai[10] || 'Share', subtitle: ai[11] || 'Pilar', copyLink: 'URL', via: 'via', copied: '!', apps: { whatsapp: 'WhatsApp', facebook: 'Facebook', twitter: 'X', linkedin: 'LinkedIn', email: 'Email', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' } },
-  search: { 
-    badge: search[0], title1: search[1], title2: search[2], 
-    subtitle1: search[3], subtitle2: search[4], placeholder: search[5] 
-  },
-  citizen_services: { 
-    title: serv[0], subtitle: serv[1], appointment: serv[2], incidents: serv[3], 
-    report: serv[4], frequent: serv[5], certificate: serv[6], taxes: serv[7], licenses: serv[8] 
-  },
-  footer: { 
-    contact: foot[0], links: foot[1], follow: foot[2], desc: foot[3], 
-    rights: foot[4], officeName: foot[5], addressLine1: foot[6], addressLine2: foot[7], addressLine3: foot[8] 
-  },
-  events_data: {
-    'fiestas-patronales': { 
-        title: 'Fiestas Patronales', 
-        date: 'Octubre', 
-        location: 'Centro Urbano', 
-        desc: 'Declaradas de Interés Turístico. Carrozas, ofrendas y charangas.',
-        category: 'TRADICIÓN',
-        long: 'Octubre es el mes más importante para los pilareños. El desfile de carrozas artesanales es único en la provincia de Alicante, donde las peñas compiten con diseños de papel y flores.'
-    },
-    'semana-santa': { 
-        title: 'Semana Santa', 
-        date: 'Marzo/Abril', 
-        location: 'Casco Antiguo', 
-        desc: 'Devoción, arte sacro y procesiones solemnes por las calles del Pilar.',
-        category: 'RELIGIOSO',
-        long: 'La Semana Santa de Pilar de la Horadada es conocida por la sobriedad y belleza de sus procesiones, destacando la del Santo Entierro.'
-    },
-    'romeria-isidro': { 
-        title: 'Romería de San Isidro', 
-        date: 'Mayo', 
-        location: 'Cañada de Praes', 
-        desc: 'Día de campo, caballos y tradición popular hacia el monte.',
-        category: 'TRADICIÓN',
-        long: 'Cientos de personas acompañan al santo en carros y caballos hasta el paraje natural de la Cañada de Praes para una jornada de picnic y hermandad.'
-    },
-    'desembarco-pirata': { 
-        title: 'Desembarco Moro/Pirata', 
-        date: 'Agosto', 
-        location: 'Higuericas', 
-        desc: 'Espectáculo nocturno de recreación histórica en la orilla del mar.',
-        category: 'HISTORIA',
-        long: 'Una recreación teatral y pirotécnica de los ataques piratas que sufrió nuestra costa en los siglos XVI y XVII.'
-    },
-    'corto-un-pilar': { 
-        title: 'Corto de un Pilar', 
-        date: 'Noviembre', 
-        location: 'Casa Cultura', 
-        desc: 'Cita ineludible del séptimo arte con cortometrajes internacionales.',
-        category: 'CINE',
-        long: 'El festival de cine que otorga los prestigiosos premios Pilar y que atrae a figuras relevantes de la industria cinematográfica.'
-    }
-  },
-  beaches_page: { 
-    title: sn[3], subtitle: sn[4],
-    list: { 
-      milpalmeras: { name: 'Mil Palmeras', desc: 'Playa de fina arena blanca con servicios de alta calidad, perfecta para familias.' },
-      higuericas: { name: 'Las Higuericas', desc: 'Nuestra joya natural: dunas, pasarelas de madera y los mejores chiringuitos.' },
-      vistamar: { name: 'Vistamar', desc: 'Aguas tranquilas y ambiente familiar en una de las zonas más queridas.' },
-      puerto: { name: 'El Puerto', desc: 'Junto al Club Náutico, combina el sabor marinero con servicios excelentes.' },
-      conde: { name: 'El Conde', desc: 'Famosa por su icónica Torre Vigía y sus puestas de sol inigualables.' },
-      jesuitas: { name: 'Los Jesuitas', desc: 'Cala amplia con red de voley y ambiente deportivo muy animado.' },
-      caleta: { name: 'La Caleta', desc: 'Una cala recogida y pintoresca, ideal para los que buscan relax.' },
-      rocamar: { name: 'Rocamar', desc: 'Paisaje rocoso natural perfecto para el snorkel y la fotografía marina.' },
-      gato: { name: 'Playa del Gato', desc: 'Pequeño rincón de paz con aguas cristalinas y poca afluencia.' },
-      mojon: { name: 'El Mojón', desc: 'Playa virgen junto a las salinas, ideal para los amantes de lo salvaje.' }
-    }
-  },
-  activities_page: {
-    title: 'Experiencias PH',
-    subtitle: 'Naturaleza, deporte y aventura los 365 días del año.',
-    list: {
-      'rio-seco': { name: 'Río Seco', desc: 'Ruta geológica por un cauce milenario con formaciones de arena únicas.' },
-      'lo-romero': { name: 'Lo Romero Golf', desc: 'Campo de golf de élite mundial con su icónico hoyo 18 en una isla.' }
-    }
-  },
-  sightseeing_page: { 
-    title: 'Cronología y Patrimonio', 
-    subtitle: 'Viaja a través de la historia: desde la Thiar romana hasta hoy.',
-    list: {
-      'torre-vigia': { name: 'Torre de la Horadada', desc: 'Torre defensiva del siglo XVI declarada Bien de Interés Cultural.' },
-      'iglesia-pilar': { name: 'Iglesia Ntra. Sra. del Pilar', desc: 'Construida en 1981 sobre la antigua ermita, símbolo de unidad.' },
-      'museo-gratiniano': { name: 'Museo Arqueológico', desc: 'Hallazgos de la Vía Augusta, anclas romanas y etnografía local.' },
-      'canteras-romanas': { name: 'Canteras Romanas', desc: 'Antigua explotación de piedra litoral de hace 2000 años.' },
-      'cine-verano': { name: 'Cine de Verano', desc: 'Tradición social que sobrevive como patrimonio vivo del ocio pilareño.' }
-    }
+  en: { 
+    m: ['Home', 'News', 'Beaches', 'Heritage', 'Experiences', 'Dining', 'Shops', 'Health', 'Services', 'Events', 'Forum', 'PH Explore', 'AI Guide', 'Profile', 'Map', 'Admin'], 
+    c: ['Sponsored', 'No results', 'Back', 'Share', 'Details', 'Open', 'Closed', 'Full Map', 'Near you', 'Search...', 'Add', 'Upload', 'Copy', 'Copied'], 
+    h: 'Mediterranean paradise.', 
+    s: ['Digital Portal', 'Town Hall 24h', 'Appointment', 'Incidents', 'Report', 'Procedures', 'Certificates', 'Taxes', 'Licenses'],
+    hp: ['Living Pilar', 'Local News', 'Latest from Pilar', 'Active Community', 'Your voice matters in town.', 'Pilar in 15s', 'Views', 'Gallery', 'Momentos', 'Sunrise at Higuericas', 'Rio Seco Route', 'Shopping Day', 'Town Festivals'],
+    f: ['Contact', 'Useful Links', 'Follow Us', 'The official town application.', 'Tourism Office', '1 Mayor St.', '03190', 'Alicante, Spain', 'All rights reserved'],
+    b: ['South Costa Blanca', 'Blue Flag', 'Open', 'Did you know?', 'Pilar has over 4km of pristine coastline.'],
+    search: { badge: 'Smart Search', title1: 'PILAR DE LA', title2: 'HORADADA', subtitle1: 'Find shops, events', subtitle2: 'and citizen services.', placeholder: 'What are you looking for?' },
+    ai: { welcome: 'Hello, I am your Pilar de la Horadada virtual concierge. How can I help you today?', system: 'You are PH Concierge, the official guide for Pilar de la Horadada. Always speak in English.', suggestions: ['Where to eat?', 'Beaches today', 'Events'] }
   }
-});
-
-const ES_SEARCH = ['PILAR', '¿Qué buscas', 'hoy?', 'Todo lo que necesitas', 'al alcance de tu mano', 'Playas, museos, tapas...'];
-const ES_SERV = ['Sede Electrónica', 'Ayuntamiento Digital 24h', 'Cita Previa', 'Incidencias', 'Reportar', 'Trámites', 'Certificados', 'Impuestos', 'Licencias'];
-const ES_FOOT = ['Contacto', 'Enlaces', 'Síguenos', 'Descubre el Pilar', '© 2025 Ayuntamiento PH', 'Oficina de Turismo', 'Calle Mayor, 1', '03190', 'Alicante'];
-const EN_SEARCH = ['PILAR', 'What are you', 'looking for?', 'Everything you need', 'at your fingertips', 'Beaches, museums, tapas...'];
-const EN_SERV = ['Citizen Portal', 'Digital Town Hall 24h', 'Appointments', 'Incidents', 'Report', 'Procedures', 'Certificates', 'Taxes', 'Licenses'];
-const EN_FOOT = ['Contact', 'Links', 'Follow us', 'Explore Pilar', '© 2025 Pilar Town Hall', 'Tourist Office', 'Main Street, 1', '03190', 'Alicante'];
-
-export const translations: Record<string, any> = {
-  es: createLang(
-    ['Inicio', 'Noticias', '10 Playas', 'Patrimonio', 'Experiencias', 'Sabor', 'Tiendas', 'Salud', 'Gestión', 'PH Festivales', 'Foro', 'Explorar', 'Guía IA', 'Perfil', 'Mapa'],
-    ['Patrocinado', 'Sin resultados', 'Volver', 'Compartir', 'Detalles', 'Abierto', 'Cerrado', 'Mapa Completo', 'Cerca de ti', 'Buscar...', 'Añadir'],
-    ['Tradición Viva', 'Tu entorno', 'Ver Mapa', 'Costa Blanca', 'Paraíso de arena y sal', 'PH Festivales', 'Vive nuestras fiestas', 'Compras', 'Comercio local', 'Sabor', 'Gastronomía', 'Actividades', 'PH Activo'],
-    ['PH Concierge', '¡Bienvenido! Soy tu guía IA.', 'En Línea', 'Pregúntame...', 'Eres PH Concierge...', '¿Playas?', '¿Comer?', '¿Eventos?', 'Acceso', 'Salir', 'Compartir', 'Pilar de la Horadada'],
-    'El paraíso mediterráneo te espera.', ES_SEARCH, ES_SERV, ES_FOOT
-  ),
-  en: createLang(
-    ['Home', 'News', '10 Beaches', 'Heritage', 'Experiences', 'Taste', 'Shops', 'Health', 'Town Hall', 'PH Festivals', 'Forum', 'Explore', 'AI Guide', 'Profile', 'Map'],
-    ['Sponsored', 'No results', 'Back', 'Share', 'Details', 'Open', 'Closed', 'Full Map', 'Near you', 'Search...', 'Add'],
-    ['Living Tradition', 'Around you', 'Full Map', 'Costa Blanca', 'Sand and salt paradise', 'PH Festivals', 'Live our traditions', 'Shopping', 'Local shops', 'Taste', 'Gastronomy', 'Activities', 'PH Active'],
-    ['PH Concierge', 'Welcome! I am your AI guide.', 'Online', 'Ask me...', 'You are PH Concierge...', 'Beaches?', 'Where to eat?', 'Events?', 'Login', 'Logout', 'Share', 'Pilar de la Horadada'],
-    'Mediterranean paradise awaits you.', EN_SEARCH, EN_SERV, EN_FOOT
-  )
 };
+
+const createLang = (code: string, langLabel: string): any => {
+  // Intentamos obtener el recurso específico, si no existe, usamos inglés como base estructural
+  const data = UI_RESOURCES[code] || UI_RESOURCES.en;
+  const en = UI_RESOURCES.en;
+  
+  // Mapeo seguro de arrays para evitar undefined
+  const m = data.m || en.m;
+  const c = data.c || en.c;
+  const s = data.s || en.s;
+  const h = data.h || en.h;
+  const hp = data.hp || en.hp;
+  const f = data.f || en.f;
+  const b = data.b || en.b;
+  const srch = data.search || en.search;
+  const ai = data.ai || en.ai;
+
+  return {
+    menu: { home: m[0], news: m[1], beaches: m[2], sightseeing: m[3], activities: m[4], dining: m[5], shopping: m[6], health: m[7], services: m[8], events: m[9], forum: m[10], title: m[11], ai: m[12], profile: m[13], map: m[14], admin: m[15] },
+    common: { sponsored: c[0], noResults: c[1], back: c[2], share: c[3], details: c[4], open: c[5], closed: c[6], fullMap: c[7], nearby: c[8], searchPlaceholder: c[9], addToCalendar: c[10], upload: c[11], copyLink: c[12], copied: c[13] },
+    hero: { subtitle: h },
+    ai_guide: { 
+      title: m[12], 
+      welcome: ai.welcome, 
+      online: code === 'es' ? 'En línea' : 'Online', 
+      placeholder: code === 'es' ? 'Pregúntame...' : 'Ask me...', 
+      system: ai.system,
+      suggestions: ai.suggestions 
+    },
+    citizen_services: { title: s[0], subtitle: s[1], appointment: s[2], incidents: s[3], report: s[4], frequent: s[5], certificate: s[6], taxes: s[7], licenses: s[8] },
+    sections: { 
+      shopping: { title: m[6], desc: m[6] },
+      dining: { title: m[5], desc: m[5] },
+      events: { title: m[9], desc: m[9] }
+    },
+    footer: { contact: f[0], links: f[1], follow: f[2], desc: f[3], rights: f[8], officeName: f[4], addressLine1: f[5], addressLine2: f[6], addressLine3: f[7] },
+    home_page: { 
+      pilar_vivo: hp[0],
+      news_main: hp[1], news_featured: hp[2], community_title: hp[3], community_desc: hp[4],
+      shorts_label: hp[5], shorts_big: 'Shorts', views: hp[6], gallery_label: hp[7], gallery_big: hp[8],
+      ai_desc: code === 'es' ? 'Tu asistente virtual para todo lo que necesites.' : 'Your virtual assistant for everything you need.',
+      shorts_titles: [hp[9], hp[10], hp[11], hp[12]]
+    },
+    beaches_page: { 
+      title: m[2], subtitle: h, 
+      coastal: b[0], blue_flag: b[1], open: b[2], fact_title: b[3], fact_desc: b[4],
+      list: { milpalmeras: { name: 'Mil Palmeras', desc: h }, higuericas: { name: 'Las Higuericas', desc: h } } 
+    },
+    sightseeing_page: {
+      title: m[3], subtitle: h,
+      list: { 'torre-vigia': { name: 'Torre de la Horadada', desc: h } }
+    },
+    activities_page: {
+      title: m[4], subtitle: h,
+      list: { 'rio-seco': { name: 'Río Seco', desc: h } }
+    },
+    business: { history: code === 'es' ? 'Nuestra Historia' : 'Our Story' },
+    events_data: {},
+    event_detail: { pilar_event: m[9], date_time: code === 'es' ? 'Fecha y Hora' : 'Date & Time', main_location: code === 'es' ? 'Ubicación' : 'Location' },
+    search: srch,
+    share: { title: 'Compartir', subtitle: 'Elige donde quieres compartir esta información', copyLink: 'Copiar enlace', copied: '¡Copiado!', via: 'vía', apps: { whatsapp: 'WhatsApp', facebook: 'Facebook', twitter: 'Twitter', linkedin: 'LinkedIn', email: 'Email', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' } }
+  };
+};
+
+export const translations: Record<string, any> = {};
+languages.forEach(lang => {
+  translations[lang.code] = createLang(lang.code, lang.label);
+});

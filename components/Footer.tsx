@@ -7,14 +7,13 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ t }) => {
-  // Aseguramos acceso seguro a las claves de traducción del footer
   const f = t.footer;
 
   return (
     <footer className="bg-[#0f172a] text-white pt-20 pb-12 px-8">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
         
-        {/* Columna 1: Contacto Localizado */}
+        {/* Localized Contact Column */}
         <div className="space-y-8">
           <h3 className="text-xl font-black border-l-4 border-blue-500 pl-4 tracking-tighter uppercase">{f.contact}</h3>
           <div className="space-y-4 text-sm text-gray-400">
@@ -32,7 +31,7 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
           </div>
         </div>
 
-        {/* Columna 2: Enlaces de Utilidad */}
+        {/* Localized Links Column */}
         <div className="space-y-8">
           <h3 className="text-xl font-black border-l-4 border-blue-500 pl-4 tracking-tighter uppercase">{f.links}</h3>
           <div className="space-y-5 text-sm">
@@ -57,12 +56,12 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
           </div>
         </div>
 
-        {/* Columna 3: Redes Sociales */}
+        {/* Localized Social Column */}
         <div className="space-y-8">
           <h3 className="text-xl font-black border-l-4 border-blue-500 pl-4 tracking-tighter uppercase">{f.follow}</h3>
           <div className="flex gap-4">
               <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-[#1877F2] hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Facebook size={22} /></a>
-              <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Instagram size={22} /></a>
+              <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] to-[#bc1888] hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Instagram size={22} /></a>
               <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-black hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Twitter size={22} /></a>
               <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-[#FF0000] hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Youtube size={22} /></a>
           </div>
@@ -72,8 +71,8 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
         </div>
       </div>
 
-      <div className="mt-20 pt-8 border-t border-white/5 text-[10px] text-center text-gray-600 tracking-[0.3em] font-black uppercase">
-          {f.rights}
+      <div className="mt-20 pt-8 border-t border-white/5 text-[10px] text-center text-gray-500 tracking-wider font-medium">
+          Pilar App 2025 © by <a href="https://vortexdigital-ai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 font-bold transition-colors">https://vortexdigital-ai.com</a>. Al rights reserved.
       </div>
     </footer>
   );

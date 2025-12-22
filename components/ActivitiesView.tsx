@@ -4,14 +4,16 @@ import {
   Activity, Star, MapPin, ChevronRight, Clock, Trophy, Waves, Bike, Sparkles, Search
 } from './Icons';
 import { ACTIVITIES_LIST } from '../data';
-import { ViewState } from '../types';
+import { ViewState, Ad } from '../types';
+import { AdSpot } from './AdSpot';
 
 interface ActivitiesViewProps {
   t: any;
   onNavigate?: (view: ViewState, id?: string) => void;
+  ads: Ad[];
 }
 
-export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate }) => {
+export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, ads }) => {
   const content = t.activities_page;
 
   return (
@@ -34,6 +36,11 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate })
       </div>
 
       <div className="px-6 -mt-10 space-y-10">
+        {/* HUECO 3: page-top */}
+        <div className="px-4">
+           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+        </div>
+
         {ACTIVITIES_LIST.map((activity) => {
           const activityLangData = content.list[activity.id as keyof typeof content.list] || { name: activity.title, desc: '' };
           return (
@@ -83,12 +90,6 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate })
                        <MapPin size={16} className="text-emerald-500" />
                        {activity.location}
                     </div>
-                    {activity.id === 'lo-romero' && (
-                        <div className="flex items-center gap-2 text-[11px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-4 py-2 rounded-xl">
-                            <Sparkles size={16} />
-                            Hoyo 18 Famoso
-                        </div>
-                    )}
                  </div>
 
                  <button 
@@ -102,36 +103,32 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate })
             </div>
           );
         })}
-      </div>
-      
-      {/* Active Community Section */}
-      <div className="px-6 mt-20 mb-10">
-         <div className="bg-white border border-emerald-100 rounded-[50px] p-12 shadow-2xl shadow-emerald-900/5 overflow-hidden relative group">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50 group-hover:scale-110 transition-transform duration-1000" />
-            <div className="relative z-10">
-               <h3 className="text-3xl font-black mb-6 tracking-tighter text-gray-900">Pilar es Deporte</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                  <div className="flex gap-4">
-                     <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center shrink-0">
-                        <Waves size={24} />
-                     </div>
-                     <div>
-                        <h4 className="font-black text-gray-900 text-lg tracking-tight">Náutica</h4>
-                        <p className="text-gray-500 text-sm font-medium">Cursos municipales de vela y deportes de viento durante todo el año.</p>
-                     </div>
-                  </div>
-                  <div className="flex gap-4">
-                     <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center shrink-0">
-                        <Bike size={24} />
-                     </div>
-                     <div>
-                        <h4 className="font-black text-gray-900 text-lg tracking-tight">Ciclismo</h4>
-                        <p className="text-gray-500 text-sm font-medium">Explora las 5 rutas diseñadas para todos los niveles, de la montaña al mar.</p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
+        
+        {/* Active Community Section */}
+        <div className="px-4 mt-10">
+           <div className="bg-white border border-emerald-100 rounded-[50px] p-12 shadow-2xl shadow-emerald-900/5 overflow-hidden relative group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50 group-hover:scale-110 transition-transform duration-1000" />
+              <div className="relative z-10">
+                 <h3 className="text-3xl font-black mb-6 tracking-tighter text-gray-900">Pilar es Deporte</h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="flex gap-4">
+                       <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center shrink-0">
+                          <Waves size={24} />
+                       </div>
+                       <div>
+                          <h4 className="font-black text-gray-900 text-lg tracking-tight">Náutica</h4>
+                          <p className="text-gray-500 text-sm font-medium">Cursos municipales de vela y deportes de viento durante todo el año.</p>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+
+        {/* HUECO 4: page-bottom */}
+        <div className="px-4">
+           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+        </div>
       </div>
     </div>
   );

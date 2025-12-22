@@ -4,14 +4,16 @@ import {
   History, Building2, MapPin, Sparkles, Landmark, Search, Clock
 } from './Icons';
 import { MOCK_SIGHTSEEING } from '../data';
-import { ViewState } from '../types';
+import { ViewState, Ad } from '../types';
+import { AdSpot } from './AdSpot';
 
 interface SightseeingViewProps {
   t: any;
   onNavigate?: (view: ViewState, id?: string) => void;
+  ads: Ad[];
 }
 
-export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate }) => {
+export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate, ads }) => {
   const content = t.sightseeing_page;
 
   return (
@@ -34,6 +36,11 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate 
       </div>
 
       <div className="px-6 -mt-10 space-y-10">
+        {/* HUECO 3: page-top */}
+        <div className="px-4">
+           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+        </div>
+
         {MOCK_SIGHTSEEING.map((site) => {
           const siteLangData = content.list[site.id as keyof typeof content.list] || { name: site.name, desc: '' };
           return (
@@ -91,36 +98,32 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate 
             </div>
           );
         })}
-      </div>
-      
-      {/* Historical Context Section */}
-      <div className="px-6 mt-20 mb-10">
-         <div className="bg-white border border-amber-100 rounded-[50px] p-12 shadow-2xl shadow-amber-900/5 overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50" />
-            <div className="relative z-10">
-               <h3 className="text-3xl font-black mb-8 tracking-tighter text-gray-900">Un legado vivo</h3>
-               <div className="space-y-8">
-                  <div className="flex gap-6">
-                     <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-3xl flex items-center justify-center shrink-0 shadow-sm">
-                        <Clock size={28} />
-                     </div>
-                     <div>
-                        <h4 className="font-black text-gray-900 text-lg tracking-tight">Thiar Romana</h4>
-                        <p className="text-gray-500 text-base font-medium leading-tight">Estación de la Vía Augusta, calzada que unía Roma con Cádiz pasando por nuestro municipio.</p>
-                     </div>
-                  </div>
-                  <div className="flex gap-6">
-                     <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center shrink-0 shadow-sm">
-                        <History size={28} />
-                     </div>
-                     <div>
-                        <h4 className="font-black text-gray-900 text-lg tracking-tight">Defensa Mediterránea</h4>
-                        <p className="text-gray-500 text-base font-medium leading-tight">La Torre de la Horadada protegía a los habitantes de los constantes ataques piratas.</p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
+
+        {/* Historical Context Section */}
+        <div className="px-4 mt-10">
+           <div className="bg-white border border-amber-100 rounded-[50px] p-12 shadow-2xl shadow-amber-900/5 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-amber-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50" />
+              <div className="relative z-10">
+                 <h3 className="text-3xl font-black mb-8 tracking-tighter text-gray-900">Un legado vivo</h3>
+                 <div className="space-y-8">
+                    <div className="flex gap-6">
+                       <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-3xl flex items-center justify-center shrink-0 shadow-sm">
+                          <Clock size={28} />
+                       </div>
+                       <div>
+                          <h4 className="font-black text-gray-900 text-lg tracking-tight">Thiar Romana</h4>
+                          <p className="text-gray-500 text-base font-medium leading-tight">Estación de la Vía Augusta, calzada que unía Roma con Cádiz pasando por nuestro municipio.</p>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+
+        {/* HUECO 4: page-bottom */}
+        <div className="px-4">
+           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+        </div>
       </div>
     </div>
   );

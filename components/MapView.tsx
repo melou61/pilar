@@ -2,17 +2,19 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, Navigation, X, Waves, Star, History, Activity } from './Icons';
 import { MOCK_EVENTS, MOCK_BEACHES, MOCK_SIGHTSEEING, ACTIVITIES_LIST } from '../data';
-import { ViewState, CensusItem } from '../types';
+import { ViewState, CensusItem, Ad } from '../types';
+import { AdSpot } from './AdSpot';
 
 interface MapViewProps {
   t: any;
   onNavigate: (view: ViewState, id?: string) => void;
   businesses: CensusItem[];
+  ads: Ad[];
 }
 
 declare const L: any; // Leaflet Global
 
-export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) => {
+export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const [leafletMap, setLeafletMap] = useState<any | null>(null);
@@ -42,6 +44,12 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
 
           mapInstanceRef.current = map;
           setLeafletMap(map);
+          
+          // CRITICAL: Ensure map fills the flex container correctly
+          setTimeout(() => {
+            map.invalidateSize();
+          }, 500);
+
           clearInterval(checkInterval);
         } catch (err) {
           console.error("Leaflet Init Error:", err);
@@ -63,6 +71,17 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
         mapInstanceRef.current = null;
       }
     };
+  }, []);
+
+  // Update map size when window resizes to keep it "totally visible"
+  useEffect(() => {
+    const handleResize = () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.invalidateSize();
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
@@ -155,37 +174,56 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
   };
 
   return (
-    <div className="flex flex-col h-full bg-white relative animate-in fade-in duration-500 overflow-hidden">
-      <div className="absolute top-4 left-0 right-0 z-[500] flex justify-center px-4">
-        <div className="bg-white/90 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar">
-          {[
-            { id: 'all', label: t.menu.home }, 
-            { id: 'beaches', label: t.menu.beaches },
-            { id: 'culture', label: t.menu.sightseeing },
-            { id: 'active', label: t.menu.activities },
-            { id: 'food', label: t.menu.dining }, 
-            { id: 'shop', label: t.menu.shopping }, 
-            { id: 'events', label: t.menu.events }
-          ].map(f => (
-            <button key={f.id} onClick={() => setFilter(f.id as any)} className={`px-5 py-2 rounded-full text-[10px] font-black transition-all capitalize whitespace-nowrap ${filter === f.id ? 'bg-[#0f172a] text-white shadow-lg' : 'bg-transparent text-gray-500 hover:bg-gray-50'}`}>
-              {f.label}
-            </button>
-          ))}
+    <div className="flex flex-col h-full bg-white animate-in fade-in duration-500 overflow-hidden">
+      
+      {/* FRANJA SUPERIOR: ANUNCIO */}
+      <div className="bg-white px-8 py-5 shrink-0 border-b border-gray-100 flex items-center justify-center z-[200]">
+        <div className="w-full max-w-4xl">
+          <AdSpot ads={ads} position="page-top" className="my-0" />
         </div>
       </div>
 
-      <div className="relative flex-1 bg-gray-100">
-        <div ref={mapContainerRef} className="w-full h-full min-h-[400px] z-10" />
+      {/* ÁREA CENTRAL: MAPA (OCUPACIÓN TOTAL DEL ESPACIO) */}
+      <div className="relative flex-1 bg-gray-50 overflow-hidden">
+        <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-10" />
+        
+        {/* Filtros sobre el mapa */}
+        <div className="absolute top-6 left-0 right-0 z-[500] flex justify-center px-4">
+          <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-2xl flex gap-1 overflow-x-auto no-scrollbar max-w-full">
+            {[
+              { id: 'all', label: t.menu.home }, 
+              { id: 'beaches', label: t.menu.beaches },
+              { id: 'culture', label: t.menu.sightseeing },
+              { id: 'active', label: t.menu.activities },
+              { id: 'food', label: t.menu.dining }, 
+              { id: 'shop', label: t.menu.shopping }, 
+              { id: 'events', label: t.menu.events }
+            ].map(f => (
+              <button 
+                key={f.id} 
+                onClick={() => setFilter(f.id as any)} 
+                className={`px-5 py-2 rounded-full text-[10px] font-black transition-all capitalize whitespace-nowrap ${
+                    filter === f.id ? 'bg-[#0f172a] text-white shadow-lg' : 'bg-transparent text-gray-500 hover:bg-gray-50'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Botón Ubicación */}
         <button 
           onClick={handleMyLocation} 
-          className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[1000] bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95`}
+          className={`absolute ${selectedItem ? 'bottom-[330px]' : 'bottom-10'} right-8 z-[1000] bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95`}
           disabled={isLocating}
         >
           <Navigation size={28} className={isLocating ? 'animate-spin opacity-50' : ''} />
         </button>
 
+        {/* Card de Información Seleccionada */}
         {selectedItem && (
-          <div className="absolute bottom-8 left-8 right-8 z-[1001] animate-in slide-in-from-bottom-20 duration-500">
+          <div className="absolute bottom-10 left-8 right-8 z-[1001] animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto">
               <div className="relative h-40 w-full">
                 <img src={selectedItem.image || (selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl)} className="w-full h-full object-cover" alt="" />
@@ -214,6 +252,14 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
           </div>
         )}
       </div>
+
+      {/* FRANJA INFERIOR: ANUNCIO */}
+      <div className="bg-white px-8 py-5 shrink-0 border-t border-gray-100 flex items-center justify-center z-[200]">
+        <div className="w-full max-w-4xl">
+          <AdSpot ads={ads} position="page-bottom" className="my-0" />
+        </div>
+      </div>
+
     </div>
   );
 };

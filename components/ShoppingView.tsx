@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronRight, Heart, Clock, Phone, MapPin, Filter } from './Icons';
-import { CensusItem } from '../types';
+import { CensusItem, Ad } from '../types';
 import { BusinessDetailView } from './BusinessDetailView';
+import { AdSpot } from './AdSpot';
 
 interface ShoppingViewProps {
   t: any;
@@ -10,9 +11,10 @@ interface ShoppingViewProps {
   highlightedBusinessId?: string | null;
   favorites: string[];
   toggleFavorite: (id: string) => void;
+  ads: Ad[]; 
 }
 
-export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highlightedBusinessId, favorites, toggleFavorite }) => {
+export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highlightedBusinessId, favorites, toggleFavorite, ads }) => {
   const [selectedBusiness, setSelectedBusiness] = useState<CensusItem | null>(null);
   const [activeZone, setActiveZone] = useState<string>('all');
   
@@ -54,8 +56,13 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
         
         <div className="mb-12 px-4">
           <h2 className="text-5xl font-black text-gray-900 tracking-tighter mb-2">{t.sections.shopping.title}</h2>
-          <p className="text-gray-500 font-medium text-lg mb-8">{t.sections.shopping.desc}</p>
+          <p className="text-gray-500 font-medium text-lg mb-4">{t.sections.shopping.desc}</p>
           
+          {/* HUECO 3: page-top */}
+          <div className="mb-8">
+            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+          </div>
+
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
             {zones.map(z => (
               <button 
@@ -124,6 +131,11 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
             }) : (
               <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">No hay comercios en esta zona todavía.</div>
             )}
+        </div>
+
+        {/* HUECO 4: page-bottom */}
+        <div className="mt-16 max-w-4xl mx-auto">
+            <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
         </div>
     </div>
   );

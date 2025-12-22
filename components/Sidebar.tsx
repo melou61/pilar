@@ -89,6 +89,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <nav className="flex-1 overflow-y-auto py-2 space-y-4 no-scrollbar">
           <WeatherWidget t={t} />
 
+          {/* HUECO 1: menu-top */}
           <div className="px-4">
              <AdSpot ads={ads} position="menu-top" label={sponsoredText} />
           </div>
@@ -116,8 +117,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
             })}
           </ul>
 
+          {/* HUECO 2: menu-bottom */}
+          <div className="px-4 py-2 border-t border-gray-50 mt-4">
+             <AdSpot ads={ads} position="menu-bottom" label={sponsoredText} />
+          </div>
+
           {isLoggedIn && (
-             <div className="px-4 mt-6">
+             <div className="px-4 mt-2 mb-6">
                 <button 
                   onClick={onLogout}
                   className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-red-50 text-red-600 font-black hover:bg-red-100 transition-all border border-red-100"
