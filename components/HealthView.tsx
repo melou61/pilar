@@ -91,7 +91,7 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads }) =>
           </div>
         </section>
 
-        {/* Ad Spot */}
+        {/* Anuncio Superior */}
         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
 
         {/* Otros Centros */}
@@ -128,6 +128,11 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads }) =>
               <p className="text-blue-100 font-medium mb-10 leading-relaxed">Infórmate sobre las campañas de vacunación y prevención locales en el Centro de Salud.</p>
               <button className="bg-white text-blue-700 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">Ver Campañas</button>
            </div>
+        </div>
+
+        {/* Anuncio Inferior */}
+        <div className="pt-4 -mx-2">
+          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
         </div>
       </div>
     </div>

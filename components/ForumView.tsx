@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
 import { MessageSquare, Heart, Share2, Plus, Filter, User, Clock, ArrowRight, MessageCircle } from './Icons';
+import { Ad } from '../types';
+import { AdSpot } from './AdSpot';
 
 interface ForumPost {
   id: string;
@@ -24,9 +26,10 @@ const MOCK_POSTS: ForumPost[] = [
 
 interface ForumViewProps {
   t: any;
+  ads: Ad[];
 }
 
-export const ForumView: React.FC<ForumViewProps> = ({ t }) => {
+export const ForumView: React.FC<ForumViewProps> = ({ t, ads }) => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [posts, setPosts] = useState(MOCK_POSTS);
 
@@ -120,6 +123,11 @@ export const ForumView: React.FC<ForumViewProps> = ({ t }) => {
              </div>
           </div>
         ))}
+
+        {/* Anuncio inferior tras los posts */}
+        <div className="pt-4 -mx-2">
+          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+        </div>
       </div>
 
       {/* Floating Action Button */}

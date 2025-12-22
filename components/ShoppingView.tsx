@@ -54,12 +54,12 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
           />
         )}
         
-        <div className="mb-12 px-4">
+        <div className="mb-12">
           <h2 className="text-5xl font-black text-gray-900 tracking-tighter mb-2">{t.sections.shopping.title}</h2>
           <p className="text-gray-500 font-medium text-lg mb-4">{t.sections.shopping.desc}</p>
           
-          {/* HUECO 3: page-top */}
-          <div className="mb-8">
+          {/* Ad Spot Top - Sin padding lateral extra */}
+          <div className="mb-8 -mx-2">
             <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
           </div>
 
@@ -133,8 +133,8 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
             )}
         </div>
 
-        {/* HUECO 4: page-bottom */}
-        <div className="mt-16 max-w-4xl mx-auto">
+        {/* Ad Spot Bottom - Sin padding lateral extra */}
+        <div className="mt-16 max-w-4xl mx-auto -mx-2">
             <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
         </div>
     </div>

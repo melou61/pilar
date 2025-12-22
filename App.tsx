@@ -52,7 +52,6 @@ const App: React.FC = () => {
   const [ads, setAds] = useState<Ad[]>(INITIAL_ADS);
   const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
   
-  // Ahora el censo empieza limpio de promociones por defecto para no molestar en la demo
   const [businesses, setBusinesses] = useState<CensusItem[]>(() => {
     return [
       ...COMMERCIAL_CENSUS.flatMap(c => c.items),
@@ -66,7 +65,6 @@ const App: React.FC = () => {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [shareData, setShareData] = useState({ title: '', text: '', url: '' });
   
-  // Beacon Simulation State
   const [activeBeaconShop, setActiveBeaconShop] = useState<CensusItem | null>(null);
   const [beaconsEnabled, setBeaconsEnabled] = useState(true);
 
@@ -83,11 +81,9 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Beacon Simulator (Solo salta si el Admin activa una promo)
   useEffect(() => {
     if (beaconsEnabled && currentView === ViewState.HOME) {
       const timer = setTimeout(() => {
-        // Busca si algún comercio tiene una promoción activada manualmente
         const shopWithPromo = businesses.find(b => b.promotion && b.promotion.title);
         if (shopWithPromo) {
             setActiveBeaconShop(shopWithPromo);
@@ -122,61 +118,68 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div key={currentLang.code} className="min-h-screen flex flex-col bg-[#f8fafc] font-sans overflow-x-hidden">
-      {currentView === ViewState.LENS && <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
-      
-      <Header 
-        onMenuClick={() => setSidebarOpen(true)} 
-        onLoginClick={() => setLoginOpen(true)} 
-        onSearchClick={() => handleNavigate(ViewState.SEARCH)} 
-        onLogoClick={() => handleNavigate(ViewState.HOME)} 
-        currentLang={currentLang} 
-        onLanguageChange={setCurrentLang} 
-        languages={languages} 
-        currentView={currentView}
-        onNavigate={handleNavigate}
-        t={t}
-      />
-      <Sidebar 
-        isOpen={isSidebarOpen} 
-        onClose={() => setSidebarOpen(false)} 
-        menuItems={menuItems} 
-        currentView={currentView} 
-        onNavigate={handleNavigate} 
-        ads={ads} 
-        title={t.menu.title} 
-        sponsoredText={t.common.sponsored}
-        isLoggedIn={isLoggedIn}
-        onLogout={() => { setIsLoggedIn(false); setCurrentView(ViewState.HOME); }}
-        t={t}
-      />
-      <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => { setIsLoggedIn(true); setLoginOpen(false); }} onLoginSuperAdmin={() => { setIsLoggedIn(true); setUserRole('ADMIN'); setLoginOpen(false); setCurrentView(ViewState.ADMIN); }} t={t} />
-      <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
-      
-      {activeBeaconShop && (
-        <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} />
-      )}
+    <div className="min-h-screen bg-slate-200 flex justify-center overflow-x-hidden font-sans">
+      {/* MOBILE DEVICE CONTAINER */}
+      <div className="w-full max-w-[450px] bg-white min-h-screen shadow-[0_0_80px_rgba(0,0,0,0.15)] relative flex flex-col">
+        
+        {currentView === ViewState.LENS && <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
+        
+        <Header 
+          onMenuClick={() => setSidebarOpen(true)} 
+          onLoginClick={() => setLoginOpen(true)} 
+          onSearchClick={() => handleNavigate(ViewState.SEARCH)} 
+          onLogoClick={() => handleNavigate(ViewState.HOME)} 
+          currentLang={currentLang} 
+          onLanguageChange={setCurrentLang} 
+          languages={languages} 
+          currentView={currentView}
+          onNavigate={handleNavigate}
+          t={t}
+        />
+        
+        <Sidebar 
+          isOpen={isSidebarOpen} 
+          onClose={() => setSidebarOpen(false)} 
+          menuItems={menuItems} 
+          currentView={currentView} 
+          onNavigate={handleNavigate} 
+          ads={ads} 
+          title={t.menu.title} 
+          sponsoredText={t.common.sponsored}
+          isLoggedIn={isLoggedIn}
+          onLogout={() => { setIsLoggedIn(false); setCurrentView(ViewState.HOME); }}
+          t={t}
+        />
 
-      <main className={`flex-1 w-full flex flex-col relative pt-24 ${currentView === ViewState.MAP ? 'h-[calc(100vh-96px)]' : ''}`}>
-         {currentView === ViewState.HOME && <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />}
-         {currentView === ViewState.BEACHES && <BeachesView t={t} onNavigate={handleNavigate} ads={ads} />}
-         {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} />}
-         {currentView === ViewState.ACTIVITIES && <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} />}
-         {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleNavigate} businesses={businesses} />}
-         {currentView === ViewState.DINING && <DiningView t={t} businesses={businesses} ads={ads} />}
-         {currentView === ViewState.SHOPPING && <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={(id) => setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id])} ads={ads} />}
-         {currentView === ViewState.CITIZEN_SERVICES && <CitizenServicesView t={t} />}
-         {currentView === ViewState.NEWS && <NewsView t={t} />}
-         {currentView === ViewState.EVENTS && <EventsView t={t} events={events} onShare={() => {}} onAddToCalendar={() => {}} initialEventId={selectedEventId} />}
-         {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} langLabel={currentLang.label} onBack={() => handleNavigate(ViewState.HOME)} />}
-         {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={() => {}} />}
-         {currentView === ViewState.POSTCARD && <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
-         {currentView === ViewState.FORUM && <ForumView t={t} />}
-         {currentView === ViewState.PROFILE && <ProfileView userName={userName} onLogout={() => setIsLoggedIn(false)} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />}
-         {currentView === ViewState.HEALTH && <HealthView t={t} onNavigate={handleNavigate} ads={ads} />}
-         {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={() => setIsLoggedIn(false)} currentUserRole={userRole as AdminRole} />}
-      </main>
-      {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && currentView !== ViewState.LENS && <Footer t={t} />}
+        <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => { setIsLoggedIn(true); setLoginOpen(false); }} onLoginSuperAdmin={() => { setIsLoggedIn(true); setUserRole('ADMIN'); setLoginOpen(false); setCurrentView(ViewState.ADMIN); }} t={t} />
+        <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
+        
+        {activeBeaconShop && (
+          <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} />
+        )}
+
+        <main className={`flex-1 w-full flex flex-col relative pt-24 ${currentView === ViewState.MAP ? 'h-[calc(100vh-96px)]' : ''}`}>
+           {currentView === ViewState.HOME && <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />}
+           {currentView === ViewState.BEACHES && <BeachesView t={t} onNavigate={handleNavigate} ads={ads} />}
+           {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} />}
+           {currentView === ViewState.ACTIVITIES && <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} />}
+           {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleNavigate} businesses={businesses} />}
+           {currentView === ViewState.DINING && <DiningView t={t} businesses={businesses} ads={ads} />}
+           {currentView === ViewState.SHOPPING && <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={(id) => setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id])} ads={ads} />}
+           {currentView === ViewState.CITIZEN_SERVICES && <CitizenServicesView t={t} ads={ads} />}
+           {currentView === ViewState.NEWS && <NewsView t={t} ads={ads} />}
+           {currentView === ViewState.EVENTS && <EventsView t={t} events={events} onShare={() => {}} onAddToCalendar={() => {}} initialEventId={selectedEventId} ads={ads} />}
+           {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} langLabel={currentLang.label} onBack={() => handleNavigate(ViewState.HOME)} />}
+           {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={() => {}} />}
+           {currentView === ViewState.POSTCARD && <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
+           {currentView === ViewState.FORUM && <ForumView t={t} ads={ads} />}
+           {currentView === ViewState.PROFILE && <ProfileView userName={userName} onLogout={() => setIsLoggedIn(false)} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />}
+           {currentView === ViewState.HEALTH && <HealthView t={t} onNavigate={handleNavigate} ads={ads} />}
+           {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={() => setIsLoggedIn(false)} currentUserRole={userRole as AdminRole} />}
+        </main>
+        
+        {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && currentView !== ViewState.LENS && <Footer t={t} />}
+      </div>
     </div>
   );
 };

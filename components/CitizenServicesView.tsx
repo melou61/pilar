@@ -4,14 +4,17 @@ import {
   CalendarCheck, FileText, HelpCircle, MessageSquare, 
   Camera, Send, ChevronRight, Landmark, X, Check, MapPin, Clock, ArrowRight, Sparkles
 } from './Icons';
+import { Ad } from '../types';
+import { AdSpot } from './AdSpot';
 
 interface CitizenServicesViewProps {
   t: any;
+  ads: Ad[];
 }
 
 type ModalType = 'none' | 'appointment' | 'incident' | 'success';
 
-export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) => {
+export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads }) => {
   const [activeModal, setActiveModal] = useState<ModalType>('none');
   const [loading, setLoading] = useState(false);
 
@@ -200,6 +203,11 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t }) =
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Anuncio inferior tras los servicios principales */}
+        <div className="py-2 -mx-2">
+           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
         </div>
 
         <div className="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[50px] p-10 text-white relative overflow-hidden shadow-2xl shadow-blue-500/20 group">

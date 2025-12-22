@@ -37,7 +37,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
   return (
     <div className="flex flex-col animate-in fade-in duration-700 pb-32 overflow-x-hidden">
       {/* 1. HERO SECTION */}
-      <section className="relative h-[85vh] w-full overflow-hidden flex-shrink-0">
+      <section className="relative h-[72vh] w-full overflow-hidden flex-shrink-0">
         {heroImages.map((img, index) => (
           <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
             <img src={img} alt="Hero" className="w-full h-full object-cover" />
@@ -46,29 +46,39 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         ))}
         
         {/* Radar Status Indicator */}
-        <div className="absolute top-12 left-8 z-30 flex items-center gap-3 bg-white/10 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20">
-           <div className="relative">
-             <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
-             <Radar size={18} className="text-blue-400 relative z-10" />
+        <div className="absolute top-20 left-8 z-30 flex flex-col items-start gap-1">
+           <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
+             <div className="relative">
+               <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
+               <Radar size={18} className="text-blue-400 relative z-10" />
+             </div>
+             <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Smart PH Activo</span>
            </div>
-           <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Smart PH Activo</span>
+           <div className="mt-5 ml-2 text-[22px] font-black text-blue-600 uppercase tracking-[0.02em] flex items-center gap-3 drop-shadow-[0_0_12px_rgba(37,99,235,0.7)]">
+              <div className="w-2 h-2 bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,1)]"></div>
+              <span style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.4)' }}>PILAR DE LA HORADADA</span>
+           </div>
         </div>
 
-        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-36">
-          <div className="max-w-4xl mx-auto w-full">
-            <div className="flex items-center gap-3 text-sm font-black mb-8 uppercase tracking-[0.4em] text-blue-400">
-              <MapPin size={24} /> PILAR DE LA HORADADA
-            </div>
-            <h2 className="text-7xl sm:text-[120px] font-black mb-2 leading-[0.85] tracking-tighter">
-              {hp.pilar_vivo?.split(' ')[0]}<br/><span className="text-blue-400">{hp.pilar_vivo?.split(' ')[1] || 'VIVO'}</span>
+        {/* Título Principal */}
+        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-[140px]">
+          <div className="max-w-[95rem] mx-auto w-full">
+            <h2 
+              className="text-[100px] sm:text-[180px] font-black mb-0 leading-[0.82] tracking-[0.05em] flex flex-col items-start"
+              style={{ textShadow: '10px 10px 25px rgba(0,0,0,0.8)' }}
+            >
+              <span className="drop-shadow-[0_0_50px_rgba(37,99,235,0.3)]">PILAR</span>
+              <span className="text-blue-500 drop-shadow-[0_0_50px_rgba(37,99,235,0.7)]">VIVO</span>
             </h2>
           </div>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto w-full px-6 -mt-24 relative z-20 space-y-24">
-        {/* Ad Spot */}
-        <div className="px-4 pt-4">
+      {/* Margen negativo para subir el contenido */}
+      <div className="max-w-6xl mx-auto w-full px-6 -mt-40 relative z-20 space-y-20">
+        
+        {/* Ad Spot Top - Sin padding lateral adicional para que se vea más ancho */}
+        <div className="-mx-2">
            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
         </div>
 
@@ -93,7 +103,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
 
         {/* SHORTS SLIDER */}
         <section className="space-y-8">
-          <div className="px-4">
+          <div className="px-2">
             <h3 className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em] mb-2">{hp.shorts_label}</h3>
             <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">{hp.shorts_big}</h2>
           </div>
@@ -111,9 +121,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           </div>
         </section>
 
-        {/* MOMENTOS PH + AI Postcard */}
+        {/* MOMENTOS PH */}
         <section className="space-y-8">
-          <div className="flex flex-col md:flex-row md:justify-between md:items-end px-4 gap-6">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end px-2 gap-6">
             <div>
               <h3 className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.4em] mb-2">{hp.gallery_label}</h3>
               <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">{hp.gallery_big}</h2>
@@ -141,7 +151,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
 
         {/* FEATURED FESTIVALS */}
         <section className="space-y-8">
-          <div className="flex justify-between items-end px-4">
+          <div className="flex justify-between items-end px-2">
             <div>
               <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-2">{t.sections.events.title}</h3>
               <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">{t.sections.events.title}</h2>
@@ -179,10 +189,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           </div>
         </section>
 
-        {/* Footer Ad */}
-        <section className="px-4">
+        {/* Footer Ad - Sin padding lateral adicional */}
+        <div className="-mx-2 pb-10">
            <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
-        </section>
+        </div>
       </div>
     </div>
   );

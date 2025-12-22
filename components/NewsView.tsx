@@ -5,13 +5,15 @@ import {
   Rss, Facebook, Instagram, Newspaper, ExternalLink, Calendar, 
   Filter, Megaphone, Share2, Flower, Briefcase, Home, Info 
 } from './Icons';
-import { NewsCategory } from '../types';
+import { NewsCategory, Ad } from '../types';
+import { AdSpot } from './AdSpot';
 
 interface NewsViewProps {
   t: any;
+  ads: Ad[];
 }
 
-export const NewsView: React.FC<NewsViewProps> = ({ t }) => {
+export const NewsView: React.FC<NewsViewProps> = ({ t, ads }) => {
   const [activeCategory, setActiveCategory] = useState<NewsCategory | 'ALL'>('ALL');
 
   const getCategoryIcon = (cat: NewsCategory) => {
@@ -129,6 +131,11 @@ export const NewsView: React.FC<NewsViewProps> = ({ t }) => {
                 No hay publicaciones en esta categoría hoy.
             </div>
           )}
+
+          {/* Anuncio inferior al final del feed */}
+          <div className="pt-6 -mx-2">
+            <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+          </div>
       </div>
 
     </div>

@@ -52,8 +52,8 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
             {t.sections.dining.desc}
         </p>
 
-        {/* HUECO 3: page-top */}
-        <div className="mb-8">
+        {/* Ad Spot Top - Sin padding lateral adicional */}
+        <div className="mb-8 -mx-2">
            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
         </div>
 
@@ -124,8 +124,8 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
           )}
       </div>
 
-      {/* HUECO 4: page-bottom */}
-      <div className="px-6 mt-16 max-w-4xl mx-auto">
+      {/* Ad Spot Bottom - Sin padding lateral adicional */}
+      <div className="px-6 mt-16 max-w-4xl mx-auto -mx-2">
         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
       </div>
     </div>
