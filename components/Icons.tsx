@@ -2,6 +2,7 @@
 // Added Wand2 and Download to imports and exports to fix missing member errors.
 // Added Image as ImageIcon to the exports to satisfy direct imports in PostcardCreator.
 // Added Bell to fix missing export error in ProfileView.
+// Added Volume2 to fix missing export error in VoiceConcierge.
 import { 
   Home, 
   Newspaper, 
@@ -108,7 +109,8 @@ import {
   Cpu,
   Wand2,
   Download,
-  Bell
+  Bell,
+  Volume2
 } from 'lucide-react';
 
 export {
@@ -218,5 +220,6 @@ export {
   Cpu,
   Wand2,
   Download,
-  Bell
+  Bell,
+  Volume2
 };

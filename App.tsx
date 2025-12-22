@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ViewState, NavItem, Ad, Event, Language, AdminRole, CensusItem } from './types';
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
-  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck, MessageSquare
+  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck, MessageSquare, Heart
 } from './components/Icons';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -26,6 +26,7 @@ import { ShareModal } from './components/ShareModal';
 import { PostcardCreator } from './components/PostcardCreator';
 import { ForumView } from './components/ForumView';
 import { ProfileView } from './components/ProfileView';
+import { HealthView } from './components/HealthView';
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -118,6 +119,7 @@ const App: React.FC = () => {
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
     { id: ViewState.AI_CHAT, label: t.menu.ai, icon: Sparkles },
+    { id: ViewState.HEALTH, label: t.menu.health, icon: Heart },
     { id: ViewState.FORUM, label: t.menu.forum, icon: MessageSquare },
     { id: ViewState.MAP, label: t.menu.map, icon: MapIcon },
     { id: ViewState.CITIZEN_SERVICES, label: t.menu.services, icon: Landmark },
@@ -175,6 +177,7 @@ const App: React.FC = () => {
          {currentView === ViewState.POSTCARD && <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
          {currentView === ViewState.FORUM && <ForumView t={t} />}
          {currentView === ViewState.PROFILE && <ProfileView userName={userName} onLogout={handleLogout} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />}
+         {currentView === ViewState.HEALTH && <HealthView t={t} onNavigate={handleNavigate} ads={ads} />}
          {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as AdminRole} />}
       </main>
       {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && <Footer t={t} />}

@@ -1,7 +1,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
-import { Send, Bot, ArrowLeft, ExternalLink, Globe } from './Icons';
+import { Send, Bot, ArrowLeft, ExternalLink, Globe, Mic } from './Icons';
+import { VoiceConcierge } from './VoiceConcierge';
 
 interface Message {
   role: 'user' | 'model';
@@ -20,6 +21,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isVoiceActive, setIsVoiceActive] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const chatSessionRef = useRef<Chat | null>(null);
 
@@ -76,6 +78,8 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
 
   return (
     <div className="flex flex-col h-full bg-white animate-in fade-in duration-300 overflow-hidden">
+      {isVoiceActive && <VoiceConcierge onClose={() => setIsVoiceActive(false)} t={t} />}
+      
       <div className="p-6 border-b border-gray-100 flex items-center justify-between shrink-0 bg-white z-10">
         <div className="flex items-center gap-4">
           <button onClick={onBack} className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"><ArrowLeft size={24}/></button>
@@ -89,6 +93,12 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
             </div>
           </div>
         </div>
+        <button 
+          onClick={() => setIsVoiceActive(true)}
+          className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+        >
+          <Mic size={24} />
+        </button>
       </div>
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar bg-slate-50/30">
         {messages.map((msg, i) => (
