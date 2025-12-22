@@ -1,12 +1,6 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-
-// Fix: __dirname is not available in ESM environments (ES modules).
-// We define it manually using fileURLToPath and import.meta.url.
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');

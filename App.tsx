@@ -156,7 +156,7 @@ const App: React.FC = () => {
          {currentView === ViewState.BEACHES && <BeachesView t={t} onNavigate={handleNavigate} ads={ads} />}
          {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} />}
          {currentView === ViewState.ACTIVITIES && <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} />}
-         {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleNavigate} businesses={businesses} ads={ads} />}
+         {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleNavigate} businesses={businesses} />}
          {currentView === ViewState.DINING && <DiningView t={t} businesses={businesses} ads={ads} />}
          {currentView === ViewState.SHOPPING && <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} />}
          {currentView === ViewState.CITIZEN_SERVICES && <CitizenServicesView t={t} />}
