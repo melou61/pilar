@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ViewState, NavItem, Ad, Event, Language, AdminRole, CensusItem } from './types';
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
-  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck, MessageSquare, Heart, Scan, Baby
+  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck, MessageSquare, Heart, Scan
 } from './components/Icons';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -29,7 +29,6 @@ import { ProfileView } from './components/ProfileView';
 import { HealthView } from './components/HealthView';
 import { BeaconModal } from './components/BeaconModal';
 import { PHLensView } from './components/PHLensView';
-import { KidsLearningView } from './components/KidsLearningView';
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -94,11 +93,13 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Beacon Simulator
+  // Beacon Simulator (Refined)
   useEffect(() => {
     if (beaconsEnabled && currentView === ViewState.HOME) {
       const timer = setTimeout(() => {
-        const shopWithPromo = businesses.find(b => b.promotion);
+        // Only trigger if a shop has an active promotion. 
+        // If promotion is undefined (removed in admin), nothing happens.
+        const shopWithPromo = businesses.find(b => b.promotion && b.promotion.title);
         if (shopWithPromo) setActiveBeaconShop(shopWithPromo);
       }, 12000);
       return () => clearTimeout(timer);
@@ -117,7 +118,6 @@ const App: React.FC = () => {
 
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
-    { id: ViewState.KIDS, label: t.menu.kids, icon: Baby },
     { id: ViewState.LENS, label: 'PH Lens', icon: Scan },
     { id: ViewState.AI_CHAT, label: t.menu.ai, icon: Sparkles },
     { id: ViewState.MAP, label: t.menu.map, icon: MapIcon },
@@ -133,7 +133,6 @@ const App: React.FC = () => {
   return (
     <div key={currentLang.code} className="min-h-screen flex flex-col bg-[#f8fafc] font-sans overflow-x-hidden">
       {currentView === ViewState.LENS && <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
-      {currentView === ViewState.KIDS && <KidsLearningView t={t} onBack={() => handleNavigate(ViewState.HOME)} langLabel={currentLang.label} />}
       
       <Header 
         onMenuClick={() => setSidebarOpen(true)} 
@@ -186,7 +185,7 @@ const App: React.FC = () => {
          {currentView === ViewState.HEALTH && <HealthView t={t} onNavigate={handleNavigate} ads={ads} />}
          {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={() => setIsLoggedIn(false)} currentUserRole={userRole as AdminRole} />}
       </main>
-      {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && currentView !== ViewState.LENS && currentView !== ViewState.KIDS && <Footer t={t} />}
+      {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && currentView !== ViewState.LENS && <Footer t={t} />}
     </div>
   );
 };

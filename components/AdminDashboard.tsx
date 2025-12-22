@@ -25,7 +25,7 @@ interface AdminDashboardProps {
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
     ads, setAds, events, setEvents, businesses, setBusinesses, onLogout, currentUserRole
 }) => {
-  const [activeTab, setActiveTab] = useState<'businesses' | 'news' | 'ads' | 'beacons'>('businesses');
+  const [activeTab, setActiveTab] = useState<'businesses' | 'news' | 'ads' | 'beaches' | 'beacons'>('businesses');
   const [newsList, setNewsList] = useState<NewsItem[]>(MOCK_NEWS);
   
   // Estados de Sincronización
@@ -119,6 +119,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     };
     setBusinesses(prev => prev.map(b => b.id === currentBeacon.bizId ? { ...b, promotion: promo } : b));
     setEditMode('none');
+  };
+
+  const deleteBeacon = (bizId: string) => {
+    if (confirm("¿Seguro que quieres desactivar este Beacon? Dejará de enviar notificaciones a los móviles cercanos.")) {
+        setBusinesses(prev => prev.map(b => b.id === bizId ? { ...b, promotion: undefined } : b));
+    }
   };
 
   return (
@@ -430,9 +436,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   </div>
 
-                  <button onClick={saveBeacon} className="w-full mt-10 py-6 bg-blue-600 text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-xl flex items-center justify-center gap-3">
-                    <Wifi size={20} /> Sincronizar y Activar Hardware
-                  </button>
+                  <div className="flex gap-4 mt-10">
+                    <button onClick={saveBeacon} className="flex-1 py-6 bg-blue-600 text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-xl flex items-center justify-center gap-3">
+                        <Wifi size={20} /> Sincronizar y Activar Hardware
+                    </button>
+                    {currentBeacon.bizId && (
+                        <button onClick={() => deleteBeacon(currentBeacon.bizId)} className="px-10 py-6 bg-red-600/10 text-red-600 border border-red-600/20 rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all">
+                            <Trash2 size={20} />
+                        </button>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <>
@@ -506,11 +519,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             </div>
                           )}
 
-                          <div className="p-6 pt-2 mt-auto bg-slate-50/50">
-                             <button onClick={() => { setCurrentBeacon({bizId: b.id, promo: b.promotion || {beaconHardwareId: hardware.uuid, frequencyPerDay: 3, activeTimeMinutes: 60}}); setEditMode('beacon'); }} className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-md transition-all flex items-center justify-center gap-2 ${b.promotion ? 'bg-slate-900 text-white' : 'bg-blue-600 text-white'}`}>
+                          <div className="p-6 pt-2 mt-auto bg-slate-50/50 flex gap-2">
+                             <button onClick={() => { setCurrentBeacon({bizId: b.id, promo: b.promotion || {beaconHardwareId: hardware.uuid, frequencyPerDay: 3, activeTimeMinutes: 60}}); setEditMode('beacon'); }} className={`flex-1 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-md transition-all flex items-center justify-center gap-2 ${b.promotion ? 'bg-slate-900 text-white' : 'bg-blue-600 text-white'}`}>
                                 {b.promotion ? <Settings2 size={14}/> : <Plus size={14}/>}
-                                {b.promotion ? 'Gestión Nodo' : 'Vincular Hardware'}
+                                {b.promotion ? 'Gestión' : 'Vincular'}
                              </button>
+                             {b.promotion && (
+                                <button onClick={() => deleteBeacon(b.id)} className="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center border border-red-100 shadow-sm active:scale-90 transition-all">
+                                    <Trash2 size={18} />
+                                </button>
+                             )}
                           </div>
                         </div>
                       );

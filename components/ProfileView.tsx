@@ -34,7 +34,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                  <p className="text-slate-400 font-medium mb-8">Gracias por ser parte activa de Pilar de la Horadada.</p>
                  <div className="flex flex-wrap justify-center md:justify-start gap-3">
                     <button onClick={() => onNavigate(ViewState.HOME)} className="bg-white text-[#0f172a] px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all">Explorar</button>
-                    <button onClick={onLogout} className="bg-red-600/20 text-red-500 border border-red-500/20 px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all">{t.profile.logout}</button>
+                    <button onClick={onLogout} className="bg-red-600/20 text-red-500 border border-red-500/20 px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all">Cerrar Sesión</button>
                  </div>
               </div>
            </div>
@@ -53,7 +53,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                  <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Tienes {myEvents.length} eventos guardados</p>
               </div>
               <button onClick={() => onNavigate(ViewState.EVENTS)} className="mt-8 flex items-center justify-between text-purple-600 font-black text-[10px] uppercase tracking-widest bg-purple-50 p-4 rounded-2xl">
-                 {t.profile.view_agenda} <ChevronRight size={16} />
+                 Ver mi agenda <ChevronRight size={16} />
               </button>
            </div>
 
@@ -90,7 +90,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                  </div>
               </div>
               <button className="mt-8 flex items-center justify-between text-blue-600 font-black text-[10px] uppercase tracking-widest bg-blue-50 p-4 rounded-2xl">
-                 {t.profile.pro_settings} <Settings2 size={16} />
+                 Ajustes pro <Settings2 size={16} />
               </button>
            </div>
 

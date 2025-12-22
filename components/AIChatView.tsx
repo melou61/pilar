@@ -129,7 +129,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
               <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" />
               <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:0.2s]" />
               <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:0.4s]" />
-              <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest ml-2">{t.common.loading}</span>
+              <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest ml-2">Consultando Pilar...</span>
             </div>
           </div>
         )}

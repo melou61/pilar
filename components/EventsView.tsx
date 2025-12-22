@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Event } from '../types';
-import { Search, Calendar, MapPin, ChevronRight, Filter, ArrowLeft, Bookmark, Sparkles, Trophy } from './Icons';
+import { Search, Calendar, MapPin, ChevronRight, ArrowLeft, Bookmark, Sparkles, Trophy } from './Icons';
 import { EventDetailView } from './EventDetailView';
 
 interface EventsViewProps {
@@ -58,15 +58,16 @@ export const EventsView: React.FC<EventsViewProps> = ({
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-44 animate-in fade-in duration-300">
-      <div className="bg-[#1e1b4b] px-8 pt-16 pb-20 text-white rounded-b-[60px] shadow-2xl relative overflow-hidden">
+    <div className="bg-[#f8fafc] min-h-screen pb-44 animate-in fade-in duration-300">
+      {/* Header Premium */}
+      <div className="bg-[#1e1b4b] px-8 pt-16 pb-24 text-white rounded-b-[60px] relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-purple-600/20 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10">
           <div className="flex items-center gap-3 text-purple-400 font-black text-[10px] uppercase tracking-[0.4em] mb-4">
             <Sparkles size={20} />
             PH Festivales
           </div>
-          <h1 className="text-5xl font-black tracking-tighter mb-4">{t.menu.events}</h1>
+          <h1 className="text-5xl font-black tracking-tighter mb-4 leading-tight">{t.menu.events}</h1>
           <p className="text-purple-100/60 text-lg font-medium leading-tight max-w-sm">
             {t.sections.events.desc}
           </p>
@@ -77,23 +78,24 @@ export const EventsView: React.FC<EventsViewProps> = ({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={t.common.searchPlaceholder}
-              className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-[20px] focus:outline-none focus:ring-4 focus:ring-purple-500/20 text-white placeholder-white/40 font-bold"
+              className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-[24px] focus:outline-none focus:ring-4 focus:ring-purple-500/20 text-white placeholder-white/40 font-bold transition-all"
             />
             <Search className="absolute left-4 top-4 text-white/40" size={24} />
           </div>
         </div>
       </div>
 
-      <div className="px-6 -mt-8 mb-10">
-        <div className="flex gap-2 overflow-x-auto no-scrollbar py-2">
+      {/* Tabs Row - Fix for the visual glitch */}
+      <div className="px-6 -mt-10 relative z-20">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar py-4 px-2">
           {categories.map(cat => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-6 py-3 rounded-2xl text-[10px] font-black whitespace-nowrap border transition-all uppercase tracking-widest ${
+              className={`px-8 py-3.5 rounded-[22px] text-[10px] font-black whitespace-nowrap transition-all uppercase tracking-widest border ${
                 activeCategory === cat.id 
-                ? 'bg-purple-600 text-white border-purple-600 shadow-xl shadow-purple-500/20' 
-                : 'bg-white text-gray-400 border-gray-100 hover:border-purple-200'
+                ? 'bg-purple-600 text-white border-purple-600 shadow-[0_15px_30px_rgba(147,51,234,0.3)] scale-105' 
+                : 'bg-white text-gray-400 border-white shadow-lg shadow-gray-200/50 hover:border-purple-200'
               }`}
             >
               {cat.label}
@@ -102,7 +104,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
         </div>
       </div>
 
-      <div className="px-6 space-y-10">
+      {/* Events Feed */}
+      <div className="px-6 mt-6 space-y-10">
         {filteredEvents.length > 0 ? (
           filteredEvents.map(event => {
             const isSaved = myEvents.includes(event.id);
