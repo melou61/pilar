@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ViewState, NavItem, Ad, Event, Language, AdminRole, CensusItem } from './types';
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
-  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck
+  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck, MessageSquare
 } from './components/Icons';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -24,6 +24,8 @@ import { HomeView } from './components/HomeView';
 import { AdminDashboard } from './components/AdminDashboard';
 import { ShareModal } from './components/ShareModal';
 import { PostcardCreator } from './components/PostcardCreator';
+import { ForumView } from './components/ForumView';
+import { ProfileView } from './components/ProfileView';
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -74,6 +76,10 @@ const App: React.FC = () => {
       setLoginOpen(true);
       return;
     }
+    if (view === ViewState.PROFILE && !isLoggedIn) {
+      setLoginOpen(true);
+      return;
+    }
     setCurrentView(view);
     setSidebarOpen(false);
     if (view === ViewState.EVENTS) setSelectedEventId(id || null);
@@ -97,7 +103,7 @@ const App: React.FC = () => {
   const handleLogin = (role: 'USER' | 'ADMIN' = 'USER', userData?: {name: string, email: string}) => {
     setIsLoggedIn(true);
     setUserRole(role);
-    setUserName(userData?.name || (role === 'ADMIN' ? 'Administrador' : 'Usuario Pilar'));
+    setUserName(userData?.name || (role === 'ADMIN' ? 'Administrador' : 'Vecino Pilar'));
     setLoginOpen(false);
     if (role === 'ADMIN') setCurrentView(ViewState.ADMIN);
     else setCurrentView(ViewState.PROFILE);
@@ -112,6 +118,7 @@ const App: React.FC = () => {
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
     { id: ViewState.AI_CHAT, label: t.menu.ai, icon: Sparkles },
+    { id: ViewState.FORUM, label: t.menu.forum, icon: MessageSquare },
     { id: ViewState.MAP, label: t.menu.map, icon: MapIcon },
     { id: ViewState.CITIZEN_SERVICES, label: t.menu.services, icon: Landmark },
     { id: ViewState.NEWS, label: t.menu.news, icon: Newspaper },
@@ -166,18 +173,9 @@ const App: React.FC = () => {
          {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} langLabel={currentLang.label} onBack={() => handleNavigate(ViewState.HOME)} />}
          {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} />}
          {currentView === ViewState.POSTCARD && <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
+         {currentView === ViewState.FORUM && <ForumView t={t} />}
+         {currentView === ViewState.PROFILE && <ProfileView userName={userName} onLogout={handleLogout} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />}
          {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as AdminRole} />}
-         {currentView === ViewState.PROFILE && (
-            <div className="p-10 text-center animate-in fade-in duration-500 max-w-4xl mx-auto">
-               <div className="w-24 h-24 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl font-black shadow-inner">{userName.charAt(0)}</div>
-               <h2 className="text-4xl font-black mb-4 tracking-tighter">Hola, {userName}</h2>
-               <p className="text-gray-500 font-medium mb-12">Gestiona tus alertas y favoritos del municipio.</p>
-               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                 <button onClick={() => handleNavigate(ViewState.HOME)} className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-blue-700 transition-all">Explorar</button>
-                 <button onClick={handleLogout} className="px-10 py-4 bg-white text-red-600 rounded-2xl font-black uppercase tracking-widest border-2 border-red-50 hover:bg-red-50 transition-all">Cerrar Sesión</button>
-               </div>
-            </div>
-         )}
       </main>
       {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && <Footer t={t} />}
     </div>
