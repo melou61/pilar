@@ -32,21 +32,21 @@ const UI_RESOURCES: Record<string, any> = {
     profile: { title: 'Mi Espacio', logout: 'Cerrar Sesión', favorites: 'Mis Favoritos', alerts: 'Mis Alertas', my_events: 'Agenda Personal', no_favs: 'Aún no tienes favoritos.' },
     beaches_page: { 
         title: 'Nuestras Playas', 
-        subtitle: '4 kilómetros de arena fina y aguas cristalinas.', 
-        coastal: 'Litoral del Pilar', 
+        subtitle: 'Descubre 4 kilómetros de arena fina, aguas turquesas y calas vírgenes premiadas internacionalmente.', 
+        coastal: 'El Litoral del Pilar', 
         blue_flag: 'Bandera Azul', 
-        open: 'Abierta', 
-        fact_title: 'Un litoral premiado', 
-        fact_desc: 'Pilar de la Horadada ostenta numerosas Banderas Azules y distinciones Q de Calidad Turística.',
+        open: 'Abierta Ahora', 
+        fact_title: 'Excelencia Mediterránea', 
+        fact_desc: 'Pilar de la Horadada lidera la calidad costera en la Costa Blanca con récords de Banderas Azules.',
         list: { 
-            milpalmeras: { name: 'Mil Palmeras', desc: 'Playa natural de gran amplitud, ideal para familias y con todos los servicios.' },
-            rocamar: { name: 'Rocamar', desc: 'Sucesión de pequeñas calas de roca y arena, perfectas para el relax y el snorkel.' },
-            jesuitas: { name: 'Jesuitas', desc: 'Amplia playa urbana con gran ambiente joven y redes de vóley instaladas.' },
-            elconde: { name: 'El Conde', desc: 'Ubicada a los pies de la emblemática Torre Vigía, combina historia y aguas tranquilas.' },
-            elpuerto: { name: 'El Puerto', desc: 'Junto al puerto deportivo, cuenta con accesos excelentes y un ambiente náutico único.' },
-            lasvillas: { name: 'Las Villas', desc: 'Playa de ambiente residencial y familiar, ideal para largos paseos al atardecer.' },
-            higuericas: { name: 'Las Higuericas', desc: 'Famosa por sus dunas y pasarelas de madera. Es un referente de sostenibilidad y belleza.' },
-            elmojon: { name: 'El Mojón', desc: 'Limitando con el parque natural, es una playa tranquila de aguas transparentes.' }
+            milpalmeras: { name: 'Mil Palmeras', desc: 'Un paraíso de arena blanca y aguas tranquilas. Es la playa familiar por excelencia, con amplios servicios y un ambiente vibrante.' },
+            rocamar: { name: 'Rocamar', desc: 'Para quienes buscan paz. Una sucesión de calas mágicas talladas en la roca, ideales para el snorkel y la desconexión total.' },
+            jesuitas: { name: 'Jesuitas', desc: 'Energía y deporte. Una gran playa urbana con redes de voley y un ambiente joven inigualable bajo el sol del Mediterráneo.' },
+            elconde: { name: 'El Conde', desc: 'Donde la historia toca el mar. Bañarse a los pies de la Torre Vigía del siglo XVI es una experiencia única en el mundo.' },
+            elpuerto: { name: 'El Puerto', desc: 'Elegancia náutica. Situada junto al puerto deportivo, ofrece aguas serenas y una oferta gastronómica de primer nivel a pie de arena.' },
+            lasvillas: { name: 'Las Villas', desc: 'Tradición y relax. Una playa residencial perfecta para paseos interminables y disfrutar de la brisa marina en familia.' },
+            higuericas: { name: 'Las Higuericas', desc: 'La joya natural. Famosa por sus dunas protegidas y sus icónicas pasarelas de madera. Sostenibilidad y belleza pura.' },
+            elmojon: { name: 'El Mojón', desc: 'Frontera de naturaleza. Lindando con las Salinas de San Pedro, es el rincón ideal para amantes de la fauna y la calma absoluta.' }
         } 
     }
   },
@@ -67,21 +67,21 @@ const UI_RESOURCES: Record<string, any> = {
     profile: { title: 'My Space', logout: 'Logout', favorites: 'My Favorites', alerts: 'My Alerts', my_events: 'Personal Agenda', no_favs: 'No favorites yet.' },
     beaches_page: { 
         title: 'Our Beaches', 
-        subtitle: '4 kilometers of fine sand and crystal clear waters.', 
+        subtitle: 'Explore 4 kilometers of fine sand, turquoise waters, and internationally awarded pristine coves.', 
         coastal: 'Pilar Coastline', 
         blue_flag: 'Blue Flag', 
-        open: 'Open', 
-        fact_title: 'Award-winning coast', 
-        fact_desc: 'Pilar de la Horadada holds numerous Blue Flags and Q for Tourism Quality distinctions.',
+        open: 'Open Now', 
+        fact_title: 'Mediterranean Excellence', 
+        fact_desc: 'Pilar de la Horadada leads coastal quality in the Costa Blanca with record Blue Flag counts.',
         list: { 
-            milpalmeras: { name: 'Mil Palmeras', desc: 'Large natural beach, ideal for families and with full services.' },
-            rocamar: { name: 'Rocamar', desc: 'Sequence of small rock and sand coves, perfect for relaxation and snorkeling.' },
-            jesuitas: { name: 'Jesuitas', desc: 'Wide urban beach with a great young atmosphere and volleyball nets.' },
-            elconde: { name: 'El Conde', desc: 'Located at the foot of the iconic Watchtower, combining history and calm waters.' },
-            elpuerto: { name: 'El Puerto', desc: 'Next to the marina, with excellent access and a unique nautical atmosphere.' },
-            lasvillas: { name: 'Las Villas', desc: 'Residential and family atmosphere beach, ideal for long sunset walks.' },
-            higuericas: { name: 'Las Higuericas', desc: 'Famous for its dunes and wooden walkways. A reference for sustainability and beauty.' },
-            elmojon: { name: 'El Mojón', desc: 'Bordering the natural park, it is a quiet beach with transparent waters.' }
+            milpalmeras: { name: 'Mil Palmeras', desc: 'A paradise of white sand and calm waters. It is the family beach par excellence, with extensive services and a vibrant atmosphere.' },
+            rocamar: { name: 'Rocamar', desc: 'For those seeking peace. A sequence of magical coves carved into the rock, ideal for snorkeling and total disconnection.' },
+            jesuitas: { name: 'Jesuitas', desc: 'Energy and sport. A large urban beach with volleyball nets and a young atmosphere under the Mediterranean sun.' },
+            elconde: { name: 'El Conde', desc: 'Where history touches the sea. Swimming at the foot of the 16th-century Watchtower is a unique world experience.' },
+            elpuerto: { name: 'El Puerto', desc: 'Nautical elegance. Located next to the marina, it offers serene waters and top-tier dining right on the sand.' },
+            lasvillas: { name: 'Las Villas', desc: 'Tradition and relaxation. A residential beach perfect for endless walks and enjoying the sea breeze with the family.' },
+            higuericas: { name: 'Las Higuericas', desc: 'The natural jewel. Famous for its protected dunes and iconic wooden walkways. Sustainability and pure beauty.' },
+            elmojon: { name: 'El Mojón', desc: 'Nature boundary. Bordering the San Pedro Salt Pans, it is the ideal spot for wildlife lovers and absolute calm.' }
         } 
     }
   }

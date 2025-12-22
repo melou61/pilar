@@ -51,23 +51,13 @@ const App: React.FC = () => {
   const [myEvents, setMyEvents] = useState<string[]>([]);
   const [ads, setAds] = useState<Ad[]>(INITIAL_ADS);
   const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
+  
+  // Ahora el censo empieza limpio de promociones por defecto para no molestar en la demo
   const [businesses, setBusinesses] = useState<CensusItem[]>(() => {
-    const base = [
+    return [
       ...COMMERCIAL_CENSUS.flatMap(c => c.items),
       ...DINING_CENSUS.flatMap(c => c.items)
     ];
-    return base.map(b => b.id === 's1' ? {
-      ...b,
-      promotion: {
-        title: '¡Descuento Vecino!',
-        description: 'Muestra esta pantalla en caja para un 10% de descuento directo.',
-        proximityRange: 'NEAR' as const,
-        frequencyPerDay: 1,
-        maxDistanceMeters: 5,
-        activeTimeMinutes: 30,
-        discountCode: 'PILAR2025'
-      }
-    } : b);
   });
   
   const [selectedBusinessId, setSelectedBusinessId] = useState<string | null>(null);
@@ -93,14 +83,15 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Beacon Simulator (Refined)
+  // Beacon Simulator (Solo salta si el Admin activa una promo)
   useEffect(() => {
     if (beaconsEnabled && currentView === ViewState.HOME) {
       const timer = setTimeout(() => {
-        // Only trigger if a shop has an active promotion. 
-        // If promotion is undefined (removed in admin), nothing happens.
+        // Busca si algún comercio tiene una promoción activada manualmente
         const shopWithPromo = businesses.find(b => b.promotion && b.promotion.title);
-        if (shopWithPromo) setActiveBeaconShop(shopWithPromo);
+        if (shopWithPromo) {
+            setActiveBeaconShop(shopWithPromo);
+        }
       }, 12000);
       return () => clearTimeout(timer);
     }
