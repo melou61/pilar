@@ -9,8 +9,8 @@ export const MOCK_NEWS: NewsItem[] = [
 ];
 
 export const MOCK_EVENTS: Event[] = [
-  { id: 'fiestas-patronales', title: 'Fiestas del Pilar', category: 'TRADICIÓN', date: 'Octubre 2025', location: 'Centro', description: 'Carrozas y ofrendas.', longDescription: 'El Desfile de Carrozas es único.', imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', isFestival: true, lat: 37.8653, lng: -0.7932 },
-  { id: 'semana-santa', title: 'Semana Santa', category: 'RELIGIOSO', date: 'Abril 2025', location: 'Centro', description: 'Procesiones solemnes.', longDescription: 'Tallas de Sánchez Lozano.', imageUrl: 'https://images.unsplash.com/photo-1523424162985-1d4889c2c62c?auto=format&fit=crop&w=800&q=80', isFestival: true, lat: 37.8655, lng: -0.7928 }
+  { id: 'fiestas-patronales', title: 'Fiestas del Pilar', category: 'TRADICIÓN', date: 'Octubre 2025', location: 'Centro', description: 'Carrozas y ofrendas.', longDescription: 'El Desfile de Carrozas es único.', imageUrl: 'https://images.unsplash.com/photo-1467810563316-b5476525c0f9?auto=format&fit=crop&w=1200&q=80', isFestival: true, lat: 37.8653, lng: -0.7932 },
+  { id: 'semana-santa', title: 'Semana Santa', category: 'RELIGIOSO', date: 'Abril 2025', location: 'Centro', description: 'Procesiones solemnes.', longDescription: 'Tallas de Sánchez Lozano.', imageUrl: 'https://images.unsplash.com/photo-1545653701-d853757659bc?auto=format&fit=crop&w=1200&q=80', isFestival: true, lat: 37.8655, lng: -0.7928 }
 ];
 
 export const MOCK_BEACHES = [
@@ -77,75 +77,66 @@ export const MOCK_BEACHES = [
     waterTemp: '23°C',
     uvIndex: 6,
     seaState: 'Calma'
-  },
-  { 
-    id: 'elpuerto', 
-    name: 'El Puerto', 
-    image: 'https://images.unsplash.com/photo-1444676632488-26a136c45b9b?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.6, 
-    services: ['Marina', 'Rampa Accesible', 'Restaurantes', 'Vela'],
-    lat: 37.8610, lng: -0.7820,
-    length: '115m',
-    sandType: 'Arena Fina',
-    occupancy: 'Media',
-    waterTemp: '24°C',
-    uvIndex: 7,
-    seaState: 'Calma'
-  },
-  { 
-    id: 'lasvillas', 
-    name: 'Las Villas', 
-    image: 'https://images.unsplash.com/photo-1515238152791-8216bfdf89a7?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: false, 
-    status: 'Abierta', 
-    rating: 4.7, 
-    services: ['Paseo', 'Pesca', 'Familiar', 'Accesible'],
-    lat: 37.8570, lng: -0.7815,
-    length: '410m',
-    sandType: 'Arena Blanca',
-    occupancy: 'Media',
-    waterTemp: '24°C',
-    uvIndex: 7,
-    seaState: 'Calma'
-  },
-  { 
-    id: 'higuericas', 
-    name: 'Las Higuericas', 
-    image: 'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.9, 
-    services: ['Dunas', 'Chiringuito', 'Madera', 'Parking', 'Sostenible', 'Música'],
-    lat: 37.8540, lng: -0.7830,
-    length: '1.050m',
-    sandType: 'Arena Fina/Dunas',
-    occupancy: 'Alta',
-    waterTemp: '25°C',
-    uvIndex: 8,
-    seaState: 'Óptimo'
-  },
-  { 
-    id: 'elmojon', 
-    name: 'El Mojón', 
-    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: false, 
-    status: 'Abierta', 
-    rating: 4.5, 
-    services: ['Parque Natural', 'Tranquilidad', 'Sendero Botánico', 'Snorkel'],
-    lat: 37.8480, lng: -0.7860,
-    length: '465m',
-    sandType: 'Arena Fina',
-    occupancy: 'Baja',
-    waterTemp: '25°C',
-    uvIndex: 8,
-    seaState: 'Calma'
   }
 ];
 
 export const MOCK_SIGHTSEEING = [
-  { id: 'torre-vigia', name: 'Torre de la Horadada', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', category: 'Monumento', century: 'XVI', lat: 37.8653, lng: -0.7845 }
+  { 
+    id: 'torre-vigia', 
+    name: 'Torre de la Horadada', 
+    image: 'https://images.unsplash.com/photo-1548625361-0268523236f2?auto=format&fit=crop&w=1200&q=80', 
+    category: 'Monumento', 
+    century: 'XVI', 
+    lat: 37.8653, lng: -0.7845,
+    style: 'Renacentista / Defensiva',
+    material: 'Piedra de Sillería',
+    visitTime: '45 min',
+    crowdLevel: 'Media',
+    status: 'Excelente',
+    amenities: ['Audioguía QR', 'Parking Cercano', 'Mirador', 'Información Histórica', 'Accesible']
+  },
+  { 
+    id: 'iglesia-pilar', 
+    name: 'Iglesia Ntra. Sra. del Pilar', 
+    image: 'https://images.unsplash.com/photo-1541432999881-197771ec8021?auto=format&fit=crop&w=1200&q=80', 
+    category: 'Religioso', 
+    century: 'XX (Base XVIII)', 
+    lat: 37.8655, lng: -0.7928,
+    style: 'Neoclásico / Regionalista',
+    material: 'Ladrillo y Piedra',
+    visitTime: '30 min',
+    crowdLevel: 'Baja',
+    status: 'Activo',
+    amenities: ['Entrada Libre', 'Zona Peatonal', 'Cerca de Comercios', 'Arte Sacro']
+  },
+  { 
+    id: 'museo-etnologico', 
+    name: 'Museo Arqueológico PH', 
+    image: 'https://images.unsplash.com/photo-1518998053574-53ee81be84ac?auto=format&fit=crop&w=1200&q=80', 
+    category: 'Museo', 
+    century: 'Contemporáneo', 
+    lat: 37.8660, lng: -0.7930,
+    style: 'Moderno / Educativo',
+    material: 'Vidrio y Hormigón',
+    visitTime: '1.5 h',
+    crowdLevel: 'Baja',
+    status: 'Abierto',
+    amenities: ['Aire Acondicionado', 'Accesible', 'Visitas Guiadas', 'Tienda de Recuerdos']
+  },
+  { 
+    id: 'canteras-romanas', 
+    name: 'Canteras Romanas', 
+    image: 'https://images.unsplash.com/photo-1449156001931-828332736075?auto=format&fit=crop&w=1200&q=80', 
+    category: 'Yacimiento', 
+    century: 'I a.C.', 
+    lat: 37.8540, lng: -0.7850,
+    style: 'Ingeniería Romana',
+    material: 'Roca Natural',
+    visitTime: '1 h',
+    crowdLevel: 'Baja',
+    status: 'Visitable',
+    amenities: ['Senderos Marítimos', 'Panel Informativo', 'Snorkel Cercano', 'Espacio Natural']
+  }
 ];
 
 export const ACTIVITIES_LIST = [
@@ -155,15 +146,11 @@ export const ACTIVITIES_LIST = [
 // --- COMERCIOS ---
 const SHOPPING_ITEMS: CensusItem[] = [
   { id: 's1', name: 'Modas Lucía', address: 'C/ Mayor 12', phone: '965351010', category: 'Moda', zone: 'CENTRO', description: 'Boutique exclusiva con las mejores marcas nacionales e internacionales.', rating: 4.9, reviewCount: 120, isOpen: true, hours: { weekdays: '10-14, 17-20', weekend: '10-14' }, images: ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80'], lat: 37.866, lng: -0.793 },
-  { id: 's2', name: 'Ferretería El Pilar', address: 'C/ del Mar 5', phone: '965351234', category: 'Hogar', zone: 'CENTRO', description: 'Todo lo que necesitas para tu hogar y jardín.', rating: 4.7, reviewCount: 80, isOpen: true, hours: { weekdays: '9-14, 16-20', weekend: '9-14' }, images: ['https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=800&q=80'], lat: 37.865, lng: -0.791 },
-  { id: 's3', name: 'Pastelería Vicente', address: 'Av. Constitución 18', phone: '965351122', category: 'Alimentación', zone: 'CENTRO', description: 'Dulces artesanos y pan tradicional recién hecho.', rating: 5.0, reviewCount: 200, isOpen: true, hours: { weekdays: '8-21', weekend: '8-21' }, images: ['https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80'], lat: 37.864, lng: -0.794 },
-  { id: 's4', name: 'Farmacia Lda. Maria', address: 'C/ Mayor 4', phone: '965351000', category: 'Salud', zone: 'CENTRO', description: 'Atención farmacéutica personalizada 12h.', rating: 4.8, reviewCount: 30, isOpen: true, hours: { weekdays: '9-21', weekend: '9-14' }, images: ['https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&w=800&q=80'], lat: 37.866, lng: -0.792 },
-  { id: 's5', name: 'Estilistas Vogue', address: 'C/ Mayor 40', phone: '965351819', category: 'Belleza', zone: 'CENTRO', description: 'Salón de belleza vanguardista.', rating: 4.9, reviewCount: 70, isOpen: true, hours: { weekdays: '9-19', weekend: '9-14' }, images: ['https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80'], lat: 37.865, lng: -0.793 }
+  { id: 's2', name: 'Ferretería El Pilar', address: 'C/ del Mar 5', phone: '965351234', category: 'Hogar', zone: 'CENTRO', description: 'Todo lo que necesitas para tu hogar y jardín.', rating: 4.7, reviewCount: 80, isOpen: true, hours: { weekdays: '9-14, 16-20', weekend: '9-14' }, images: ['https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=800&q=80'], lat: 37.865, lng: -0.791 }
 ];
 
 const DINING_ITEMS: CensusItem[] = [
-  { id: 'r1', name: 'La Mamma', address: 'C/ Mayor 45', phone: '965351515', category: 'Italiano', zone: 'CENTRO', description: 'La mejor pasta artesana del municipio.', rating: 4.6, reviewCount: 450, priceRange: '€€', isOpen: true, hours: { weekdays: '19-23', weekend: '13-23' }, images: ['https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'], lat: 37.864, lng: -0.793 },
-  { id: 'r2', name: 'Pilar Burguer', address: 'Av. Constitución', phone: '965351212', category: 'Internacional', zone: 'CENTRO', description: 'Hamburguesas gourmet con productos locales.', rating: 4.5, reviewCount: 290, priceRange: '€€', isOpen: true, hours: { weekdays: '19-23', weekend: '13-00' }, images: ['https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80'], lat: 37.863, lng: -0.794 }
+  { id: 'r1', name: 'La Mamma', address: 'C/ Mayor 45', phone: '965351515', category: 'Italiano', zone: 'CENTRO', description: 'La mejor pasta artesana del municipio.', rating: 4.6, reviewCount: 450, priceRange: '€€', isOpen: true, hours: { weekdays: '19-23', weekend: '13-23' }, images: ['https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'], lat: 37.864, lng: -0.793 }
 ];
 
 export const COMMERCIAL_CENSUS: CensusCategory[] = [ { id: 'shopping', title: 'Comercio Local', items: SHOPPING_ITEMS } ];

@@ -17,10 +17,17 @@ interface HomeViewProps {
 }
 
 const SHORTS_BASE = [
-  { id: 's1', videoUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80', views: '2.4k' },
-  { id: 's2', videoUrl: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', views: '1.8k' },
-  { id: 's3', videoUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80', views: '3.1k' },
-  { id: 's4', videoUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', views: '12k' },
+  { id: 's1', videoUrl: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80', views: '2.4k' },
+  { id: 's2', videoUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80', views: '1.8k' },
+  { id: 's3', videoUrl: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', views: '3.1k' },
+  { id: 's4', videoUrl: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80', views: '12k' },
+];
+
+const MOMENTS_GALLERY = [
+  'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=800&q=80', // Dunas Higuericas
+  'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', // Río Seco
+  'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Gastronomía
+  'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80', // Torre
 ];
 
 export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroImages, currentHeroIndex, ads }) => {
@@ -121,9 +128,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-2">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className={`aspect-square rounded-[30px] overflow-hidden shadow-xl border border-gray-100 relative group cursor-zoom-in ${i % 2 === 0 ? 'mt-8' : ''}`}>
-                <img src={`https://images.unsplash.com/photo-${1500000000000 + i * 100000}?auto=format&fit=crop&w=600&q=80`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" />
+            {MOMENTS_GALLERY.map((img, i) => (
+              <div key={i} className={`aspect-[3/4] md:aspect-square rounded-[30px] overflow-hidden shadow-xl border border-gray-100 relative group cursor-zoom-in ${i % 2 === 0 ? 'mt-8' : ''}`}>
+                <img src={img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" />
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                   <ImageIcon className="text-white" size={32} />
+                </div>
               </div>
             ))}
           </div>

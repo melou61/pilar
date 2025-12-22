@@ -48,6 +48,16 @@ const UI_RESOURCES: Record<string, any> = {
             higuericas: { name: 'Las Higuericas', desc: 'La joya natural. Famosa por sus dunas protegidas y sus icónicas pasarelas de madera. Sostenibilidad y belleza pura.' },
             elmojon: { name: 'El Mojón', desc: 'Frontera de naturaleza. Lindando con las Salinas de San Pedro, es el rincón ideal para amantes de la fauna y la calma absoluta.' }
         } 
+    },
+    sightseeing_page: {
+        title: 'Joyas del Patrimonio',
+        subtitle: 'Un viaje en el tiempo desde las calzadas romanas hasta la majestuosa Torre Vigía que custodia nuestro mar.',
+        list: {
+            'torre-vigia': { name: 'Torre de la Horadada', desc: 'Símbolo indiscutible de nuestra costa. Construida en 1591 para proteger el litoral de los ataques piratas, hoy es un vigía eterno del Mediterráneo.' },
+            'iglesia-pilar': { name: 'Nuestra Sra. del Pilar', desc: 'El corazón espiritual del municipio. Destaca por su torre campanario y un interior de gran belleza que alberga la esencia de nuestra fe y tradición.' },
+            'museo-etnologico': { name: 'Museo Arqueológico', desc: 'Un espacio moderno para descubrir Thiar. Desde restos romanos de la Vía Augusta hasta útiles agrícolas que forjaron nuestra identidad.' },
+            'canteras-romanas': { name: 'Canteras Romanas', desc: 'Ingeniería milenaria al borde del mar. Un yacimiento único donde se extraía la piedra para pavimentar la mítica Vía Augusta.' }
+        }
     }
   },
   en: { 
@@ -83,6 +93,16 @@ const UI_RESOURCES: Record<string, any> = {
             higuericas: { name: 'Las Higuericas', desc: 'The natural jewel. Famous for its protected dunes and iconic wooden walkways. Sustainability and pure beauty.' },
             elmojon: { name: 'El Mojón', desc: 'Nature boundary. Bordering the San Pedro Salt Pans, it is the ideal spot for wildlife lovers and absolute calm.' }
         } 
+    },
+    sightseeing_page: {
+        title: 'Heritage Jewels',
+        subtitle: 'A journey through time from Roman roads to the majestic Watchtower guarding our sea.',
+        list: {
+            'torre-vigia': { name: 'Horadada Tower', desc: 'Undisputed symbol of our coast. Built in 1591 to protect against pirate attacks, today it is an eternal guardian of the Mediterranean.' },
+            'iglesia-pilar': { name: 'Church of Our Lady of Pilar', desc: 'The spiritual heart of the town. Notable for its bell tower and a beautiful interior that holds our faith and tradition.' },
+            'museo-etnologico': { name: 'Archaeological Museum', desc: 'A modern space to discover Thiar. From Roman remains of the Via Augusta to the tools that forged our identity.' },
+            'canteras-romanas': { name: 'Roman Quarries', desc: 'Millenary engineering by the sea. A unique site where stone was extracted to pave the mythical Via Augusta.' }
+        }
     }
   }
 };
@@ -103,6 +123,7 @@ const createLang = (code: string, langLabel: string): any => {
   const fr = data.forum || en.forum;
   const pr = data.profile || en.profile;
   const bch = data.beaches_page || en.beaches_page;
+  const sig = data.sightseeing_page || en.sightseeing_page;
 
   return {
     menu: { home: m[0], news: m[1], beaches: m[2], sightseeing: m[3], activities: m[4], dining: m[5], shopping: m[6], health: m[7], services: m[8], events: m[9], forum: m[10], title: m[11], ai: m[12], profile: m[13], map: m[14], admin: m[15] },
@@ -120,7 +141,7 @@ const createLang = (code: string, langLabel: string): any => {
     event_detail: { pilar_event: 'EVENTO PH', date_time: 'FECHA Y HORA', main_location: 'UBICACIÓN' },
     events_data: ed,
     beaches_page: bch,
-    sightseeing_page: { title: m[3], subtitle: h, list: { 'torre-vigia': { name: 'Torre de la Horadada', desc: h } } },
+    sightseeing_page: sig,
     activities_page: { title: m[4], subtitle: h, list: { 'rio-seco': { name: 'Río Seco', desc: h } } },
     business: { history: 'Story' },
     search: srch,
