@@ -42,17 +42,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
             <div className="flex items-center gap-3 text-sm font-black mb-8 uppercase tracking-[0.4em] text-blue-400">
               <MapPin size={24} /> PILAR DE LA HORADADA
             </div>
-            <h2 className="text-7xl sm:text-[120px] font-black mb-10 leading-[0.85] tracking-tighter">
+            <h2 className="text-7xl sm:text-[120px] font-black mb-2 leading-[0.85] tracking-tighter">
               {hp.pilar_vivo?.split(' ')[0]}<br/><span className="text-blue-400">{hp.pilar_vivo?.split(' ')[1] || 'VIVO'}</span>
             </h2>
-            <div className="flex flex-wrap gap-4">
-               <button onClick={() => onNavigate(ViewState.MAP)} className="bg-white text-gray-900 px-10 py-5 rounded-[30px] font-black text-sm flex items-center gap-3 shadow-2xl hover:scale-105 transition-all">
-                 <MapIcon size={20} className="text-blue-600" /> {t.menu.map?.toUpperCase()}
-               </button>
-               <button onClick={() => onNavigate(ViewState.AI_CHAT)} className="bg-blue-600/20 backdrop-blur-xl text-white border border-white/30 px-10 py-5 rounded-[30px] font-black text-sm flex items-center gap-3 shadow-2xl hover:bg-blue-600 transition-all">
-                 <Sparkles size={20} /> {t.menu.ai?.toUpperCase()}
-               </button>
-            </div>
           </div>
         </div>
       </section>

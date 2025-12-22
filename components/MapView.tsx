@@ -45,10 +45,12 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
           mapInstanceRef.current = map;
           setLeafletMap(map);
           
-          // CRITICAL: Ensure map fills the flex container correctly
+          // CRITICAL: Ensure map fills the flex container correctly immediately
           setTimeout(() => {
-            map.invalidateSize();
-          }, 500);
+            if (mapInstanceRef.current) {
+              mapInstanceRef.current.invalidateSize();
+            }
+          }, 400);
 
           clearInterval(checkInterval);
         } catch (err) {
@@ -57,8 +59,8 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
       }
     };
 
-    const initialTimer = setTimeout(initMap, 100);
-    checkInterval = setInterval(initMap, 1000);
+    const initialTimer = setTimeout(initMap, 50);
+    checkInterval = setInterval(initMap, 800);
 
     return () => {
       isDestroyedRef.current = true;
@@ -73,17 +75,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
     };
   }, []);
 
-  // Update map size when window resizes to keep it "totally visible"
-  useEffect(() => {
-    const handleResize = () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.invalidateSize();
-      }
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+  // Update markers based on filters
   useEffect(() => {
     if (!leafletMap || typeof L === 'undefined' || isDestroyedRef.current) return;
 
@@ -176,18 +168,20 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
   return (
     <div className="flex flex-col h-full bg-white animate-in fade-in duration-500 overflow-hidden">
       
-      {/* FRANJA SUPERIOR: ANUNCIO */}
+      {/* 1. FRANJA SUPERIOR: ANUNCIO BLANCO */}
       <div className="bg-white px-8 py-5 shrink-0 border-b border-gray-100 flex items-center justify-center z-[200]">
         <div className="w-full max-w-4xl">
+          {/* El AdSpot ya usa aspect-[3.5/1] según el archivo anterior */}
           <AdSpot ads={ads} position="page-top" className="my-0" />
         </div>
       </div>
 
-      {/* ÁREA CENTRAL: MAPA (OCUPACIÓN TOTAL DEL ESPACIO) */}
-      <div className="relative flex-1 bg-gray-50 overflow-hidden">
+      {/* 2. ÁREA CENTRAL: MAPA TOTALMENTE VISIBLE */}
+      <div className="relative flex-1 bg-gray-50 overflow-hidden border-y border-gray-100">
+        {/* Usamos absolute inset-0 para que el mapa rellene el flex-1 al 100% */}
         <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-10" />
         
-        {/* Filtros sobre el mapa */}
+        {/* Filtros Flotantes sobre el mapa */}
         <div className="absolute top-6 left-0 right-0 z-[500] flex justify-center px-4">
           <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-2xl flex gap-1 overflow-x-auto no-scrollbar max-w-full">
             {[
@@ -212,7 +206,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
           </div>
         </div>
 
-        {/* Botón Ubicación */}
+        {/* Botón Ubicación Flotante */}
         <button 
           onClick={handleMyLocation} 
           className={`absolute ${selectedItem ? 'bottom-[330px]' : 'bottom-10'} right-8 z-[1000] bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95`}
@@ -221,20 +215,25 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
           <Navigation size={28} className={isLocating ? 'animate-spin opacity-50' : ''} />
         </button>
 
-        {/* Card de Información Seleccionada */}
+        {/* Card de Información Seleccionada sobre el mapa */}
         {selectedItem && (
           <div className="absolute bottom-10 left-8 right-8 z-[1001] animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto">
               <div className="relative h-40 w-full">
                 <img src={selectedItem.image || (selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl)} className="w-full h-full object-cover" alt="" />
-                <button onClick={() => setSelectedItem(null)} className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-xl text-white rounded-full"><X size={18} /></button>
+                <button onClick={() => setSelectedItem(null)} className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-xl text-white rounded-full transition-all active:scale-90">
+                  <X size={18} />
+                </button>
               </div>
               <div className="p-6">
                 <h3 className="font-black text-gray-900 text-xl truncate mb-1">{selectedItem.name || selectedItem.title}</h3>
                 <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">
                   {selectedItem.type === 'ACTIVE' ? 'PH Experiencia' : selectedItem.type === 'CULTURE' ? 'Patrimonio' : selectedItem.type === 'BEACH' ? 'Playa' : selectedItem.category}
                 </p>
-                <p className="text-gray-500 text-xs flex items-center gap-2 font-medium mb-6"><MapPin size={14} className="text-blue-500" /><span className="truncate">{selectedItem.address || selectedItem.location || 'Pilar de la Horadada'}</span></p>
+                <p className="text-gray-500 text-xs flex items-center gap-2 font-medium mb-6">
+                  <MapPin size={14} className="text-blue-500" />
+                  <span className="truncate">{selectedItem.address || selectedItem.location || 'Pilar de la Horadada'}</span>
+                </p>
                 <button 
                   onClick={() => onNavigate(
                     selectedItem.type === 'ACTIVE' ? ViewState.ACTIVITIES : 
@@ -243,7 +242,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
                     ViewState.SHOPPING, 
                     selectedItem.id
                   )} 
-                  className="w-full py-4 bg-blue-600 text-white rounded-[20px] font-black text-sm shadow-xl"
+                  className="w-full py-4 bg-blue-600 text-white rounded-[20px] font-black text-sm shadow-xl active:scale-95 transition-transform"
                 >
                   Ver Detalles
                 </button>
@@ -253,7 +252,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
         )}
       </div>
 
-      {/* FRANJA INFERIOR: ANUNCIO */}
+      {/* 3. FRANJA INFERIOR: ANUNCIO BLANCO */}
       <div className="bg-white px-8 py-5 shrink-0 border-t border-gray-100 flex items-center justify-center z-[200]">
         <div className="w-full max-w-4xl">
           <AdSpot ads={ads} position="page-bottom" className="my-0" />
