@@ -23,6 +23,7 @@ import { AIChatView } from './components/AIChatView';
 import { HomeView } from './components/HomeView';
 import { AdminDashboard } from './components/AdminDashboard';
 import { ShareModal } from './components/ShareModal';
+import { PostcardCreator } from './components/PostcardCreator';
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -164,6 +165,7 @@ const App: React.FC = () => {
          {currentView === ViewState.EVENTS && <EventsView t={t} events={events} onShare={(e) => handleShare({ title: e.title, text: e.description })} onAddToCalendar={() => {}} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={(id) => setMyEvents(prev => prev.includes(id) ? prev.filter(eid => eid !== id) : [...prev, id])} />}
          {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} langLabel={currentLang.label} onBack={() => handleNavigate(ViewState.HOME)} />}
          {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} />}
+         {currentView === ViewState.POSTCARD && <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
          {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as AdminRole} />}
          {currentView === ViewState.PROFILE && (
             <div className="p-10 text-center animate-in fade-in duration-500 max-w-4xl mx-auto">
@@ -177,7 +179,7 @@ const App: React.FC = () => {
             </div>
          )}
       </main>
-      {currentView !== ViewState.ADMIN && <Footer t={t} />}
+      {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && <Footer t={t} />}
     </div>
   );
 };

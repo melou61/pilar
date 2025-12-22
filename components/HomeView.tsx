@@ -3,7 +3,7 @@ import React from 'react';
 import { ViewState, Event, Ad } from '../types';
 import { 
   Sparkles, MapIcon, ChevronRight, 
-  ArrowRight, Bot, MapPin, Play, Camera, Image as ImageIcon, Newspaper, MessageSquare
+  ArrowRight, Bot, MapPin, Play, Camera, Image as ImageIcon, Newspaper, MessageSquare, Wand2
 } from './Icons';
 import { AdSpot } from './AdSpot';
 
@@ -94,16 +94,21 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           </div>
         </section>
 
-        {/* MOMENTOS PH */}
+        {/* MOMENTOS PH + AI Postcard */}
         <section className="space-y-8">
-          <div className="flex justify-between items-end px-4">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end px-4 gap-6">
             <div>
               <h3 className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.4em] mb-2">{hp.gallery_label}</h3>
               <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">{hp.gallery_big}</h2>
             </div>
-            <button className="bg-emerald-50 text-emerald-600 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
-              <Camera size={16} /> {t.common.upload}
-            </button>
+            <div className="flex gap-3">
+              <button onClick={() => onNavigate(ViewState.POSTCARD)} className="bg-blue-600 text-white px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-blue-200 animate-bounce">
+                <Wand2 size={16} /> Crear Postal IA
+              </button>
+              <button className="bg-emerald-50 text-emerald-600 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 border border-emerald-100">
+                <Camera size={16} /> {t.common.upload}
+              </button>
+            </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-2">
             {[1, 2, 3, 4].map(i => (

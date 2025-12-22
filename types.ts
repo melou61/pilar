@@ -19,7 +19,8 @@ export enum ViewState {
   ADMIN = 'ADMIN',
   AI_CHAT = 'AI_CHAT',
   PROFILE = 'PROFILE',
-  SEARCH = 'SEARCH'
+  SEARCH = 'SEARCH',
+  POSTCARD = 'POSTCARD'
 }
 
 export type NewsCategory = 'GENERAL' | 'DIFUNTOS' | 'TRABAJO' | 'CASAS' | 'OTROS';
@@ -73,10 +74,10 @@ export interface Promotion {
   beaconUuid?: string;
   beaconHardwareId?: string;
   proximityRange: 'IMMEDIATE' | 'NEAR' | 'FAR';
-  frequencyPerDay: number; // Veces de pital
-  maxDistanceMeters: number; // Distancia
-  activeTimeMinutes: number; // Tiempo de validez del mensaje
-  interactionsCount?: number; // Cuántos han "pitado"
+  frequencyPerDay: number; 
+  maxDistanceMeters: number; 
+  activeTimeMinutes: number; 
+  interactionsCount?: number;
 }
 
 export interface CensusItem {
