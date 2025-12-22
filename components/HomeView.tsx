@@ -3,7 +3,7 @@ import React from 'react';
 import { ViewState, Event, Ad } from '../types';
 import { 
   Sparkles, MapIcon, ChevronRight, 
-  ArrowRight, Bot, MapPin, Play, Camera, Image as ImageIcon, Newspaper, MessageSquare, Wand2, Radar
+  ArrowRight, Bot, MapPin, Play, Camera, Image as ImageIcon, Newspaper, MessageSquare, Wand2, Radar, Baby
 } from './Icons';
 import { AdSpot } from './AdSpot';
 
@@ -55,6 +55,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
             <h2 className="text-7xl sm:text-[120px] font-black mb-2 leading-[0.85] tracking-tighter">
               {hp.pilar_vivo?.split(' ')[0]}<br/><span className="text-blue-400">{hp.pilar_vivo?.split(' ')[1] || 'VIVO'}</span>
             </h2>
+            <p className="text-white/80 text-xl font-bold italic drop-shadow-lg">{t.hero.subtitle}</p>
           </div>
         </div>
       </section>
@@ -64,6 +65,25 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         <div className="px-4 pt-4">
            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
         </div>
+
+        {/* KIDS LEARNING CARD */}
+        <section className="bg-gradient-to-br from-yellow-400 via-orange-400 to-yellow-500 rounded-[50px] p-10 text-white shadow-2xl relative overflow-hidden group cursor-pointer hover:scale-[1.02] transition-all" onClick={() => onNavigate(ViewState.KIDS)}>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/20 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2" />
+          <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
+            <div className="w-32 h-32 bg-white/20 backdrop-blur-2xl rounded-[40px] flex items-center justify-center border border-white/30 shrink-0 shadow-xl">
+               <Baby size={64} className="text-white animate-bounce" strokeWidth={2.5} />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <h3 className="text-4xl font-black tracking-tighter mb-4 uppercase">{hp.kids_label}</h3>
+              <p className="text-white/90 text-lg font-black leading-tight mb-8 drop-shadow-md">
+                {hp.kids_big} • Explora el Pilar en tu propio idioma
+              </p>
+              <div className="inline-flex bg-white text-orange-600 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest items-center justify-center gap-3 shadow-xl">
+                Jugar <Play size={18} fill="currentColor" />
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* IA CONCIERGE CARD */}
         <section className="bg-gradient-to-br from-indigo-900 via-blue-900 to-[#1e1b4b] rounded-[50px] p-10 text-white shadow-2xl relative overflow-hidden group">

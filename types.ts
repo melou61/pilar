@@ -21,7 +21,8 @@ export enum ViewState {
   PROFILE = 'PROFILE',
   SEARCH = 'SEARCH',
   POSTCARD = 'POSTCARD',
-  LENS = 'LENS'
+  LENS = 'LENS',
+  KIDS = 'KIDS'
 }
 
 export type NewsCategory = 'GENERAL' | 'DIFUNTOS' | 'TRABAJO' | 'CASAS' | 'OTROS';
