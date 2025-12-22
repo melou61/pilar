@@ -20,7 +20,8 @@ export enum ViewState {
   AI_CHAT = 'AI_CHAT',
   PROFILE = 'PROFILE',
   SEARCH = 'SEARCH',
-  POSTCARD = 'POSTCARD'
+  POSTCARD = 'POSTCARD',
+  LENS = 'LENS'
 }
 
 export type NewsCategory = 'GENERAL' | 'DIFUNTOS' | 'TRABAJO' | 'CASAS' | 'OTROS';

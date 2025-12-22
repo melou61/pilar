@@ -3,6 +3,7 @@
 // Added Image as ImageIcon to the exports to satisfy direct imports in PostcardCreator.
 // Added Bell to fix missing export error in ProfileView.
 // Added Volume2 to fix missing export error in VoiceConcierge.
+// Added Scan, Upload, and Maximize to fix missing export errors in App.tsx and PHLensView.tsx.
 import { 
   Home, 
   Newspaper, 
@@ -110,7 +111,10 @@ import {
   Wand2,
   Download,
   Bell,
-  Volume2
+  Volume2,
+  Scan,
+  Upload,
+  Maximize
 } from 'lucide-react';
 
 export {
@@ -221,5 +225,8 @@ export {
   Wand2,
   Download,
   Bell,
-  Volume2
+  Volume2,
+  Scan,
+  Upload,
+  Maximize
 };

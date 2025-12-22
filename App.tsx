@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ViewState, NavItem, Ad, Event, Language, AdminRole, CensusItem } from './types';
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
-  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck, MessageSquare, Heart
+  ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck, MessageSquare, Heart, Scan
 } from './components/Icons';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -28,6 +28,7 @@ import { ForumView } from './components/ForumView';
 import { ProfileView } from './components/ProfileView';
 import { HealthView } from './components/HealthView';
 import { BeaconModal } from './components/BeaconModal';
+import { PHLensView } from './components/PHLensView';
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -55,7 +56,6 @@ const App: React.FC = () => {
       ...COMMERCIAL_CENSUS.flatMap(c => c.items),
       ...DINING_CENSUS.flatMap(c => c.items)
     ];
-    // Add a default promotion for demo purposes to one shop
     return base.map(b => b.id === 's1' ? {
       ...b,
       promotion: {
@@ -93,28 +93,20 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Beacon Simulator: Triggers once after 12 seconds if on Home
+  // Beacon Simulator
   useEffect(() => {
     if (beaconsEnabled && currentView === ViewState.HOME) {
       const timer = setTimeout(() => {
         const shopWithPromo = businesses.find(b => b.promotion);
-        if (shopWithPromo) {
-          setActiveBeaconShop(shopWithPromo);
-        }
+        if (shopWithPromo) setActiveBeaconShop(shopWithPromo);
       }, 12000);
       return () => clearTimeout(timer);
     }
   }, [currentView, beaconsEnabled, businesses]);
 
   const handleNavigate = (view: ViewState, id?: string) => {
-    if (view === ViewState.ADMIN && userRole !== 'ADMIN') {
-      setLoginOpen(true);
-      return;
-    }
-    if (view === ViewState.PROFILE && !isLoggedIn) {
-      setLoginOpen(true);
-      return;
-    }
+    if (view === ViewState.ADMIN && userRole !== 'ADMIN') { setLoginOpen(true); return; }
+    if (view === ViewState.PROFILE && !isLoggedIn) { setLoginOpen(true); return; }
     setCurrentView(view);
     setSidebarOpen(false);
     if (view === ViewState.EVENTS) setSelectedEventId(id || null);
@@ -122,45 +114,15 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleShare = (data: { title: string; text: string; url?: string }) => {
-    setShareData({ title: data.title, text: data.text, url: data.url || window.location.href });
-    setIsShareOpen(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserRole('USER');
-    setUserName('');
-    setCurrentView(ViewState.HOME);
-    setSidebarOpen(false);
-  };
-
-  const handleLogin = (role: 'USER' | 'ADMIN' = 'USER', userData?: {name: string, email: string}) => {
-    setIsLoggedIn(true);
-    setUserRole(role);
-    setUserName(userData?.name || (role === 'ADMIN' ? 'Administrador' : 'Vecino Pilar'));
-    setLoginOpen(false);
-    if (role === 'ADMIN') setCurrentView(ViewState.ADMIN);
-    else setCurrentView(ViewState.PROFILE);
-    setSidebarOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const toggleFavorite = (id: string) => {
-    setFavorites(prev => prev.includes(id) ? prev.filter(fid => fid !== id) : [...prev, id]);
-  };
-
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
+    { id: ViewState.LENS, label: 'PH Lens', icon: Scan },
     { id: ViewState.AI_CHAT, label: t.menu.ai, icon: Sparkles },
-    { id: ViewState.HEALTH, label: t.menu.health, icon: Heart },
-    { id: ViewState.FORUM, label: t.menu.forum, icon: MessageSquare },
     { id: ViewState.MAP, label: t.menu.map, icon: MapIcon },
     { id: ViewState.CITIZEN_SERVICES, label: t.menu.services, icon: Landmark },
     { id: ViewState.NEWS, label: t.menu.news, icon: Newspaper },
     { id: ViewState.BEACHES, label: t.menu.beaches, icon: Waves },
     { id: ViewState.SIGHTSEEING, label: t.menu.sightseeing, icon: Eye },
-    { id: ViewState.ACTIVITIES, label: t.menu.activities, icon: Activity },
     { id: ViewState.DINING, label: t.menu.dining, icon: UtensilsCrossed },
     { id: ViewState.SHOPPING, label: t.menu.shopping, icon: ShoppingBag },
     { id: ViewState.EVENTS, label: t.menu.events, icon: Calendar },
@@ -168,6 +130,8 @@ const App: React.FC = () => {
 
   return (
     <div key={currentLang.code} className="min-h-screen flex flex-col bg-[#f8fafc] font-sans overflow-x-hidden">
+      {currentView === ViewState.LENS && <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
+      
       <Header 
         onMenuClick={() => setSidebarOpen(true)} 
         onLoginClick={() => setLoginOpen(true)} 
@@ -190,18 +154,14 @@ const App: React.FC = () => {
         title={t.menu.title} 
         sponsoredText={t.common.sponsored}
         isLoggedIn={isLoggedIn}
-        onLogout={handleLogout}
+        onLogout={() => { setIsLoggedIn(false); setCurrentView(ViewState.HOME); }}
         t={t}
       />
-      <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={(data) => handleLogin('USER', data)} onLoginSuperAdmin={() => handleLogin('ADMIN')} t={t} />
+      <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => { setIsLoggedIn(true); setLoginOpen(false); }} onLoginSuperAdmin={() => { setIsLoggedIn(true); setUserRole('ADMIN'); setLoginOpen(false); setCurrentView(ViewState.ADMIN); }} t={t} />
       <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
       
       {activeBeaconShop && (
-        <BeaconModal 
-          isOpen={!!activeBeaconShop} 
-          onClose={() => setActiveBeaconShop(null)} 
-          shop={activeBeaconShop} 
-        />
+        <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} />
       )}
 
       <main className={`flex-1 w-full flex flex-col relative pt-24 ${currentView === ViewState.MAP ? 'h-[calc(100vh-96px)]' : ''}`}>
@@ -211,19 +171,19 @@ const App: React.FC = () => {
          {currentView === ViewState.ACTIVITIES && <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} />}
          {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleNavigate} businesses={businesses} />}
          {currentView === ViewState.DINING && <DiningView t={t} businesses={businesses} ads={ads} />}
-         {currentView === ViewState.SHOPPING && <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} />}
+         {currentView === ViewState.SHOPPING && <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={(id) => setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id])} ads={ads} />}
          {currentView === ViewState.CITIZEN_SERVICES && <CitizenServicesView t={t} />}
          {currentView === ViewState.NEWS && <NewsView t={t} />}
-         {currentView === ViewState.EVENTS && <EventsView t={t} events={events} onShare={(e) => handleShare({ title: e.title, text: e.description })} onAddToCalendar={() => {}} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={(id) => setMyEvents(prev => prev.includes(id) ? prev.filter(eid => eid !== id) : [...prev, id])} />}
+         {currentView === ViewState.EVENTS && <EventsView t={t} events={events} onShare={() => {}} onAddToCalendar={() => {}} initialEventId={selectedEventId} />}
          {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} langLabel={currentLang.label} onBack={() => handleNavigate(ViewState.HOME)} />}
-         {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} />}
+         {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={() => {}} />}
          {currentView === ViewState.POSTCARD && <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
          {currentView === ViewState.FORUM && <ForumView t={t} />}
-         {currentView === ViewState.PROFILE && <ProfileView userName={userName} onLogout={handleLogout} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />}
+         {currentView === ViewState.PROFILE && <ProfileView userName={userName} onLogout={() => setIsLoggedIn(false)} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />}
          {currentView === ViewState.HEALTH && <HealthView t={t} onNavigate={handleNavigate} ads={ads} />}
-         {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as AdminRole} />}
+         {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={() => setIsLoggedIn(false)} currentUserRole={userRole as AdminRole} />}
       </main>
-      {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && <Footer t={t} />}
+      {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && currentView !== ViewState.LENS && <Footer t={t} />}
     </div>
   );
 };
