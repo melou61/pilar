@@ -72,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
       </div>
 
       <div className="mt-20 pt-8 border-t border-white/5 text-[10px] text-center text-gray-500 tracking-wider font-medium">
-          Pilar App 2025 © by <a href="https://vortexdigital-ai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 font-bold transition-colors">https://vortexdigital-ai.com</a>. Al rights reserved.
+          Pilar App 2025 © by <a href="https://vortexdigital-ai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 font-bold transition-colors">https://vortexdigital-ai.com</a>. All rights reserved.
       </div>
     </footer>
   );
