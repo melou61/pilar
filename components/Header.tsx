@@ -42,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="fixed top-0 left-0 right-0 z-[200] bg-white h-24 w-full flex items-center border-b border-gray-50 shadow-sm px-4 sm:px-6">
       <div className="max-w-screen-2xl mx-auto w-full flex items-center justify-between gap-2 sm:gap-4">
         
-        {/* LOGO - Pilar de la Horadada */}
+        {/* LOGO */}
         <div 
           className="flex items-center gap-3 sm:gap-4 cursor-pointer shrink-0 group" 
           onClick={onLogoClick}
@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* NAVEGACIÓN CENTRAL */}
+        {/* NAVIGATION */}
         <nav className="flex items-center bg-[#f1f5f9]/60 border border-[#f1f5f9] rounded-[32px] p-1 gap-0.5 shadow-inner overflow-x-auto no-scrollbar flex-1 max-w-[600px]">
           {navItems.map((item) => {
             const isActive = currentView === item.id;
@@ -84,12 +84,11 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </nav>
 
-        {/* ACCIONES DERECHA */}
+        {/* ACTIONS */}
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           
           <div className="flex flex-col items-center gap-1">
-            <span className="text-[9px] font-black text-blue-600 uppercase tracking-[0.2em] leading-none mb-1">IDIOMA</span>
-            <div className="flex items-center bg-white border border-gray-200 rounded-full p-1 shadow-sm h-12">
+            <div className="flex items-center bg-white border border-gray-200 rounded-full p-1 shadow-sm h-12 relative">
               <button 
                 onClick={() => setIsLangOpen(!isLangOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 rounded-full transition-all"
@@ -109,21 +108,20 @@ export const Header: React.FC<HeaderProps> = ({
                 <Search size={18} strokeWidth={2.5} />
               </button>
 
-              {/* Selector de Idioma Dropdown */}
+              {/* Language Selection Dropdown */}
               {isLangOpen && (
                 <>
                   <div className="fixed inset-0 z-[210] bg-black/5" onClick={() => setIsLangOpen(false)} />
-                  <div className="absolute top-16 right-0 w-72 bg-white rounded-[32px] shadow-2xl border border-gray-100 py-6 z-[220] animate-in zoom-in-95 duration-200 overflow-hidden">
-                    <div className="px-6 pb-4 flex flex-col border-b border-gray-50 mb-4 text-left">
+                  <div className="absolute top-16 right-0 w-80 bg-white rounded-[32px] shadow-2xl border border-gray-100 py-6 z-[220] animate-in zoom-in-95 duration-200 overflow-hidden flex flex-col">
+                    <div className="px-6 pb-4 flex flex-col border-b border-gray-50 mb-2 text-left shrink-0">
                        <div className="flex items-center justify-between">
-                         <span className="text-[12px] font-black text-blue-600 uppercase tracking-[0.3em] block">IDIOMA</span>
+                         <span className="text-[12px] font-black text-blue-600 uppercase tracking-[0.3em] block">IDIOMA / LANGUAGE</span>
                          <button onClick={() => setIsLangOpen(false)} className="p-1.5 hover:bg-gray-100 rounded-full transition-colors">
                            <X size={16} className="text-gray-400" />
                          </button>
                        </div>
-                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Language Selection</span>
                     </div>
-                    <div className="max-h-[400px] overflow-y-auto no-scrollbar px-3">
+                    <div className="max-h-[450px] overflow-y-auto no-scrollbar px-3 pb-4 snap-y snap-mandatory">
                       <div className="grid grid-cols-1 gap-1">
                         {languages.map((lang) => (
                           <button
@@ -132,16 +130,19 @@ export const Header: React.FC<HeaderProps> = ({
                               onLanguageChange(lang);
                               setIsLangOpen(false);
                             }}
-                            className={`flex items-center gap-4 px-4 py-3.5 w-full rounded-2xl transition-all ${
+                            className={`snap-start flex items-center gap-4 px-4 py-3.5 w-full rounded-2xl transition-all ${
                               currentLang.code === lang.code 
                               ? 'bg-blue-50 text-blue-600' 
                               : 'hover:bg-gray-50 text-gray-700'
                             }`}
                           >
                             <span className="text-xl">{lang.flag}</span>
-                            <span className="text-[10px] font-black uppercase tracking-tight flex-1 text-left">
+                            <span className="text-[11px] font-black uppercase tracking-tight flex-1 text-left">
                               {lang.label}
                             </span>
+                            {currentLang.code === lang.code && (
+                              <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                            )}
                           </button>
                         ))}
                       </div>
