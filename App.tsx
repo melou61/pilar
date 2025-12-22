@@ -27,6 +27,7 @@ import { PostcardCreator } from './components/PostcardCreator';
 import { ForumView } from './components/ForumView';
 import { ProfileView } from './components/ProfileView';
 import { HealthView } from './components/HealthView';
+import { BeaconModal } from './components/BeaconModal';
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -49,15 +50,35 @@ const App: React.FC = () => {
   const [myEvents, setMyEvents] = useState<string[]>([]);
   const [ads, setAds] = useState<Ad[]>(INITIAL_ADS);
   const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
-  const [businesses, setBusinesses] = useState<CensusItem[]>(() => [
-    ...COMMERCIAL_CENSUS.flatMap(c => c.items),
-    ...DINING_CENSUS.flatMap(c => c.items)
-  ]);
+  const [businesses, setBusinesses] = useState<CensusItem[]>(() => {
+    const base = [
+      ...COMMERCIAL_CENSUS.flatMap(c => c.items),
+      ...DINING_CENSUS.flatMap(c => c.items)
+    ];
+    // Add a default promotion for demo purposes to one shop
+    return base.map(b => b.id === 's1' ? {
+      ...b,
+      promotion: {
+        title: '¡Descuento Vecino!',
+        description: 'Muestra esta pantalla en caja para un 10% de descuento directo.',
+        proximityRange: 'NEAR' as const,
+        frequencyPerDay: 1,
+        maxDistanceMeters: 5,
+        activeTimeMinutes: 30,
+        discountCode: 'PILAR2025'
+      }
+    } : b);
+  });
+  
   const [selectedBusinessId, setSelectedBusinessId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [shareData, setShareData] = useState({ title: '', text: '', url: '' });
+  
+  // Beacon Simulation State
+  const [activeBeaconShop, setActiveBeaconShop] = useState<CensusItem | null>(null);
+  const [beaconsEnabled, setBeaconsEnabled] = useState(true);
 
   const t = translations[currentLang.code] || translations.en;
 
@@ -71,6 +92,19 @@ const App: React.FC = () => {
     const interval = setInterval(() => setCurrentHeroIndex((prev) => (prev + 1) % heroImages.length), 8000);
     return () => clearInterval(interval);
   }, []);
+
+  // Beacon Simulator: Triggers once after 12 seconds if on Home
+  useEffect(() => {
+    if (beaconsEnabled && currentView === ViewState.HOME) {
+      const timer = setTimeout(() => {
+        const shopWithPromo = businesses.find(b => b.promotion);
+        if (shopWithPromo) {
+          setActiveBeaconShop(shopWithPromo);
+        }
+      }, 12000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentView, beaconsEnabled, businesses]);
 
   const handleNavigate = (view: ViewState, id?: string) => {
     if (view === ViewState.ADMIN && userRole !== 'ADMIN') {
@@ -161,6 +195,15 @@ const App: React.FC = () => {
       />
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={(data) => handleLogin('USER', data)} onLoginSuperAdmin={() => handleLogin('ADMIN')} t={t} />
       <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
+      
+      {activeBeaconShop && (
+        <BeaconModal 
+          isOpen={!!activeBeaconShop} 
+          onClose={() => setActiveBeaconShop(null)} 
+          shop={activeBeaconShop} 
+        />
+      )}
+
       <main className={`flex-1 w-full flex flex-col relative pt-24 ${currentView === ViewState.MAP ? 'h-[calc(100vh-96px)]' : ''}`}>
          {currentView === ViewState.HOME && <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />}
          {currentView === ViewState.BEACHES && <BeachesView t={t} onNavigate={handleNavigate} ads={ads} />}

@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { CensusItem } from '../types';
-import { Zap, X, MapPin, Tag } from './Icons';
+import { Zap, X, MapPin, Tag, Sparkles } from './Icons';
 
 interface BeaconModalProps {
   isOpen: boolean;
@@ -12,67 +13,70 @@ export const BeaconModal: React.FC<BeaconModalProps> = ({ isOpen, onClose, shop 
   if (!isOpen || !shop.promotion) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-      {/* Dynamic Background Effect */}
+    <div className="fixed inset-0 z-[9000] flex items-center justify-center p-6">
+      {/* Premium Backdrop */}
       <div 
-        className="absolute inset-0 bg-blue-900/40 backdrop-blur-md animate-in fade-in duration-500"
+        className="absolute inset-0 bg-[#020617]/80 backdrop-blur-xl animate-in fade-in duration-700"
         onClick={onClose}
       />
       
-      <div className="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-10 duration-500 border-2 border-blue-500/30">
+      <div className="relative w-full max-w-sm bg-white rounded-[45px] shadow-[0_40px_100px_rgba(37,99,235,0.4)] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-20 duration-500 border border-white/20">
         
-        {/* Animated Pulse Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 pb-12 relative overflow-hidden text-center">
-            {/* Pulsing Circles Background */}
+        {/* Futuristic Pulse Header */}
+        <div className="bg-[#1e40af] p-8 pb-16 relative overflow-hidden text-center">
+            {/* Pulsing Aura */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="w-64 h-64 bg-white/10 rounded-full animate-ping absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 duration-1000"></div>
-                <div className="w-48 h-48 bg-white/10 rounded-full animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 delay-75"></div>
+                <div className="w-80 h-80 bg-blue-400/20 rounded-full animate-ping absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 duration-[3000ms]"></div>
+                <div className="w-64 h-64 bg-blue-300/20 rounded-full animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
             </div>
 
             <div className="relative z-10 flex flex-col items-center">
-                <div className="bg-white p-3 rounded-full text-blue-600 shadow-lg mb-2">
-                    <Zap size={32} className="fill-current animate-pulse" />
+                <div className="w-20 h-20 bg-white rounded-3xl text-blue-600 shadow-2xl mb-6 flex items-center justify-center rotate-3 group">
+                    <Zap size={40} className="fill-current animate-bounce" />
                 </div>
-                <h2 className="text-2xl font-black text-white uppercase tracking-wider italic">¡Beacon Detectado!</h2>
-                <p className="text-blue-100 text-sm font-medium">Tienes una oferta exclusiva cerca de ti</p>
+                <div className="flex items-center gap-2 mb-1">
+                   <Sparkles size={16} className="text-blue-300" />
+                   <h2 className="text-xs font-black text-blue-200 uppercase tracking-[0.5em]">SMART PH DETECTADO</h2>
+                </div>
+                <h3 className="text-3xl font-black text-white tracking-tighter leading-none">Oferta Cercana</h3>
             </div>
 
             <button 
                 onClick={onClose}
-                className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors backdrop-blur-sm z-20"
+                className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-full transition-all backdrop-blur-md z-20 active:scale-90"
             >
                 <X size={20} />
             </button>
         </div>
 
-        {/* Content */}
-        <div className="px-6 pb-6 -mt-8 relative z-10">
-            <div className="bg-white rounded-2xl shadow-lg p-1">
-                {/* Shop Info */}
-                <div className="p-4 text-center border-b border-gray-100">
-                     <div className="w-16 h-16 mx-auto rounded-xl overflow-hidden shadow-sm mb-3">
+        {/* Floating Content Card */}
+        <div className="px-6 pb-8 -mt-10 relative z-10">
+            <div className="bg-white rounded-[35px] shadow-2xl p-2 border border-gray-50">
+                {/* Shop Brand */}
+                <div className="p-6 text-center border-b border-gray-100">
+                     <div className="w-20 h-20 mx-auto rounded-[24px] overflow-hidden shadow-xl mb-4 border-4 border-white -mt-12 bg-white">
                          <img src={shop.images[0]} alt={shop.name} className="w-full h-full object-cover" />
                      </div>
-                     <h3 className="font-bold text-gray-900 text-lg">{shop.name}</h3>
-                     <p className="text-gray-500 text-xs flex items-center justify-center gap-1 mt-1">
-                        <MapPin size={12} /> {shop.address}
+                     <h3 className="font-black text-gray-900 text-2xl tracking-tight">{shop.name}</h3>
+                     <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 mt-2">
+                        <MapPin size={12} className="text-red-500" /> {shop.address}
                      </p>
                 </div>
 
-                {/* Promotion Details */}
-                <div className="p-5 text-center bg-blue-50/50 rounded-b-2xl">
-                    <span className="inline-block bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider mb-2">
-                        Promo Flash
-                    </span>
-                    <h4 className="text-xl font-bold text-gray-800 mb-2">{shop.promotion.title}</h4>
-                    <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-                        {shop.promotion.description}
+                {/* Offer Details */}
+                <div className="p-8 text-center bg-blue-50/30 rounded-b-[32px]">
+                    <div className="inline-flex items-center gap-2 bg-blue-600 text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 shadow-lg shadow-blue-200">
+                        <Tag size={12} /> Exclusivo App
+                    </div>
+                    <h4 className="text-2xl font-black text-gray-800 mb-3 tracking-tight leading-tight">{shop.promotion.title}</h4>
+                    <p className="text-sm text-gray-500 mb-6 font-medium leading-relaxed italic px-2">
+                       "{shop.promotion.description}"
                     </p>
 
                     {shop.promotion.discountCode && (
-                        <div className="border-2 border-dashed border-blue-200 bg-white rounded-xl p-3 mb-4">
-                            <p className="text-xs text-gray-400 uppercase font-semibold mb-1">Muestra este código</p>
-                            <code className="text-xl font-mono font-bold text-blue-600 tracking-widest">
+                        <div className="border-2 border-dashed border-blue-200 bg-white rounded-2xl p-4 mb-8">
+                            <p className="text-[9px] text-gray-400 uppercase font-black tracking-widest mb-2">Código de Canje</p>
+                            <code className="text-2xl font-black text-blue-600 tracking-[0.3em]">
                                 {shop.promotion.discountCode}
                             </code>
                         </div>
@@ -80,11 +84,11 @@ export const BeaconModal: React.FC<BeaconModalProps> = ({ isOpen, onClose, shop 
 
                     <button 
                         onClick={onClose}
-                        className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-transform active:scale-95 flex items-center justify-center gap-2"
+                        className="w-full py-5 bg-[#0f172a] text-white rounded-[24px] font-black text-sm uppercase tracking-widest shadow-2xl hover:bg-black transition-all active:scale-95 flex items-center justify-center gap-3"
                     >
-                        <Tag size={18} />
-                        Canjear Ahora
+                        Activar Cupón
                     </button>
+                    <p className="text-[8px] text-gray-400 mt-4 font-bold uppercase tracking-widest opacity-50">Oferta válida solo por proximidad física</p>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@ import React from 'react';
 import { ViewState, Event, Ad } from '../types';
 import { 
   Sparkles, MapIcon, ChevronRight, 
-  ArrowRight, Bot, MapPin, Play, Camera, Image as ImageIcon, Newspaper, MessageSquare, Wand2
+  ArrowRight, Bot, MapPin, Play, Camera, Image as ImageIcon, Newspaper, MessageSquare, Wand2, Radar
 } from './Icons';
 import { AdSpot } from './AdSpot';
 
@@ -37,6 +37,16 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#f8fafc]" />
           </div>
         ))}
+        
+        {/* Radar Status Indicator */}
+        <div className="absolute top-12 left-8 z-30 flex items-center gap-3 bg-white/10 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20">
+           <div className="relative">
+             <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
+             <Radar size={18} className="text-blue-400 relative z-10" />
+           </div>
+           <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Smart PH Activo</span>
+        </div>
+
         <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-36">
           <div className="max-w-4xl mx-auto w-full">
             <div className="flex items-center gap-3 text-sm font-black mb-8 uppercase tracking-[0.4em] text-blue-400">
