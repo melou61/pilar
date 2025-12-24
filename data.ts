@@ -331,7 +331,7 @@ const DINING_DATA = [
   { name: 'Chiringuito Mil Palmeras', cat: 'Chiringuito', zone: 'MIL_PALMERAS', lat: 37.8862, lng: -0.7608 },
   { name: 'Bar El Sol', cat: 'Tapas', zone: 'MIL_PALMERAS', lat: 37.8868, lng: -0.7612 },
   { name: 'Café de la Mar', cat: 'Cafetería', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7615 },
-  { name: 'Arrocería Marina', cat: 'Arroces', zone: 'MIL_PALMERAS', lat: 37.8875, lng: -0.7620 },
+  { name: 'Arrocería El Pilar', cat: 'Arroces', zone: 'CENTRO', lat: 37.8662, lng: -0.7925 },
   { name: 'Tapería Central', cat: 'Tapas', zone: 'CENTRO', lat: 37.8660, lng: -0.7930 },
   { name: 'Bar Restaurante PH', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8652, lng: -0.7928 },
   { name: 'Hamburguesería Palmeras', cat: 'Restaurante', zone: 'MIL_PALMERAS', lat: 37.8860, lng: -0.7618 },
@@ -341,7 +341,6 @@ const DINING_DATA = [
   { name: 'Cafetería El Faro', cat: 'Cafetería', zone: 'LA_TORRE', lat: 37.8642, lng: -0.7840 },
   { name: 'Heladería Marina', cat: 'Heladería', zone: 'LA_TORRE', lat: 37.8646, lng: -0.7846 },
   { name: 'Bar El Pescador', cat: 'Tapas', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7838 },
-  { name: 'Arrocería Pilar', cat: 'Arroces', zone: 'CENTRO', lat: 37.8662, lng: -0.7925 },
   { name: 'Restaurante Las Brisas', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8625, lng: -0.7845 },
   { name: 'Cafetería Central', cat: 'Cafetería', zone: 'CENTRO', lat: 37.8657, lng: -0.7922 },
   { name: 'Bar El Norte', cat: 'Tapas', zone: 'CENTRO', lat: 37.8668, lng: -0.7935 },
@@ -368,15 +367,7 @@ const SHOPPING_ITEMS: CensusItem[] = SHOP_DATA.map((shop, i) => ({
   images: [getRealisticImage(shop.cat, i)],
   lat: shop.lat,
   lng: shop.lng,
-  promotion: (i % 10 === 0) ? {
-    title: `Oferta en ${shop.name}`,
-    description: `Aprovecha un 20% de descuento directo al presentar la App en caja. ¡Solo hoy!`,
-    discountCode: `PH${100 + i}`,
-    proximityRange: 'NEAR',
-    frequencyPerDay: 3,
-    maxDistanceMeters: 20,
-    activeTimeMinutes: 60
-  } : undefined
+  promotion: undefined // Se eliminó la inyección automática
 }));
 
 const DINING_ITEMS: CensusItem[] = DINING_DATA.map((dining, i) => ({
@@ -396,15 +387,7 @@ const DINING_ITEMS: CensusItem[] = DINING_DATA.map((dining, i) => ({
   lat: dining.lat,
   lng: dining.lng,
   featuredItems: ['Especialidad de la casa', 'Vino de la zona', 'Postre artesano'],
-  promotion: (i % 15 === 0) ? {
-    title: `Invitación en ${dining.name}`,
-    description: `Aperitivo de la casa gratis con tu consumición principal al mostrar este cupón.`,
-    discountCode: `GastroPH${i}`,
-    proximityRange: 'IMMEDIATE',
-    frequencyPerDay: 1,
-    maxDistanceMeters: 10,
-    activeTimeMinutes: 120
-  } : undefined
+  promotion: undefined // Se eliminó la inyección automática
 }));
 
 export const COMMERCIAL_CENSUS: CensusCategory[] = [ 
