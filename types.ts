@@ -21,7 +21,8 @@ export enum ViewState {
   PROFILE = 'PROFILE',
   SEARCH = 'SEARCH',
   POSTCARD = 'POSTCARD',
-  LENS = 'LENS'
+  LENS = 'LENS',
+  SIDEBAR = 'SIDEBAR'
 }
 
 export type NewsCategory = 'GENERAL' | 'DIFUNTOS' | 'TRABAJO' | 'CASAS' | 'OTROS';
@@ -45,6 +46,8 @@ export interface Ad {
   imageUrl: string;
   linkUrl: string;
   position: 'page-top' | 'page-bottom' | 'menu-top' | 'menu-bottom';
+  view: ViewState; // Página donde aparece
+  filterContext?: string; // Filtro específico (ej: 'beaches' en MAP o 'CENTRO' en SHOPPING)
   startDate: string; 
   endDate: string;   
   isActive: boolean;

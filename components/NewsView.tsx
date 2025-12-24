@@ -5,7 +5,7 @@ import {
   Rss, Facebook, Instagram, Newspaper, ExternalLink, Calendar, 
   Filter, Megaphone, Share2, Flower, Briefcase, Home, Info 
 } from './Icons';
-import { NewsCategory, Ad } from '../types';
+import { NewsCategory, Ad, ViewState } from '../types';
 import { AdSpot } from './AdSpot';
 
 interface NewsViewProps {
@@ -134,7 +134,8 @@ export const NewsView: React.FC<NewsViewProps> = ({ t, ads }) => {
 
           {/* Anuncio inferior al final del feed */}
           <div className="pt-6 -mx-2">
-            <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+            {/* Added missing view prop */}
+            <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.NEWS} />
           </div>
       </div>
 

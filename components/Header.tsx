@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { Menu, Search, Home, MapIcon, Sparkles, Calendar, User, ShieldCheck, X } from './Icons';
 import { Language, ViewState } from '../types';
 
+// Removed unused onLoginClick from HeaderProps to fix type mismatch in App.tsx usage
 interface HeaderProps {
   onMenuClick: () => void;
-  onLoginClick: () => void;
   onLogoClick: () => void;
   onSearchClick: () => void;
   currentLang: Language;

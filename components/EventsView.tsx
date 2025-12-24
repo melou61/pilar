@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Event, Ad } from '../types';
+import { Event, Ad, ViewState } from '../types';
 import { Search, Calendar, MapPin, ChevronRight, ArrowLeft, Bookmark, Sparkles, Trophy } from './Icons';
 import { EventDetailView } from './EventDetailView';
 import { AdSpot } from './AdSpot';
@@ -176,7 +176,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
             
             {/* Anuncio inferior al final de los eventos */}
             <div className="pt-6 -mx-2">
-              <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+              {/* Added missing view prop */}
+              <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.EVENTS} />
             </div>
           </>
         ) : (

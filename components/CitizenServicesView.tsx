@@ -4,7 +4,7 @@ import {
   CalendarCheck, FileText, HelpCircle, MessageSquare, 
   Camera, Send, ChevronRight, Landmark, X, Check, MapPin, Clock, ArrowRight, Sparkles
 } from './Icons';
-import { Ad } from '../types';
+import { Ad, ViewState } from '../types';
 import { AdSpot } from './AdSpot';
 
 interface CitizenServicesViewProps {
@@ -207,7 +207,8 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads
 
         {/* Anuncio inferior tras los servicios principales */}
         <div className="py-2 -mx-2">
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.CITIZEN_SERVICES} />
         </div>
 
         <div className="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[50px] p-10 text-white relative overflow-hidden shadow-2xl shadow-blue-500/20 group">

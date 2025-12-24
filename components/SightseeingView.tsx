@@ -47,7 +47,8 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
       <div className="px-6 -mt-12 space-y-12">
         {/* Ad Spot Top */}
         <div className="max-w-4xl mx-auto w-full">
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.SIGHTSEEING} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
@@ -197,7 +198,8 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
 
         {/* Ad Spot Bottom */}
         <div className="max-w-4xl mx-auto w-full">
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.SIGHTSEEING} />
         </div>
       </div>
     </div>

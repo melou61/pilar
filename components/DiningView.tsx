@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { UtensilsCrossed, Star, MapPin, Clock, Phone, ChevronRight, Heart } from './Icons';
-import { CensusItem, Ad } from '../types';
+import { CensusItem, Ad, ViewState } from '../types';
 import { BusinessDetailView } from './BusinessDetailView';
 import { AdSpot } from './AdSpot';
 
@@ -52,9 +52,15 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
             {t.sections.dining.desc}
         </p>
 
-        {/* Ad Spot Top - Sin padding lateral adicional */}
+        {/* Ad Spot Top con segmentación por zona gastronómica */}
         <div className="mb-8 -mx-2">
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+           <AdSpot 
+            ads={ads} 
+            position="page-top" 
+            label={t.common.sponsored} 
+            view={ViewState.DINING} 
+            currentFilter={activeZone}
+           />
         </div>
 
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -124,9 +130,15 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
           )}
       </div>
 
-      {/* Ad Spot Bottom - Sin padding lateral adicional */}
+      {/* Ad Spot Bottom con segmentación */}
       <div className="px-6 mt-16 max-w-4xl mx-auto -mx-2">
-        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+        <AdSpot 
+          ads={ads} 
+          position="page-bottom" 
+          label={t.common.sponsored} 
+          view={ViewState.DINING} 
+          currentFilter={activeZone}
+        />
       </div>
     </div>
   );

@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
-import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, NewsCategory } from '../types';
+import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, NewsCategory, ViewState } from '../types';
 import { 
   Trash2, Plus, Calendar, Image as ImageIcon, Save, X, LogOut, 
   Zap, Tag, Edit3, ShoppingBag, Globe, MapPin, 
   Radio, Clock, Check, Phone, Filter,
   ShieldCheck, TrendingUp, Newspaper, Radar, AlertCircle, Share2,
   Facebook, Instagram, Twitter, Video, Eye, MousePointer2, Activity, BarChart3,
-  Battery, Wifi, Settings2, Signal, Cpu
+  Battery, Wifi, Settings2, Signal, Cpu, Layers
 } from './Icons';
 import { MOCK_NEWS } from '../data';
 
@@ -49,6 +49,50 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     instagram: { icon: Instagram, activeClass: 'bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] shadow-pink-500/40' },
     tiktok: { icon: Video, activeClass: 'bg-black ring-1 ring-cyan-400 shadow-cyan-400/20' },
     twitter: { icon: Twitter, activeClass: 'bg-black shadow-slate-800' }
+  };
+
+  // Mapeo de filtros disponibles por página para el selector de anuncios
+  const getFiltersForView = (view: ViewState | undefined): { id: string, label: string }[] => {
+    switch (view) {
+      case ViewState.MAP:
+        return [
+          { id: 'all', label: 'Todo el Mapa' },
+          { id: 'beaches', label: 'Solo Playas' },
+          { id: 'culture', label: 'Solo Patrimonio' },
+          { id: 'active', label: 'Solo Experiencias' },
+          { id: 'food', label: 'Solo Gastronomía' },
+          { id: 'shop', label: 'Solo Tiendas' },
+          { id: 'events', label: 'Solo Eventos' }
+        ];
+      case ViewState.SHOPPING:
+      case ViewState.DINING:
+        return [
+          { id: 'all', label: 'Todo el Municipio' },
+          { id: 'CENTRO', label: 'Pilar Centro' },
+          { id: 'LA_TORRE', label: 'La Torre' },
+          { id: 'MIL_PALMERAS', label: 'Mil Palmeras' },
+          { id: 'CAMPOVERDE', label: 'Campoverde' },
+          { id: 'EL_MOJON', label: 'El Mojón' }
+        ];
+      case ViewState.EVENTS:
+        return [
+          { id: 'all', label: 'Todos los Eventos' },
+          { id: 'TRADICIÓN', label: 'Tradición' },
+          { id: 'RELIGIOSO', label: 'Semana Santa' },
+          { id: 'CINE', label: 'Cultura' },
+          { id: 'HISTORIA', label: 'Recreación' }
+        ];
+      case ViewState.NEWS:
+        return [
+          { id: 'ALL', label: 'Todas las Noticias' },
+          { id: 'GENERAL', label: 'Actualidad' },
+          { id: 'DIFUNTOS', label: 'Difuntos' },
+          { id: 'TRABAJO', label: 'Empleo' },
+          { id: 'CASAS', label: 'Vivienda' }
+        ];
+      default:
+        return [];
+    }
   };
 
   // --- MOCK DE ANALÍTICAS PUBLICIDAD ---
@@ -102,7 +146,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const item = {
       ...currentAd, id: currentAd.id || `ad-${Date.now()}`, isActive: true,
       startDate: currentAd.startDate || new Date().toISOString().split('T')[0],
-      endDate: currentAd.endDate || '2025-12-31'
+      endDate: currentAd.endDate || '2025-12-31',
+      view: currentAd.view || ViewState.HOME
     } as Ad;
     if (currentAd.id) setAds(prev => prev.map(a => a.id === item.id ? item : a));
     else setAds(prev => [item, ...prev]);
@@ -342,32 +387,102 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               {editMode === 'ad' ? (
                 <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
                   <div className="flex justify-between items-center mb-8">
-                    <h3 className="text-2xl font-black tracking-tighter">Configurar Campaña Banner</h3>
+                    <h3 className="text-2xl font-black tracking-tighter">Configurar Campaña Publicitaria</h3>
                     <button onClick={() => setEditMode('none')}><X /></button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Datos Cliente</label>
-                      <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="Cliente" value={currentAd.clientName || ''} onChange={e => setCurrentAd({...currentAd, clientName: e.target.value})} />
-                      <div className="grid grid-cols-2 gap-4">
-                        <select className="p-5 bg-slate-50 rounded-2xl font-bold border" value={currentAd.position} onChange={e => setCurrentAd({...currentAd, position: e.target.value as any})}>
-                          <option value="page-top">Top Página</option>
-                          <option value="page-bottom">Pie Página</option>
-                        </select>
-                        <select className="p-5 bg-slate-50 rounded-2xl font-bold border" value={currentAd.isActive ? 'active' : 'inactive'} onChange={e => setCurrentAd({...currentAd, isActive: e.target.value === 'active'})}>
-                          <option value="active">Activo</option>
-                          <option value="inactive">Pausado</option>
-                        </select>
+                    {/* Bloque Izquierda: Destino y Segmentación */}
+                    <div className="space-y-6">
+                      <div className="bg-slate-50 p-6 rounded-[30px] border space-y-4">
+                        <div className="flex items-center gap-2 mb-2">
+                           <Layers size={18} className="text-blue-600" />
+                           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ubicación en la App</label>
+                        </div>
+                        <div className="grid grid-cols-1 gap-4">
+                          {/* Selector de Vista Principal */}
+                          <div className="space-y-2">
+                            <span className="text-[9px] font-bold text-slate-400 uppercase ml-1">Página de Destino</span>
+                            <select 
+                              className="w-full p-4 bg-white rounded-xl font-bold border shadow-sm" 
+                              value={currentAd.view} 
+                              onChange={e => setCurrentAd({...currentAd, view: e.target.value as ViewState, filterContext: 'all'})}
+                            >
+                              <option value={ViewState.HOME}>🏠 Inicio</option>
+                              <option value={ViewState.SIDEBAR}>📱 Menú Lateral (Sidebar)</option>
+                              <option value={ViewState.MAP}>🗺️ Mapa Interactivo</option>
+                              <option value={ViewState.DINING}>🍴 Gastronomía</option>
+                              <option value={ViewState.SHOPPING}>🛍️ Tiendas</option>
+                              <option value={ViewState.EVENTS}>📅 Eventos</option>
+                              <option value={ViewState.NEWS}>📰 Noticias</option>
+                              <option value={ViewState.BEACHES}>🏖️ Playas</option>
+                            </select>
+                          </div>
+
+                          {/* Selector de Filtro (Si aplica) */}
+                          {getFiltersForView(currentAd.view).length > 0 && (
+                            <div className="space-y-2 animate-in slide-in-from-top-2">
+                              <span className="text-[9px] font-bold text-blue-500 uppercase ml-1">Contexto de Segmentación (Filtro)</span>
+                              <select 
+                                className="w-full p-4 bg-white border-blue-200 rounded-xl font-bold border shadow-sm text-blue-700" 
+                                value={currentAd.filterContext || 'all'} 
+                                onChange={e => setCurrentAd({...currentAd, filterContext: e.target.value})}
+                              >
+                                {getFiltersForView(currentAd.view).map(f => (
+                                  <option key={f.id} value={f.id}>{f.label}</option>
+                                ))}
+                              </select>
+                              <p className="text-[8px] text-slate-400 italic px-1">El anuncio solo aparecerá cuando este filtro esté activo.</p>
+                            </div>
+                          )}
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <span className="text-[9px] font-bold text-slate-400 uppercase ml-1">Posición</span>
+                              <select className="w-full p-4 bg-white rounded-xl font-bold border" value={currentAd.position} onChange={e => setCurrentAd({...currentAd, position: e.target.value as any})}>
+                                <option value="page-top">Superior</option>
+                                <option value="page-bottom">Inferior</option>
+                                <option value="menu-top">Menú (Arriba)</option>
+                                <option value="menu-bottom">Menú (Abajo)</option>
+                              </select>
+                            </div>
+                            <div className="space-y-2">
+                              <span className="text-[9px] font-bold text-slate-400 uppercase ml-1">Estado</span>
+                              <select className="w-full p-4 bg-white rounded-xl font-bold border" value={currentAd.isActive ? 'active' : 'inactive'} onChange={e => setCurrentAd({...currentAd, isActive: e.target.value === 'active'})}>
+                                <option value="active">Activo</option>
+                                <option value="inactive">Pausado</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Datos Cliente</label>
+                        <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="Nombre de la empresa" value={currentAd.clientName || ''} onChange={e => setCurrentAd({...currentAd, clientName: e.target.value})} />
                       </div>
                     </div>
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Imagen y Link</label>
-                      <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="URL Imagen" value={currentAd.imageUrl || ''} onChange={e => setCurrentAd({...currentAd, imageUrl: e.target.value})} />
-                      <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="URL Link" value={currentAd.linkUrl || ''} onChange={e => setCurrentAd({...currentAd, linkUrl: e.target.value})} />
+
+                    {/* Bloque Derecha: Contenido y Creatividad */}
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Creatividad y Enlace</label>
+                        <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="URL Imagen (Recomendado 1200x480)" value={currentAd.imageUrl || ''} onChange={e => setCurrentAd({...currentAd, imageUrl: e.target.value})} />
+                        <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="URL Destino (https://...)" value={currentAd.linkUrl || ''} onChange={e => setCurrentAd({...currentAd, linkUrl: e.target.value})} />
+                      </div>
+                      
+                      {/* Vista previa mini */}
+                      {currentAd.imageUrl && (
+                        <div className="space-y-2">
+                           <span className="text-[9px] font-bold text-slate-400 uppercase ml-1">Vista Previa</span>
+                           <div className="aspect-[2.5/1] rounded-2xl overflow-hidden border border-slate-100 shadow-inner bg-slate-50">
+                             <img src={currentAd.imageUrl} className="w-full h-full object-cover" />
+                           </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <button onClick={saveAd} className="w-full mt-10 py-6 bg-[#0f172a] text-white rounded-3xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3">
-                    <BarChart3 size={20} /> Publicar y Trackear
+                  <button onClick={saveAd} className="w-full mt-10 py-6 bg-[#0f172a] text-white rounded-3xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-all">
+                    <Save size={20} /> Guardar Campaña Segmentada
                   </button>
                 </div>
               ) : (
@@ -375,28 +490,49 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-[35px] border border-slate-200 shadow-xl flex flex-col gap-2">
                        <span className="text-3xl font-black tracking-tighter">142.5K</span>
-                       <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Impresiones</span>
+                       <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Impresiones Totales</span>
                     </div>
                     <div className="bg-white p-6 rounded-[35px] border border-slate-200 shadow-xl flex flex-col gap-2">
                        <span className="text-3xl font-black tracking-tighter">4.8K</span>
-                       <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Clics</span>
+                       <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Clics Únicos</span>
                     </div>
-                    <div className="bg-[#0f172a] p-6 rounded-[35px] shadow-2xl flex flex-col justify-center items-center text-center cursor-pointer hover:bg-blue-600 transition-all" onClick={() => { setCurrentAd({startDate: new Date().toISOString().split('T')[0]}); setEditMode('ad'); }}>
+                    <div className="bg-[#0f172a] p-6 rounded-[35px] shadow-2xl flex flex-col justify-center items-center text-center cursor-pointer hover:bg-blue-600 transition-all group" onClick={() => { setCurrentAd({view: ViewState.HOME, position: 'page-top', startDate: new Date().toISOString().split('T')[0]}); setEditMode('ad'); }}>
+                       <Plus size={24} className="text-blue-500 mb-1 group-hover:text-white transition-colors" />
                        <span className="text-white font-black text-[10px] uppercase tracking-widest">Nueva Campaña</span>
                     </div>
                   </div>
+
                   <div className="grid grid-cols-1 gap-6">
                     {ads.map(ad => (
-                      <div key={ad.id} className="bg-white rounded-[40px] border border-slate-200 shadow-2xl overflow-hidden flex flex-col md:flex-row">
-                          <div className="w-full md:w-1/3 p-8 border-r border-slate-50">
-                             <h4 className="text-2xl font-black text-slate-900 tracking-tighter leading-none mb-4">{ad.clientName}</h4>
-                             <div className="h-16 bg-slate-100 rounded-xl overflow-hidden mb-4 opacity-50"><img src={ad.imageUrl} className="w-full h-full object-cover" /></div>
-                             <button onClick={() => { setCurrentAd(ad); setEditMode('ad'); }} className="w-full py-3 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest">Editar</button>
+                      <div key={ad.id} className="bg-white rounded-[40px] border border-slate-200 shadow-2xl overflow-hidden flex flex-col md:flex-row group hover:border-blue-200 transition-all">
+                          <div className="w-full md:w-1/3 p-8 border-r border-slate-50 flex flex-col">
+                             <div className="flex items-center gap-2 mb-2">
+                                <span className={`w-2 h-2 rounded-full ${ad.isActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`}></span>
+                                <h4 className="text-2xl font-black text-slate-900 tracking-tighter leading-none">{ad.clientName}</h4>
+                             </div>
+                             <div className="flex flex-wrap gap-2 mb-4">
+                                <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border border-blue-100">
+                                   Pág: {ad.view}
+                                </span>
+                                {ad.filterContext && ad.filterContext !== 'all' && ad.filterContext !== 'ALL' && (
+                                   <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border border-emerald-100">
+                                      Filtro: {ad.filterContext}
+                                   </span>
+                                )}
+                             </div>
+                             <div className="h-24 bg-slate-100 rounded-xl overflow-hidden mb-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                                <img src={ad.imageUrl} className="w-full h-full object-cover" />
+                             </div>
+                             <button onClick={() => { setCurrentAd(ad); setEditMode('ad'); }} className="w-full py-4 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 transition-all">Configurar</button>
                           </div>
                           <div className="flex-1 p-8 grid grid-cols-2 md:grid-cols-3 gap-8 bg-slate-50/30">
                              <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Alcance</p><p className="text-2xl font-black">{getAdMetrics(ad.id).views.toLocaleString()}</p></div>
                              <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Clics</p><p className="text-2xl font-black">{getAdMetrics(ad.id).clicks.toLocaleString()}</p></div>
                              <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">CTR</p><p className="text-2xl font-black text-blue-600">{getAdMetrics(ad.id).ctr}%</p></div>
+                             <div className="col-span-2 md:col-span-3 pt-6 border-t border-slate-200/50 flex justify-between items-center">
+                                <div className="text-[9px] font-black text-slate-400 uppercase">Período: {ad.startDate} al {ad.endDate}</div>
+                                <button onClick={() => setAds(prev => prev.filter(i => i.id !== ad.id))} className="text-red-400 hover:text-red-600 transition-colors"><Trash2 size={16}/></button>
+                             </div>
                           </div>
                       </div>
                     ))}

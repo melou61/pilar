@@ -47,7 +47,8 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
       <div className="px-6 -mt-12 space-y-12">
         {/* Ad Spot Top */}
         <div className="max-w-4xl mx-auto w-full">
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.BEACHES} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
@@ -199,7 +200,8 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
 
         {/* Ad Spot Bottom */}
         <div className="max-w-4xl mx-auto w-full">
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.BEACHES} />
         </div>
       </div>
     </div>

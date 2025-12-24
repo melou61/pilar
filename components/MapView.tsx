@@ -172,15 +172,21 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
   return (
     <div className="flex flex-col bg-white relative animate-in fade-in duration-500 overflow-x-hidden min-h-screen">
       
-      {/* 1. PUBLICIDAD SUPERIOR (Entre Header y Mapa) */}
+      {/* 1. PUBLICIDAD SUPERIOR - Segmentada por filtro del mapa (ej: Playas) */}
       <div className="px-6 py-4 bg-white shrink-0">
-        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+        <AdSpot 
+          ads={ads} 
+          position="page-top" 
+          label={t.common.sponsored} 
+          view={ViewState.MAP} 
+          currentFilter={filter}
+        />
       </div>
 
-      {/* 2. CONTENEDOR DEL MAPA (Ocupa el resto de la pantalla) */}
+      {/* 2. CONTENEDOR DEL MAPA */}
       <div className="relative h-[65vh] bg-gray-100 rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-4 mb-4">
         
-        {/* BARRA DE FILTROS: Absoluta sobre el mapa */}
+        {/* BARRA DE FILTROS */}
         <div className="absolute top-6 left-0 right-0 z-[1001] flex justify-center px-4">
           <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar max-w-full">
             {[
@@ -208,30 +214,15 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
         {/* Div de Leaflet */}
         <div ref={mapContainerRef} className="w-full h-full" />
         
-        {/* CONTROLES DE MAPA (DERECHA) */}
+        {/* CONTROLES DE MAPA */}
         <div className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[1000] flex flex-col gap-3`}>
-          {/* Zoom In */}
-          <button 
-            onClick={handleZoomIn} 
-            className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all"
-          >
+          <button onClick={handleZoomIn} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all">
             <Plus size={24} strokeWidth={3} />
           </button>
-          
-          {/* Zoom Out */}
-          <button 
-            onClick={handleZoomOut} 
-            className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all"
-          >
+          <button onClick={handleZoomOut} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all">
             <Minus size={24} strokeWidth={3} />
           </button>
-
-          {/* Botón Mi Ubicación */}
-          <button 
-            onClick={handleMyLocation} 
-            className="bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 mt-2"
-            disabled={isLocating}
-          >
+          <button onClick={handleMyLocation} className="bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 mt-2" disabled={isLocating}>
             <Navigation size={28} className={isLocating ? 'animate-spin opacity-50' : ''} />
           </button>
         </div>
@@ -250,27 +241,22 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
                   {selectedItem.type === 'ACTIVE' ? 'PH Experiencia' : selectedItem.type === 'CULTURE' ? 'Patrimonio' : selectedItem.type === 'BEACH' ? 'Playa' : selectedItem.category}
                 </p>
                 <p className="text-gray-500 text-xs flex items-center gap-2 font-medium mb-6"><MapPin size={14} className="text-blue-500" /><span className="truncate">{selectedItem.address || selectedItem.location || 'Pilar de la Horadada'}</span></p>
-                <button 
-                  onClick={() => onNavigate(
-                    selectedItem.type === 'ACTIVE' ? ViewState.ACTIVITIES : 
-                    selectedItem.type === 'CULTURE' ? ViewState.SIGHTSEEING : 
-                    selectedItem.type === 'BEACH' ? ViewState.BEACHES : 
-                    ViewState.SHOPPING, 
-                    selectedItem.id
-                  )} 
-                  className="w-full py-4 bg-blue-600 text-white rounded-[20px] font-black text-sm shadow-xl"
-                >
-                  Ver Detalles
-                </button>
+                <button onClick={() => onNavigate(selectedItem.type === 'ACTIVE' ? ViewState.ACTIVITIES : selectedItem.type === 'CULTURE' ? ViewState.SIGHTSEEING : selectedItem.type === 'BEACH' ? ViewState.BEACHES : ViewState.SHOPPING, selectedItem.id)} className="w-full py-4 bg-blue-600 text-white rounded-[20px] font-black text-sm shadow-xl">Ver Detalles</button>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* 3. PUBLICIDAD INFERIOR (Entre Mapa y Footer) */}
+      {/* 3. PUBLICIDAD INFERIOR */}
       <div className="px-6 py-10 bg-white shrink-0">
-        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+        <AdSpot 
+          ads={ads} 
+          position="page-bottom" 
+          label={t.common.sponsored} 
+          view={ViewState.MAP} 
+          currentFilter={filter}
+        />
       </div>
 
     </div>

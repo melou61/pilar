@@ -92,7 +92,8 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads }) =>
         </section>
 
         {/* Anuncio Superior */}
-        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+        {/* Added missing view prop */}
+        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HEALTH} />
 
         {/* Otros Centros */}
         <section className="space-y-6">
@@ -132,7 +133,8 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads }) =>
 
         {/* Anuncio Inferior */}
         <div className="pt-4 -mx-2">
-          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+          {/* Added missing view prop */}
+          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.HEALTH} />
         </div>
       </div>
     </div>

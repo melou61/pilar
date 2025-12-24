@@ -1,18 +1,30 @@
 
 import React, { useState } from 'react';
-import { Ad } from '../types';
+import { Ad, ViewState } from '../types';
 
 interface AdSpotProps {
   ads: Ad[];
-  position?: string;
+  position?: 'page-top' | 'page-bottom' | 'menu-top' | 'menu-bottom';
   label?: string;
+  view: ViewState; // Obligatorio para saber en qué vista estamos
+  currentFilter?: string; // Opcional para segmentación por filtro
 }
 
-export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top' }) => {
+export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top', view, currentFilter }) => {
   const [imgLoaded, setImgLoaded] = useState(false);
-  const activeAds = ads.filter(ad => ad.position === position && ad.isActive);
 
-  // Proporción 2.5/1: es significativamente más alto ("gordo") que el 4.5/1 anterior.
+  // Lógica de filtrado avanzada:
+  // 1. Coincidir posición
+  // 2. Coincidir Vista (Página)
+  // 3. Si el anuncio tiene un filterContext definido, debe coincidir con el currentFilter de la vista.
+  const activeAds = ads.filter(ad => {
+    const matchPos = ad.position === position;
+    const matchView = ad.view === view;
+    const matchFilter = !ad.filterContext || ad.filterContext === 'all' || ad.filterContext === 'ALL' || ad.filterContext === currentFilter;
+    
+    return ad.isActive && matchPos && matchView && matchFilter;
+  });
+
   const aspectClass = "aspect-[2.5/1]";
 
   if (activeAds.length === 0) {

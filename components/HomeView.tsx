@@ -79,7 +79,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         
         {/* Ad Spot Top - Sin padding lateral adicional. Bajado aprox 0.5cm (20px) */}
         <div className="-mx-2 pt-5">
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
         </div>
 
         {/* IA CONCIERGE CARD */}
@@ -191,7 +192,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
 
         {/* Footer Ad - Sin padding lateral adicional */}
         <div className="-mx-2 pb-10">
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.HOME} />
         </div>
       </div>
     </div>

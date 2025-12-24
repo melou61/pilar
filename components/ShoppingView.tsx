@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronRight, Heart, Clock, Phone, MapPin, Filter } from './Icons';
-import { CensusItem, Ad } from '../types';
+import { CensusItem, Ad, ViewState } from '../types';
 import { BusinessDetailView } from './BusinessDetailView';
 import { AdSpot } from './AdSpot';
 
@@ -58,9 +58,15 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
           <h2 className="text-5xl font-black text-gray-900 tracking-tighter mb-2">{t.sections.shopping.title}</h2>
           <p className="text-gray-500 font-medium text-lg mb-4">{t.sections.shopping.desc}</p>
           
-          {/* Ad Spot Top - Sin padding lateral extra */}
+          {/* Ad Spot Top con segmentación por zona */}
           <div className="mb-8 -mx-2">
-            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+            <AdSpot 
+              ads={ads} 
+              position="page-top" 
+              label={t.common.sponsored} 
+              view={ViewState.SHOPPING} 
+              currentFilter={activeZone}
+            />
           </div>
 
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -133,9 +139,15 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
             )}
         </div>
 
-        {/* Ad Spot Bottom - Sin padding lateral extra */}
+        {/* Ad Spot Bottom con segmentación por zona */}
         <div className="mt-16 max-w-4xl mx-auto -mx-2">
-            <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+            <AdSpot 
+              ads={ads} 
+              position="page-bottom" 
+              label={t.common.sponsored} 
+              view={ViewState.SHOPPING} 
+              currentFilter={activeZone}
+            />
         </div>
     </div>
   );

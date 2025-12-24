@@ -29,7 +29,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
           <h1 className="text-6xl font-black text-white tracking-tighter mb-4 leading-none">
             {content.title}
           </h1>
-          <p className="text-white/80 text-xl font-medium leading-tight max-w-sm">
+          <p className="text-white/80 text-xl font-medium leading-tight max-sm">
             {content.subtitle}
           </p>
         </div>
@@ -38,7 +38,8 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
       <div className="px-6 -mt-10 space-y-10">
         {/* HUECO 3: page-top */}
         <div className="px-4">
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.ACTIVITIES} />
         </div>
 
         {ACTIVITIES_LIST.map((activity) => {
@@ -127,7 +128,8 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
 
         {/* HUECO 4: page-bottom */}
         <div className="px-4">
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+           {/* Added missing view prop */}
+           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.ACTIVITIES} />
         </div>
       </div>
     </div>

@@ -92,7 +92,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <WeatherWidget t={t} />
 
           <div className="px-6">
-             <AdSpot ads={ads} position="menu-top" label={sponsoredText} />
+             {/* Cambiado a ViewState.SIDEBAR para segmentación global del menú */}
+             <AdSpot ads={ads} position="menu-top" label={sponsoredText} view={ViewState.SIDEBAR} />
           </div>
 
           <ul className="space-y-2 px-6">
@@ -119,7 +120,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </ul>
 
           <div className="px-6 py-4 border-t border-gray-50 mt-4">
-             <AdSpot ads={ads} position="menu-bottom" label={sponsoredText} />
+             {/* Cambiado a ViewState.SIDEBAR para segmentación global del menú */}
+             <AdSpot ads={ads} position="menu-bottom" label={sponsoredText} view={ViewState.SIDEBAR} />
           </div>
 
           {isLoggedIn && (
