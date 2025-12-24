@@ -77,8 +77,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
       {/* Margen negativo para subir el contenido */}
       <div className="max-w-6xl mx-auto w-full px-6 -mt-40 relative z-20 space-y-20">
         
-        {/* Ad Spot Top - Sin padding lateral adicional para que se vea más ancho */}
-        <div className="-mx-2">
+        {/* Ad Spot Top - Sin padding lateral adicional. Bajado aprox 0.5cm (20px) */}
+        <div className="-mx-2 pt-5">
            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
         </div>
 

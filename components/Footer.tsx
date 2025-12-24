@@ -61,7 +61,7 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
           <h3 className="text-xl font-black border-l-4 border-blue-500 pl-4 tracking-tighter uppercase">{f.follow}</h3>
           <div className="flex gap-4">
               <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-[#1877F2] hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Facebook size={22} /></a>
-              <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] to-[#bc1888] hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Instagram size={22} /></a>
+              <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-gradient-to-tr hover:from-[#f09433] via-[#dc2743] to-[#bc1888] hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Instagram size={22} /></a>
               <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-black hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Twitter size={22} /></a>
               <a href="#" className="bg-white/5 p-3.5 rounded-2xl hover:bg-[#FF0000] hover:text-white transition-all duration-300 text-gray-400 shadow-xl border border-white/5"><Youtube size={22} /></a>
           </div>

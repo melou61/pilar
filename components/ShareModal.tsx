@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   X, 
@@ -104,7 +105,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, data, t
   ];
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-[2100] flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" 
         onClick={onClose}

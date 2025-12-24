@@ -38,21 +38,25 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="fixed top-0 z-[200] bg-white h-24 w-full max-w-[450px] flex items-center border-b border-gray-50 shadow-sm px-4">
-      <div className="w-full flex items-center justify-between gap-2">
+    <header className="fixed top-0 z-[200] bg-white h-24 w-full flex items-center border-b border-gray-50 shadow-sm px-6">
+      <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-4">
         
         {/* LOGO */}
         <div 
           className="flex items-center gap-2 cursor-pointer shrink-0 group" 
           onClick={onLogoClick}
         >
-          <div className="w-10 h-10 bg-[#2563eb] rounded-[14px] flex items-center justify-center text-white font-black text-lg shadow-xl shadow-blue-200 group-hover:scale-105 transition-all duration-300">
+          <div className="w-12 h-12 bg-[#2563eb] rounded-[16px] flex items-center justify-center text-white font-black text-xl shadow-xl shadow-blue-200 group-hover:scale-105 transition-all duration-300">
             PH
+          </div>
+          <div className="hidden md:flex flex-col">
+            <span className="text-sm font-black text-gray-900 tracking-tighter leading-none">PILAR</span>
+            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">MASTER</span>
           </div>
         </div>
 
-        {/* NAVIGATION - Más compacto para móvil */}
-        <nav className="flex items-center bg-[#f1f5f9]/60 border border-[#f1f5f9] rounded-[32px] p-1 gap-0.5 shadow-inner overflow-x-auto no-scrollbar flex-1">
+        {/* NAVIGATION - Restaurada visibilidad en móviles */}
+        <nav className="flex items-center bg-[#f1f5f9]/60 border border-[#f1f5f9] rounded-[32px] p-1 gap-1 shadow-inner overflow-x-auto no-scrollbar max-w-[200px] sm:max-w-none">
           {navItems.map((item) => {
             const isActive = currentView === item.id;
             const IconComponent = item.icon;
@@ -61,16 +65,16 @@ export const Header: React.FC<HeaderProps> = ({
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
                 className={`
-                  relative px-2 h-14 flex flex-col items-center justify-center rounded-[26px] transition-all duration-300 flex-1 min-w-[50px]
+                  relative px-3 sm:px-6 h-14 flex flex-col items-center justify-center rounded-[26px] transition-all duration-300 min-w-[60px] sm:min-w-[100px]
                   ${isActive ? 'bg-white shadow-md text-[#2563eb]' : 'text-[#94a3b8] hover:text-[#475569]'}
                 `}
               >
-                <IconComponent size={18} strokeWidth={isActive ? 2.5 : 2} />
-                <span className="text-[7px] font-black uppercase tracking-widest mt-1 whitespace-nowrap">
+                <IconComponent size={20} strokeWidth={isActive ? 2.5 : 2} />
+                <span className="text-[8px] font-black uppercase tracking-widest mt-1 whitespace-nowrap">
                   {item.label}
                 </span>
                 {isActive && (
-                  <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#2563eb] animate-in zoom-in" />
+                  <div className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-[#2563eb] animate-in zoom-in" />
                 )}
               </button>
             );
@@ -78,19 +82,19 @@ export const Header: React.FC<HeaderProps> = ({
         </nav>
 
         {/* ACTIONS */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-3 shrink-0">
           <button 
             onClick={onSearchClick}
-            className="w-10 h-10 flex items-center justify-center text-[#64748b] hover:text-[#2563eb]"
+            className="w-12 h-12 flex items-center justify-center text-[#64748b] hover:text-[#2563eb] bg-gray-50 rounded-2xl hover:bg-white hover:shadow-md transition-all"
           >
-            <Search size={20} strokeWidth={2.5} />
+            <Search size={22} strokeWidth={2.5} />
           </button>
           
           <button 
             onClick={onMenuClick} 
-            className="w-10 h-10 bg-[#2563eb] text-white rounded-[14px] flex items-center justify-center shadow-lg shadow-blue-100 active:scale-95"
+            className="w-12 h-12 bg-[#2563eb] text-white rounded-[16px] flex items-center justify-center shadow-lg shadow-blue-100 active:scale-95 hover:bg-blue-700 transition-colors"
           >
-            <Menu size={20} strokeWidth={2.5} />
+            <Menu size={22} strokeWidth={2.5} />
           </button>
         </div>
       </div>

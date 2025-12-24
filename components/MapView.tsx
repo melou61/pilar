@@ -2,17 +2,19 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, Navigation, X, Waves, Star, History, Activity } from './Icons';
 import { MOCK_EVENTS, MOCK_BEACHES, MOCK_SIGHTSEEING, ACTIVITIES_LIST } from '../data';
-import { ViewState, CensusItem } from '../types';
+import { ViewState, CensusItem, Ad } from '../types';
+import { AdSpot } from './AdSpot';
 
 interface MapViewProps {
   t: any;
   onNavigate: (view: ViewState, id?: string) => void;
   businesses: CensusItem[];
+  ads: Ad[];
 }
 
 declare const L: any; // Leaflet Global
 
-export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) => {
+export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const [leafletMap, setLeafletMap] = useState<any | null>(null);
@@ -33,7 +35,8 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
         try {
           const map = L.map(mapContainerRef.current, {
             zoomControl: false,
-            attributionControl: false
+            attributionControl: false,
+            scrollWheelZoom: false 
           }).setView([37.8653, -0.7932], 14);
 
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -155,9 +158,16 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
   };
 
   return (
-    <div className="flex flex-col h-full bg-white relative animate-in fade-in duration-500 overflow-hidden">
-      <div className="absolute top-4 left-0 right-0 z-[500] flex justify-center px-4">
-        <div className="bg-white/90 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar">
+    <div className="flex flex-col bg-white relative animate-in fade-in duration-500 overflow-x-hidden min-h-screen">
+      
+      {/* 1. PUBLICIDAD SUPERIOR (Entre Header y Mapa) */}
+      <div className="px-6 py-4 bg-white">
+        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
+      </div>
+
+      {/* Zona de Filtros (Ahora flotando sobre el mapa pero bajo la publicidad superior) */}
+      <div className="relative z-[500] flex justify-center px-4 py-2 bg-white">
+        <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar">
           {[
             { id: 'all', label: t.menu.home }, 
             { id: 'beaches', label: t.menu.beaches },
@@ -174,8 +184,11 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
         </div>
       </div>
 
-      <div className="relative flex-1 bg-gray-100">
+      {/* 2. EL MAPA */}
+      <div className="relative flex-1 bg-gray-100 h-[60vh] md:h-[70vh] rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-4">
         <div ref={mapContainerRef} className="w-full h-full min-h-[400px] z-10" />
+        
+        {/* Botón Mi Ubicación */}
         <button 
           onClick={handleMyLocation} 
           className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[1000] bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95`}
@@ -184,6 +197,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
           <Navigation size={28} className={isLocating ? 'animate-spin opacity-50' : ''} />
         </button>
 
+        {/* Tarjeta de Detalle Seleccionado */}
         {selectedItem && (
           <div className="absolute bottom-8 left-8 right-8 z-[1001] animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto">
@@ -214,6 +228,12 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses }) =
           </div>
         )}
       </div>
+
+      {/* 3. PUBLICIDAD INFERIOR (Entre Mapa y Footer) */}
+      <div className="px-6 py-10 bg-white">
+        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
+      </div>
+
     </div>
   );
 };

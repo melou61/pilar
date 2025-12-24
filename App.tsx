@@ -103,6 +103,43 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleLogin = (userData?: { name: string, email: string }) => {
+    if (userData) {
+      setUserRole('USER');
+      setUserName(userData.name);
+    } else {
+      setUserRole('ADMIN');
+      setUserName('Administrador');
+    }
+    setIsLoggedIn(true);
+    setLoginOpen(false);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserRole('USER');
+    setUserName('');
+    setCurrentView(ViewState.HOME);
+    setSidebarOpen(false);
+  };
+
+  const toggleFavorite = (id: string) => {
+    setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
+  };
+
+  const toggleMyEvent = (id: string) => {
+    setMyEvents(prev => prev.includes(id) ? prev.filter(e => e !== id) : [...prev, id]);
+  };
+
+  const handleShare = (data: any) => {
+    setShareData({
+        title: data.title || 'Pilar de la Horadada',
+        text: data.description || 'Descubre este lugar increíble.',
+        url: window.location.href 
+    });
+    setIsShareOpen(true);
+  };
+
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
     { id: ViewState.LENS, label: 'PH Lens', icon: Scan },
@@ -112,75 +149,93 @@ const App: React.FC = () => {
     { id: ViewState.NEWS, label: t.menu.news, icon: Newspaper },
     { id: ViewState.BEACHES, label: t.menu.beaches, icon: Waves },
     { id: ViewState.SIGHTSEEING, label: t.menu.sightseeing, icon: Eye },
+    { id: ViewState.ACTIVITIES, label: t.menu.activities, icon: Activity },
     { id: ViewState.DINING, label: t.menu.dining, icon: UtensilsCrossed },
     { id: ViewState.SHOPPING, label: t.menu.shopping, icon: ShoppingBag },
+    { id: ViewState.HEALTH, label: t.menu.health, icon: Heart },
     { id: ViewState.EVENTS, label: t.menu.events, icon: Calendar },
+    { id: ViewState.FORUM, label: t.menu.forum, icon: MessageSquare },
+    { id: ViewState.ADMIN, label: t.menu.admin, icon: ShieldCheck },
   ];
 
+  const renderContent = () => {
+    switch (currentView) {
+      case ViewState.HOME: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />;
+      case ViewState.NEWS: return <NewsView t={t} ads={ads} />;
+      case ViewState.BEACHES: return <BeachesView t={t} onNavigate={handleNavigate} ads={ads} />;
+      case ViewState.SIGHTSEEING: return <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} />;
+      case ViewState.ACTIVITIES: return <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} />;
+      case ViewState.DINING: return <DiningView t={t} businesses={businesses} ads={ads} />;
+      case ViewState.SHOPPING: return <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} />;
+      case ViewState.HEALTH: return <HealthView t={t} onNavigate={handleNavigate} ads={ads} />;
+      case ViewState.CITIZEN_SERVICES: return <CitizenServicesView t={t} ads={ads} />;
+      case ViewState.EVENTS: return <EventsView t={t} events={events} onShare={handleShare} onAddToCalendar={(e) => alert(t.common.addToCalendar)} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={toggleMyEvent} ads={ads} />;
+      case ViewState.FORUM: return <ForumView t={t} ads={ads} />;
+      case ViewState.MAP: return <MapView t={t} onNavigate={handleNavigate} businesses={businesses} ads={ads} />;
+      case ViewState.AI_CHAT: return <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} langCode={currentLang.code} langLabel={currentLang.label} />;
+      case ViewState.ADMIN: return <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as any} />;
+      case ViewState.PROFILE: return <ProfileView userName={userName} onLogout={handleLogout} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />;
+      case ViewState.SEARCH: return <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} />;
+      case ViewState.POSTCARD: return <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />;
+      case ViewState.LENS: return <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} />;
+      default: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-200 flex justify-center overflow-x-hidden font-sans">
-      {/* MOBILE DEVICE CONTAINER */}
-      <div className="w-full max-w-[450px] bg-white min-h-screen shadow-[0_0_80px_rgba(0,0,0,0.15)] relative flex flex-col">
-        
-        {currentView === ViewState.LENS && <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
-        
-        <Header 
-          onMenuClick={() => setSidebarOpen(true)} 
-          onLoginClick={() => setLoginOpen(true)} 
-          onSearchClick={() => handleNavigate(ViewState.SEARCH)} 
-          onLogoClick={() => handleNavigate(ViewState.HOME)} 
-          currentLang={currentLang} 
-          onLanguageChange={setCurrentLang} 
-          languages={languages} 
-          currentView={currentView}
-          onNavigate={handleNavigate}
-          t={t}
-        />
-        
-        <Sidebar 
-          isOpen={isSidebarOpen} 
-          onClose={() => setSidebarOpen(false)} 
-          menuItems={menuItems} 
-          currentView={currentView} 
-          onNavigate={handleNavigate} 
-          ads={ads} 
-          title={t.menu.title} 
-          sponsoredText={t.common.sponsored}
-          isLoggedIn={isLoggedIn}
-          onLogout={() => { setIsLoggedIn(false); setCurrentView(ViewState.HOME); }}
-          t={t}
-        />
+    <div className="min-h-screen bg-white font-sans text-gray-900">
+      {activeBeaconShop && (
+        <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} />
+      )}
+      
+      <LoginModal 
+        isOpen={isLoginOpen} 
+        onClose={() => setLoginOpen(false)} 
+        onLogin={handleLogin}
+        onLoginSuperAdmin={() => handleLogin()}
+        t={t}
+      />
 
-        <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={() => { setIsLoggedIn(true); setLoginOpen(false); }} onLoginSuperAdmin={() => { setIsLoggedIn(true); setUserRole('ADMIN'); setLoginOpen(false); setCurrentView(ViewState.ADMIN); }} t={t} />
-        <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
-        
-        {activeBeaconShop && (
-          <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} />
-        )}
+      <ShareModal 
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        data={shareData}
+        t={t.share}
+      />
 
-        <main className={`flex-1 w-full flex flex-col relative pt-24 ${currentView === ViewState.MAP ? 'h-[calc(100vh-96px)]' : ''}`}>
-           {currentView === ViewState.HOME && <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />}
-           {currentView === ViewState.BEACHES && <BeachesView t={t} onNavigate={handleNavigate} ads={ads} />}
-           {currentView === ViewState.SIGHTSEEING && <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} />}
-           {currentView === ViewState.ACTIVITIES && <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} />}
-           {currentView === ViewState.MAP && <MapView t={t} onNavigate={handleNavigate} businesses={businesses} />}
-           {currentView === ViewState.DINING && <DiningView t={t} businesses={businesses} ads={ads} />}
-           {currentView === ViewState.SHOPPING && <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={(id) => setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id])} ads={ads} />}
-           {currentView === ViewState.CITIZEN_SERVICES && <CitizenServicesView t={t} ads={ads} />}
-           {currentView === ViewState.NEWS && <NewsView t={t} ads={ads} />}
-           {currentView === ViewState.EVENTS && <EventsView t={t} events={events} onShare={() => {}} onAddToCalendar={() => {}} initialEventId={selectedEventId} ads={ads} />}
-           {currentView === ViewState.AI_CHAT && <AIChatView t={t} langCode={currentLang.code} langLabel={currentLang.label} onBack={() => handleNavigate(ViewState.HOME)} />}
-           {currentView === ViewState.SEARCH && <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={() => {}} />}
-           {currentView === ViewState.POSTCARD && <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />}
-           {currentView === ViewState.FORUM && <ForumView t={t} ads={ads} />}
-           {currentView === ViewState.PROFILE && <ProfileView userName={userName} onLogout={() => setIsLoggedIn(false)} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />}
-           {currentView === ViewState.HEALTH && <HealthView t={t} onNavigate={handleNavigate} ads={ads} />}
-           {currentView === ViewState.ADMIN && <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={() => setIsLoggedIn(false)} currentUserRole={userRole as AdminRole} />}
-        </main>
-        
-        {currentView !== ViewState.ADMIN && currentView !== ViewState.POSTCARD && currentView !== ViewState.LENS && <Footer t={t} />}
-      </div>
+      <Header 
+        onMenuClick={() => setSidebarOpen(true)}
+        onLogoClick={() => handleNavigate(ViewState.HOME)}
+        onSearchClick={() => handleNavigate(ViewState.SEARCH)}
+        currentLang={currentLang}
+        onLanguageChange={setCurrentLang}
+        languages={languages}
+        currentView={currentView}
+        onNavigate={handleNavigate}
+        t={t}
+      />
+
+      <Sidebar 
+        isOpen={isSidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        menuItems={menuItems}
+        currentView={currentView}
+        onNavigate={handleNavigate}
+        ads={ads}
+        title={t.menu.title || 'PH App'}
+        sponsoredText={t.common.sponsored}
+        isLoggedIn={isLoggedIn}
+        onLogout={handleLogout}
+        t={t}
+      />
+
+      <main className="pt-24 min-h-screen">
+        {renderContent()}
+      </main>
+
+      <Footer t={t} />
     </div>
   );
 };
+
 export default App;
