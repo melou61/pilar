@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { MapPin, Navigation, X, Waves, Star, History, Activity } from './Icons';
+import { MapPin, Navigation, X, Waves, Star, History, Activity, Plus, Minus } from './Icons';
 import { MOCK_EVENTS, MOCK_BEACHES, MOCK_SIGHTSEEING, ACTIVITIES_LIST } from '../data';
 import { ViewState, CensusItem, Ad } from '../types';
 import { AdSpot } from './AdSpot';
@@ -157,45 +157,84 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
     }
   };
 
+  const handleZoomIn = () => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.zoomIn();
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.zoomOut();
+    }
+  };
+
   return (
     <div className="flex flex-col bg-white relative animate-in fade-in duration-500 overflow-x-hidden min-h-screen">
       
       {/* 1. PUBLICIDAD SUPERIOR (Entre Header y Mapa) */}
-      <div className="px-6 py-4 bg-white">
+      <div className="px-6 py-4 bg-white shrink-0">
         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} />
       </div>
 
-      {/* Zona de Filtros (Ahora flotando sobre el mapa pero bajo la publicidad superior) */}
-      <div className="relative z-[500] flex justify-center px-4 py-2 bg-white">
-        <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar">
-          {[
-            { id: 'all', label: t.menu.home }, 
-            { id: 'beaches', label: t.menu.beaches },
-            { id: 'culture', label: t.menu.sightseeing },
-            { id: 'active', label: t.menu.activities },
-            { id: 'food', label: t.menu.dining }, 
-            { id: 'shop', label: t.menu.shopping }, 
-            { id: 'events', label: t.menu.events }
-          ].map(f => (
-            <button key={f.id} onClick={() => setFilter(f.id as any)} className={`px-5 py-2 rounded-full text-[10px] font-black transition-all capitalize whitespace-nowrap ${filter === f.id ? 'bg-[#0f172a] text-white shadow-lg' : 'bg-transparent text-gray-500 hover:bg-gray-50'}`}>
-              {f.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 2. EL MAPA */}
-      <div className="relative flex-1 bg-gray-100 h-[60vh] md:h-[70vh] rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-4">
-        <div ref={mapContainerRef} className="w-full h-full min-h-[400px] z-10" />
+      {/* 2. CONTENEDOR DEL MAPA (Ocupa el resto de la pantalla) */}
+      <div className="relative h-[65vh] bg-gray-100 rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-4 mb-4">
         
-        {/* Botón Mi Ubicación */}
-        <button 
-          onClick={handleMyLocation} 
-          className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[1000] bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95`}
-          disabled={isLocating}
-        >
-          <Navigation size={28} className={isLocating ? 'animate-spin opacity-50' : ''} />
-        </button>
+        {/* BARRA DE FILTROS: Absoluta sobre el mapa */}
+        <div className="absolute top-6 left-0 right-0 z-[1001] flex justify-center px-4">
+          <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar max-w-full">
+            {[
+              { id: 'all', label: t.menu.home }, 
+              { id: 'beaches', label: t.menu.beaches },
+              { id: 'culture', label: t.menu.sightseeing },
+              { id: 'active', label: t.menu.activities },
+              { id: 'food', label: t.menu.dining }, 
+              { id: 'shop', label: t.menu.shopping }, 
+              { id: 'events', label: t.menu.events }
+            ].map(f => (
+              <button 
+                key={f.id} 
+                onClick={() => setFilter(f.id as any)} 
+                className={`px-5 py-2 rounded-full text-[10px] font-black transition-all capitalize whitespace-nowrap ${
+                  filter === f.id ? 'bg-[#0f172a] text-white shadow-lg' : 'bg-transparent text-gray-500 hover:bg-gray-50'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Div de Leaflet */}
+        <div ref={mapContainerRef} className="w-full h-full" />
+        
+        {/* CONTROLES DE MAPA (DERECHA) */}
+        <div className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[1000] flex flex-col gap-3`}>
+          {/* Zoom In */}
+          <button 
+            onClick={handleZoomIn} 
+            className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all"
+          >
+            <Plus size={24} strokeWidth={3} />
+          </button>
+          
+          {/* Zoom Out */}
+          <button 
+            onClick={handleZoomOut} 
+            className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all"
+          >
+            <Minus size={24} strokeWidth={3} />
+          </button>
+
+          {/* Botón Mi Ubicación */}
+          <button 
+            onClick={handleMyLocation} 
+            className="bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 mt-2"
+            disabled={isLocating}
+          >
+            <Navigation size={28} className={isLocating ? 'animate-spin opacity-50' : ''} />
+          </button>
+        </div>
 
         {/* Tarjeta de Detalle Seleccionado */}
         {selectedItem && (
@@ -230,7 +269,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
       </div>
 
       {/* 3. PUBLICIDAD INFERIOR (Entre Mapa y Footer) */}
-      <div className="px-6 py-10 bg-white">
+      <div className="px-6 py-10 bg-white shrink-0">
         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} />
       </div>
 
