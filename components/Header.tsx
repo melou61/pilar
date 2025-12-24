@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Menu, Search, Home, MapIcon, Sparkles, Calendar, User, ShieldCheck, X } from './Icons';
 import { Language, ViewState } from '../types';
@@ -52,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div className="hidden md:flex flex-col">
             <span className="text-sm font-black text-gray-900 tracking-tighter leading-none">PILAR</span>
-            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">MASTER</span>
+            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">DE LA HORADADA</span>
           </div>
         </div>
 
