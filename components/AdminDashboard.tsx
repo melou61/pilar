@@ -40,6 +40,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [currentAd, setCurrentAd] = useState<Partial<Ad>>({});
   const [currentBeacon, setCurrentBeacon] = useState<{bizId: string, promo: Partial<Promotion & { cooldownMinutes?: number } >}>({bizId: '', promo: {}});
 
+  // Estado para Beacons Forzados a Offline (Local para la demo)
+  const [offlineBeacons, setOfflineBeacons] = useState<Set<string>>(new Set());
+
   // Configuración de iconos y colores para redes sociales
   const socialConfig: Record<string, { icon: any, activeClass: string }> = {
     facebook: { icon: Facebook, activeClass: 'bg-[#1877F2] shadow-[#1877F2]/40' },
@@ -118,12 +121,44 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       interactionsCount: 0
     };
     setBusinesses(prev => prev.map(b => b.id === currentBeacon.bizId ? { ...b, promotion: promo } : b));
+    setOfflineBeacons(prev => {
+      const next = new Set(prev);
+      next.delete(currentBeacon.bizId);
+      return next;
+    });
     setEditMode('none');
   };
 
   const deleteBeacon = (bizId: string) => {
-    if (confirm("¿Seguro que quieres desactivar este Beacon? Dejará de enviar notificaciones a los móviles cercanos.")) {
-        setBusinesses(prev => prev.map(b => b.id === bizId ? { ...b, promotion: undefined } : b));
+    setBusinesses(prev => prev.map(b => b.id === bizId ? { ...b, promotion: undefined } : b));
+  };
+
+  const handleStatusChange = (bizId: string, newStatus: string) => {
+    const biz = businesses.find(b => b.id === bizId);
+    if (!biz) return;
+    const hardware = getBeaconHardwareStats(bizId);
+
+    if (newStatus === 'offline') {
+      setOfflineBeacons(prev => new Set(prev).add(bizId));
+      deleteBeacon(bizId);
+    } else if (newStatus === 'standby') {
+      setOfflineBeacons(prev => {
+        const next = new Set(prev);
+        next.delete(bizId);
+        return next;
+      });
+      deleteBeacon(bizId);
+    } else if (newStatus === 'online') {
+      if (biz.promotion) {
+        setOfflineBeacons(prev => {
+          const next = new Set(prev);
+          next.delete(bizId);
+          return next;
+        });
+      } else {
+        setCurrentBeacon({bizId: biz.id, promo: {beaconHardwareId: hardware.uuid, frequencyPerDay: 3, activeTimeMinutes: 60}}); 
+        setEditMode('beacon');
+      }
     }
   };
 
@@ -472,38 +507,51 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {businesses.map(b => {
                       const hardware = getBeaconHardwareStats(b.id);
+                      const isOffline = offlineBeacons.has(b.id);
+                      const status = isOffline ? 'offline' : (b.promotion ? 'online' : 'standby');
+
                       return (
-                        <div key={b.id} className={`bg-white rounded-[40px] border transition-all duration-500 overflow-hidden shadow-xl flex flex-col ${b.promotion ? 'border-blue-500 ring-4 ring-blue-500/5' : 'border-slate-100 opacity-80 hover:opacity-100'}`}>
+                        <div key={b.id} className={`bg-white rounded-[40px] border transition-all duration-500 overflow-hidden shadow-xl flex flex-col ${status === 'online' ? 'border-blue-500 ring-4 ring-blue-500/5' : status === 'offline' ? 'border-red-500 grayscale opacity-70' : 'border-slate-100 opacity-80 hover:opacity-100'}`}>
                           
                           {/* Card Header Técnico */}
                           <div className="p-6 pb-2 flex justify-between items-start">
-                             <div className="flex-1">
-                                <h4 className="font-black text-slate-900 text-lg leading-tight truncate">{b.name}</h4>
+                             <div className="flex-1 min-w-0">
+                                <h4 className={`font-black text-slate-900 text-lg leading-tight truncate ${status === 'offline' ? 'text-red-900' : ''}`}>{b.name}</h4>
                                 <p className="text-[9px] font-mono text-slate-400 mt-1 uppercase tracking-tight">{hardware.uuid}</p>
                              </div>
-                             {b.promotion ? (
-                               <div className="bg-emerald-50 text-emerald-600 px-2 py-1 rounded-lg text-[8px] font-black uppercase">Online</div>
-                             ) : (
-                               <div className="bg-slate-100 text-slate-400 px-2 py-1 rounded-lg text-[8px] font-black uppercase">Standby</div>
-                             )}
+                             <div className="shrink-0 flex items-center">
+                                <select 
+                                  value={status}
+                                  onChange={(e) => handleStatusChange(b.id, e.target.value)}
+                                  className={`appearance-none px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 ${
+                                    status === 'online' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 
+                                    status === 'offline' ? 'bg-red-50 text-red-600 border-red-200' : 
+                                    'bg-slate-50 text-slate-500 border-slate-200'
+                                  }`}
+                                >
+                                  <option value="online">Online</option>
+                                  <option value="standby">Standby</option>
+                                  <option value="offline">Offline</option>
+                                </select>
+                             </div>
                           </div>
 
                           {/* Hardware Health Visualizer */}
                           <div className="px-6 py-4 grid grid-cols-2 gap-4">
-                             <div className="bg-slate-50 p-3 rounded-2xl flex flex-col items-center justify-center">
-                                <Battery size={18} className={hardware.battery < 30 ? 'text-red-500 animate-bounce' : 'text-emerald-500'} />
-                                <span className="text-sm font-black mt-1">{hardware.battery}%</span>
+                             <div className="bg-slate-50 p-3 rounded-2xl flex flex-col items-center justify-center transition-all">
+                                <Battery size={18} className={status === 'offline' ? 'text-red-800' : hardware.battery < 30 ? 'text-red-500 animate-bounce' : 'text-emerald-500'} />
+                                <span className={`text-sm font-black mt-1 ${status === 'offline' ? 'text-red-900' : ''}`}>{status === 'offline' ? '--' : `${hardware.battery}%`}</span>
                                 <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Batería</span>
                              </div>
-                             <div className="bg-slate-50 p-3 rounded-2xl flex flex-col items-center justify-center">
-                                <Signal size={18} className="text-blue-500" />
-                                <span className="text-sm font-black mt-1">-{hardware.signal}dBm</span>
+                             <div className="bg-slate-50 p-3 rounded-2xl flex flex-col items-center justify-center transition-all">
+                                <Signal size={18} className={status === 'offline' ? 'text-red-800' : 'text-blue-500'} />
+                                <span className={`text-sm font-black mt-1 ${status === 'offline' ? 'text-red-900' : ''}`}>{status === 'offline' ? '--' : `-${hardware.signal}dBm`}</span>
                                 <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Potencia</span>
                              </div>
                           </div>
 
                           {/* Stats Info */}
-                          {b.promotion && (
+                          {status !== 'offline' && b.promotion && (
                             <div className="px-6 space-y-2 mb-4">
                                <div className="flex justify-between text-[9px] font-black uppercase">
                                  <span className="text-slate-400">Pital Rate:</span>
@@ -519,8 +567,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             </div>
                           )}
 
+                          {status === 'offline' && (
+                             <div className="px-6 mb-4 flex items-center gap-2 text-[9px] font-black text-red-600 uppercase">
+                                <AlertCircle size={12} /> hardware desconectado
+                             </div>
+                          )}
+
                           <div className="p-6 pt-2 mt-auto bg-slate-50/50 flex gap-2">
-                             <button onClick={() => { setCurrentBeacon({bizId: b.id, promo: b.promotion || {beaconHardwareId: hardware.uuid, frequencyPerDay: 3, activeTimeMinutes: 60}}); setEditMode('beacon'); }} className={`flex-1 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-md transition-all flex items-center justify-center gap-2 ${b.promotion ? 'bg-slate-900 text-white' : 'bg-blue-600 text-white'}`}>
+                             <button 
+                                onClick={() => { setCurrentBeacon({bizId: b.id, promo: b.promotion || {beaconHardwareId: hardware.uuid, frequencyPerDay: 3, activeTimeMinutes: 60}}); setEditMode('beacon'); }} 
+                                disabled={status === 'offline'}
+                                className={`flex-1 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-md transition-all flex items-center justify-center gap-2 ${status === 'offline' ? 'bg-slate-200 text-slate-400' : b.promotion ? 'bg-slate-900 text-white' : 'bg-blue-600 text-white'}`}
+                             >
                                 {b.promotion ? <Settings2 size={14}/> : <Plus size={14}/>}
                                 {b.promotion ? 'Gestión' : 'Vincular'}
                              </button>

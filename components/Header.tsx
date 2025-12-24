@@ -35,6 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
     { id: ViewState.AI_CHAT, icon: Sparkles, label: t.menu.ai },
     { id: ViewState.EVENTS, icon: Calendar, label: t.menu.events },
     { id: ViewState.PROFILE, icon: User, label: t.menu.profile },
+    { id: ViewState.ADMIN, icon: ShieldCheck, label: t.menu.admin },
   ];
 
   return (
@@ -55,7 +56,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* NAVIGATION - Restaurada visibilidad en móviles */}
+        {/* NAVIGATION */}
         <nav className="flex items-center bg-[#f1f5f9]/60 border border-[#f1f5f9] rounded-[32px] p-1 gap-1 shadow-inner overflow-x-auto no-scrollbar max-w-[200px] sm:max-w-none">
           {navItems.map((item) => {
             const isActive = currentView === item.id;
