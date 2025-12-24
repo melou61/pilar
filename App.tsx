@@ -95,10 +95,19 @@ const App: React.FC = () => {
   }, [currentView, beaconsEnabled, businesses]);
 
   const handleNavigate = (view: ViewState, id?: string) => {
-    if (view === ViewState.ADMIN && userRole !== 'ADMIN') { setLoginOpen(true); return; }
-    if (view === ViewState.PROFILE && !isLoggedIn) { setLoginOpen(true); return; }
-    setCurrentView(view);
+    // Cerramos el sidebar siempre al inicio para una mejor UX
     setSidebarOpen(false);
+
+    if (view === ViewState.ADMIN && userRole !== 'ADMIN') { 
+      setLoginOpen(true); 
+      return; 
+    }
+    if (view === ViewState.PROFILE && !isLoggedIn) { 
+      setLoginOpen(true); 
+      return; 
+    }
+
+    setCurrentView(view);
     if (view === ViewState.EVENTS) setSelectedEventId(id || null);
     if (view === ViewState.SHOPPING) setSelectedBusinessId(id || null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
