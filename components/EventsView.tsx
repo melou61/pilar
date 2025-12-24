@@ -61,7 +61,6 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-44 animate-in fade-in duration-300">
-      {/* Header Premium */}
       <div className="bg-[#1e1b4b] px-8 pt-16 pb-24 text-white rounded-b-[60px] relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-purple-600/20 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10">
@@ -87,14 +86,13 @@ export const EventsView: React.FC<EventsViewProps> = ({
         </div>
       </div>
 
-      {/* Tabs Row - Refined styling to avoid Figma glitch */}
       <div className="px-6 -mt-10 relative z-20">
-        <div className="flex gap-3 overflow-x-auto no-scrollbar py-4 px-2">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar py-4 px-2 select-none">
           {categories.map(cat => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-8 py-3.5 rounded-[22px] text-[10px] font-black whitespace-nowrap transition-all uppercase tracking-widest border border-transparent shadow-lg ${
+              className={`px-8 py-3.5 rounded-[22px] text-[10px] font-black whitespace-nowrap transition-all uppercase tracking-widest border border-transparent shadow-lg shrink-0 ${
                 activeCategory === cat.id 
                 ? 'bg-purple-600 text-white shadow-purple-200/50 scale-105' 
                 : 'bg-white text-gray-400 shadow-gray-100 hover:border-purple-100'
@@ -106,7 +104,6 @@ export const EventsView: React.FC<EventsViewProps> = ({
         </div>
       </div>
 
-      {/* Events Feed */}
       <div className="px-6 mt-6 space-y-10">
         {filteredEvents.length > 0 ? (
           <>
@@ -174,9 +171,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
               );
             })}
             
-            {/* Anuncio inferior al final de los eventos */}
             <div className="pt-6 -mx-2">
-              {/* Added missing view prop */}
               <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.EVENTS} />
             </div>
           </>
