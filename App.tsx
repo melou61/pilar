@@ -83,7 +83,6 @@ const App: React.FC = () => {
   useEffect(() => {
     if (beaconsEnabled && currentView === ViewState.HOME) {
       const timer = setTimeout(() => {
-        // Fix: corrected typo in variable name 'shopWith promo' to 'shopWithPromo'
         const shopWithPromo = businesses.find(b => b.promotion && b.promotion.title);
         if (shopWithPromo) setActiveBeaconShop(shopWithPromo);
       }, 12000);
@@ -139,7 +138,6 @@ const App: React.FC = () => {
     { id: ViewState.ADMIN, label: t.menu.admin, icon: ShieldCheck },
   ];
 
-  // Se añade HOME a la lista de vistas inmersivas
   const isImmersiveView = [
     ViewState.HOME,
     ViewState.LENS, 
@@ -153,7 +151,8 @@ const App: React.FC = () => {
     ViewState.SHOPPING,
     ViewState.EVENTS,
     ViewState.FORUM,
-    ViewState.HEALTH
+    ViewState.HEALTH,
+    ViewState.SEARCH // Añadida la búsqueda a vistas inmersivas
   ].includes(currentView);
 
   const headerProps = {
@@ -185,7 +184,7 @@ const App: React.FC = () => {
       case ViewState.AI_CHAT: return <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} langCode={currentLang.code} langLabel={currentLang.label} ads={ads} headerProps={headerProps} />;
       case ViewState.ADMIN: return <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as any} />;
       case ViewState.PROFILE: return <ProfileView userName={userName} onLogout={handleLogout} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />;
-      case ViewState.SEARCH: return <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} />;
+      case ViewState.SEARCH: return <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} headerProps={headerProps} />;
       case ViewState.POSTCARD: return <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />;
       case ViewState.LENS: return <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} ads={ads} headerProps={headerProps} />;
       default: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} headerProps={headerProps} />;
