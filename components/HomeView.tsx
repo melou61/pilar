@@ -6,6 +6,8 @@ import {
   ArrowRight, Bot, MapPin, Play, Camera, Image as ImageIcon, Newspaper, MessageSquare, Wand2, Radar
 } from './Icons';
 import { AdSpot } from './AdSpot';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 interface HomeViewProps {
   t: any;
@@ -14,6 +16,7 @@ interface HomeViewProps {
   heroImages: string[];
   currentHeroIndex: number;
   ads: Ad[]; 
+  headerProps: any;
 }
 
 const SHORTS_BASE = [
@@ -24,29 +27,35 @@ const SHORTS_BASE = [
 ];
 
 const MOMENTS_GALLERY = [
-  'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=800&q=80', // Dunas Higuericas
-  'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', // Río Seco
-  'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Gastronomía
-  'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80', // Torre
+  'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=800&q=80', 
+  'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', 
+  'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', 
+  'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80', 
 ];
 
-export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroImages, currentHeroIndex, ads }) => {
+export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroImages, currentHeroIndex, ads, headerProps }) => {
   const featuredEvents = events.filter(e => e.isFestival).slice(0, 3);
   const hp = t.home_page;
 
   return (
-    <div className="flex flex-col animate-in fade-in duration-700 pb-32 overflow-x-hidden">
-      {/* 1. HERO SECTION */}
-      <section className="relative h-[72vh] w-full overflow-hidden flex-shrink-0">
+    <div className="fixed inset-0 z-[400] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
+      
+      {/* 1. HEADER GLOBAL (Flotante y traslúcido) */}
+      <div className="relative z-[220] shrink-0">
+         <Header {...headerProps} />
+      </div>
+
+      {/* 2. HERO SECTION (Empieza en top-0 para solaparse) */}
+      <section className="relative h-[85vh] w-full overflow-hidden shrink-0">
         {heroImages.map((img, index) => (
           <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
             <img src={img} alt="Hero" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#f8fafc]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#f8fafc]" />
           </div>
         ))}
         
-        {/* Radar Status Indicator */}
-        <div className="absolute top-20 left-8 z-30 flex flex-col items-start gap-1">
+        {/* Contenido sobre el Hero */}
+        <div className="absolute top-32 left-8 z-30 flex flex-col items-start gap-1 animate-in slide-in-from-left duration-700">
            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
              <div className="relative">
                <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
@@ -60,29 +69,25 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
            </div>
         </div>
 
-        {/* Título Principal */}
-        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-[140px]">
+        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-[120px]">
           <div className="max-w-[95rem] mx-auto w-full">
-            <h2 
-              className="text-[100px] sm:text-[180px] font-black mb-0 leading-[0.82] tracking-[0.05em] flex flex-col items-start"
-              style={{ textShadow: '10px 10px 25px rgba(0,0,0,0.8)' }}
-            >
-              <span className="drop-shadow-[0_0_50px_rgba(37,99,235,0.3)]">PILAR</span>
-              <span className="text-blue-500 drop-shadow-[0_0_50px_rgba(37,99,235,0.7)]">VIVO</span>
+            <h2 className="text-[100px] sm:text-[180px] font-black mb-0 leading-[0.82] tracking-[0.05em] flex flex-col items-start" style={{ textShadow: '10px 10px 25px rgba(0,0,0,0.8)' }}>
+              <span className="drop-shadow-[0_0_50px_rgba(37,99,235,0.3)] animate-in fade-in slide-in-from-bottom duration-1000 delay-200">PILAR</span>
+              <span className="text-blue-500 drop-shadow-[0_0_50px_rgba(37,99,235,0.7)] animate-in fade-in slide-in-from-bottom duration-1000 delay-500">VIVO</span>
             </h2>
           </div>
         </div>
       </section>
 
-      {/* Margen negativo para subir el contenido */}
-      <div className="max-w-6xl mx-auto w-full px-6 -mt-40 relative z-20 space-y-20">
-        
-        {/* Ad Spot Top - Sin padding lateral adicional. Bajado aprox 0.5cm (20px) */}
-        <div className="-mx-2 pt-5">
-           {/* Added missing view prop */}
+      {/* 3. ANUNCIO SUPERIOR (Flotante tras el Hero) */}
+      <div className="px-6 -mt-16 relative z-30 mb-12">
+        <div className="max-w-6xl mx-auto">
            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
         </div>
+      </div>
 
+      {/* 4. CONTENT AREA */}
+      <div className="max-w-6xl mx-auto w-full px-6 relative z-20 space-y-20 pb-20">
         {/* IA CONCIERGE CARD */}
         <section className="bg-gradient-to-br from-indigo-900 via-blue-900 to-[#1e1b4b] rounded-[50px] p-10 text-white shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2" />
@@ -92,9 +97,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
             </div>
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-4xl font-black tracking-tighter mb-4">PH Concierge</h3>
-              <p className="text-blue-100/60 text-lg font-medium leading-tight mb-8">
-                {hp.ai_desc}
-              </p>
+              <p className="text-blue-100/60 text-lg font-medium leading-tight mb-8">{hp.ai_desc}</p>
               <button onClick={() => onNavigate(ViewState.AI_CHAT)} className="bg-white text-blue-900 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl hover:scale-105 transition-all mx-auto md:mx-0">
                 {t.common.details} <ArrowRight size={18} />
               </button>
@@ -133,68 +136,28 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
               <button onClick={() => onNavigate(ViewState.POSTCARD)} className="bg-blue-600 text-white px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-blue-200 animate-bounce">
                 <Wand2 size={16} /> Crear Postal IA
               </button>
-              <button className="bg-emerald-50 text-emerald-600 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 border border-emerald-100">
-                <Camera size={16} /> {t.common.upload}
-              </button>
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-2">
             {MOMENTS_GALLERY.map((img, i) => (
               <div key={i} className={`aspect-[3/4] md:aspect-square rounded-[30px] overflow-hidden shadow-xl border border-gray-100 relative group cursor-zoom-in ${i % 2 === 0 ? 'mt-8' : ''}`}>
                 <img src={img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" />
-                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                   <ImageIcon className="text-white" size={32} />
-                </div>
               </div>
             ))}
           </div>
         </section>
+      </div>
 
-        {/* FEATURED FESTIVALS */}
-        <section className="space-y-8">
-          <div className="flex justify-between items-end px-2">
-            <div>
-              <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-2">{t.sections.events.title}</h3>
-              <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">{t.sections.events.title}</h2>
-            </div>
-            <button onClick={() => onNavigate(ViewState.EVENTS)} className="text-blue-600 font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-4 transition-all">
-              {t.common.details} <ChevronRight size={16} />
-            </button>
-          </div>
-          
-          <div className="flex gap-6 overflow-x-auto no-scrollbar pb-8 px-2">
-            {featuredEvents.map(event => {
-              const evData = t.events_data?.[event.id] || event;
-              return (
-                <div 
-                  key={event.id}
-                  onClick={() => onNavigate(ViewState.EVENTS, event.id)}
-                  className="w-[320px] shrink-0 bg-white rounded-[45px] overflow-hidden shadow-xl border border-gray-100 group cursor-pointer hover:shadow-2xl transition-all"
-                >
-                  <div className="h-56 relative">
-                    <img src={event.imageUrl} alt={evData.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest text-blue-600 shadow-lg">
-                      {evData.category}
-                    </div>
-                  </div>
-                  <div className="p-8">
-                    <h4 className="text-2xl font-black text-gray-900 tracking-tighter mb-2 leading-none">{evData.title}</h4>
-                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">{evData.date}</p>
-                    <div className="flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-widest">
-                      {t.common.details} <ArrowRight size={14} />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Footer Ad - Sin padding lateral adicional */}
-        <div className="-mx-2 pb-10">
-           {/* Added missing view prop */}
+      {/* 5. ANUNCIO INFERIOR */}
+      <div className="px-6 py-12 shrink-0 opacity-90 relative z-10 bg-white border-t border-gray-50">
+        <div className="max-w-6xl mx-auto">
            <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.HOME} />
         </div>
+      </div>
+
+      {/* 6. FOOTER GLOBAL */}
+      <div className="relative z-10">
+        <Footer t={t} />
       </div>
     </div>
   );

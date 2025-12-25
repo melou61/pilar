@@ -83,6 +83,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (beaconsEnabled && currentView === ViewState.HOME) {
       const timer = setTimeout(() => {
+        // Fix: corrected typo in variable name 'shopWith promo' to 'shopWithPromo'
         const shopWithPromo = businesses.find(b => b.promotion && b.promotion.title);
         if (shopWithPromo) setActiveBeaconShop(shopWithPromo);
       }, 12000);
@@ -138,8 +139,22 @@ const App: React.FC = () => {
     { id: ViewState.ADMIN, label: t.menu.admin, icon: ShieldCheck },
   ];
 
-  // Identificamos vistas que manejan su propio Header/Footer para evitar duplicidad y permitir el layout de anuncios
-  const isImmersiveView = [ViewState.LENS, ViewState.CITIZEN_SERVICES, ViewState.AI_CHAT].includes(currentView);
+  // Se añade HOME a la lista de vistas inmersivas
+  const isImmersiveView = [
+    ViewState.HOME,
+    ViewState.LENS, 
+    ViewState.CITIZEN_SERVICES, 
+    ViewState.AI_CHAT,
+    ViewState.NEWS,
+    ViewState.BEACHES,
+    ViewState.SIGHTSEEING,
+    ViewState.ACTIVITIES,
+    ViewState.DINING,
+    ViewState.SHOPPING,
+    ViewState.EVENTS,
+    ViewState.FORUM,
+    ViewState.HEALTH
+  ].includes(currentView);
 
   const headerProps = {
     onMenuClick: () => setSidebarOpen(true),
@@ -155,17 +170,17 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (currentView) {
-      case ViewState.HOME: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />;
-      case ViewState.NEWS: return <NewsView t={t} ads={ads} />;
-      case ViewState.BEACHES: return <BeachesView t={t} onNavigate={handleNavigate} ads={ads} />;
-      case ViewState.SIGHTSEEING: return <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} />;
-      case ViewState.ACTIVITIES: return <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} />;
-      case ViewState.DINING: return <DiningView t={t} businesses={businesses} ads={ads} />;
-      case ViewState.SHOPPING: return <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} />;
-      case ViewState.HEALTH: return <HealthView t={t} onNavigate={handleNavigate} ads={ads} />;
+      case ViewState.HOME: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} headerProps={headerProps} />;
+      case ViewState.NEWS: return <NewsView t={t} ads={ads} headerProps={headerProps} />;
+      case ViewState.BEACHES: return <BeachesView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} />;
+      case ViewState.SIGHTSEEING: return <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} />;
+      case ViewState.ACTIVITIES: return <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} />;
+      case ViewState.DINING: return <DiningView t={t} businesses={businesses} ads={ads} headerProps={headerProps} />;
+      case ViewState.SHOPPING: return <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} headerProps={headerProps} />;
+      case ViewState.HEALTH: return <HealthView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} />;
       case ViewState.CITIZEN_SERVICES: return <CitizenServicesView t={t} ads={ads} onBack={() => handleNavigate(ViewState.HOME)} headerProps={headerProps} />;
-      case ViewState.EVENTS: return <EventsView t={t} events={events} onShare={handleShare} onAddToCalendar={(e) => alert(t.common.addToCalendar)} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={toggleMyEvent} ads={ads} />;
-      case ViewState.FORUM: return <ForumView t={t} ads={ads} />;
+      case ViewState.EVENTS: return <EventsView t={t} events={events} onShare={handleShare} onAddToCalendar={(e) => alert(t.common.addToCalendar)} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={toggleMyEvent} ads={ads} headerProps={headerProps} />;
+      case ViewState.FORUM: return <ForumView t={t} ads={ads} headerProps={headerProps} />;
       case ViewState.MAP: return <MapView t={t} onNavigate={handleNavigate} businesses={businesses} ads={ads} />;
       case ViewState.AI_CHAT: return <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} langCode={currentLang.code} langLabel={currentLang.label} ads={ads} headerProps={headerProps} />;
       case ViewState.ADMIN: return <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as any} />;
@@ -173,7 +188,7 @@ const App: React.FC = () => {
       case ViewState.SEARCH: return <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} />;
       case ViewState.POSTCARD: return <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />;
       case ViewState.LENS: return <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} ads={ads} headerProps={headerProps} />;
-      default: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} />;
+      default: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} headerProps={headerProps} />;
     }
   };
 

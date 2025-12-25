@@ -4,14 +4,17 @@ import { UtensilsCrossed, Star, MapPin, Clock, Phone, ChevronRight, Heart } from
 import { CensusItem, Ad, ViewState } from '../types';
 import { BusinessDetailView } from './BusinessDetailView';
 import { AdSpot } from './AdSpot';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 interface DiningViewProps {
   t: any;
   businesses: CensusItem[];
   ads: Ad[]; 
+  headerProps: any;
 }
 
-export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) => {
+export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads, headerProps }) => {
   const [selectedBusiness, setSelectedBusiness] = useState<CensusItem | null>(null);
   const [activeZone, setActiveZone] = useState<string>('all');
 
@@ -33,7 +36,7 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
   ];
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-44 animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[400] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
       {selectedBusiness && (
         <BusinessDetailView 
           business={selectedBusiness} 
@@ -42,26 +45,24 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
         />
       )}
 
-      <div className="bg-white px-8 pt-16 pb-12 rounded-b-[60px] shadow-sm mb-10">
+      {/* 1. HEADER GLOBAL */}
+      <div className="relative z-[220] shrink-0">
+         <Header {...headerProps} />
+      </div>
+
+      {/* 2. ANUNCIO SUPERIOR (mt-24) */}
+      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
+        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.DINING} currentFilter={activeZone} />
+      </div>
+
+      {/* 3. EDITORIAL HEADER */}
+      <div className="bg-white px-8 pt-16 pb-12 rounded-b-[60px] shadow-sm mb-10 shrink-0 mt-4">
         <div className="flex items-center gap-3 text-orange-500 font-black text-[10px] uppercase tracking-[0.4em] mb-4">
             <UtensilsCrossed size={20} />
             Sabor de Pilar
         </div>
         <h1 className="text-5xl font-black text-gray-900 tracking-tighter mb-4">{t.sections.dining.title}</h1>
-        <p className="text-gray-500 text-lg font-medium leading-tight max-w-sm mb-8">
-            {t.sections.dining.desc}
-        </p>
-
-        {/* Ad Spot Top con segmentación por zona gastronómica */}
-        <div className="mb-8 -mx-2">
-           <AdSpot 
-            ads={ads} 
-            position="page-top" 
-            label={t.common.sponsored} 
-            view={ViewState.DINING} 
-            currentFilter={activeZone}
-           />
-        </div>
+        <p className="text-gray-500 text-lg font-medium leading-tight max-w-sm mb-8">{t.sections.dining.desc}</p>
 
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
             {zones.map(z => (
@@ -78,7 +79,8 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
         </div>
       </div>
 
-      <div className="px-6 space-y-10">
+      {/* 4. LISTADO */}
+      <div className="px-6 space-y-10 flex-1">
           {filteredDining.length > 0 ? filteredDining.map((place) => (
               <div 
                 key={place.id} 
@@ -86,20 +88,12 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
                 className="bg-white rounded-[50px] border border-gray-100 shadow-2xl shadow-gray-200/40 overflow-hidden flex flex-col md:flex-row hover:shadow-3xl transition-all duration-500 group cursor-pointer relative"
               >
                   <div className="w-full md:w-80 h-64 md:h-auto relative overflow-hidden shrink-0">
-                    <img 
-                      src={place.images && place.images.length > 0 ? place.images[0] : 'https://images.unsplash.com/photo-1517248135467-4c7ed9d8607c?auto=format&fit=crop&w=800&q=80'} 
-                      alt={place.name} 
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
-                    />
+                    <img src={place.images[0]} alt={place.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                     <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-1.5 text-sm font-black text-gray-900 shadow-2xl">
                       <Star size={16} className="text-yellow-500 fill-current" />
                       {place.rating}
                     </div>
-                    <div className="absolute bottom-6 left-6 bg-orange-500 text-white px-4 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl">
-                      {place.priceRange || '€€'}
-                    </div>
                   </div>
-
                   <div className="p-10 flex-1 flex flex-col justify-between">
                       <div>
                           <div className="flex justify-between items-start mb-2">
@@ -110,35 +104,25 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads }) =>
                       </div>
                       <div className="mt-8 pt-8 border-t border-gray-50 flex items-center justify-between text-[10px] text-gray-400 font-black uppercase tracking-widest">
                           <div className="flex flex-wrap gap-6">
-                              <span className="flex items-center gap-2">
-                                <Clock size={16} className="text-blue-500" /> 
-                                <span className="text-green-600">Abierto</span>
-                              </span>
-                              <span className="flex items-center gap-2">
-                                <MapPin size={16} className="text-red-500" /> 
-                                {place.address}
-                              </span>
+                              <span className="flex items-center gap-2"><Clock size={16} className="text-blue-500" /> <span className="text-green-600">Abierto</span></span>
+                              <span className="flex items-center gap-2"><MapPin size={16} className="text-red-500" /> {place.address}</span>
                           </div>
-                          <button className="bg-orange-50 text-orange-600 p-4 rounded-2xl group-hover:bg-orange-600 group-hover:text-white transition-all shadow-sm">
-                            <ChevronRight size={22} />
-                          </button>
                       </div>
                   </div>
               </div>
           )) : (
-            <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">No hay restaurantes listados en esta zona todavía.</div>
+            <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">No hay restaurantes en esta zona.</div>
           )}
       </div>
 
-      {/* Ad Spot Bottom con segmentación */}
-      <div className="px-6 mt-16 max-w-4xl mx-auto -mx-2">
-        <AdSpot 
-          ads={ads} 
-          position="page-bottom" 
-          label={t.common.sponsored} 
-          view={ViewState.DINING} 
-          currentFilter={activeZone}
-        />
+      {/* 5. ANUNCIO INFERIOR */}
+      <div className="px-6 py-6 shrink-0 opacity-90 relative z-10 bg-white">
+        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.DINING} currentFilter={activeZone} />
+      </div>
+
+      {/* 6. FOOTER GLOBAL */}
+      <div className="relative z-10">
+        <Footer t={t} />
       </div>
     </div>
   );

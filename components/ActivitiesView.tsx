@@ -6,20 +6,34 @@ import {
 import { ACTIVITIES_LIST } from '../data';
 import { ViewState, Ad } from '../types';
 import { AdSpot } from './AdSpot';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 interface ActivitiesViewProps {
   t: any;
   onNavigate?: (view: ViewState, id?: string) => void;
   ads: Ad[];
+  headerProps: any;
 }
 
-export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, ads }) => {
+export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, ads, headerProps }) => {
   const content = t.activities_page;
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-44 animate-in fade-in duration-500 overflow-x-hidden">
-      {/* Dynamic Activity Header */}
-      <div className="bg-[#10b981] px-8 pt-20 pb-24 rounded-b-[60px] shadow-2xl relative overflow-hidden">
+    <div className="fixed inset-0 z-[450] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
+      
+      {/* 1. HEADER GLOBAL */}
+      <div className="relative z-[220] shrink-0">
+         <Header {...headerProps} />
+      </div>
+
+      {/* 2. ANUNCIO SUPERIOR */}
+      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
+         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.ACTIVITIES} />
+      </div>
+
+      {/* 3. ACTIVITY HEADER */}
+      <div className="bg-[#10b981] px-8 pt-20 pb-24 rounded-b-[60px] shadow-2xl relative overflow-hidden shrink-0 mt-4">
         <div className="absolute top-0 right-0 w-80 h-80 bg-white/20 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10">
           <div className="flex items-center gap-3 text-emerald-100 font-black text-[10px] uppercase tracking-[0.4em] mb-4">
@@ -35,13 +49,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
         </div>
       </div>
 
-      <div className="px-6 -mt-10 space-y-10">
-        {/* HUECO 3: page-top */}
-        <div className="px-4">
-           {/* Added missing view prop */}
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.ACTIVITIES} />
-        </div>
-
+      <div className="px-6 -mt-10 space-y-10 relative z-10">
         {ACTIVITIES_LIST.map((activity) => {
           const activityLangData = content.list[activity.id as keyof typeof content.list] || { name: activity.title, desc: '' };
           return (
@@ -56,7 +64,6 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
                   />
                   
-                  {/* Category Overlay */}
                   <div className="absolute top-8 left-8 flex flex-col gap-2">
                       <div className="bg-emerald-600 text-white px-5 py-2.5 rounded-[20px] flex items-center gap-2.5 shadow-2xl border border-white/20">
                          <Trophy size={16} className="fill-white" />
@@ -105,8 +112,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
           );
         })}
         
-        {/* Active Community Section */}
-        <div className="px-4 mt-10">
+        <div className="px-4 mt-10 pb-10">
            <div className="bg-white border border-emerald-100 rounded-[50px] p-12 shadow-2xl shadow-emerald-900/5 overflow-hidden relative group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50 group-hover:scale-110 transition-transform duration-1000" />
               <div className="relative z-10">
@@ -125,12 +131,16 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
               </div>
            </div>
         </div>
+      </div>
 
-        {/* HUECO 4: page-bottom */}
-        <div className="px-4">
-           {/* Added missing view prop */}
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.ACTIVITIES} />
-        </div>
+      {/* 4. ANUNCIO INFERIOR */}
+      <div className="px-8 py-6 shrink-0 opacity-90 relative z-10 bg-white">
+         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.ACTIVITIES} />
+      </div>
+
+      {/* 5. FOOTER GLOBAL */}
+      <div className="relative z-10">
+        <Footer t={t} />
       </div>
     </div>
   );

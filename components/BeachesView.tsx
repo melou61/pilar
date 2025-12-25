@@ -6,14 +6,17 @@ import {
 import { MOCK_BEACHES } from '../data';
 import { ViewState, Ad } from '../types';
 import { AdSpot } from './AdSpot';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 interface BeachesViewProps {
   t: any;
   onNavigate?: (view: ViewState, id?: string) => void;
   ads: Ad[];
+  headerProps: any;
 }
 
-export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) => {
+export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, headerProps }) => {
   const content = t.beaches_page;
 
   const getOccupancyColor = (level: string) => {
@@ -26,9 +29,20 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-44 animate-in fade-in duration-500 overflow-x-hidden">
-      {/* Editorial Tourism Header */}
-      <div className="bg-[#0f172a] px-8 pt-20 pb-28 rounded-b-[70px] shadow-2xl relative overflow-hidden">
+    <div className="fixed inset-0 z-[450] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
+      
+      {/* 1. HEADER GLOBAL */}
+      <div className="relative z-[220] shrink-0">
+         <Header {...headerProps} />
+      </div>
+
+      {/* 2. ANUNCIO SUPERIOR */}
+      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
+         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.BEACHES} />
+      </div>
+
+      {/* 3. TOURISM HEADER */}
+      <div className="bg-[#0f172a] px-8 pt-20 pb-28 rounded-b-[70px] shadow-2xl relative overflow-hidden shrink-0 mt-4">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10 max-w-4xl mx-auto">
           <div className="flex items-center gap-3 text-blue-400 font-black text-[10px] uppercase tracking-[0.4em] mb-4">
@@ -44,13 +58,7 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
         </div>
       </div>
 
-      <div className="px-6 -mt-12 space-y-12">
-        {/* Ad Spot Top */}
-        <div className="max-w-4xl mx-auto w-full">
-           {/* Added missing view prop */}
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.BEACHES} />
-        </div>
-
+      <div className="px-6 -mt-12 space-y-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
           {MOCK_BEACHES.map((beach) => {
             const beachLangData = content.list[beach.id as keyof typeof content.list] || { name: beach.name, desc: '' };
@@ -59,7 +67,6 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
                 key={beach.id} 
                 className="bg-white rounded-[60px] shadow-2xl shadow-blue-900/5 overflow-hidden border border-gray-100 group hover:shadow-3xl hover:-translate-y-1 transition-all duration-700"
               >
-                 {/* Visual Header with Real-time indicators */}
                  <div className="relative h-96 overflow-hidden">
                     <img 
                       src={beach.image} 
@@ -67,7 +74,6 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3s]" 
                     />
                     
-                    {/* Status Badges */}
                     <div className="absolute top-8 left-8 flex flex-col gap-2 z-10">
                        {beach.blueFlag && (
                           <div className="bg-blue-600 text-white px-5 py-2.5 rounded-[22px] flex items-center gap-2.5 shadow-2xl border border-white/20">
@@ -81,7 +87,6 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
                        </div>
                     </div>
 
-                    {/* Stats Floating Panel */}
                     <div className="absolute bottom-8 left-8 right-8 z-10">
                        <div className="bg-white/90 backdrop-blur-2xl rounded-[32px] p-4 flex items-center justify-between shadow-2xl border border-white/40">
                           <div className="flex items-center gap-2 px-4 border-r border-gray-100">
@@ -123,7 +128,6 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
                       "{beachLangData.desc}"
                    </p>
 
-                   {/* Tech Specs Bento Row */}
                    <div className="grid grid-cols-2 gap-4 mb-10">
                       <div className="bg-slate-50 p-5 rounded-[30px] flex items-center gap-4 border border-slate-100/50">
                          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm"><Ruler size={18}/></div>
@@ -141,7 +145,6 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
                       </div>
                    </div>
 
-                   {/* Services Chips */}
                    <div className="mb-10">
                       <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                          <Info size={14} /> Servicios Destacados
@@ -169,8 +172,7 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
           })}
         </div>
         
-        {/* Coastal Notice Localizado - Expanded for tourism */}
-        <div className="max-w-4xl mx-auto w-full">
+        <div className="max-w-4xl mx-auto w-full pb-10">
            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-[60px] p-16 text-center text-white shadow-2xl shadow-blue-500/20 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
               <div className="relative z-10">
@@ -197,12 +199,16 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads }) 
               </div>
            </div>
         </div>
+      </div>
 
-        {/* Ad Spot Bottom */}
-        <div className="max-w-4xl mx-auto w-full">
-           {/* Added missing view prop */}
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.BEACHES} />
-        </div>
+      {/* 4. ANUNCIO INFERIOR */}
+      <div className="px-8 py-6 shrink-0 opacity-90 relative z-10 bg-white">
+         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.BEACHES} />
+      </div>
+
+      {/* 5. FOOTER GLOBAL */}
+      <div className="relative z-10">
+        <Footer t={t} />
       </div>
     </div>
   );

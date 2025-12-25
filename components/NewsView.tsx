@@ -7,13 +7,16 @@ import {
 } from './Icons';
 import { NewsCategory, Ad, ViewState } from '../types';
 import { AdSpot } from './AdSpot';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 interface NewsViewProps {
   t: any;
   ads: Ad[];
+  headerProps: any;
 }
 
-export const NewsView: React.FC<NewsViewProps> = ({ t, ads }) => {
+export const NewsView: React.FC<NewsViewProps> = ({ t, ads, headerProps }) => {
   const [activeCategory, setActiveCategory] = useState<NewsCategory | 'ALL'>('ALL');
 
   const getCategoryIcon = (cat: NewsCategory) => {
@@ -50,10 +53,20 @@ export const NewsView: React.FC<NewsViewProps> = ({ t, ads }) => {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-44 animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[450] bg-gray-50 flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
       
-      {/* Editorial Header */}
-      <div className="bg-white px-8 pt-12 pb-10 border-b border-gray-100 shadow-sm">
+      {/* 1. HEADER GLOBAL */}
+      <div className="relative z-[220] shrink-0">
+         <Header {...headerProps} />
+      </div>
+
+      {/* 2. ANUNCIO SUPERIOR */}
+      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
+         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.NEWS} currentFilter={activeCategory} />
+      </div>
+
+      {/* 3. EDITORIAL HEADER */}
+      <div className="bg-white px-8 pt-12 pb-10 border-b border-gray-100 shadow-sm shrink-0">
          <div className="max-w-4xl mx-auto">
             <h1 className="text-5xl font-black text-gray-900 tracking-tighter mb-2 flex items-center gap-4">
                 <Newspaper className="text-blue-600" size={48} />
@@ -82,8 +95,8 @@ export const NewsView: React.FC<NewsViewProps> = ({ t, ads }) => {
          </div>
       </div>
 
-      {/* Feed List */}
-      <div className="max-w-4xl mx-auto px-6 py-12 space-y-10">
+      {/* 4. FEED LIST */}
+      <div className="max-w-4xl mx-auto px-6 py-12 space-y-10 flex-1">
           {filteredNews.length > 0 ? filteredNews.map((news) => (
              <article key={news.id} className={`bg-white rounded-[45px] p-8 shadow-2xl shadow-gray-200/40 border border-gray-50 transition-all hover:-translate-y-1`}>
                  <div className="flex items-center justify-between mb-6">
@@ -131,14 +144,17 @@ export const NewsView: React.FC<NewsViewProps> = ({ t, ads }) => {
                 No hay publicaciones en esta categoría hoy.
             </div>
           )}
-
-          {/* Anuncio inferior al final del feed */}
-          <div className="pt-6 -mx-2">
-            {/* Added missing view prop */}
-            <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.NEWS} />
-          </div>
       </div>
 
+      {/* 5. ANUNCIO INFERIOR */}
+      <div className="px-8 py-6 shrink-0 opacity-90 relative z-10 bg-white">
+         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.NEWS} currentFilter={activeCategory} />
+      </div>
+
+      {/* 6. FOOTER GLOBAL */}
+      <div className="relative z-10">
+        <Footer t={t} />
+      </div>
     </div>
   );
 };

@@ -6,14 +6,17 @@ import {
 import { MOCK_SIGHTSEEING } from '../data';
 import { ViewState, Ad } from '../types';
 import { AdSpot } from './AdSpot';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 interface SightseeingViewProps {
   t: any;
   onNavigate?: (view: ViewState, id?: string) => void;
   ads: Ad[];
+  headerProps: any;
 }
 
-export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate, ads }) => {
+export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate, ads, headerProps }) => {
   const content = t.sightseeing_page;
 
   const getCrowdColor = (level: string) => {
@@ -26,9 +29,20 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-44 animate-in fade-in duration-500 overflow-x-hidden">
-      {/* Editorial Heritage Header */}
-      <div className="bg-[#451a03] px-8 pt-20 pb-28 rounded-b-[70px] shadow-2xl relative overflow-hidden">
+    <div className="fixed inset-0 z-[450] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
+      
+      {/* 1. HEADER GLOBAL */}
+      <div className="relative z-[220] shrink-0">
+         <Header {...headerProps} />
+      </div>
+
+      {/* 2. ANUNCIO SUPERIOR */}
+      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
+         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.SIGHTSEEING} />
+      </div>
+
+      {/* 3. HERITAGE HEADER */}
+      <div className="bg-[#451a03] px-8 pt-20 pb-28 rounded-b-[70px] shadow-2xl relative overflow-hidden shrink-0 mt-4">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-600/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10 max-w-4xl mx-auto text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-3 text-amber-400 font-black text-[10px] uppercase tracking-[0.4em] mb-4">
@@ -44,13 +58,7 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
         </div>
       </div>
 
-      <div className="px-6 -mt-12 space-y-12">
-        {/* Ad Spot Top */}
-        <div className="max-w-4xl mx-auto w-full">
-           {/* Added missing view prop */}
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.SIGHTSEEING} />
-        </div>
-
+      <div className="px-6 -mt-12 space-y-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
           {MOCK_SIGHTSEEING.map((site) => {
             const siteLangData = content.list[site.id as keyof typeof content.list] || { name: site.name, desc: '' };
@@ -59,7 +67,6 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
                 key={site.id} 
                 className="bg-white rounded-[60px] shadow-2xl shadow-amber-900/5 overflow-hidden border border-gray-100 group hover:shadow-3xl hover:-translate-y-1 transition-all duration-700"
               >
-                 {/* Visual Header with Heritage Indicators */}
                  <div className="relative h-96 overflow-hidden">
                     <img 
                       src={site.image} 
@@ -67,7 +74,6 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3s]" 
                     />
                     
-                    {/* Century Badge */}
                     <div className="absolute top-8 left-8 flex flex-col gap-2 z-10">
                        <div className="bg-amber-600 text-white px-5 py-2.5 rounded-[22px] flex items-center gap-2.5 shadow-2xl border border-white/20">
                           <History size={16} className="fill-white" />
@@ -79,7 +85,6 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
                        </div>
                     </div>
 
-                    {/* Stats Floating Panel */}
                     <div className="absolute bottom-8 left-8 right-8 z-10">
                        <div className="bg-white/90 backdrop-blur-2xl rounded-[32px] p-4 flex items-center justify-between shadow-2xl border border-white/40">
                           <div className="flex items-center gap-2 px-4 border-r border-gray-100">
@@ -121,7 +126,6 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
                       "{siteLangData.desc}"
                    </p>
 
-                   {/* Heritage Specs Bento Row */}
                    <div className="grid grid-cols-2 gap-4 mb-10">
                       <div className="bg-orange-50/50 p-5 rounded-[30px] flex items-center gap-4 border border-orange-100/30">
                          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-amber-600 shadow-sm"><Building2 size={18}/></div>
@@ -139,7 +143,6 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
                       </div>
                    </div>
 
-                   {/* Amenities Chips */}
                    <div className="mb-10">
                       <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                          <Info size={14} /> Servicios y Accesibilidad
@@ -167,8 +170,7 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
           })}
         </div>
         
-        {/* Heritage Fact Banner */}
-        <div className="max-w-4xl mx-auto w-full">
+        <div className="max-w-4xl mx-auto w-full pb-10">
            <div className="bg-gradient-to-br from-amber-700 to-amber-900 rounded-[60px] p-16 text-center text-white shadow-2xl shadow-amber-900/20 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
               <div className="relative z-10">
@@ -195,12 +197,16 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
               </div>
            </div>
         </div>
+      </div>
 
-        {/* Ad Spot Bottom */}
-        <div className="max-w-4xl mx-auto w-full">
-           {/* Added missing view prop */}
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.SIGHTSEEING} />
-        </div>
+      {/* 4. ANUNCIO INFERIOR */}
+      <div className="px-8 py-6 shrink-0 opacity-90 relative z-10 bg-white">
+         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.SIGHTSEEING} />
+      </div>
+
+      {/* 5. FOOTER GLOBAL */}
+      <div className="relative z-10">
+        <Footer t={t} />
       </div>
     </div>
   );

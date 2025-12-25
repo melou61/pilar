@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { MessageSquare, Heart, Share2, Plus, Filter, User, Clock, ArrowRight, MessageCircle } from './Icons';
 import { Ad, ViewState } from '../types';
 import { AdSpot } from './AdSpot';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 interface ForumPost {
   id: string;
@@ -27,9 +29,10 @@ const MOCK_POSTS: ForumPost[] = [
 interface ForumViewProps {
   t: any;
   ads: Ad[];
+  headerProps: any;
 }
 
-export const ForumView: React.FC<ForumViewProps> = ({ t, ads }) => {
+export const ForumView: React.FC<ForumViewProps> = ({ t, ads, headerProps }) => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [posts, setPosts] = useState(MOCK_POSTS);
 
@@ -38,9 +41,20 @@ export const ForumView: React.FC<ForumViewProps> = ({ t, ads }) => {
     : posts.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase());
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-44 animate-in fade-in duration-300">
-      {/* Editorial Header */}
-      <div className="bg-white px-8 pt-12 pb-10 border-b border-gray-100 shadow-sm relative overflow-hidden">
+    <div className="fixed inset-0 z-[400] bg-slate-50 flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
+      
+      {/* 1. HEADER GLOBAL */}
+      <div className="relative z-[220] shrink-0">
+         <Header {...headerProps} />
+      </div>
+
+      {/* 2. ANUNCIO SUPERIOR (mt-24) */}
+      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
+        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.FORUM} />
+      </div>
+
+      {/* 3. EDITORIAL HEADER */}
+      <div className="bg-white px-8 pt-12 pb-10 border-b border-gray-100 shadow-sm relative overflow-hidden shrink-0 mt-4">
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="flex items-center gap-3 text-blue-600 font-black text-[10px] uppercase tracking-[0.4em] mb-3">
              <MessageSquare size={18} />
@@ -71,68 +85,40 @@ export const ForumView: React.FC<ForumViewProps> = ({ t, ads }) => {
              ))}
           </div>
         </div>
-        <div className="absolute -right-20 -top-20 w-80 h-80 bg-blue-50 rounded-full opacity-50 blur-3xl"></div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-10 space-y-6">
+      {/* 4. FEED */}
+      <div className="max-w-4xl mx-auto px-6 py-10 space-y-6 flex-1">
         {filteredPosts.map(post => (
-          <div key={post.id} className="bg-white rounded-[40px] p-8 shadow-xl shadow-slate-200/50 border border-white hover:border-blue-100 transition-all group">
+          <div key={post.id} className="bg-white rounded-[40px] p-8 shadow-xl border border-white hover:border-blue-100 transition-all group">
              <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
-                   <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center text-blue-600 font-black text-sm shadow-inner">
-                      {post.avatar}
-                   </div>
+                   <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center text-blue-600 font-black text-sm">AG</div>
                    <div>
-                      <div className="flex items-center gap-2">
-                         <h4 className="font-black text-gray-900 text-sm">{post.user}</h4>
-                         {post.badge && (
-                           <span className="bg-blue-50 text-blue-600 text-[8px] font-black uppercase px-2 py-0.5 rounded-lg border border-blue-100">
-                             {post.badge}
-                           </span>
-                         )}
-                      </div>
+                      <h4 className="font-black text-gray-900 text-sm">{post.user}</h4>
                       <div className="flex items-center gap-2 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
                          <Clock size={12} /> {post.time}
                       </div>
                    </div>
                 </div>
-                <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest bg-blue-50/50 px-3 py-1 rounded-xl">
-                   #{post.category}
-                </span>
              </div>
-
-             <h3 className="text-2xl font-black text-gray-900 tracking-tight mb-4 group-hover:text-blue-600 transition-colors leading-tight">
-                {post.title}
-             </h3>
-             <p className="text-gray-500 font-medium leading-relaxed mb-8">
-                {post.content}
-             </p>
-
-             <div className="flex items-center justify-between pt-6 border-t border-gray-50">
-                <div className="flex gap-4">
-                   <button className="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 hover:text-red-500 transition-colors">
-                      <Heart size={16} /> {post.likes} <span className="hidden sm:inline">{t.forum.likes}</span>
-                   </button>
-                   <button className="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 hover:text-blue-600 transition-colors">
-                      <MessageCircle size={16} /> {post.replies} <span className="hidden sm:inline">{t.forum.replies}</span>
-                   </button>
-                </div>
-                <button className="p-3 bg-slate-50 text-slate-400 rounded-xl hover:bg-blue-600 hover:text-white transition-all">
-                   <Share2 size={16} />
-                </button>
-             </div>
+             <h3 className="text-2xl font-black text-gray-900 tracking-tight mb-4 leading-tight">{post.title}</h3>
+             <p className="text-gray-500 font-medium leading-relaxed mb-8">{post.content}</p>
           </div>
         ))}
-
-        {/* Anuncio inferior tras los posts */}
-        <div className="pt-4 -mx-2">
-          {/* Added missing view prop */}
-          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.FORUM} />
-        </div>
       </div>
 
-      {/* Floating Action Button */}
-      <button className="fixed bottom-32 right-8 w-16 h-16 bg-blue-600 text-white rounded-3xl shadow-2xl shadow-blue-400 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-[100]">
+      {/* 5. ANUNCIO INFERIOR */}
+      <div className="px-6 py-6 shrink-0 opacity-90 relative z-10 bg-white">
+        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.FORUM} />
+      </div>
+
+      {/* 6. FOOTER GLOBAL */}
+      <div className="relative z-10">
+        <Footer t={t} />
+      </div>
+
+      <button className="fixed bottom-32 right-8 w-16 h-16 bg-blue-600 text-white rounded-3xl shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-[100]">
          <Plus size={32} strokeWidth={3} />
       </button>
     </div>
