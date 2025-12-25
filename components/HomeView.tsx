@@ -34,18 +34,14 @@ const MOMENTS_GALLERY = [
 ];
 
 export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroImages, currentHeroIndex, ads, headerProps }) => {
-  const featuredEvents = events.filter(e => e.isFestival).slice(0, 3);
   const hp = t.home_page;
 
   return (
     <div className="fixed inset-0 z-[400] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
-      
-      {/* 1. HEADER GLOBAL (Flotante y traslúcido) */}
       <div className="relative z-[5000] shrink-0">
          <Header {...headerProps} />
       </div>
 
-      {/* 2. HERO SECTION (Empieza en top-0 para solaparse) */}
       <section className="relative h-[85vh] w-full overflow-hidden shrink-0">
         {heroImages.map((img, index) => (
           <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
@@ -54,14 +50,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           </div>
         ))}
         
-        {/* Contenido sobre el Hero */}
         <div className="absolute top-32 left-8 z-30 flex flex-col items-start gap-1 animate-in slide-in-from-left duration-700">
            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
              <div className="relative">
                <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
                <Radar size={18} className="text-blue-400 relative z-10" />
              </div>
-             <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Smart PH Activo</span>
+             <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{hp.smart_active}</span>
            </div>
            <div className="mt-5 ml-2 text-[22px] font-black text-blue-600 uppercase tracking-[0.02em] flex items-center gap-3 drop-shadow-[0_0_12px_rgba(37,99,235,0.7)]">
               <div className="w-2 h-2 bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,1)]"></div>
@@ -72,52 +67,32 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-[140px]">
           <div className="max-w-[95rem] mx-auto w-full">
             <h2 className="text-[100px] sm:text-[180px] font-black mb-0 leading-[0.82] tracking-[0.05em] flex flex-col items-start" style={{ textShadow: '10px 10px 25px rgba(0,0,0,0.8)' }}>
-              <span className="drop-shadow-[0_0_50px_rgba(37,99,235,0.3)] animate-in fade-in slide-in-from-bottom duration-1000 delay-200">PILAR</span>
-              <span className="text-blue-500 drop-shadow-[0_0_50px_rgba(37,99,235,0.7)] animate-in fade-in slide-in-from-bottom duration-1000 delay-500">VIVO</span>
+              <span>PILAR</span>
+              <span className="text-blue-500 drop-shadow-[0_0_50px_rgba(37,99,235,0.7)]">VIVO</span>
             </h2>
           </div>
         </div>
       </section>
 
-      {/* 3. ANUNCIO SUPERIOR (Flotante tras el Hero) */}
       <div className="px-6 -mt-16 relative z-30 mb-12">
         <div className="max-w-6xl mx-auto">
            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
         </div>
       </div>
 
-      {/* 4. CONTENT AREA */}
       <div className="max-w-6xl mx-auto w-full px-6 relative z-20 space-y-20 pb-20">
-        {/* IA CONCIERGE CARD */}
-        <section className="bg-gradient-to-br from-indigo-900 via-blue-900 to-[#1e1b4b] rounded-[50px] p-10 text-white shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2" />
-          <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
-            <div className="w-32 h-32 bg-white/10 backdrop-blur-2xl rounded-[40px] flex items-center justify-center border border-white/20 shrink-0">
-               <Bot size={64} className="text-blue-400 animate-pulse" />
-            </div>
-            <div className="flex-1 text-center md:text-left">
-              <h3 className="text-4xl font-black tracking-tighter mb-4">PH Concierge</h3>
-              <p className="text-blue-100/60 text-lg font-medium leading-tight mb-8">{hp.ai_desc}</p>
-              <button onClick={() => onNavigate(ViewState.AI_CHAT)} className="bg-white text-blue-900 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl hover:scale-105 transition-all mx-auto md:mx-0">
-                {t.common.details} <ArrowRight size={18} />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* SHORTS SLIDER */}
         <section className="space-y-8">
           <div className="px-2">
             <h3 className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em] mb-2">{hp.shorts_label}</h3>
-            <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">{hp.shorts_big}</h2>
+            <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">Shorts</h2>
           </div>
           <div className="flex gap-4 overflow-x-auto no-scrollbar pb-6 px-2">
             {SHORTS_BASE.map((short, idx) => (
               <div key={short.id} className="w-56 h-96 shrink-0 rounded-[35px] overflow-hidden relative group cursor-pointer shadow-2xl border border-white/10 transition-all hover:scale-[1.02]">
-                <img src={short.videoUrl} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0" alt="" />
+                <img src={short.videoUrl} className="w-full h-full object-cover" alt="" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">
-                  <p className="text-white font-black text-sm leading-tight mb-1 line-clamp-2">{hp.shorts_titles[idx] || 'Pilar'}</p>
+                  <p className="text-white font-black text-sm leading-tight mb-1">{hp.shorts_titles[idx] || 'Pilar'}</p>
                   <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">{short.views} {hp.views}</span>
                 </div>
               </div>
@@ -125,16 +100,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           </div>
         </section>
 
-        {/* MOMENTOS PH */}
         <section className="space-y-8">
           <div className="flex flex-col md:flex-row md:justify-between md:items-end px-2 gap-6">
             <div>
               <h3 className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.4em] mb-2">{hp.gallery_label}</h3>
-              <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">{hp.gallery_big}</h2>
+              <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">Momentos</h2>
             </div>
             <div className="flex gap-3">
-              <button onClick={() => onNavigate(ViewState.POSTCARD)} className="bg-blue-600 text-white px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-blue-200 animate-bounce">
-                <Wand2 size={16} /> Crear Postal IA
+              <button onClick={() => onNavigate(ViewState.POSTCARD)} className="bg-blue-600 text-white px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-blue-200">
+                <Wand2 size={16} /> {hp.create_postcard}
               </button>
             </div>
           </div>
@@ -148,14 +122,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         </section>
       </div>
 
-      {/* 5. ANUNCIO INFERIOR */}
-      <div className="px-6 py-12 shrink-0 opacity-90 relative z-10 bg-white border-t border-gray-50">
-        <div className="max-w-6xl mx-auto">
-           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.HOME} />
-        </div>
-      </div>
-
-      {/* 6. FOOTER GLOBAL */}
       <div className="relative z-10">
         <Footer t={t} />
       </div>

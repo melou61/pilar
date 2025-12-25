@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
-import { X, Mic, MicOff, Bot, Globe, ArrowLeft, Volume2, Waves, Sparkles, MessageCircle } from './Icons';
+import { X, Mic, MicOff, Volume2 } from './Icons';
 import { AdSpot } from './AdSpot';
 import { Footer } from './Footer';
 import { Header } from './Header';
@@ -18,23 +18,19 @@ export const VoiceConcierge: React.FC<VoiceConciergeProps> = ({ onClose, t, ads,
   const [isActive, setIsActive] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [transcription, setTranscription] = useState('');
-  const isRunningRef = useRef(false);
   const sessionRef = useRef<any>(null);
   const streamRef = useRef<MediaStream | null>(null);
-
-  useEffect(() => { return () => stopSession(); }, []);
 
   const startSession = async () => {
     if (isActive || isConnecting) return;
     setIsConnecting(true);
-    isRunningRef.current = true;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const sessionPromise = ai.live.connect({
         model: 'gemini-2.5-flash-native-audio-preview-09-2025',
-        config: { responseModalities: [Modality.AUDIO], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } }, systemInstruction: "Eres PH Voice. Responde corto por voz." },
+        config: { responseModalities: [Modality.AUDIO], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } }, systemInstruction: "Eres PH Voice." },
         callbacks: {
           onopen: () => { setIsActive(true); setIsConnecting(false); },
           onmessage: (m) => { if (m.serverContent?.outputTranscription) setTranscription(p => p + m.serverContent.outputTranscription.text); },
@@ -47,24 +43,21 @@ export const VoiceConcierge: React.FC<VoiceConciergeProps> = ({ onClose, t, ads,
   };
 
   const stopSession = () => {
-    setIsActive(false); setIsConnecting(false); isRunningRef.current = false;
+    setIsActive(false); setIsConnecting(false);
     if (sessionRef.current) sessionRef.current.close();
     if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
   };
 
   return (
     <div className="fixed inset-0 z-[1000] bg-[#020617] flex flex-col text-white animate-in fade-in duration-700 overflow-y-auto no-scrollbar">
-      {/* 1. HEADER GLOBAL (En la parte superior) */}
       <div className="relative z-[220] shrink-0">
          <Header {...headerProps} />
       </div>
 
-      {/* 2. ANUNCIO SUPERIOR (Justo debajo del header con margen mt-24) */}
       <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-20 bg-[#020617]">
          <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.AI_CHAT} />
       </div>
 
-      {/* 3. CONTENIDO CENTRAL */}
       <div className="flex flex-col items-center justify-center p-8 text-center relative z-20 shrink-0 min-h-[60vh]">
         {!isActive && !isConnecting && (
           <div className="animate-in fade-in">
@@ -73,25 +66,22 @@ export const VoiceConcierge: React.FC<VoiceConciergeProps> = ({ onClose, t, ads,
              </div>
              <h3 className="text-5xl font-black tracking-tighter mb-6 uppercase leading-none">PH VOICE</h3>
              <button onClick={startSession} className="bg-blue-600 text-white px-16 py-8 rounded-[45px] font-black uppercase tracking-[0.2em] shadow-2xl flex items-center gap-5 hover:scale-105 transition-all">
-                <Mic size={28} /> Hablar ahora
+                <Mic size={28} /> {t.ai_guide.voice_btn}
              </button>
           </div>
         )}
         {isActive && (
           <div className="p-12">
              <div className="w-24 h-24 bg-blue-600 rounded-full animate-ping mx-auto mb-10"></div>
-             <p className="text-2xl font-bold italic">"{transcription || 'Escuchando...'}"</p>
+             <p className="text-2xl font-bold italic">"{transcription || '...'}"</p>
              <button onClick={stopSession} className="mt-12 bg-red-600 p-8 rounded-[40px] shadow-2xl"><MicOff size={40}/></button>
           </div>
         )}
+        {isConnecting && (
+           <div className="text-blue-400 font-black uppercase tracking-widest animate-pulse">{t.common.loading}</div>
+        )}
       </div>
 
-      {/* 4. ANUNCIO INFERIOR */}
-      <div className="px-8 py-6 shrink-0 opacity-90 relative z-20 mt-auto">
-         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.AI_CHAT} />
-      </div>
-
-      {/* 5. FOOTER GLOBAL */}
       <div className="relative z-20">
         <Footer t={t} />
       </div>

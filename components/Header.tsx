@@ -55,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* NAVIGATION - Draggable */}
+        {/* NAVIGATION */}
         <div className="flex-1 relative flex items-center overflow-hidden h-16">
           <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
@@ -102,7 +102,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="fixed inset-0 z-[210]" onClick={() => setIsLangOpen(false)} />
                 <div className="absolute right-0 mt-3 w-48 bg-white rounded-[24px] shadow-2xl border border-gray-100 p-2 z-[220] animate-in fade-in zoom-in-95 duration-200">
                   <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Seleccionar Idioma</span>
+                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t.header.selectLanguage}</span>
                   </div>
                   {languages.map((lang) => (
                     <button

@@ -60,7 +60,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
       const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map((chunk: any) => ({ uri: chunk.web?.uri, title: chunk.web?.title })).filter((s: any) => s.uri);
       setMessages(prev => [...prev, { role: 'model', text: response.text || "...", sources }]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'model', text: "Error. Inténtalo de nuevo." }]);
+      setMessages(prev => [...prev, { role: 'model', text: t.common.error }]);
     } finally { setIsLoading(false); }
   };
 
@@ -90,7 +90,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
                     <div>
                         <h2 className="font-black text-gray-900 uppercase tracking-tighter leading-none text-xs">PH Concierge</h2>
                         <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-1 mt-1">
-                            <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" /> En línea
+                            <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" /> {t.ai_guide.online}
                         </span>
                     </div>
                   </div>
@@ -111,7 +111,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
                         <div className="mt-3 flex flex-wrap gap-2">
                            {msg.sources.map((s, idx) => (
                                <a key={idx} href={s.uri} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1 bg-white border border-gray-100 rounded-full text-[9px] font-black text-blue-600 uppercase tracking-widest hover:bg-blue-50 transition-colors">
-                                   <Globe size={10} /> {s.title || 'Ver fuente'}
+                                   <Globe size={10} /> {s.title || 'Source'}
                                </a>
                            ))}
                         </div>
@@ -121,7 +121,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
                 {isLoading && (
                     <div className="flex gap-2 items-center p-4 bg-white/50 rounded-2xl border border-dashed border-gray-200 animate-pulse">
                         <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" />
-                        <span className="text-[10px] font-black uppercase text-blue-400 tracking-[0.2em]">PH Concierge está pensando...</span>
+                        <span className="text-[10px] font-black uppercase text-blue-400 tracking-[0.2em]">{t.common.thinking}</span>
                     </div>
                 )}
               </div>

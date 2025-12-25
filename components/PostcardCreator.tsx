@@ -39,7 +39,7 @@ export const PostcardCreator: React.FC<PostcardCreatorProps> = ({ t, onBack }) =
       }
     } catch (error) {
       console.error("Postcard error:", error);
-      alert("Error al generar la postal. Inténtalo de nuevo.");
+      alert(t.common.error);
     } finally {
       setIsGenerating(false);
     }
@@ -59,7 +59,7 @@ export const PostcardCreator: React.FC<PostcardCreatorProps> = ({ t, onBack }) =
       <div className="p-6 flex items-center justify-between border-b border-white/5 shrink-0 bg-[#0f172a] z-10">
         <button onClick={onBack} className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/60"><ArrowLeft size={24}/></button>
         <div className="flex flex-col items-center">
-          <h2 className="font-black text-sm uppercase tracking-[0.3em]">AI MOMENTOS</h2>
+          <h2 className="font-black text-sm uppercase tracking-[0.3em]">{t.postcard.title}</h2>
           <span className="text-blue-400 text-[8px] font-black uppercase tracking-[0.4em] mt-1 italic">PILAR DE LA HORADADA</span>
         </div>
         <div className="w-10 h-10" /> {/* Spacer */}
@@ -71,8 +71,8 @@ export const PostcardCreator: React.FC<PostcardCreatorProps> = ({ t, onBack }) =
             <div className="w-24 h-24 bg-blue-600/10 rounded-[40px] flex items-center justify-center text-blue-500 mb-8 border border-blue-500/20 animate-pulse">
                <ImageIcon size={48} />
             </div>
-            <h3 className="text-3xl font-black tracking-tighter mb-4 leading-tight">Imagina Pilar de la Horadada</h3>
-            <p className="text-white/40 font-medium mb-12">Nuestra IA creativa creará una postal única basada en tu descripción.</p>
+            <h3 className="text-3xl font-black tracking-tighter mb-4 leading-tight">{t.postcard.subtitle}</h3>
+            <p className="text-white/40 font-medium mb-12">{t.postcard.desc}</p>
           </div>
         ) : generatedImage ? (
           <div className="w-full max-w-lg aspect-square rounded-[40px] overflow-hidden shadow-2xl shadow-blue-500/10 border border-white/10 animate-in zoom-in-95">
@@ -81,7 +81,7 @@ export const PostcardCreator: React.FC<PostcardCreatorProps> = ({ t, onBack }) =
         ) : (
           <div className="w-full max-w-lg aspect-square rounded-[40px] bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center animate-pulse">
              <Wand2 size={48} className="text-blue-500 animate-spin mb-4" />
-             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">Generando tu visión...</span>
+             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">{t.postcard.generating}</span>
           </div>
         )}
 
@@ -91,13 +91,13 @@ export const PostcardCreator: React.FC<PostcardCreatorProps> = ({ t, onBack }) =
                onClick={downloadImage}
                className="bg-white/10 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-3 border border-white/10"
              >
-               <Download size={18} /> Guardar
+               <Download size={18} /> {t.postcard.save}
              </button>
              <button 
                onClick={() => setGeneratedImage(null)}
                className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-3 shadow-xl shadow-blue-600/20"
              >
-               <Wand2 size={18} /> Crear Otra
+               <Wand2 size={18} /> {t.postcard.create}
              </button>
           </div>
         )}
@@ -123,7 +123,7 @@ export const PostcardCreator: React.FC<PostcardCreatorProps> = ({ t, onBack }) =
                 type="text"
                 value={prompt}
                 onChange={e => setPrompt(e.target.value)}
-                placeholder="Escribe tu visión de Pilar..."
+                placeholder={t.postcard.placeholder}
                 className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 font-bold text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all"
               />
               <button 

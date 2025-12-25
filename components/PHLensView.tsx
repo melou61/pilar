@@ -43,14 +43,14 @@ export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerPr
         contents: {
           parts: [
             { inlineData: { data: base64Content, mimeType: 'image/jpeg' } },
-            { text: `Identifica este elemento de Pilar de la Horadada. Responde JSON: {"identified": "...", "confidence": "...", "context": "...", "category": "...", "location": "...", "funFact": "..."}` }
+            { text: `Identify this element of Pilar de la Horadada, Spain. Respond in JSON format only with these keys: identified, confidence, context, category, location, funFact.` }
           ]
         }
       });
       const data = JSON.parse(response.text.replace(/```json|```/gi, "").trim());
       setResult(data);
     } catch (error) {
-      alert("Error en análisis.");
+      alert(t.common.error);
     } finally {
       setIsAnalyzing(false);
     }
@@ -62,55 +62,51 @@ export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerPr
         <div className="absolute inset-0 bg-[linear-gradient(rgba(18,24,27,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] [background-size:100%_2px,3px_100%]"></div>
       </div>
 
-      {/* 1. HEADER GLOBAL (En la cima) */}
       <div className="relative z-[210] shrink-0">
          <Header {...headerProps} />
       </div>
 
-      {/* 2. ANUNCIO SUPERIOR (Debajo del header, con mt-24 para compensar el header fixed) */}
       <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-[#020617]">
          <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.LENS} />
       </div>
 
-      {/* 3. AREA CENTRAL */}
       <div className="flex-1 relative flex flex-col items-center justify-center p-8 z-10">
         {!image ? (
           <div className="flex flex-col items-center text-center max-w-sm animate-in fade-in zoom-in duration-700">
              <div className="w-32 h-32 bg-cyan-500/10 rounded-[50px] flex items-center justify-center text-cyan-400 mb-10 border border-cyan-400/20 shadow-[0_0_60px_rgba(8,145,178,0.2)]">
                 <Camera size={64} className="animate-pulse" />
              </div>
-             <h3 className="text-4xl font-black tracking-tighter mb-6 uppercase">Explorador PH Lens</h3>
+             <h3 className="text-4xl font-black tracking-tighter mb-6 uppercase">{t.lens.title}</h3>
              <button 
                onClick={() => fileInputRef.current?.click()}
                className="bg-cyan-600 text-white px-12 py-6 rounded-[30px] font-black uppercase tracking-widest shadow-xl flex items-center gap-4 hover:scale-105 active:scale-95 transition-all"
              >
-                <Upload size={24} /> Escanear Patrimonio
+                <Upload size={24} /> {t.lens.scanBtn}
              </button>
              <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="image/*" className="hidden" />
           </div>
         ) : (
           <div className="w-full max-w-lg flex flex-col items-center">
              <div className="relative w-full aspect-[4/5] rounded-[45px] overflow-hidden border border-white/20 shadow-2xl">
-                <img src={image} className="w-full h-full object-cover" alt="Analizando" />
+                <img src={image} className="w-full h-full object-cover" alt="Analyzing" />
                 {isAnalyzing && <div className="absolute inset-0 z-20"><div className="w-full h-1 bg-cyan-400 shadow-[0_0_20px_cyan] absolute animate-[scan_3s_infinite]"></div></div>}
              </div>
              {result && !isAnalyzing && (
                <div className="mt-8 w-full bg-[#0f172a]/95 backdrop-blur-3xl border border-white/10 p-8 rounded-[40px] shadow-2xl">
+                  <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest mb-1 block">{t.lens.identified}</span>
                   <h3 className="text-3xl font-black tracking-tighter text-white mb-2">{result.identified}</h3>
                   <p className="text-slate-300 italic mb-6">"{result.context}"</p>
-                  <button onClick={() => setImage(null)} className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest">Nueva Captura</button>
+                  <button onClick={() => setImage(null)} className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest">{t.lens.newScan}</button>
                </div>
              )}
           </div>
         )}
       </div>
 
-      {/* 4. ANUNCIO INFERIOR */}
       <div className="px-8 py-6 shrink-0 opacity-90 relative z-10 mt-auto">
          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.LENS} />
       </div>
 
-      {/* 5. FOOTER GLOBAL */}
       <div className="relative z-10">
         <Footer t={t} />
       </div>

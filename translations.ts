@@ -17,93 +17,147 @@ export const languages: Language[] = [
 const UI_RESOURCES: Record<string, any> = {
   es: { 
     m: ['Inicio', 'Noticias', 'Playas', 'Patrimonio', 'Experiencias', 'Gastronomía', 'Tiendas', 'Salud', 'Servicios', 'Eventos', 'Foro', 'PH Explorar', 'Guía IA', 'Perfil', 'Mapa', 'Admin'], 
-    c: ['Patrocinado', 'Sin resultados', 'Volver', 'Compartir', 'Detalles', 'Abierto', 'Cerrado', 'Mapa', 'Cerca', 'Buscar...', 'Añadir', 'Subir', 'Copiar', 'Copiado'], 
+    c: ['Patrocinado', 'Sin resultados', 'Volver', 'Compartir', 'Detalles', 'Abierto', 'Cerrado', 'Mapa', 'Cerca', 'Buscar...', 'Añadir', 'Subir', 'Copiar', 'Copiado', 'Error', 'Cargando...', 'Pensando...'], 
     h: 'Paraíso mediterráneo.', 
     s: ['Sede Electrónica', 'Ayuntamiento 24h', 'Cita Previa', 'Incidencias', 'Reportar', 'Trámites', 'Certificados', 'Impuestos', 'Licencias'],
-    hp: ['Pilar Vivo', 'Actualidad Local', 'Noticias del Pilar', 'Comunidad Participativa', 'Tu voz importa en el municipio.', 'Pilar en 15s', 'Vistas', 'Galería', 'Momentos', 'Amanecer en Las Higuericas', 'Ruta por Río Seco', 'Tarde de Compras', 'Fiestas del Pilar'],
+    hp: {
+      pilar_vivo: 'PILAR VIVO',
+      smart_active: 'Smart PH Activo',
+      create_postcard: 'Crear Postal IA',
+      shorts_label: 'Pilar en 15s',
+      gallery_label: 'Vistas',
+      views: 'vistas',
+      shorts_titles: ['Amanecer en Las Higuericas', 'Ruta por Río Seco', 'Tarde de Compras', 'Fiestas del Pilar']
+    },
     f: ['Contacto', 'Enlaces de interés', 'Síguenos', 'La App oficial del municipio.', 'Oficina de Turismo', 'Calle Mayor, 1', '03190', 'Alicante, España', 'Todos los derechos reservados'],
-    search: { badge: 'Buscador Inteligente', title1: 'PILAR DE LA', title2: 'HORADADA', subtitle1: 'Encuentra comercios, eventos', subtitle2: 'y servicios municipales.', placeholder: '¿Qué buscas hoy?' },
-    ai: { welcome: 'Hola, soy tu conserje virtual de Pilar de la Horadada. ¿En qué puedo ayudarte?', system: 'Eres PH Concierge, la guía oficial de Pilar de la Horadada.', suggestions: ['¿Dónde comer?', 'Playas hoy', 'Eventos'] },
-    ed: { 
-      'fiestas-patronales': { title: 'Fiestas del Pilar', category: 'TRADICIÓN', date: 'Octubre 2025', location: 'Centro Urbano', desc: 'Carrozas y ofrendas tradicionales.', badge: 'Interés Turístico' },
-      'semana-santa': { title: 'Semana Santa', category: 'RELIGIOSO', date: 'Abril 2025', location: 'Calles del Centro', desc: 'Procesiones solemnes con tallas de Sánchez Lozano.' }
-    },
-    forum: { title: 'Foro Comunitario', subtitle: 'Conecta con tus vecinos', create: 'Nueva Publicación', categories: ['General', 'Recomendaciones', 'Mercadillo', 'Mascotas'], empty: 'No hay hilos todavía.', likes: 'Me gusta', replies: 'Respuestas' },
-    profile: { title: 'Mi Espacio', logout: 'Cerrar Sesión', favorites: 'Mis Favoritos', alerts: 'Mis Alertas', my_events: 'Agenda Personal', no_favs: 'Aún no tienes favoritos.' },
-    beaches_page: { 
-        title: 'Nuestras Playas', 
-        subtitle: 'Descubre 4 kilómetros de arena fina, aguas turquesas y calas vírgenes premiadas internacionalmente.', 
-        coastal: 'El Litoral del Pilar', 
-        blue_flag: 'Bandera Azul', 
-        open: 'Abierta Ahora', 
-        fact_title: 'Excelencia Mediterránea', 
-        fact_desc: 'Pilar de la Horadada lidera la calidad costera en la Costa Blanca con récords de Banderas Azules.',
-        list: { 
-            milpalmeras: { name: 'Mil Palmeras', desc: 'Un paraíso de arena blanca y aguas tranquilas. Es la playa familiar por excelencia, con amplios servicios y un ambiente vibrante.' },
-            rocamar: { name: 'Rocamar', desc: 'Para quienes buscan paz. Una sucesión de calas mágicas talladas en la roca, ideales para el snorkel y la desconexión total.' },
-            jesuitas: { name: 'Jesuitas', desc: 'Energía y deporte. Una gran playa urbana con redes de voley y un ambiente joven inigualable bajo el sol del Mediterráneo.' },
-            elconde: { name: 'El Conde', desc: 'Donde la historia toca el mar. Bañarse a los pies de la Torre Vigía del siglo XVI es una experiencia única en el mundo.' },
-            elpuerto: { name: 'El Puerto', desc: 'Elegancia náutica. Situada junto al puerto deportivo, ofrece aguas serenas y una oferta gastronómica de primer nivel a pie de arena.' },
-            lasvillas: { name: 'Las Villas', desc: 'Tradición y relax. Una playa residencial perfecta para paseos interminables y disfrutar de la brisa marina en familia.' },
-            higuericas: { name: 'Las Higuericas', desc: 'La joya natural. Famosa por sus dunas protegidas y sus icónicas pasarelas de madera. Sostenibilidad y belleza pura.' },
-            elmojon: { name: 'El Mojón', desc: 'Frontera de naturaleza. Lindando con las Salinas de San Pedro, es el rincón ideal para amantes de la fauna y la calma absoluta.' }
-        } 
-    },
-    sightseeing_page: {
-        title: 'Joyas del Patrimonio',
-        subtitle: 'Un viaje en el tiempo desde las calzadas romanas hasta la majestuosa Torre Vigía que custodia nuestro mar.',
-        list: {
-            'torre-vigia': { name: 'Torre de la Horadada', desc: 'Símbolo indiscutible de nuestra costa. Construida en 1591 para proteger el litoral de los ataques piratas, hoy es un vigía eterno del Mediterráneo.' },
-            'iglesia-pilar': { name: 'Nuestra Sra. del Pilar', desc: 'El corazón espiritual del municipio. Destaca por su torre campanario y un interior de gran belleza que alberga la esencia de nuestra fe y tradición.' },
-            'museo-etnologico': { name: 'Museo Arqueológico', desc: 'Un espacio moderno para descubrir Thiar. Desde restos romanos de la Vía Augusta hasta útiles agrícolas que forjaron nuestra identidad.' },
-            'canteras-romanas': { name: 'Canteras Romanas', desc: 'Ingeniería milenaria al borde del mar. Un yacimiento único donde se extraía la piedra para pavimentar la mítica Vía Augusta.' }
-        }
-    }
+    search: { badge: 'Buscador Inteligente', subtitle1: 'Encuentra comercios, eventos', subtitle2: 'y servicios municipales.', placeholder: '¿Qué buscas hoy?', noResults: 'No hay resultados para' },
+    ai: { welcome: 'Hola, soy tu conserje virtual de Pilar de la Horadada. ¿En qué puedo ayudarte?', system: 'Eres PH Concierge, la guía oficial de Pilar de la Horadada.', online: 'En línea', voice_btn: 'Hablar ahora' },
+    header: { selectLanguage: 'Seleccionar Idioma' },
+    beacon: { title: 'SMART PH DETECTADO', subtitle: 'Oferta Cercana', exclusive: 'Exclusivo App', activate: 'Activar Cupón', footer: 'Oferta válida solo por proximidad física', codeLabel: 'Código de Canje' },
+    lens: { title: 'Explorador PH Lens', scanBtn: 'Escanear Patrimonio', newScan: 'Nueva Captura', analyzing: 'Analizando...', identified: 'Identificado' },
+    postcard: { title: 'AI MOMENTOS', subtitle: 'Imagina Pilar de la Horadada', desc: 'Nuestra IA creativa creará una postal única.', save: 'Guardar', create: 'Crear Otra', placeholder: 'Escribe tu visión de Pilar...', generating: 'Generando tu visión...' },
+    beaches_page: { title: 'Nuestras Playas', coastal: 'El Litoral del Pilar', blue_flag: 'Bandera Azul', open: 'Abierta Ahora', fact_title: 'Excelencia Mediterránea', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'Paraíso de arena blanca.' } } },
+    sightseeing_page: { title: 'Joyas del Patrimonio', list: { 'torre-vigia': { name: 'Torre de la Horadada', desc: 'Símbolo de nuestra costa.' } } }
   },
   en: { 
     m: ['Home', 'News', 'Beaches', 'Heritage', 'Experiences', 'Dining', 'Shops', 'Health', 'Services', 'Events', 'Forum', 'PH Explore', 'AI Guide', 'Profile', 'Map', 'Admin'], 
-    c: ['Sponsored', 'No results', 'Back', 'Share', 'Details', 'Open', 'Closed', 'Full Map', 'Near you', 'Search...', 'Add', 'Upload', 'Copy', 'Copied'], 
+    c: ['Sponsored', 'No results', 'Back', 'Share', 'Details', 'Open', 'Closed', 'Full Map', 'Near you', 'Search...', 'Add', 'Upload', 'Copy', 'Copied', 'Error', 'Loading...', 'Thinking...'], 
     h: 'Mediterranean paradise.', 
     s: ['Digital Portal', 'Town Hall 24h', 'Appointment', 'Incidents', 'Report', 'Procedures', 'Certificates', 'Taxes', 'Licenses'],
-    hp: ['Living Pilar', 'Local News', 'Latest from Pilar', 'Active Community', 'Your voice matters in town.', 'Pilar in 15s', 'Views', 'Gallery', 'Momentos', 'Sunrise at Higuericas', 'Rio Seco Route', 'Shopping Day', 'Town Festivals'],
+    hp: {
+      pilar_vivo: 'LIVING PILAR',
+      smart_active: 'Smart PH Active',
+      create_postcard: 'Create AI Postcard',
+      shorts_label: 'Pilar in 15s',
+      gallery_label: 'Views',
+      views: 'views',
+      shorts_titles: ['Sunrise at Higuericas', 'Rio Seco Route', 'Shopping Day', 'Town Festivals']
+    },
     f: ['Contact', 'Useful Links', 'Follow Us', 'The official town application.', 'Tourism Office', '1 Mayor St.', '03190', 'Alicante, Spain', 'All rights reserved'],
-    search: { badge: 'Smart Search', title1: 'PILAR DE LA', title2: 'HORADADA', subtitle1: 'Find shops, events', subtitle2: 'and citizen services.', placeholder: 'What are you looking for?' },
-    ai: { welcome: 'Hello, I am your Pilar de la Horadada virtual concierge. How can I help you today?', system: 'You are PH Concierge, the official guide for Pilar de la Horadada.', suggestions: ['Where to eat?', 'Beaches today', 'Events'] },
-    ed: { 
-      'fiestas-patronales': { title: 'Pilar Festivals', category: 'TRADITION', date: 'October 2025', location: 'Town Centre', desc: 'Traditional floats and offerings.', badge: 'Tourist Interest' },
-      'semana-santa': { title: 'Holy Week', category: 'RELIGIOUS', date: 'April 2025', location: 'Downtown Streets', desc: 'Solemn processions with Sánchez Lozano sculptures.' }
+    search: { badge: 'Smart Search', subtitle1: 'Find shops, events', subtitle2: 'and citizen services.', placeholder: 'What are you looking for?', noResults: 'No results for' },
+    ai: { welcome: 'Hello, I am your Pilar de la Horadada virtual concierge. How can I help you?', system: 'You are PH Concierge, the official guide for Pilar de la Horadada.', online: 'Online', voice_btn: 'Speak now' },
+    header: { selectLanguage: 'Select Language' },
+    beacon: { title: 'SMART PH DETECTED', subtitle: 'Nearby Offer', exclusive: 'App Exclusive', activate: 'Activate Coupon', footer: 'Valid by physical proximity only', codeLabel: 'Redemption Code' },
+    lens: { title: 'PH Lens Explorer', scanBtn: 'Scan Heritage', newScan: 'New Capture', analyzing: 'Analyzing...', identified: 'Identified' },
+    postcard: { title: 'AI MOMENTS', subtitle: 'Imagine Pilar de la Horadada', desc: 'Our AI will create a unique postcard based on your description.', save: 'Save', create: 'Create Another', placeholder: 'Write your vision of Pilar...', generating: 'Generating vision...' },
+    beaches_page: { title: 'Our Beaches', coastal: 'Pilar Coastline', blue_flag: 'Blue Flag', open: 'Open Now', fact_title: 'Excellence', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'A white sand paradise.' } } },
+    sightseeing_page: { title: 'Heritage Jewels', list: { 'torre-vigia': { name: 'Watchtower', desc: 'Symbol of our coast.' } } }
+  },
+  fr: { 
+    m: ['Accueil', 'Nouvelles', 'Plages', 'Patrimoine', 'Expériences', 'Gastronomie', 'Boutiques', 'Santé', 'Services', 'Événements', 'Forum', 'PH Explorer', 'Guide IA', 'Profil', 'Carte', 'Admin'], 
+    c: ['Sponsorisé', 'Aucun résultat', 'Retour', 'Partager', 'Détails', 'Ouvert', 'Fermé', 'Carte', 'Près de vous', 'Chercher...', 'Ajouter', 'Télécharger', 'Copier', 'Copié', 'Erreur', 'Chargement...', 'Réflexion...'], 
+    h: 'Paradis méditerranéen.', 
+    s: ['Sede Électronique', 'Mairie 24h', 'Rendez-vous', 'Incidents', 'Signaler', 'Procédures', 'Certificats', 'Impôts', 'Licences'],
+    hp: {
+      pilar_vivo: 'PILAR VIVANT',
+      smart_active: 'Smart PH Actif',
+      create_postcard: 'Créer Carte IA',
+      shorts_label: 'Pilar en 15s',
+      gallery_label: 'Vues',
+      views: 'vues',
+      shorts_titles: ['Lever du soleil', 'Route Rio Seco', 'Shopping', 'Festivités']
     },
-    forum: { title: 'Community Forum', subtitle: 'Connect with neighbors', create: 'New Post', categories: ['General', 'Recommendations', 'Marketplace', 'Pets'], empty: 'No threads yet.', likes: 'Likes', replies: 'Replies' },
-    profile: { title: 'My Space', logout: 'Logout', favorites: 'My Favorites', alerts: 'My Alerts', my_events: 'Personal Agenda', no_favs: 'No favorites yet.' },
-    beaches_page: { 
-        title: 'Our Beaches', 
-        subtitle: 'Explore 4 kilometers of fine sand, turquoise waters, and internationally awarded pristine coves.', 
-        coastal: 'Pilar Coastline', 
-        blue_flag: 'Blue Flag', 
-        open: 'Open Now', 
-        fact_title: 'Mediterranean Excellence', 
-        fact_desc: 'Pilar de la Horadada leads coastal quality in the Costa Blanca with record Blue Flag counts.',
-        list: { 
-            milpalmeras: { name: 'Mil Palmeras', desc: 'A paradise of white sand and calm waters. It is the family beach par excellence, with extensive services and a vibrant atmosphere.' },
-            rocamar: { name: 'Rocamar', desc: 'For those seeking peace. A sequence of magical coves carved into the rock, ideal for snorkeling and total disconnection.' },
-            jesuitas: { name: 'Jesuitas', desc: 'Energy and sport. A large urban beach with volleyball nets and a young atmosphere under the Mediterranean sun.' },
-            elconde: { name: 'El Conde', desc: 'Where history touches the sea. Swimming at the foot of the 16th-century Watchtower is a unique world experience.' },
-            elpuerto: { name: 'El Puerto', desc: 'Nautical elegance. Located next to the marina, it offers serene waters and top-tier dining right on the sand.' },
-            lasvillas: { name: 'Las Villas', desc: 'Tradition and relaxation. A residential beach perfect for endless walks and enjoying the sea breeze with the family.' },
-            higuericas: { name: 'Las Higuericas', desc: 'The natural jewel. Famous for its protected dunes and iconic wooden walkways. Sustainability and pure beauty.' },
-            elmojon: { name: 'El Mojón', desc: 'Nature boundary. Bordering the San Pedro Salt Pans, it is the ideal spot for wildlife lovers and absolute calm.' }
-        } 
+    f: ['Contact', 'Liens utiles', 'Suivez-nous', 'App officielle.', 'Office Tourisme', 'Rue Mayor, 1', '03190', 'Alicante, Espagne', 'Tous droits réservés'],
+    search: { badge: 'Recherche IA', subtitle1: 'Trouvez boutiques, événements', subtitle2: 'et services municipaux.', placeholder: 'Que cherchez-vous?', noResults: 'Aucun résultat pour' },
+    ai: { welcome: 'Bonjour, je suis votre concierge virtuel.', system: 'Vous êtes PH Concierge.', online: 'En ligne', voice_btn: 'Parler maintenant' },
+    header: { selectLanguage: 'Choisir la langue' },
+    beacon: { title: 'SMART PH DÉTECTÉ', subtitle: 'Offre Proche', activate: 'Activer le Coupon' },
+    lens: { scanBtn: 'Scanner Patrimoine', newScan: 'Nouvelle Capture' },
+    postcard: { save: 'Sauvegarder', create: 'Créer une autre' },
+    beaches_page: { title: 'Nos Plages', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'Un paradis de sable blanc.' } } },
+    sightseeing_page: { title: 'Patrimoine', list: { 'torre-vigia': { name: 'Tour de Guet', desc: 'Symbole de notre côte.' } } }
+  },
+  de: { 
+    m: ['Start', 'Nachrichten', 'Strände', 'Kulturerbe', 'Erlebnisse', 'Gastronomie', 'Geschäfte', 'Gesundheit', 'Dienste', 'Events', 'Forum', 'PH Erkunden', 'KI Guide', 'Profil', 'Karte', 'Admin'], 
+    c: ['Gesponsert', 'Keine Ergebnisse', 'Zurück', 'Teilen', 'Details', 'Offen', 'Geschlossen', 'Karte', 'In der Nähe', 'Suche...', 'Hinzufügen', 'Hochladen', 'Kopieren', 'Kopiert', 'Fehler', 'Laden...', 'Denken...'], 
+    h: 'Mediterranes Paradies.', 
+    s: ['Online-Portal', 'Rathaus 24h', 'Termin', 'Vorfälle', 'Bericht', 'Verfahren', 'Zertifikate', 'Steuern', 'Lizenzen'],
+    hp: {
+      pilar_vivo: 'PILAR LEBT',
+      smart_active: 'Smart PH Aktiv',
+      create_postcard: 'KI Postkarte',
+      shorts_label: 'Pilar in 15s',
+      gallery_label: 'Ansichten',
+      views: 'ansichten',
+      shorts_titles: ['Sonnenaufgang', 'Rio Seco Route', 'Shopping-Tag', 'Stadtfeste']
     },
-    sightseeing_page: {
-        title: 'Heritage Jewels',
-        subtitle: 'A journey through time from Roman roads to the majestic Watchtower guarding our sea.',
-        list: {
-            'torre-vigia': { name: 'Horadada Tower', desc: 'Undisputed symbol of our coast. Built in 1591 to protect against pirate attacks, today it is an eternal guardian of the Mediterranean.' },
-            'iglesia-pilar': { name: 'Church of Our Lady of Pilar', desc: 'The spiritual heart of the town. Notable for its bell tower and a beautiful interior that holds our faith and tradition.' },
-            'museo-etnologico': { name: 'Archaeological Museum', desc: 'A modern space to discover Thiar. From Roman remains of the Via Augusta to the tools that forged our identity.' },
-            'canteras-romanas': { name: 'Roman Quarries', desc: 'Millenary engineering by the sea. A unique site where stone was extracted to pave the mythical Via Augusta.' }
-        }
-    }
+    f: ['Contact', 'Nützliche Links', 'Folgen Sie uns', 'Offizielle App.', 'Tourismusbüro', 'Mayor Str. 1', '03190', 'Alicante, Spanien', 'Alle Rechte vorbehalten'],
+    search: { badge: 'KI Suche', subtitle1: 'Finden Sie Shops, Events', subtitle2: 'und Dienste.', placeholder: 'Was suchen Sie?', noResults: 'Keine Ergebnisse für' },
+    ai: { welcome: 'Hallo, ich bin Ihr virtueller Concierge.', online: 'Online', voice_btn: 'Jetzt sprechen' },
+    header: { selectLanguage: 'Sprache wählen' },
+    beacon: { title: 'SMART PH ENTDECKT', subtitle: 'Angebot in der Nähe', activate: 'Gutschein aktivieren' },
+    lens: { scanBtn: 'Kulturerbe scannen', newScan: 'Neuer Scan' },
+    postcard: { save: 'Speichern', create: 'Neu erstellen' },
+    beaches_page: { title: 'Unsere Strände', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'Ein Paradies.' } } },
+    sightseeing_page: { title: 'Kulturschätze', list: { 'torre-vigia': { name: 'Turm Horadada', desc: 'Symbol.' } } }
+  },
+  it: { 
+    m: ['Inizio', 'Notizie', 'Spiagge', 'Patrimonio', 'Esperienze', 'Gastronomia', 'Negozi', 'Salute', 'Servizi', 'Eventi', 'Forum', 'PH Esplora', 'Guida IA', 'Profilo', 'Mappa', 'Admin'], 
+    c: ['Sponsorizzato', 'Nessun risultato', 'Indietro', 'Condividi', 'Dettagli', 'Aperto', 'Chiuso', 'Mappa', 'Vicino a te', 'Cerca...', 'Aggiungi', 'Carica', 'Copia', 'Copiato', 'Errore', 'Caricamento...', 'Pensando...'], 
+    h: 'Paradiso mediterraneo.', 
+    s: ['Sede Elettronica', 'Comune 24h', 'Appuntamento', 'Incidenti', 'Segnala', 'Procedure', 'Certificati', 'Tasse', 'Licenze'],
+    hp: {
+      pilar_vivo: 'PILAR VIVO',
+      smart_active: 'Smart PH Attivo',
+      create_postcard: 'Crea Cartolina IA',
+      shorts_label: 'Pilar in 15s',
+      gallery_label: 'Viste',
+      views: 'viste',
+      shorts_titles: ['Alba a Higuericas', 'Percorso Rio Seco', 'Shopping', 'Feste']
+    },
+    f: ['Contatto', 'Link utili', 'Seguici', 'App ufficiale.', 'Ufficio Turistico', 'Via Mayor 1', '03190', 'Alicante, Spagna', 'Tutti i diritti riservati'],
+    search: { badge: 'Ricerca IA', subtitle1: 'Trova negozi, eventos', subtitle2: 'e servizi.', placeholder: 'Cosa cerchi?', noResults: 'Nessun resultado per' },
+    ai: { welcome: 'Ciao, sono il tuo concierge virtuale.', online: 'Online', voice_btn: 'Parla ora' },
+    header: { selectLanguage: 'Seleziona lingua' },
+    beacon: { title: 'SMART PH RILEVATO', subtitle: 'Offerta Vicina', activate: 'Attiva Coupon' },
+    lens: { scanBtn: 'Scansiona Patrimonio', newScan: 'Nuova Cattura' },
+    postcard: { save: 'Salva', create: 'Crea un\'altra' },
+    beaches_page: { title: 'Spiagge', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'Un paradiso.' } } },
+    sightseeing_page: { title: 'Patrimonio', list: { 'torre-vigia': { name: 'Torre Horadada', desc: 'Simbolo.' } } }
+  },
+  pt: { 
+    m: ['Início', 'Notícias', 'Praias', 'Património', 'Experiências', 'Gastronomia', 'Lojas', 'Saúde', 'Serviços', 'Eventos', 'Fórum', 'PH Explorar', 'Guia IA', 'Perfil', 'Mapa', 'Admin'], 
+    c: ['Patrocinado', 'Sem resultados', 'Voltar', 'Partilhar', 'Detalhes', 'Aberto', 'Fechado', 'Mapa', 'Perto de si', 'Procurar...', 'Adicionar', 'Subir', 'Copiar', 'Copiado', 'Erro', 'A carregar...', 'A pensar...'], 
+    h: 'Paraíso mediterrânico.', 
+    s: ['Sede Eletrónica', 'Câmara 24h', 'Agendamento', 'Incidentes', 'Reportar', 'Trâmites', 'Certificados', 'Impostos', 'Licenças'],
+    hp: {
+      pilar_vivo: 'PILAR VIVO',
+      smart_active: 'Smart PH Ativo',
+      create_postcard: 'Criar Postal IA',
+      shorts_label: 'Pilar em 15s',
+      gallery_label: 'Vistas',
+      views: 'vistas',
+      shorts_titles: ['Nascer do sol', 'Rota Rio Seco', 'Shopping', 'Festas']
+    },
+    f: ['Contacto', 'Links úteis', 'Siga-nos', 'App oficial.', 'Posto de Turismo', 'Rua Mayor 1', '03190', 'Alicante, España', 'Todos os direitos reservados'],
+    search: { badge: 'Busca IA', subtitle1: 'Encontre lojas, eventos', subtitle2: 'e serviços.', placeholder: 'O que procura?', noResults: 'Sem resultados para' },
+    ai: { welcome: 'Olá, sou o seu concierge virtual.', online: 'Online', voice_btn: 'Falar agora' },
+    header: { selectLanguage: 'Selecionar idioma' },
+    beacon: { title: 'SMART PH DETETADO', subtitle: 'Oferta Próxima', activate: 'Ativar Cupão' },
+    lens: { scanBtn: 'Escanear Património', newScan: 'Nova Captura' },
+    postcard: { save: 'Guardar', create: 'Criar outro' },
+    beaches_page: { title: 'Praias', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'Um paraíso.' } } },
+    sightseeing_page: { title: 'Património', list: { 'torre-vigia': { name: 'Torre Horadada', desc: 'Símbolo.' } } }
   }
 };
 
@@ -111,43 +165,67 @@ const createLang = (code: string, langLabel: string): any => {
   const data = UI_RESOURCES[code] || UI_RESOURCES.en;
   const en = UI_RESOURCES.en;
   
-  const m = data.m || en.m;
-  const c = data.c || en.c;
-  const s = data.s || en.s;
-  const h = data.h || en.h;
-  const hp = data.hp || en.hp;
-  const f = data.f || en.f;
-  const srch = data.search || en.search;
-  const ai = data.ai || en.ai;
-  const ed = data.ed || en.ed;
-  const fr = data.forum || en.forum;
-  const pr = data.profile || en.profile;
-  const bch = data.beaches_page || en.beaches_page;
-  const sig = data.sightseeing_page || en.sightseeing_page;
+  // Función auxiliar para obtener valores con fallback a inglés
+  const get = (obj: any, path: string, fallback: any) => {
+    const parts = path.split('.');
+    let current = obj;
+    for (const part of parts) {
+      if (current && current[part] !== undefined) current = current[part];
+      else return fallback;
+    }
+    return current;
+  };
 
   return {
-    menu: { home: m[0], news: m[1], beaches: m[2], sightseeing: m[3], activities: m[4], dining: m[5], shopping: m[6], health: m[7], services: m[8], events: m[9], forum: m[10], title: m[11], ai: m[12], profile: m[13], map: m[14], admin: m[15] },
-    common: { sponsored: c[0], noResults: c[1], back: c[2], share: c[3], details: c[4], open: c[5], closed: c[6], fullMap: c[7], nearby: c[8], searchPlaceholder: c[9], addToCalendar: c[10], upload: c[11], copyLink: c[12], copied: c[13] },
-    hero: { subtitle: h },
-    ai_guide: { title: m[12], welcome: ai.welcome, online: 'Online', placeholder: ai.placeholder || '...', system: ai.system, suggestions: ai.suggestions },
-    citizen_services: { title: s[0], subtitle: s[1], appointment: s[2], incidents: s[3], report: s[4], frequent: s[5], certificate: s[6], taxes: s[7], licenses: s[8] },
-    sections: { shopping: { title: m[6], desc: m[6] }, dining: { title: m[5], desc: m[5] }, events: { title: m[9], desc: m[9] } },
-    footer: { contact: f[0], links: f[1], follow: f[2], desc: f[3], rights: f[8], officeName: f[4], addressLine1: f[5], addressLine2: f[6], addressLine3: f[7] },
-    home_page: { 
-      pilar_vivo: hp[0], news_main: hp[1], news_featured: hp[2], community_title: hp[3], community_desc: hp[4],
-      shorts_label: hp[5], shorts_big: 'Shorts', views: hp[6], gallery_label: hp[7], gallery_big: hp[8],
-      ai_desc: ai.welcome, shorts_titles: [hp[9], hp[10], hp[11], hp[12]]
+    menu: { 
+      home: data.m[0], news: data.m[1], beaches: data.m[2], sightseeing: data.m[3], 
+      activities: data.m[4], dining: data.m[5], shopping: data.m[6], health: data.m[7], 
+      services: data.m[8], events: data.m[9], forum: data.m[10], title: data.m[11], 
+      ai: data.m[12], profile: data.m[13], map: data.m[14], admin: data.m[15] 
     },
-    event_detail: { pilar_event: 'EVENTO PH', date_time: 'FECHA Y HORA', main_location: 'UBICACIÓN' },
-    events_data: ed,
-    beaches_page: bch,
-    sightseeing_page: sig,
-    activities_page: { title: m[4], subtitle: h, list: { 'rio-seco': { name: 'Río Seco', desc: h } } },
-    business: { history: 'Story' },
-    search: srch,
-    share: { title: 'Share', subtitle: 'Select platform', copyLink: 'Copy', copied: 'Copied!', via: 'via', apps: { whatsapp: 'WhatsApp', facebook: 'Facebook', twitter: 'Twitter', linkedin: 'LinkedIn', email: 'Email', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' } },
-    forum: fr,
-    profile: pr
+    common: { 
+      sponsored: data.c[0], noResults: data.c[1], back: data.c[2], share: data.c[3], 
+      details: data.c[4], open: data.c[5], closed: data.c[6], fullMap: data.c[7], 
+      nearby: data.c[8], searchPlaceholder: data.c[9], addToCalendar: data.c[10], 
+      upload: data.c[11], copyLink: data.c[12], copied: data.c[13], error: data.c[14],
+      loading: data.c[15], thinking: data.c[16]
+    },
+    hero: { subtitle: data.h },
+    ai_guide: { 
+      title: data.m[12], 
+      welcome: get(data, 'ai.welcome', en.ai.welcome), 
+      online: get(data, 'ai.online', en.ai.online), 
+      placeholder: get(data, 'search.placeholder', en.search.placeholder), 
+      voice_btn: get(data, 'ai.voice_btn', en.ai.voice_btn),
+      system: get(data, 'ai.system', en.ai.system)
+    },
+    header: data.header || en.header,
+    home_page: data.hp || en.hp,
+    beacon: data.beacon || en.beacon,
+    lens: data.lens || en.lens,
+    postcard: data.postcard || en.postcard,
+    citizen_services: { 
+        title: data.s[0], subtitle: data.s[1], appointment: data.s[2], 
+        incidents: data.s[3], report: data.s[4], frequent: data.s[5], 
+        certificate: data.s[6], taxes: data.s[7], licenses: data.s[8] 
+    },
+    sections: { 
+        shopping: { title: data.m[6] }, 
+        dining: { title: data.m[5] }, 
+        events: { title: data.m[9] } 
+    },
+    footer: { 
+        contact: data.f[0], links: data.f[1], follow: data.f[2], desc: data.f[3],
+        officeName: data.f[4], addressLine1: data.f[5], addressLine2: data.f[6], addressLine3: data.f[7], rights: data.f[8]
+    },
+    search: data.search || en.search,
+    share: { title: 'Share', subtitle: 'Platform', apps: { whatsapp: 'WhatsApp', facebook: 'Facebook', twitter: 'Twitter', linkedin: 'LinkedIn', email: 'Email', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' } },
+    events_data: data.ed || en.ed,
+    beaches_page: data.beaches_page || en.beaches_page,
+    sightseeing_page: data.sightseeing_page || en.sightseeing_page,
+    profile: data.profile || en.profile,
+    forum: data.forum || en.forum,
+    event_detail: { pilar_event: 'EVENTO PH', date_time: 'FECHA Y HORA', main_location: 'UBICACIÓN' }
   };
 };
 

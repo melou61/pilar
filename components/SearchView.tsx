@@ -81,14 +81,14 @@ export const SearchView: React.FC<SearchViewProps> = ({ t, events, businesses, o
                     <Search size={48} className="opacity-10" />
                  </div>
                  <p className="font-black uppercase tracking-[0.3em] text-[11px] max-w-[200px] leading-relaxed">
-                    {t.search?.subtitle1 || 'Encuentra eventos, comercios'} {t.search?.subtitle2 || 'y servicios municipales.'}
+                    {t.search.subtitle1} {t.search.subtitle2}
                  </p>
               </div>
             )}
 
             {query && results.business.length === 0 && results.events.length === 0 && (
                 <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">
-                    No hay resultados para "{query}"
+                    {t.search.noResults} "{query}"
                 </div>
             )}
 
