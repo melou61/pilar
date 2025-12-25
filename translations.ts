@@ -39,7 +39,8 @@ const UI_RESOURCES: Record<string, any> = {
     beaches_page: { title: 'Nuestras Playas', coastal: 'El Litoral del Pilar', blue_flag: 'Bandera Azul', open: 'Abierta Ahora', fact_title: 'Excelencia Mediterránea', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'Paraíso de arena blanca.' } } },
     sightseeing_page: { title: 'Joyas del Patrimonio', list: { 'torre-vigia': { name: 'Torre de la Horadada', desc: 'Símbolo de nuestra costa.' } } },
     health: { title: 'Pilar Saludable', subtitle: 'Salud y Bienestar', emergency: 'Emergencias', center: 'Centro Salud', pharmacy: 'Farmacia de Guardia' },
-    forum: { title: 'Comunidad Pilar', subtitle: 'Conecta con tus vecinos', categories: ['Recomendaciones', 'General', 'Mascotas', 'Mercadillo'] }
+    forum: { title: 'Comunidad Pilar', subtitle: 'Conecta con tus vecinos', categories: ['Recomendaciones', 'General', 'Mascotas', 'Mercadillo'] },
+    profile: { my_events: 'Mis Eventos', favorites: 'Favoritos', alerts: 'Alertas y Notificaciones', logout: 'Cerrar Sesión' }
   },
   en: { 
     m: ['Home', 'News', 'Beaches', 'Heritage', 'Experiences', 'Dining', 'Shops', 'Health', 'Services', 'Events', 'Forum', 'PH Explore', 'AI Guide', 'Profile', 'Map', 'Admin'], 
@@ -65,27 +66,32 @@ const UI_RESOURCES: Record<string, any> = {
     beaches_page: { title: 'Our Beaches', coastal: 'Pilar Coastline', blue_flag: 'Blue Flag', open: 'Open Now', fact_title: 'Excellence', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'A white sand paradise.' } } },
     sightseeing_page: { title: 'Heritage Jewels', list: { 'torre-vigia': { name: 'Watchtower', desc: 'Symbol of our coast.' } } },
     health: { title: 'Healthy Pilar', subtitle: 'Health & Wellness', emergency: 'Emergencies', center: 'Health Center', pharmacy: 'Pharmacy on Duty' },
-    forum: { title: 'Pilar Community', subtitle: 'Connect with neighbors', categories: ['Recommendations', 'General', 'Pets', 'Marketplace'] }
+    forum: { title: 'Pilar Community', subtitle: 'Connect with neighbors', categories: ['Recommendations', 'General', 'Pets', 'Marketplace'] },
+    profile: { my_events: 'My Events', favorites: 'Favorites', alerts: 'Alerts & Notifications', logout: 'Log Out' }
   },
   fr: { 
     m: ['Accueil', 'Nouvelles', 'Plages', 'Patrimoine', 'Expériences', 'Gastronomie', 'Boutiques', 'Santé', 'Services', 'Événements', 'Forum', 'PH Explorer', 'Guide IA', 'Profil', 'Carte', 'Admin'], 
     c: ['Sponsorisé', 'Aucun résultat', 'Retour', 'Partager', 'Détails', 'Ouvert', 'Fermé', 'Carte', 'Près de vous', 'Chercher...', 'Ajouter', 'Télécharger', 'Copier', 'Copié', 'Erreur', 'Chargement...', 'Réflexion...', 'Détails', 'Tout'], 
-    h: 'Paradis méditerranéen.'
+    h: 'Paradis méditerranéen.',
+    profile: { my_events: 'Mes Événements', favorites: 'Favoris', alerts: 'Alertes', logout: 'Déconnexion' }
   },
   de: { 
     m: ['Start', 'Nachrichten', 'Strände', 'Kulturerbe', 'Erlebnisse', 'Gastronomie', 'Geschäfte', 'Gesundheit', 'Dienste', 'Events', 'Forum', 'PH Erkunden', 'KI Guide', 'Profil', 'Karte', 'Admin'], 
     c: ['Gesponsert', 'Keine Ergebnisse', 'Zurück', 'Teilen', 'Details', 'Offen', 'Geschlossen', 'Karte', 'In der Nähe', 'Suche...', 'Hinzufügen', 'Hochladen', 'Kopieren', 'Kopiert', 'Fehler', 'Laden...', 'Denken...', 'Details', 'Alle'], 
-    h: 'Mediterranes Paradies.'
+    h: 'Mediterranes Paradies.',
+    profile: { my_events: 'Meine Events', favorites: 'Favoriten', alerts: 'Benachrichtigungen', logout: 'Abmelden' }
   },
   it: { 
     m: ['Inizio', 'Notizie', 'Spiagge', 'Patrimonio', 'Esperienze', 'Gastronomia', 'Negozi', 'Salute', 'Servizi', 'Eventi', 'Forum', 'PH Esplora', 'Guida IA', 'Profilo', 'Mappa', 'Admin'], 
     c: ['Sponsorizzato', 'Nessun risultato', 'Indietro', 'Condividi', 'Dettagli', 'Aperto', 'Chiuso', 'Mappa', 'Vicino a te', 'Cerca...', 'Aggiungi', 'Carica', 'Copia', 'Copiato', 'Errore', 'Caricamento...', 'Pensando...', 'Dettagli', 'Tutti'], 
-    h: 'Paradiso mediterraneo.'
+    h: 'Paradiso mediterraneo.',
+    profile: { my_events: 'I Miei Eventi', favorites: 'Preferiti', alerts: 'Avvisi', logout: 'Disconnetti' }
   },
   pt: { 
     m: ['Início', 'Notícias', 'Praias', 'Património', 'Experiências', 'Gastronomia', 'Lojas', 'Saúde', 'Serviços', 'Eventos', 'Fórum', 'PH Explorar', 'Guia IA', 'Perfil', 'Mapa', 'Admin'], 
     c: ['Patrocinado', 'Sem resultados', 'Voltar', 'Partilhar', 'Detalhes', 'Aberto', 'Fechado', 'Mapa', 'Perto de si', 'Procurar...', 'Adicionar', 'Subir', 'Copiar', 'Copiado', 'Erro', 'A carregar...', 'A pensar...', 'Detalhes', 'Todos'], 
-    h: 'Paraíso mediterrânico.'
+    h: 'Paraíso mediterrânico.',
+    profile: { my_events: 'Meus Eventos', favorites: 'Favoritos', alerts: 'Alertas', logout: 'Sair' }
   }
 };
 

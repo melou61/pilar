@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, LogIn, ShieldCheck, UserPlus, Check, AlertTriangle } from './Icons';
+import { AdminRole } from '../types';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogin: (userData?: { name: string, email: string }) => void;
+  onLogin: (userData?: { name: string, email: string, role?: AdminRole }) => void;
   onLoginSuperAdmin: () => void;
   t: any;
 }
@@ -29,11 +30,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
     e.preventDefault();
     setError(null);
 
-    // 1. Credenciales Maestras de Administración
+    // 1. Credenciales Maestras de Administración (SUPER_ADMIN)
     if (email.toLowerCase() === 'admin@pilarhoradada.com' && password === 'admin') {
       setIsSuccess(true);
       setTimeout(() => {
-        onLoginSuperAdmin(); // Activa handleLogin('ADMIN') en App.tsx
+        onLogin({ name: 'Super Administrador', email: email, role: 'SUPER_ADMIN' });
         setIsSuccess(false);
         resetForm();
       }, 800);
@@ -45,7 +46,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
     if (dbUser && email.toLowerCase() === dbUser.email.toLowerCase() && password === dbUser.pass) {
       setIsSuccess(true);
       setTimeout(() => {
-        onLogin({ name: dbUser.name, email: dbUser.email }); // Activa handleLogin('USER')
+        onLogin({ name: dbUser.name, email: dbUser.email, role: 'USER' as any }); 
         setIsSuccess(false);
         resetForm();
       }, 800);
@@ -62,7 +63,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
         return;
     }
 
-    // Guardamos en un mini "DB" local para la demo
     const userData = { name, email, pass: password };
     localStorage.setItem('pilar_user_db', JSON.stringify(userData));
     
@@ -72,7 +72,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
       setView('login');
       setError(null);
       setPassword(''); 
-      alert("¡Cuenta creada! Ahora puedes entrar con tu email y contraseña. Recuerda que para el panel administrativo se requiere una cuenta especial.");
+      alert("¡Cuenta creada! Ahora puedes entrar con tu email y contraseña.");
     }, 1000);
   };
 

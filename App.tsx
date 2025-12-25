@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ViewState, NavItem, Ad, Event, Language, AdminRole, CensusItem } from './types';
+import { ViewState, NavItem, Ad, Event, Language, AdminRole, CensusItem, AdminUser } from './types';
 import { 
   Home, Newspaper, Waves, Eye, Activity, UtensilsCrossed, 
   ShoppingBag, Calendar, MapIcon, Landmark, Sparkles, User, ShieldCheck, MessageSquare, Heart, Scan
@@ -40,18 +40,25 @@ const INITIAL_ADS: Ad[] = [
   { id: 'ad-4', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true, view: ViewState.HOME }
 ];
 
+const MOCK_ADMINS: AdminUser[] = [
+  { id: 'adm-1', name: 'Alcaldía Master', email: 'admin@pilarhoradada.com', role: 'SUPER_ADMIN', createdAt: '2023-01-01', active: true, lastSeen: 'Ahora' },
+  { id: 'adm-2', name: 'Gestor Comercio', email: 'comercio@pilardelahoradada.org', role: 'ADMIN_COMMERCE', createdAt: '2024-02-15', active: true, lastSeen: 'Hace 2h' },
+  { id: 'adm-3', name: 'Cultura PH', email: 'cultura@pilardelahoradada.org', role: 'ADMIN_CULTURE', createdAt: '2024-03-10', active: true, lastSeen: 'Ayer' }
+];
+
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>(ViewState.HOME);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState<Language>(languages[0]); 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState<'USER' | 'ADMIN'>('USER');
+  const [userRole, setUserRole] = useState<AdminRole | 'USER'>('USER');
   const [userName, setUserName] = useState('');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [myEvents, setMyEvents] = useState<string[]>([]);
   const [ads, setAds] = useState<Ad[]>(INITIAL_ADS);
   const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
+  const [admins, setAdmins] = useState<AdminUser[]>(MOCK_ADMINS);
   
   const [businesses, setBusinesses] = useState<CensusItem[]>(() => {
     return [
@@ -93,7 +100,11 @@ const App: React.FC = () => {
 
   const handleNavigate = (view: ViewState, id?: string) => {
     setSidebarOpen(false);
-    if (view === ViewState.ADMIN && userRole !== 'ADMIN') { setLoginOpen(true); return; }
+    // Verificación de acceso al panel de administración
+    if (view === ViewState.ADMIN && !['SUPER_ADMIN', 'ADMIN_GENERAL', 'ADMIN_CULTURE', 'ADMIN_SPORTS', 'ADMIN_COMMERCE'].includes(userRole as any)) {
+      setLoginOpen(true);
+      return;
+    }
     if (view === ViewState.PROFILE && !isLoggedIn) { setLoginOpen(true); return; }
     setCurrentView(view);
     if (view === ViewState.EVENTS) setSelectedEventId(id || null);
@@ -101,9 +112,15 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleLogin = (userData?: { name: string, email: string }) => {
-    if (userData) { setUserRole('USER'); setUserName(userData.name); }
-    else { setUserRole('ADMIN'); setUserName('Administrador'); }
+  const handleLogin = (userData?: { name: string, email: string, role?: AdminRole }) => {
+    if (userData) { 
+      setUserRole(userData.role || 'USER'); 
+      setUserName(userData.name); 
+    } else { 
+      // Caso Super Admin desde LoginModal (master credentials)
+      setUserRole('SUPER_ADMIN'); 
+      setUserName('Super Administrador'); 
+    }
     setIsLoggedIn(true);
     setLoginOpen(false);
   };
@@ -183,7 +200,16 @@ const App: React.FC = () => {
       case ViewState.FORUM: return <ForumView t={t} ads={ads} headerProps={headerProps} />;
       case ViewState.MAP: return <MapView t={t} onNavigate={handleNavigate} businesses={businesses} ads={ads} />;
       case ViewState.AI_CHAT: return <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} langCode={currentLang.code} langLabel={currentLang.label} ads={ads} headerProps={headerProps} />;
-      case ViewState.ADMIN: return <AdminDashboard ads={ads} setAds={setAds} events={events} setEvents={setEvents} businesses={businesses} setBusinesses={setBusinesses} onLogout={handleLogout} currentUserRole={userRole as any} />;
+      case ViewState.ADMIN: return (
+        <AdminDashboard 
+          ads={ads} setAds={setAds} 
+          events={events} setEvents={setEvents} 
+          businesses={businesses} setBusinesses={setBusinesses} 
+          admins={admins} setAdmins={setAdmins}
+          onLogout={handleLogout} 
+          currentUserRole={userRole as AdminRole} 
+        />
+      );
       case ViewState.PROFILE: return <ProfileView userName={userName} onLogout={handleLogout} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />;
       case ViewState.SEARCH: return <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} headerProps={headerProps} />;
       case ViewState.POSTCARD: return <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />;

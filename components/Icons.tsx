@@ -111,7 +111,9 @@ import {
   Scan,
   Upload,
   Maximize,
-  Ruler
+  Ruler,
+  // Added Lock icon for AdminDashboard
+  Lock
 } from 'lucide-react';
 
 export {
@@ -227,5 +229,7 @@ export {
   Scan,
   Upload,
   Maximize,
-  Ruler
+  Ruler,
+  // Added Lock icon to exports
+  Lock
 };
