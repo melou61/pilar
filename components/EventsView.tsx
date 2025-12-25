@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Event, Ad, ViewState } from '../types';
 import { Search, Calendar, MapPin, ChevronRight, ArrowLeft, Bookmark, Sparkles, Trophy } from './Icons';
@@ -102,6 +101,17 @@ export const EventsView: React.FC<EventsViewProps> = ({
             </button>
           ))}
         </div>
+
+        {/* Anuncio Superior - Justo debajo de la barra de filtros */}
+        <div className="mt-2 -mx-2">
+           <AdSpot 
+             ads={ads} 
+             position="page-top" 
+             label={t.common.sponsored} 
+             view={ViewState.EVENTS} 
+             currentFilter={activeCategory} 
+           />
+        </div>
       </div>
 
       <div className="px-6 mt-6 space-y-10">
@@ -172,7 +182,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
             })}
             
             <div className="pt-6 -mx-2">
-              <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.EVENTS} />
+              <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.EVENTS} currentFilter={activeCategory} />
             </div>
           </>
         ) : (
