@@ -88,7 +88,7 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads, head
                 className="bg-white rounded-[50px] border border-gray-100 shadow-2xl shadow-gray-200/40 overflow-hidden flex flex-col md:flex-row hover:shadow-3xl transition-all duration-500 group cursor-pointer relative"
               >
                   <div className="w-full md:w-80 h-64 md:h-auto relative overflow-hidden shrink-0">
-                    <img src={place.images[0]} alt={place.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                    <img src={place.images?.[0] || 'https://images.unsplash.com/photo-1517248135467-4c7ed9d8607c?auto=format&fit=crop&w=800&q=80'} alt={place.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                     <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-1.5 text-sm font-black text-gray-900 shadow-2xl">
                       <Star size={16} className="text-yellow-500 fill-current" />
                       {place.rating}

@@ -56,7 +56,7 @@ export const BeaconModal: React.FC<BeaconModalProps> = ({ isOpen, onClose, shop,
                 {/* Shop Brand */}
                 <div className="p-6 text-center border-b border-gray-100">
                      <div className="w-20 h-20 mx-auto rounded-[24px] overflow-hidden shadow-xl mb-4 border-4 border-white -mt-12 bg-white">
-                         <img src={shop.images[0]} alt={shop.name} className="w-full h-full object-cover" />
+                         <img src={shop.images?.[0]} alt={shop.name} className="w-full h-full object-cover" />
                      </div>
                      <h3 className="font-black text-gray-900 text-2xl tracking-tight">{shop.name}</h3>
                      <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 mt-2">

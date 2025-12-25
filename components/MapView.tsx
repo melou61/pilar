@@ -186,7 +186,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
       {/* 2. CONTENEDOR DEL MAPA */}
       <div className="relative h-[65vh] bg-gray-100 rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-4 mb-4">
         
-        {/* BARRA DE FILTROS - z-index reducido para quedar bajo el Header fixed */}
+        {/* BARRA DE FILTROS */}
         <div className="absolute top-6 left-0 right-0 z-[400] flex justify-center px-4">
           <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar max-w-full">
             {[
@@ -214,7 +214,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
         {/* Div de Leaflet */}
         <div ref={mapContainerRef} className="w-full h-full" />
         
-        {/* CONTROLES DE MAPA - z-index reducido */}
+        {/* CONTROLES DE MAPA */}
         <div className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[400] flex flex-col gap-3`}>
           <button onClick={handleZoomIn} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all">
             <Plus size={24} strokeWidth={3} />
@@ -227,7 +227,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
           </button>
         </div>
 
-        {/* Tarjeta de Detalle Seleccionado - z-index reducido */}
+        {/* Tarjeta de Detalle Seleccionado */}
         {selectedItem && (
           <div className="absolute bottom-8 left-8 right-8 z-[410] animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto">
@@ -241,7 +241,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
                   {selectedItem.type === 'ACTIVE' ? 'PH Experiencia' : selectedItem.type === 'CULTURE' ? 'Patrimonio' : selectedItem.type === 'BEACH' ? 'Playa' : selectedItem.category}
                 </p>
                 <p className="text-gray-500 text-xs flex items-center gap-2 font-medium mb-6"><MapPin size={14} className="text-blue-500" /><span className="truncate">{selectedItem.address || selectedItem.location || 'Pilar de la Horadada'}</span></p>
-                <button onClick={() => onNavigate(selectedItem.type === 'ACTIVE' ? ViewState.ACTIVITIES : selectedItem.type === 'CULTURE' ? ViewState.SIGHTSEEING : selectedItem.type === 'BEACH' ? ViewState.BEACHES : ViewState.SHOPPING, selectedItem.id)} className="w-full py-4 bg-blue-600 text-white rounded-[20px] font-black text-sm shadow-xl">Ver Detalles</button>
+                <button onClick={() => onNavigate(selectedItem.type === 'ACTIVE' ? ViewState.ACTIVITIES : selectedItem.type === 'CULTURE' ? ViewState.SIGHTSEEING : selectedItem.type === 'BEACH' ? ViewState.BEACHES : ViewState.SHOPPING, selectedItem.id)} className="w-full py-4 bg-blue-600 text-white rounded-[20px] font-black text-sm shadow-xl">{t.common.view_details}</button>
               </div>
             </div>
           </div>

@@ -98,7 +98,7 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
                           className="bg-white rounded-[50px] overflow-hidden border border-gray-100 shadow-2xl shadow-gray-200/40 flex flex-col md:flex-row md:h-64 group cursor-pointer hover:-translate-y-2 transition-all duration-500 relative"
                       >
                           <div className="w-full md:w-64 h-56 md:h-full overflow-hidden shrink-0 relative">
-                              <img src={biz.images[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt={biz.name} />
+                              <img src={biz.images?.[0] || 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1000&q=80'} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt={biz.name} />
                           </div>
                           <div className="flex-1 p-8 md:p-10 flex flex-col justify-between">
                               <div>

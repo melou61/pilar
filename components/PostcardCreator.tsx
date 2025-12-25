@@ -32,9 +32,12 @@ export const PostcardCreator: React.FC<PostcardCreatorProps> = ({ t, onBack }) =
         }
       });
 
-      for (const part of response.candidates[0].content.parts) {
-        if (part.inlineData) {
-          setGeneratedImage(`data:image/png;base64,${part.inlineData.data}`);
+      const candidate = response.candidates?.[0];
+      if (candidate?.content?.parts) {
+        for (const part of candidate.content.parts) {
+          if (part.inlineData) {
+            setGeneratedImage(`data:image/png;base64,${part.inlineData.data}`);
+          }
         }
       }
     } catch (error) {
@@ -108,7 +111,7 @@ export const PostcardCreator: React.FC<PostcardCreatorProps> = ({ t, onBack }) =
         <div className="p-8 border-t border-white/5 bg-slate-900/50 backdrop-blur-xl shrink-0 pb-12">
           <div className="max-w-xl mx-auto flex flex-col gap-6">
             <div className="flex flex-wrap gap-2">
-              {["Atardecer Higuericas", "Torre futurista", "Río Seco mágico", "Plaza Iglesia"].map(s => (
+              {t.postcard.suggestions.map((s: string) => (
                 <button 
                   key={s} 
                   onClick={() => setPrompt(s)}

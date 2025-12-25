@@ -121,7 +121,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const item = {
       ...currentBiz,
       id: currentBiz.id || `biz-${Date.now()}`,
-      images: currentBiz.images || ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80'],
+      images: currentBiz.images || ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80'],
       hours: { weekdays: '09:00-14:00', weekend: 'Cerrado' },
       rating: 5.0,
       reviewCount: 0
@@ -287,7 +287,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <div className="grid grid-cols-1 gap-4">
                     {businesses.map(b => (
                       <div key={b.id} className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-md flex items-center gap-6 group hover:border-blue-300 transition-all">
-                        <img src={b.images[0]} className="w-16 h-16 rounded-xl object-cover" />
+                        <img src={b.images?.[0]} className="w-16 h-16 rounded-xl object-cover" />
                         <div className="flex-1">
                           <h4 className="font-black text-slate-900 tracking-tight">{b.name}</h4>
                           <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{b.category} • {b.zone}</p>

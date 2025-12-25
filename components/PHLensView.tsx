@@ -38,18 +38,23 @@ export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerPr
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const base64Content = base64Data.split(',')[1];
+      const langName = headerProps.currentLang.label;
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: {
           parts: [
             { inlineData: { data: base64Content, mimeType: 'image/jpeg' } },
-            { text: `Identify this element of Pilar de la Horadada, Spain. Respond in JSON format only with these keys: identified, confidence, context, category, location, funFact.` }
+            { text: `Identify this element of Pilar de la Horadada, Spain. Respond in ${langName}. Respond in JSON format only with these keys: identified, confidence, context, category, location, funFact.` }
           ]
         }
       });
-      const data = JSON.parse(response.text.replace(/```json|```/gi, "").trim());
-      setResult(data);
+      const text = (response.text || "").replace(/```json|```/gi, "").trim();
+      if (text) {
+        const data = JSON.parse(text);
+        setResult(data);
+      }
     } catch (error) {
+      console.error("Lens error:", error);
       alert(t.common.error);
     } finally {
       setIsAnalyzing(false);
@@ -89,14 +94,23 @@ export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerPr
           <div className="w-full max-w-lg flex flex-col items-center">
              <div className="relative w-full aspect-[4/5] rounded-[45px] overflow-hidden border border-white/20 shadow-2xl">
                 <img src={image} className="w-full h-full object-cover" alt="Analyzing" />
-                {isAnalyzing && <div className="absolute inset-0 z-20"><div className="w-full h-1 bg-cyan-400 shadow-[0_0_20px_cyan] absolute animate-[scan_3s_infinite]"></div></div>}
+                {isAnalyzing && <div className="absolute inset-0 z-20 bg-black/40"><div className="w-full h-1 bg-cyan-400 shadow-[0_0_20px_cyan] absolute animate-[scan_3s_infinite]"></div></div>}
              </div>
              {result && !isAnalyzing && (
                <div className="mt-8 w-full bg-[#0f172a]/95 backdrop-blur-3xl border border-white/10 p-8 rounded-[40px] shadow-2xl">
                   <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest mb-1 block">{t.lens.identified}</span>
                   <h3 className="text-3xl font-black tracking-tighter text-white mb-2">{result.identified}</h3>
                   <p className="text-slate-300 italic mb-6">"{result.context}"</p>
-                  <button onClick={() => setImage(null)} className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest">{t.lens.newScan}</button>
+                  <div className="space-y-4 mb-8">
+                     <div className="flex items-center gap-3 text-xs font-bold text-slate-400"><MapPin size={16} className="text-cyan-500" /> {result.location}</div>
+                     <div className="flex items-center gap-3 text-xs font-bold text-slate-400"><Info size={16} className="text-cyan-500" /> {result.funFact}</div>
+                  </div>
+                  <button onClick={() => setImage(null)} className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all">{t.lens.newScan}</button>
+               </div>
+             )}
+             {isAnalyzing && (
+               <div className="mt-8 text-cyan-400 font-black uppercase tracking-[0.3em] animate-pulse">
+                  {t.common.thinking}
                </div>
              )}
           </div>

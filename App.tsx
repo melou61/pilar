@@ -29,6 +29,7 @@ import { ProfileView } from './components/ProfileView';
 import { HealthView } from './components/HealthView';
 import { BeaconModal } from './components/BeaconModal';
 import { PHLensView } from './components/PHLensView';
+import { MobileNav } from './components/MobileNav';
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
 
@@ -192,7 +193,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-900">
+    <div className="min-h-screen bg-white font-sans text-gray-900 pb-20">
       {activeBeaconShop && <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} t={t} />}
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={handleLogin} onLoginSuperAdmin={() => handleLogin()} t={t} />
       <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
@@ -210,6 +211,7 @@ const App: React.FC = () => {
       </main>
 
       {!isImmersiveView && <Footer t={t} />}
+      <MobileNav currentView={currentView} onNavigate={handleNavigate} t={t} />
     </div>
   );
 };

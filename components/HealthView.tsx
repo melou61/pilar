@@ -25,6 +25,7 @@ const PHARMACIES = [
 export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, headerProps }) => {
   const today = new Date().getDay();
   const onDutyPharmacy = PHARMACIES.find(f => f.onDutyDays.includes(today)) || PHARMACIES[0];
+  const h = t.health;
 
   return (
     <div className="fixed inset-0 z-[400] bg-slate-50 flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
@@ -44,16 +45,16 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, head
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="flex items-center gap-3 text-red-500 font-black text-[10px] uppercase tracking-[0.4em] mb-3">
              <Heart size={18} className="animate-pulse" />
-             Salud y Bienestar
+             {h.subtitle}
           </div>
-          <h1 className="text-5xl font-black text-gray-900 tracking-tighter mb-4">Pilar Saludable</h1>
+          <h1 className="text-5xl font-black text-gray-900 tracking-tighter mb-4">{h.title}</h1>
           <div className="flex gap-4">
              <a href="tel:112" className="flex-1 bg-red-600 text-white p-5 rounded-[26px] shadow-xl flex flex-col items-center justify-center gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest opacity-80">Emergencias</span>
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-80">{h.emergency}</span>
                 <span className="text-3xl font-black">112</span>
              </a>
              <a href="tel:+34965352355" className="flex-1 bg-[#0f172a] text-white p-5 rounded-[26px] shadow-xl flex flex-col items-center justify-center gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest opacity-80">Centro Salud</span>
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-80">{h.center}</span>
                 <span className="text-xl font-black mt-1">965 35 23 55</span>
              </a>
           </div>
@@ -64,13 +65,17 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, head
       <div className="max-w-4xl mx-auto px-6 py-10 space-y-10 flex-1">
         <section>
           <div className="bg-gradient-to-br from-emerald-600 to-teal-800 rounded-[50px] p-10 text-white shadow-2xl relative overflow-hidden">
+             <div className="flex items-center gap-2 mb-4">
+                <div className="w-1.5 h-1.5 bg-emerald-300 rounded-full animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-300">{h.pharmacy}</span>
+             </div>
              <h2 className="text-4xl font-black tracking-tighter mb-4">{onDutyPharmacy.name}</h2>
              <div className="space-y-3 mb-10">
                 <div className="flex items-center gap-3 text-emerald-100 font-medium"><MapPin size={18} /> {onDutyPharmacy.address}</div>
                 <div className="flex items-center gap-3 text-emerald-100 font-medium"><Phone size={18} /> {onDutyPharmacy.phone}</div>
              </div>
              <button onClick={() => onNavigate(ViewState.MAP, onDutyPharmacy.id)} className="bg-white text-emerald-800 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center gap-2">
-                <Navigation size={16} /> Mapa
+                <Navigation size={16} /> {t.common.fullMap}
              </button>
           </div>
         </section>
