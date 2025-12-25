@@ -41,7 +41,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
     <div className="fixed inset-0 z-[400] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
       
       {/* 1. HEADER GLOBAL (Flotante y traslúcido) */}
-      <div className="relative z-[220] shrink-0">
+      <div className="relative z-[5000] shrink-0">
          <Header {...headerProps} />
       </div>
 
@@ -69,7 +69,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
            </div>
         </div>
 
-        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-[120px]">
+        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-[140px]">
           <div className="max-w-[95rem] mx-auto w-full">
             <h2 className="text-[100px] sm:text-[180px] font-black mb-0 leading-[0.82] tracking-[0.05em] flex flex-col items-start" style={{ textShadow: '10px 10px 25px rgba(0,0,0,0.8)' }}>
               <span className="drop-shadow-[0_0_50px_rgba(37,99,235,0.3)] animate-in fade-in slide-in-from-bottom duration-1000 delay-200">PILAR</span>

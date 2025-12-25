@@ -172,7 +172,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
   return (
     <div className="flex flex-col bg-white relative animate-in fade-in duration-500 overflow-x-hidden min-h-screen">
       
-      {/* 1. PUBLICIDAD SUPERIOR - Segmentada por filtro del mapa (ej: Playas) */}
+      {/* 1. PUBLICIDAD SUPERIOR */}
       <div className="px-6 py-4 bg-white shrink-0">
         <AdSpot 
           ads={ads} 
@@ -186,8 +186,8 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
       {/* 2. CONTENEDOR DEL MAPA */}
       <div className="relative h-[65vh] bg-gray-100 rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-4 mb-4">
         
-        {/* BARRA DE FILTROS */}
-        <div className="absolute top-6 left-0 right-0 z-[1001] flex justify-center px-4">
+        {/* BARRA DE FILTROS - z-index reducido para quedar bajo el Header fixed */}
+        <div className="absolute top-6 left-0 right-0 z-[400] flex justify-center px-4">
           <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar max-w-full">
             {[
               { id: 'all', label: t.menu.home }, 
@@ -214,8 +214,8 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
         {/* Div de Leaflet */}
         <div ref={mapContainerRef} className="w-full h-full" />
         
-        {/* CONTROLES DE MAPA */}
-        <div className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[1000] flex flex-col gap-3`}>
+        {/* CONTROLES DE MAPA - z-index reducido */}
+        <div className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[400] flex flex-col gap-3`}>
           <button onClick={handleZoomIn} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all">
             <Plus size={24} strokeWidth={3} />
           </button>
@@ -227,9 +227,9 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
           </button>
         </div>
 
-        {/* Tarjeta de Detalle Seleccionado */}
+        {/* Tarjeta de Detalle Seleccionado - z-index reducido */}
         {selectedItem && (
-          <div className="absolute bottom-8 left-8 right-8 z-[1001] animate-in slide-in-from-bottom-20 duration-500">
+          <div className="absolute bottom-8 left-8 right-8 z-[410] animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto">
               <div className="relative h-40 w-full">
                 <img src={selectedItem.image || (selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl)} className="w-full h-full object-cover" alt="" />

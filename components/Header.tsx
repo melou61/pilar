@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="fixed top-0 z-[200] bg-white/95 backdrop-blur-md h-24 w-full flex items-center border-b border-gray-100 shadow-sm px-4 sm:px-6">
+    <header className="fixed top-0 z-[5000] bg-white/95 backdrop-blur-md h-24 w-full flex items-center border-b border-gray-100 shadow-sm px-4 sm:px-6">
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
         
         {/* LOGO */}
