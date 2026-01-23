@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { MapPin, Navigation, X, Waves, Star, History, Activity, Plus, Minus } from './Icons';
+import { MapPin, Navigation, X, Waves, Star, History, Activity, Plus, Minus, ShoppingBag, UtensilsCrossed, Heart, Landmark } from './Icons';
 import { MOCK_EVENTS, MOCK_BEACHES, MOCK_SIGHTSEEING, ACTIVITIES_LIST } from '../data';
 import { ViewState, CensusItem, Ad } from '../types';
 import { AdSpot } from './AdSpot';
@@ -18,12 +18,30 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const [leafletMap, setLeafletMap] = useState<any | null>(null);
-  const [filter, setFilter] = useState<'all' | 'food' | 'shop' | 'events' | 'beaches' | 'culture' | 'active'>('all');
+  const [filter, setFilter] = useState<string>('all');
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const markersRef = useRef<any[]>([]);
   const userMarkerRef = useRef<any>(null);
   const isDestroyedRef = useRef(false);
+
+  const categories = [
+    { id: 'all', label: 'Todos' },
+    { id: 'Alimentación', label: 'Alimentación' },
+    { id: 'Alojamiento', label: 'Alojamiento' },
+    { id: 'Comunicación y publicidad', label: 'Comunicación y publicidad' },
+    { id: 'Educación', label: 'Educación' },
+    { id: 'Gestiones profesionales y bancarias', label: 'Gestiones profesionales y bancarias' },
+    { id: 'Hogar', label: 'Hogar' },
+    { id: 'Hostelería y restauración', label: 'Hostelería y restauración' },
+    { id: 'Mascotas', label: 'Mascotas' },
+    { id: 'Medio Ambiente y agricultura', label: 'Medio Ambiente y agricultura' },
+    { id: 'Moda', label: 'Moda' },
+    { id: 'Motor', label: 'Motor' },
+    { id: 'Ocio y entretenimiento', label: 'Ocio y entretenimiento' },
+    { id: 'Salud y belleza', label: 'Salud y belleza' },
+    { id: 'Servicios municipales y otros servicios', label: 'Servicios municipales y otros servicios' },
+  ];
 
   useEffect(() => {
     isDestroyedRef.current = false;
@@ -77,31 +95,28 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
     markersRef.current = [];
 
     const itemsToAdd: any[] = [];
-    const foodCats = ['restaurante', 'bar', 'italiano', 'pescados', 'playa', 'chiringuito', 'arroces', 'internacional', 'mediterráneo', 'tapas', 'postres', 'vinos', 'carnes'];
 
-    if (filter === 'all' || filter === 'shop') {
-      const shops = businesses.filter(b => !foodCats.includes(b.category.toLowerCase()));
-      itemsToAdd.push(...shops.map(i => ({ ...i, type: 'SHOP', color: '#2563eb' })));
-    }
+    // Lógica de mapeo de color por categoría general
+    const getCategoryColor = (cat: string) => {
+      if (['Hostelería y restauración', 'Alimentación'].includes(cat)) return '#f97316';
+      if (['Salud y belleza'].includes(cat)) return '#ec4899';
+      if (['Moda', 'Hogar'].includes(cat)) return '#2563eb';
+      if (['Servicios municipales y otros servicios'].includes(cat)) return '#64748b';
+      return '#3b82f6';
+    };
+
+    // Filtrado de negocios por la nueva lista de categorías
+    const filteredBusinesses = filter === 'all' 
+      ? businesses 
+      : businesses.filter(b => b.category === filter);
     
-    if (filter === 'all' || filter === 'food') {
-      const eateries = businesses.filter(b => foodCats.includes(b.category.toLowerCase()));
-      itemsToAdd.push(...eateries.map(i => ({ ...i, type: 'FOOD', color: '#f97316' })));
-    }
-    
-    if (filter === 'all' || filter === 'events') {
+    itemsToAdd.push(...filteredBusinesses.map(i => ({ ...i, type: 'BIZ', color: getCategoryColor(i.category) })));
+
+    // Si es "Todos", incluimos también playas, monumentos y eventos
+    if (filter === 'all') {
       itemsToAdd.push(...MOCK_EVENTS.map(i => ({ ...i, type: 'EVENT', color: '#9333ea' })));
-    }
-
-    if (filter === 'all' || filter === 'beaches') {
       itemsToAdd.push(...MOCK_BEACHES.map(i => ({ ...i, type: 'BEACH', color: '#06b6d4' })));
-    }
-
-    if (filter === 'all' || filter === 'culture') {
       itemsToAdd.push(...MOCK_SIGHTSEEING.map(i => ({ ...i, type: 'CULTURE', color: '#d97706' })));
-    }
-
-    if (filter === 'all' || filter === 'active') {
       itemsToAdd.push(...ACTIVITIES_LIST.map(i => ({ ...i, type: 'ACTIVE', color: '#10b981' })));
     }
 
@@ -157,55 +172,29 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
     }
   };
 
-  const handleZoomIn = () => {
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current.zoomIn();
-    }
-  };
-
-  const handleZoomOut = () => {
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current.zoomOut();
-    }
-  };
-
   return (
     <div className="flex flex-col bg-white relative animate-in fade-in duration-500 overflow-x-hidden min-h-screen">
       
       {/* 1. PUBLICIDAD SUPERIOR */}
       <div className="px-6 py-4 bg-white shrink-0">
-        <AdSpot 
-          ads={ads} 
-          position="page-top" 
-          label={t.common.sponsored} 
-          view={ViewState.MAP} 
-          currentFilter={filter}
-        />
+        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.MAP} currentFilter={filter} />
       </div>
 
       {/* 2. CONTENEDOR DEL MAPA */}
       <div className="relative h-[65vh] bg-gray-100 rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-4 mb-4">
         
-        {/* BARRA DE FILTROS */}
+        {/* BARRA DE FILTROS ACTUALIZADA */}
         <div className="absolute top-6 left-0 right-0 z-[400] flex justify-center px-4">
           <div className="bg-white/95 backdrop-blur-xl border border-gray-100 p-2 rounded-[28px] shadow-xl flex gap-1 overflow-x-auto no-scrollbar max-w-full">
-            {[
-              { id: 'all', label: t.menu.home }, 
-              { id: 'beaches', label: t.menu.beaches },
-              { id: 'culture', label: t.menu.sightseeing },
-              { id: 'active', label: t.menu.activities },
-              { id: 'food', label: t.menu.dining }, 
-              { id: 'shop', label: t.menu.shopping }, 
-              { id: 'events', label: t.menu.events }
-            ].map(f => (
+            {categories.map(cat => (
               <button 
-                key={f.id} 
-                onClick={() => setFilter(f.id as any)} 
+                key={cat.id} 
+                onClick={() => setFilter(cat.id)} 
                 className={`px-5 py-2 rounded-full text-[10px] font-black transition-all capitalize whitespace-nowrap ${
-                  filter === f.id ? 'bg-[#0f172a] text-white shadow-lg' : 'bg-transparent text-gray-500 hover:bg-gray-50'
+                  filter === cat.id ? 'bg-[#0f172a] text-white shadow-lg' : 'bg-transparent text-gray-500 hover:bg-gray-50'
                 }`}
               >
-                {f.label}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -216,10 +205,10 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
         
         {/* CONTROLES DE MAPA */}
         <div className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[400] flex flex-col gap-3`}>
-          <button onClick={handleZoomIn} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all">
+          <button onClick={() => mapInstanceRef.current?.zoomIn()} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 transition-all">
             <Plus size={24} strokeWidth={3} />
           </button>
-          <button onClick={handleZoomOut} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all">
+          <button onClick={() => mapInstanceRef.current?.zoomOut()} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 transition-all">
             <Minus size={24} strokeWidth={3} />
           </button>
           <button onClick={handleMyLocation} className="bg-white text-blue-600 p-5 rounded-[22px] shadow-2xl transition-all border border-gray-50 flex items-center justify-center hover:bg-blue-50 active:scale-95 mt-2" disabled={isLocating}>
@@ -250,13 +239,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
 
       {/* 3. PUBLICIDAD INFERIOR */}
       <div className="px-6 py-10 bg-white shrink-0">
-        <AdSpot 
-          ads={ads} 
-          position="page-bottom" 
-          label={t.common.sponsored} 
-          view={ViewState.MAP} 
-          currentFilter={filter}
-        />
+        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.MAP} currentFilter={filter} />
       </div>
 
     </div>

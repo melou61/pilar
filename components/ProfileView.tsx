@@ -13,6 +13,14 @@ interface ProfileViewProps {
 }
 
 export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, onNavigate, favorites, myEvents, t }) => {
+  // Safe access to profile translations
+  const profileT = t?.profile || {
+    my_events: 'Mis Eventos',
+    favorites: 'Favoritos',
+    alerts: 'Alertas',
+    logout: 'Cerrar Sesión'
+  };
+
   return (
     <div className="bg-slate-50 min-h-screen pb-44 animate-in fade-in duration-500 px-6 pt-10">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -49,7 +57,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                  <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
                     <Calendar size={24} />
                  </div>
-                 <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{t.profile.my_events}</h3>
+                 <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{profileT.my_events}</h3>
                  <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Tienes {myEvents.length} eventos guardados</p>
               </div>
               <button onClick={() => onNavigate(ViewState.EVENTS)} className="mt-8 flex items-center justify-between text-purple-600 font-black text-[10px] uppercase tracking-widest bg-purple-50 p-4 rounded-2xl">
@@ -63,7 +71,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                  <div className="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mb-6">
                     <Heart size={24} />
                  </div>
-                 <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{t.profile.favorites}</h3>
+                 <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{profileT.favorites}</h3>
                  <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">{favorites.length} sitios favoritos</p>
               </div>
               <button onClick={() => onNavigate(ViewState.SHOPPING)} className="mt-8 flex items-center justify-between text-red-500 font-black text-[10px] uppercase tracking-widest bg-red-50 p-4 rounded-2xl">
@@ -77,7 +85,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
                     <Bell size={24} />
                  </div>
-                 <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{t.profile.alerts}</h3>
+                 <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{profileT.alerts || 'Alertas'}</h3>
                  <div className="space-y-3 mt-4">
                     <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
                        <span className="text-[10px] font-black uppercase text-slate-500">Noticias Locales</span>
@@ -95,35 +103,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
            </div>
 
         </div>
-
-        {/* Community Activity Summary */}
-        <div className="bg-white rounded-[50px] p-10 shadow-xl shadow-slate-200 border border-white">
-           <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-6">Tu Actividad Social</h3>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="flex items-center gap-4">
-                 <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shadow-inner"><Zap size={24}/></div>
-                 <div>
-                    <p className="text-2xl font-black text-gray-900 leading-none">142</p>
-                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-1">Puntos PH</p>
-                 </div>
-              </div>
-              <div className="flex items-center gap-4">
-                 <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center shadow-inner"><Settings2 size={24}/></div>
-                 <div>
-                    <p className="text-2xl font-black text-gray-900 leading-none">3</p>
-                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-1">Gestiones SAC</p>
-                 </div>
-              </div>
-              <div className="flex items-center gap-4">
-                 <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shadow-inner"><Award size={24}/></div>
-                 <div>
-                    <p className="text-2xl font-black text-gray-900 leading-none">1a Gen</p>
-                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-1">Usuario Original</p>
-                 </div>
-              </div>
-           </div>
-        </div>
-
       </div>
     </div>
   );
