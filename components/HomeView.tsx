@@ -50,22 +50,22 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           </div>
         ))}
         
-        {/* BADGE SUPERIOR (FLOTANTE) */}
-        <div className="absolute top-32 left-8 z-30 animate-in slide-in-from-left duration-700">
-           <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
-             <div className="relative">
-               <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
-               <Radar size={18} className="text-blue-400 relative z-10" />
-             </div>
-             <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{hp.smart_active}</span>
-           </div>
-        </div>
-
         {/* CONTENEDOR DE TÍTULO UNIFICADO Y ESTABILIZADO */}
-        {/* Se usa pb-[140px] para asegurar que el texto se vea bien sobre la transición a blanco inferior */}
+        {/* Usamos flex-col justify-end para que todo el bloque se mueva solidario desde la base del hero */}
         <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 md:p-16 lg:p-24 pb-20 sm:pb-24 md:pb-32 text-white pointer-events-none">
           <div className="max-w-[120rem] mx-auto w-full flex flex-col items-start pointer-events-auto">
             
+            {/* BADGE SMART PH: Reposicionado aquí para mantener distancia fija con los títulos y el anuncio superior */}
+            <div className="mb-6 sm:mb-8 md:mb-10 animate-in slide-in-from-left duration-700">
+               <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-2xl border border-white/20 shadow-2xl">
+                 <div className="relative">
+                   <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
+                   <Radar size={18} className="text-blue-400 relative z-10" />
+                 </div>
+                 <span className="text-[10px] sm:text-[11px] font-black text-white uppercase tracking-[0.2em]">{hp.smart_active}</span>
+               </div>
+            </div>
+
             {/* SUBTÍTULO: PILAR DE LA HORADADA */}
             <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2 animate-in slide-in-from-left duration-700 delay-100">
                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-3 md:h-3 bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,1)]"></div>
@@ -75,7 +75,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
             </div>
 
             {/* TÍTULO PRINCIPAL: PILAR VIVO */}
-            {/* El leading-[0.82] mantiene las líneas pegadas pero sin solaparse en todos los tamaños */}
             <h2 className="text-[64px] sm:text-[100px] md:text-[140px] lg:text-[180px] xl:text-[220px] font-black leading-[0.82] tracking-tighter flex flex-col items-start animate-in slide-in-from-bottom duration-1000" style={{ textShadow: '0 10px 40px rgba(0,0,0,0.6)' }}>
               <span>PILAR</span>
               <span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.5)]">VIVO</span>
@@ -84,6 +83,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         </div>
       </section>
 
+      {/* ANUNCIO SUPERIOR (AD superior): Posicionado con margen negativo para el solapamiento visual */}
       <div className="px-6 -mt-16 relative z-30 mb-12">
         <div className="max-w-6xl mx-auto">
            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
