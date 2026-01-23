@@ -42,7 +42,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
          <Header {...headerProps} />
       </div>
 
-      <section className="relative h-[85vh] w-full overflow-hidden shrink-0">
+      <section className="relative min-h-[85vh] md:min-h-[80vh] w-full overflow-hidden shrink-0">
         {heroImages.map((img, index) => (
           <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
             <img src={img} alt="Hero" className="w-full h-full object-cover" />
@@ -50,13 +50,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           </div>
         ))}
         
-        {/* CONTENEDOR DE TÍTULO UNIFICADO Y ESTABILIZADO */}
-        {/* Usamos flex-col justify-end para que todo el bloque se mueva solidario desde la base del hero */}
-        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 md:p-16 lg:p-24 pb-20 sm:pb-24 md:pb-32 text-white pointer-events-none">
+        {/* CONTENEDOR DE TÍTULO UNIFICADO Y ESTABILIZADO DESDE EL TOP */}
+        {/* pt-[140px] garantiza la misma distancia respecto al Header (96px) en todos los dispositivos */}
+        <div className="absolute inset-0 flex flex-col justify-start pt-[140px] p-8 sm:p-12 md:p-16 lg:p-24 text-white pointer-events-none">
           <div className="max-w-[120rem] mx-auto w-full flex flex-col items-start pointer-events-auto">
             
-            {/* BADGE SMART PH: Reposicionado aquí para mantener distancia fija con los títulos y el anuncio superior */}
-            <div className="mb-6 sm:mb-8 md:mb-10 animate-in slide-in-from-left duration-700">
+            {/* BADGE SMART PH: Posicionado para ser el punto de anclaje visual superior */}
+            <div className="mb-8 sm:mb-10 md:mb-12 animate-in slide-in-from-left duration-700">
                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-2xl border border-white/20 shadow-2xl">
                  <div className="relative">
                    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
@@ -83,7 +83,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         </div>
       </section>
 
-      {/* ANUNCIO SUPERIOR (AD superior): Posicionado con margen negativo para el solapamiento visual */}
+      {/* ANUNCIO SUPERIOR: Se mantiene solapado pero ahora el contenido superior no depende de él para su posición */}
       <div className="px-6 -mt-16 relative z-30 mb-12">
         <div className="max-w-6xl mx-auto">
            <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
