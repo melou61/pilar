@@ -50,7 +50,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           </div>
         ))}
         
-        <div className="absolute top-32 left-8 z-30 flex flex-col items-start gap-1 animate-in slide-in-from-left duration-700">
+        {/* BADGE SUPERIOR (FLOTANTE) */}
+        <div className="absolute top-32 left-8 z-30 animate-in slide-in-from-left duration-700">
            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
              <div className="relative">
                <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
@@ -58,17 +59,26 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
              </div>
              <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{hp.smart_active}</span>
            </div>
-           <div className="mt-5 ml-2 text-[22px] font-black text-blue-600 uppercase tracking-[0.02em] flex items-center gap-3 drop-shadow-[0_0_12px_rgba(37,99,235,0.7)]">
-              <div className="w-2 h-2 bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,1)]"></div>
-              <span style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.4)' }}>PILAR DE LA HORADADA</span>
-           </div>
         </div>
 
-        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 text-white pb-[140px]">
-          <div className="max-w-[95rem] mx-auto w-full">
-            <h2 className="text-[100px] sm:text-[180px] font-black mb-0 leading-[0.82] tracking-[0.05em] flex flex-col items-start" style={{ textShadow: '10px 10px 25px rgba(0,0,0,0.8)' }}>
+        {/* CONTENEDOR DE TÍTULO UNIFICADO Y ESTABILIZADO */}
+        {/* Se usa pb-[140px] para asegurar que el texto se vea bien sobre la transición a blanco inferior */}
+        <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 md:p-16 lg:p-24 pb-20 sm:pb-24 md:pb-32 text-white pointer-events-none">
+          <div className="max-w-[120rem] mx-auto w-full flex flex-col items-start pointer-events-auto">
+            
+            {/* SUBTÍTULO: PILAR DE LA HORADADA */}
+            <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2 animate-in slide-in-from-left duration-700 delay-100">
+               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-3 md:h-3 bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,1)]"></div>
+               <span className="text-[12px] sm:text-[16px] md:text-[20px] lg:text-[24px] font-black text-blue-600 uppercase tracking-[0.2em]" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
+                  PILAR DE LA HORADADA
+               </span>
+            </div>
+
+            {/* TÍTULO PRINCIPAL: PILAR VIVO */}
+            {/* El leading-[0.82] mantiene las líneas pegadas pero sin solaparse en todos los tamaños */}
+            <h2 className="text-[64px] sm:text-[100px] md:text-[140px] lg:text-[180px] xl:text-[220px] font-black leading-[0.82] tracking-tighter flex flex-col items-start animate-in slide-in-from-bottom duration-1000" style={{ textShadow: '0 10px 40px rgba(0,0,0,0.6)' }}>
               <span>PILAR</span>
-              <span className="text-blue-500 drop-shadow-[0_0_50px_rgba(37,99,235,0.7)]">VIVO</span>
+              <span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.5)]">VIVO</span>
             </h2>
           </div>
         </div>
@@ -115,7 +125,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-2">
             {MOMENTS_GALLERY.map((img, i) => (
               <div key={i} className={`aspect-[3/4] md:aspect-square rounded-[30px] overflow-hidden shadow-xl border border-gray-100 relative group cursor-zoom-in ${i % 2 === 0 ? 'mt-8' : ''}`}>
-                <img src={img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" />
+                <img src={img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" alt={`Momento ${i}`} />
               </div>
             ))}
           </div>
