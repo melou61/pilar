@@ -38,59 +38,63 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
 
   return (
     <div className="fixed inset-0 z-[400] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
+      {/* HEADER FIJO */}
       <div className="relative z-[5000] shrink-0">
          <Header {...headerProps} />
       </div>
 
-      <section className="relative min-h-[85vh] md:min-h-[80vh] w-full overflow-hidden shrink-0">
-        {heroImages.map((img, index) => (
-          <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
-            <img src={img} alt="Hero" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#f8fafc]" />
-          </div>
-        ))}
-        
-        {/* CONTENEDOR DE TÍTULO UNIFICADO Y ESTABILIZADO DESDE EL TOP */}
-        {/* pt-[140px] garantiza la misma distancia respecto al Header (96px) en todos los dispositivos */}
-        <div className="absolute inset-0 flex flex-col justify-start pt-[140px] p-8 sm:p-12 md:p-16 lg:p-24 text-white pointer-events-none">
-          <div className="max-w-[120rem] mx-auto w-full flex flex-col items-start pointer-events-auto">
+      {/* SECCIÓN HERO: Ahora crece según su contenido para evitar espacio muerto */}
+      <section className="relative w-full flex flex-col shrink-0 overflow-hidden min-h-[75vh]">
+        {/* FONDO ANIMADO: Se mantiene absoluto para cubrir toda la zona del contenido superior */}
+        <div className="absolute inset-0 z-0">
+          {heroImages.map((img, index) => (
+            <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
+              <img src={img} alt="Hero" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#f8fafc]" />
+            </div>
+          ))}
+        </div>
+
+        {/* CONTENEDOR DE CONTENIDO PRINCIPAL */}
+        {/* pt-24 para dejar espacio al Header, pb-12 para dar aire abajo */}
+        <div className="relative z-10 w-full flex flex-col items-start px-8 sm:px-12 md:px-16 lg:px-24 pt-32 sm:pt-40 pb-12">
+          <div className="max-w-[120rem] mx-auto w-full">
             
-            {/* BADGE SMART PH: Posicionado para ser el punto de anclaje visual superior */}
-            <div className="mb-8 sm:mb-10 md:mb-12 animate-in slide-in-from-left duration-700">
-               <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-2xl border border-white/20 shadow-2xl">
+            {/* 1. BADGE SMART PH: Posición anclada respecto al Header */}
+            <div className="mb-8 animate-in slide-in-from-left duration-700">
+               <div className="inline-flex items-center gap-3 bg-white/15 backdrop-blur-2xl px-5 py-3 rounded-2xl border border-white/20 shadow-2xl">
                  <div className="relative">
                    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-75"></div>
                    <Radar size={18} className="text-blue-400 relative z-10" />
                  </div>
-                 <span className="text-[10px] sm:text-[11px] font-black text-white uppercase tracking-[0.2em]">{hp.smart_active}</span>
+                 <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{hp.smart_active}</span>
                </div>
             </div>
 
-            {/* SUBTÍTULO: PILAR DE LA HORADADA */}
-            <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2 animate-in slide-in-from-left duration-700 delay-100">
-               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-3 md:h-3 bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,1)]"></div>
-               <span className="text-[12px] sm:text-[16px] md:text-[20px] lg:text-[24px] font-black text-blue-600 uppercase tracking-[0.2em]" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
+            {/* 2. SUBTÍTULO */}
+            <div className="flex items-center gap-3 mb-2 animate-in slide-in-from-left duration-700 delay-100">
+               <div className="w-2 h-2 bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,1)]"></div>
+               <span className="text-[12px] sm:text-[18px] md:text-[22px] font-black text-blue-600 uppercase tracking-[0.3em]" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
                   PILAR DE LA HORADADA
                </span>
             </div>
 
-            {/* TÍTULO PRINCIPAL: PILAR VIVO */}
-            <h2 className="text-[64px] sm:text-[100px] md:text-[140px] lg:text-[180px] xl:text-[220px] font-black leading-[0.82] tracking-tighter flex flex-col items-start animate-in slide-in-from-bottom duration-1000" style={{ textShadow: '0 10px 40px rgba(0,0,0,0.6)' }}>
+            {/* 3. TÍTULO PRINCIPAL: Tamaños responsivos equilibrados */}
+            <h2 className="text-[72px] sm:text-[110px] md:text-[150px] lg:text-[180px] font-black leading-[0.85] tracking-tighter flex flex-col items-start text-white animate-in slide-in-from-bottom duration-1000 mb-12" style={{ textShadow: '0 10px 40px rgba(0,0,0,0.5)' }}>
               <span>PILAR</span>
-              <span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.5)]">VIVO</span>
+              <span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.4)]">VIVO</span>
             </h2>
+
+            {/* 4. PUBLICIDAD SUPERIOR: Integrada en el flujo para mantener distancia fija con el texto */}
+            <div className="w-full max-w-4xl animate-in fade-in duration-1000 delay-500">
+               <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ANUNCIO SUPERIOR: Se mantiene solapado pero ahora el contenido superior no depende de él para su posición */}
-      <div className="px-6 -mt-16 relative z-30 mb-12">
-        <div className="max-w-6xl mx-auto">
-           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
-        </div>
-      </div>
-
-      <div className="max-w-6xl mx-auto w-full px-6 relative z-20 space-y-20 pb-20">
+      {/* CONTENIDO DE LA PÁGINA (SCROLLABLE) */}
+      <div className="max-w-6xl mx-auto w-full px-6 relative z-20 space-y-20 pt-10 pb-20">
         <section className="space-y-8">
           <div className="px-2">
             <h3 className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em] mb-2">{hp.shorts_label}</h3>
@@ -132,6 +136,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         </section>
       </div>
 
+      {/* FOOTER */}
       <div className="relative z-10">
         <Footer t={t} />
       </div>
