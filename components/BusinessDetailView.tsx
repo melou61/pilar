@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { CensusItem } from '../types';
-import { ArrowLeft, MapPin, Phone, Star, Share2, Globe, Heart } from './Icons';
+import { ArrowLeft, MapPin, Phone, Star, Share2, Globe, Heart, MessageSquare } from './Icons';
 import { SecureText } from './Security';
+import { RatingModal } from './RatingModal';
 
 interface BusinessDetailViewProps {
   business: CensusItem;
@@ -13,11 +14,37 @@ interface BusinessDetailViewProps {
 }
 
 export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({ 
-    business, onClose, t, isFavorite, onToggleFavorite 
+    business: initialBusiness, onClose, t, isFavorite, onToggleFavorite 
 }) => {
+  const [business, setBusiness] = useState(initialBusiness);
+  const [isRatingOpen, setIsRatingOpen] = useState(false);
   const bT = t.business || {};
+
+  const handleRate = (userRating: number, comment: string) => {
+    // Calculate new average
+    const currentCount = business.reviewCount || 0;
+    const currentRating = business.rating || 0;
+    const newCount = currentCount + 1;
+    // Simple average calculation
+    const newRating = ((currentRating * currentCount) + userRating) / newCount;
+    
+    // Update local state to reflect change immediately
+    setBusiness(prev => ({
+      ...prev,
+      rating: parseFloat(newRating.toFixed(1)),
+      reviewCount: newCount
+    }));
+  };
+
   return (
     <div className="fixed inset-0 z-[110] bg-white flex flex-col animate-in slide-in-from-bottom duration-500 overflow-y-auto pb-44">
+      <RatingModal 
+        isOpen={isRatingOpen}
+        onClose={() => setIsRatingOpen(false)}
+        onSubmit={handleRate}
+        title={business.name}
+      />
+
       {/* Gallery Hero */}
       <div className="relative h-[50vh] w-full">
         <img 
@@ -70,6 +97,12 @@ export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({
             <span className="text-gray-400 font-bold ml-1 uppercase tracking-widest text-[10px]">
               {business.reviewCount} {bT.reviews}
             </span>
+            <button 
+              onClick={() => setIsRatingOpen(true)}
+              className="mt-2 text-blue-600 text-[10px] font-black uppercase tracking-widest hover:underline"
+            >
+              ★ Valorar
+            </button>
           </div>
           <div className="flex gap-4">
             <a 

@@ -1,7 +1,7 @@
 
-import React from 'react';
-import { User, Heart, Calendar, Bell, ChevronRight, LogOut, Settings2, Award, Zap } from './Icons';
-import { ViewState } from '../types';
+import React, { useEffect, useState } from 'react';
+import { User, Heart, Calendar, Bell, ChevronRight, LogOut, Settings2, Award, Zap, Medal } from './Icons';
+import { ViewState, Medal as MedalType } from '../types';
 
 interface ProfileViewProps {
   userName: string;
@@ -13,6 +13,7 @@ interface ProfileViewProps {
 }
 
 export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, onNavigate, favorites, myEvents = [], t }) => {
+  const [medals, setMedals] = useState<MedalType[]>([]);
   const safeT = t || {};
   const profileT = safeT.profile || {
     my_events: 'Mis Eventos',
@@ -30,6 +31,17 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
     places_fav: 'sitios'
   };
 
+  useEffect(() => {
+    // Load Medals
+    const statsStr = localStorage.getItem('pilar_user_stats');
+    if (statsStr) {
+      const stats = JSON.parse(statsStr);
+      if (stats.medals) {
+        setMedals(stats.medals);
+      }
+    }
+  }, []);
+
   return (
     <div className="bg-slate-50 min-h-screen pb-44 animate-in fade-in duration-500 px-6 pt-10">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -38,8 +50,13 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
         <div className="bg-[#0f172a] rounded-[50px] p-10 text-white relative overflow-hidden shadow-2xl">
            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px]"></div>
            <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
-              <div className="w-32 h-32 bg-blue-600 rounded-[40px] flex items-center justify-center text-white text-5xl font-black shadow-2xl rotate-3">
+              <div className="w-32 h-32 bg-blue-600 rounded-[40px] flex items-center justify-center text-white text-5xl font-black shadow-2xl rotate-3 relative">
                  {(userName || 'U').charAt(0)}
+                 {medals.length > 0 && (
+                   <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-4 border-[#0f172a]">
+                     <Award size={18} />
+                   </div>
+                 )}
               </div>
               <div className="text-center md:text-left flex-1">
                  <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
@@ -58,6 +75,40 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
               </div>
            </div>
         </div>
+
+        {/* Medals & Achievements Section */}
+        {medals.length > 0 ? (
+          <div className="bg-white rounded-[40px] p-8 shadow-xl shadow-slate-200 border border-white">
+             <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-yellow-50 text-yellow-600 rounded-xl flex items-center justify-center">
+                   <Medal size={20} />
+                </div>
+                <h3 className="text-xl font-black text-gray-900 tracking-tight">Logros y Medallas</h3>
+             </div>
+             
+             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {medals.map((medal) => (
+                  <div key={medal.id} className={`${medal.color} p-4 rounded-3xl flex items-center gap-4 transition-all hover:scale-[1.02] cursor-default border border-white/50 shadow-sm`}>
+                     <div className="text-3xl filter drop-shadow-md">{medal.icon}</div>
+                     <div>
+                        <h4 className="font-black text-sm leading-tight">{medal.name}</h4>
+                        <p className="text-[10px] font-bold opacity-70 mt-0.5">{medal.description}</p>
+                     </div>
+                  </div>
+                ))}
+             </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-[40px] p-8 shadow-xl shadow-slate-200 border border-white border-dashed">
+             <div className="flex flex-col items-center text-center py-6">
+                <div className="w-16 h-16 bg-slate-50 text-slate-300 rounded-3xl flex items-center justify-center mb-4">
+                   <Award size={32} />
+                </div>
+                <h4 className="text-slate-400 font-bold text-sm mb-2">Aún no tienes medallas</h4>
+                <p className="text-slate-300 text-xs max-w-xs">Participa en el foro, comenta y ayuda a la comunidad para desbloquear logros exclusivos.</p>
+             </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            

@@ -72,7 +72,9 @@ export interface Event {
   lng?: number;
   isFestival?: boolean; 
   startDateTime?: string; 
-  endDateTime?: string;   
+  endDateTime?: string;
+  rating?: number; // Added for rating system
+  reviewCount?: number; // Added for rating system   
 }
 
 export interface LocalizedContent {
@@ -191,4 +193,13 @@ export interface AdminUser {
   active?: boolean;
   lastSeen?: string;
   password?: string;
+}
+
+export interface Medal {
+  id: string;
+  name: string;
+  description: string;
+  icon: string; // Emoji or Icon Name
+  dateEarned: string;
+  color: string;
 }

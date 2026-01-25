@@ -121,7 +121,9 @@ import {
   Layout,
   Server,
   Key,
-  DollarSign
+  DollarSign,
+  Languages,
+  Medal
 } from 'lucide-react';
 
 export {
@@ -246,5 +248,7 @@ export {
   Layout,
   Server,
   Key,
-  DollarSign
+  DollarSign,
+  Languages,
+  Medal
 };

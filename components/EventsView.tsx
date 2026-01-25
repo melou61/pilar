@@ -41,20 +41,6 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
   const selectedEvent = events.find(e => e.id === selectedEventId);
 
-  if (selectedEvent) {
-    const translatedEvent = {
-        ...selectedEvent,
-        ...getEventContent(selectedEvent.id)
-    };
-    return <EventDetailView 
-      event={translatedEvent} 
-      onBack={() => setSelectedEventId(null)} 
-      onShare={onShare} 
-      onAddToCalendar={onAddToCalendar} 
-      t={t} 
-    />;
-  }
-
   const categories = [
     { id: 'all', label: 'Todo' },
     { id: 'TRADICIÓN', label: 'Tradición' },
@@ -91,7 +77,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={t.common.searchPlaceholder}
-              className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-[24px] text-white placeholder-white/40 font-bold"
+              className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-[24px] text-white placeholder-white/40 font-bold outline-none focus:bg-white/20 transition-all"
             />
             <Search className="absolute left-4 top-4 text-white/40" size={24} />
           </div>
@@ -104,7 +90,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-8 py-3.5 rounded-[22px] text-[10px] font-black whitespace-nowrap uppercase tracking-widest border border-transparent shadow-lg shrink-0 ${activeCategory === cat.id ? 'bg-purple-600 text-white scale-105' : 'bg-white text-gray-400'}`}
+              className={`px-8 py-3.5 rounded-[22px] text-[10px] font-black whitespace-nowrap uppercase tracking-widest border border-transparent shadow-lg shrink-0 transition-all ${activeCategory === cat.id ? 'bg-purple-600 text-white scale-105' : 'bg-white text-gray-400'}`}
             >
               {cat.label}
             </button>
@@ -113,9 +99,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
         <div className="grid grid-cols-1 gap-10 pb-20">
           {filteredEvents.map(event => (
-              <div key={event.id} onClick={() => setSelectedEventId(event.id)} className="bg-white rounded-[56px] overflow-hidden shadow-2xl border border-gray-100 group cursor-pointer relative transition-all duration-500">
+              <div key={event.id} onClick={() => setSelectedEventId(event.id)} className="bg-white rounded-[56px] overflow-hidden shadow-2xl border border-gray-100 group cursor-pointer relative transition-all duration-500 hover:-translate-y-2">
                   <div className="h-72 overflow-hidden relative">
                       <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                      <div className="absolute top-6 left-6 bg-purple-600 text-white px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl">
+                        {event.category}
+                      </div>
                   </div>
                   <div className="p-10">
                       <h3 className="font-black text-gray-900 text-4xl mb-6 tracking-tighter leading-none">{getEventContent(event.id).title}</h3>
@@ -141,6 +130,17 @@ export const EventsView: React.FC<EventsViewProps> = ({
       <div className="relative z-10">
         <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
+
+      {/* EVENT MODAL OVERLAY */}
+      {selectedEvent && (
+        <EventDetailView 
+          event={{...selectedEvent, ...getEventContent(selectedEvent.id)}}
+          onBack={() => setSelectedEventId(null)}
+          onShare={onShare}
+          onAddToCalendar={onAddToCalendar}
+          t={t}
+        />
+      )}
     </div>
   );
 };

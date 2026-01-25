@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Waves, Flag, MapPin, Star, ShieldCheck, Thermometer, Sun, Users, Ruler, Droplets, Info, ChevronRight
 } from './Icons';
@@ -8,6 +8,7 @@ import { ViewState, Ad } from '../types';
 import { AdSpot } from './AdSpot';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { RatingModal } from './RatingModal';
 
 interface BeachesViewProps {
   t: any;
@@ -20,6 +21,10 @@ interface BeachesViewProps {
 export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, headerProps, onOpenAdminLogin }) => {
   const content = t.beaches_page;
   const labels = t.beach_labels;
+  
+  // Lift mock data to state to allow rating updates
+  const [beaches, setBeaches] = useState(MOCK_BEACHES.map(b => ({...b, reviewCount: 120}))); // Mock initial count
+  const [ratingModal, setRatingModal] = useState<{isOpen: boolean, beachId: string | null}>({isOpen: false, beachId: null});
 
   const getOccupancyColor = (level: string) => {
     switch(level.toLowerCase()) {
@@ -30,8 +35,34 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
     }
   };
 
+  const handleRate = (userRating: number, comment: string) => {
+    if (!ratingModal.beachId) return;
+    
+    setBeaches(prev => prev.map(beach => {
+        if (beach.id === ratingModal.beachId) {
+            const currentCount = beach.reviewCount || 0;
+            const currentRating = beach.rating || 0;
+            const newCount = currentCount + 1;
+            const newRating = ((currentRating * currentCount) + userRating) / newCount;
+            return {
+                ...beach,
+                rating: parseFloat(newRating.toFixed(1)),
+                reviewCount: newCount
+            };
+        }
+        return beach;
+    }));
+  };
+
   return (
     <div className="fixed inset-0 z-[450] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
+      <RatingModal 
+        isOpen={ratingModal.isOpen} 
+        onClose={() => setRatingModal({isOpen: false, beachId: null})} 
+        onSubmit={handleRate}
+        title={ratingModal.beachId ? (beaches.find(b => b.id === ratingModal.beachId)?.name || 'Playa') : 'Playa'} 
+      />
+
       <div className="relative z-[220] shrink-0">
          <Header {...headerProps} />
       </div>
@@ -58,7 +89,7 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
 
       <div className="px-6 -mt-12 space-y-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
-          {MOCK_BEACHES.map((beach) => {
+          {beaches.map((beach) => {
             const beachLangData = content.list?.[beach.id as keyof typeof content.list] || { name: beach.name, desc: '' };
             return (
               <div 
@@ -111,10 +142,14 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
                        </div>
                     </div>
 
-                    <div className="absolute top-8 right-8 bg-[#0f172a] text-white px-5 py-3 rounded-[24px] flex items-center gap-2 shadow-2xl">
+                    <button 
+                        onClick={() => setRatingModal({isOpen: true, beachId: beach.id})}
+                        className="absolute top-8 right-8 bg-[#0f172a] text-white px-5 py-3 rounded-[24px] flex items-center gap-2 shadow-2xl hover:scale-105 active:scale-95 transition-all"
+                    >
                        <Star size={20} className="text-yellow-400 fill-current" />
                        <span className="text-xl font-black">{beach.rating}</span>
-                    </div>
+                       <span className="text-[10px] opacity-50 ml-1">({beach.reviewCount})</span>
+                    </button>
                  </div>
                  
                  <div className="p-10">
