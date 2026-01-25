@@ -12,9 +12,10 @@ interface ProfileViewProps {
   t: any;
 }
 
-export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, onNavigate, favorites, myEvents, t }) => {
-  // Safe access to profile translations
-  const profileT = t?.profile || {
+export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, onNavigate, favorites, myEvents = [], t }) => {
+  // Acceso seguro a las traducciones con fallback explícito
+  const safeT = t || {};
+  const profileT = safeT.profile || {
     my_events: 'Mis Eventos',
     favorites: 'Favoritos',
     alerts: 'Alertas',
@@ -30,11 +31,11 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px]"></div>
            <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
               <div className="w-32 h-32 bg-blue-600 rounded-[40px] flex items-center justify-center text-white text-5xl font-black shadow-2xl rotate-3">
-                 {userName.charAt(0)}
+                 {(userName || 'U').charAt(0)}
               </div>
               <div className="text-center md:text-left flex-1">
                  <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
-                    <h2 className="text-4xl font-black tracking-tighter">Hola, {userName}</h2>
+                    <h2 className="text-4xl font-black tracking-tighter">Hola, {userName || 'Usuario'}</h2>
                     <span className="bg-blue-500/20 text-blue-400 border border-blue-400/20 px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2">
                        <Award size={14} /> Vecino VIP
                     </span>
@@ -42,7 +43,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                  <p className="text-slate-400 font-medium mb-8">Gracias por ser parte activa de Pilar de la Horadada.</p>
                  <div className="flex flex-wrap justify-center md:justify-start gap-3">
                     <button onClick={() => onNavigate(ViewState.HOME)} className="bg-white text-[#0f172a] px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all">Explorar</button>
-                    <button onClick={onLogout} className="bg-red-600/20 text-red-500 border border-red-500/20 px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all">Cerrar Sesión</button>
+                    <button onClick={onLogout} className="bg-red-600/20 text-red-500 border border-red-500/20 px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all">
+                      {profileT.logout}
+                    </button>
                  </div>
               </div>
            </div>
@@ -58,7 +61,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                     <Calendar size={24} />
                  </div>
                  <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{profileT.my_events}</h3>
-                 <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Tienes {myEvents.length} eventos guardados</p>
+                 <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Tienes {myEvents?.length || 0} eventos guardados</p>
               </div>
               <button onClick={() => onNavigate(ViewState.EVENTS)} className="mt-8 flex items-center justify-between text-purple-600 font-black text-[10px] uppercase tracking-widest bg-purple-50 p-4 rounded-2xl">
                  Ver mi agenda <ChevronRight size={16} />
@@ -72,7 +75,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                     <Heart size={24} />
                  </div>
                  <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{profileT.favorites}</h3>
-                 <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">{favorites.length} sitios favoritos</p>
+                 <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">{favorites?.length || 0} sitios favoritos</p>
               </div>
               <button onClick={() => onNavigate(ViewState.SHOPPING)} className="mt-8 flex items-center justify-between text-red-500 font-black text-[10px] uppercase tracking-widest bg-red-50 p-4 rounded-2xl">
                  Ir a favoritos <ChevronRight size={16} />
@@ -85,7 +88,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ userName, onLogout, on
                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
                     <Bell size={24} />
                  </div>
-                 <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{profileT.alerts || 'Alertas'}</h3>
+                 <h3 className="text-xl font-black text-gray-900 tracking-tight mb-2">{profileT.alerts}</h3>
                  <div className="space-y-3 mt-4">
                     <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
                        <span className="text-[10px] font-black uppercase text-slate-500">Noticias Locales</span>

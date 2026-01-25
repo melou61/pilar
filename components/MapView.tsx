@@ -25,22 +25,23 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
   const userMarkerRef = useRef<any>(null);
   const isDestroyedRef = useRef(false);
 
+  // Categorías con etiquetas traducidas
   const categories = [
-    { id: 'all', label: 'Todos' },
-    { id: 'Alimentación', label: 'Alimentación' },
-    { id: 'Alojamiento', label: 'Alojamiento' },
-    { id: 'Comunicación y publicidad', label: 'Comunicación y publicidad' },
-    { id: 'Educación', label: 'Educación' },
-    { id: 'Gestiones profesionales y bancarias', label: 'Gestiones profesionales y bancarias' },
-    { id: 'Hogar', label: 'Hogar' },
-    { id: 'Hostelería y restauración', label: 'Hostelería y restauración' },
-    { id: 'Mascotas', label: 'Mascotas' },
-    { id: 'Medio Ambiente y agricultura', label: 'Medio Ambiente y agricultura' },
-    { id: 'Moda', label: 'Moda' },
-    { id: 'Motor', label: 'Motor' },
-    { id: 'Ocio y entretenimiento', label: 'Ocio y entretenimiento' },
-    { id: 'Salud y belleza', label: 'Salud y belleza' },
-    { id: 'Servicios municipales y otros servicios', label: 'Servicios municipales y otros servicios' },
+    { id: 'all', label: t.common.all },
+    { id: 'Alimentación', label: t.map_categories.food },
+    { id: 'Alojamiento', label: t.map_categories.accommodation },
+    { id: 'Comunicación y publicidad', label: t.map_categories.communication },
+    { id: 'Educación', label: t.map_categories.education },
+    { id: 'Gestiones profesionales y bancarias', label: t.map_categories.professional },
+    { id: 'Hogar', label: t.map_categories.home },
+    { id: 'Hostelería y restauración', label: t.map_categories.hospitality },
+    { id: 'Mascotas', label: t.map_categories.pets },
+    { id: 'Medio Ambiente y agricultura', label: t.map_categories.environment },
+    { id: 'Moda', label: t.map_categories.fashion },
+    { id: 'Motor', label: t.map_categories.motor },
+    { id: 'Ocio y entretenimiento', label: t.map_categories.leisure },
+    { id: 'Salud y belleza', label: t.map_categories.health },
+    { id: 'Servicios municipales y otros servicios', label: t.map_categories.municipal },
   ];
 
   useEffect(() => {
@@ -105,7 +106,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
       return '#3b82f6';
     };
 
-    // Filtrado de negocios por la nueva lista de categorías
+    // Filtrado de negocios
     const filteredBusinesses = filter === 'all' 
       ? businesses 
       : businesses.filter(b => b.category === filter);

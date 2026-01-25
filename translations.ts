@@ -40,7 +40,8 @@ const UI_RESOURCES: Record<string, any> = {
     sightseeing_page: { title: 'Joyas del Patrimonio', list: { 'torre-vigia': { name: 'Torre de la Horadada', desc: 'Símbolo de nuestra costa.' } } },
     health: { title: 'Pilar Saludable', subtitle: 'Salud y Bienestar', emergency: 'Emergencias', center: 'Centro Salud', pharmacy: 'Farmacia de Guardia' },
     forum: { title: 'Comunidad Pilar', subtitle: 'Conecta con tus vecinos', categories: ['Recomendaciones', 'General', 'Mascotas', 'Mercadillo'] },
-    profile: { my_events: 'Mis Eventos', favorites: 'Favoritos', alerts: 'Alertas y Notificaciones', logout: 'Cerrar Sesión' }
+    profile: { my_events: 'Mis Eventos', favorites: 'Favoritos', alerts: 'Alertas y Notificaciones', logout: 'Cerrar Sesión' },
+    mc: ['Alimentación', 'Alojamiento', 'Comunicación y publicidad', 'Educación', 'Gestiones profesionales y bancarias', 'Hogar', 'Hostelería y restauración', 'Mascotas', 'Medio Ambiente y agricultura', 'Moda', 'Motor', 'Ocio y entretenimiento', 'Salud y belleza', 'Servicios municipales y otros servicios']
   },
   en: { 
     m: ['Home', 'News', 'Beaches', 'Heritage', 'Experiences', 'Dining', 'Shops', 'Health', 'Services', 'Events', 'Forum', 'PH Explore', 'AI Guide', 'Profile', 'Map', 'Admin'], 
@@ -67,31 +68,36 @@ const UI_RESOURCES: Record<string, any> = {
     sightseeing_page: { title: 'Heritage Jewels', list: { 'torre-vigia': { name: 'Watchtower', desc: 'Symbol of our coast.' } } },
     health: { title: 'Healthy Pilar', subtitle: 'Health & Wellness', emergency: 'Emergencies', center: 'Health Center', pharmacy: 'Pharmacy on Duty' },
     forum: { title: 'Pilar Community', subtitle: 'Connect with neighbors', categories: ['Recommendations', 'General', 'Pets', 'Marketplace'] },
-    profile: { my_events: 'My Events', favorites: 'Favorites', alerts: 'Alerts & Notifications', logout: 'Log Out' }
+    profile: { my_events: 'My Events', favorites: 'Favorites', alerts: 'Alerts & Notifications', logout: 'Log Out' },
+    mc: ['Food', 'Accommodation', 'Communication & Advertising', 'Education', 'Professional & Banking', 'Home', 'Hospitality & Dining', 'Pets', 'Environment & Agriculture', 'Fashion', 'Automotive', 'Leisure & Entertainment', 'Health & Beauty', 'Municipal & Other Services']
   },
   fr: { 
     m: ['Accueil', 'Nouvelles', 'Plages', 'Patrimoine', 'Expériences', 'Gastronomie', 'Boutiques', 'Santé', 'Services', 'Événements', 'Forum', 'PH Explorer', 'Guide IA', 'Profil', 'Carte', 'Admin'], 
     c: ['Sponsorisé', 'Aucun résultat', 'Retour', 'Partager', 'Détails', 'Ouvert', 'Fermé', 'Carte', 'Près de vous', 'Chercher...', 'Ajouter', 'Télécharger', 'Copier', 'Copié', 'Erreur', 'Chargement...', 'Réflexion...', 'Détails', 'Tout'], 
     h: 'Paradis méditerranéen.',
-    profile: { my_events: 'Mes Événements', favorites: 'Favoris', alerts: 'Alertes', logout: 'Déconnexion' }
+    profile: { my_events: 'Mes Événements', favorites: 'Favoris', alerts: 'Alertes', logout: 'Déconnexion' },
+    mc: ['Alimentation', 'Hébergement', 'Communication et publicité', 'Éducation', 'Services pro. et bancaires', 'Maison', 'Hôtellerie et restauration', 'Animaux', 'Environnement et agriculture', 'Mode', 'Automobile', 'Loisirs et divertissement', 'Santé et beauté', 'Services municipaux et autres']
   },
   de: { 
     m: ['Start', 'Nachrichten', 'Strände', 'Kulturerbe', 'Erlebnisse', 'Gastronomie', 'Geschäfte', 'Gesundheit', 'Dienste', 'Events', 'Forum', 'PH Erkunden', 'KI Guide', 'Profil', 'Karte', 'Admin'], 
     c: ['Gesponsert', 'Keine Ergebnisse', 'Zurück', 'Teilen', 'Details', 'Offen', 'Geschlossen', 'Karte', 'In der Nähe', 'Suche...', 'Hinzufügen', 'Hochladen', 'Kopieren', 'Kopiert', 'Fehler', 'Laden...', 'Denken...', 'Details', 'Alle'], 
     h: 'Mediterranes Paradies.',
-    profile: { my_events: 'Meine Events', favorites: 'Favoriten', alerts: 'Benachrichtigungen', logout: 'Abmelden' }
+    profile: { my_events: 'Meine Events', favorites: 'Favoriten', alerts: 'Benachrichtigungen', logout: 'Abmelden' },
+    mc: ['Lebensmittel', 'Unterkunft', 'Kommunikation & Werbung', 'Bildung', 'Profi- & Bankdienste', 'Zuhause', 'Gastgewerbe & Gastro', 'Haustiere', 'Umwelt & Landwirtschaft', 'Mode', 'Motor', 'Freizeit & Unterhaltung', 'Gesundheit & Schönheit', 'Kommunale & Sonstige']
   },
   it: { 
     m: ['Inizio', 'Notizie', 'Spiagge', 'Patrimonio', 'Esperienze', 'Gastronomia', 'Negozi', 'Salute', 'Servizi', 'Eventi', 'Forum', 'PH Esplora', 'Guida IA', 'Profilo', 'Mappa', 'Admin'], 
     c: ['Sponsorizzato', 'Nessun risultato', 'Indietro', 'Condividi', 'Dettagli', 'Aperto', 'Chiuso', 'Mappa', 'Vicino a te', 'Cerca...', 'Aggiungi', 'Carica', 'Copia', 'Copiato', 'Errore', 'Caricamento...', 'Pensando...', 'Dettagli', 'Tutti'], 
     h: 'Paradiso mediterraneo.',
-    profile: { my_events: 'I Miei Eventi', favorites: 'Preferiti', alerts: 'Avvisi', logout: 'Disconnetti' }
+    profile: { my_events: 'I Miei Eventi', favorites: 'Preferiti', alerts: 'Avvisi', logout: 'Disconnetti' },
+    mc: ['Alimentari', 'Alloggio', 'Comunicazione e pubblicità', 'Istruzione', 'Servizi prof. e bancari', 'Casa', 'Ospitalità e ristorazione', 'Animali', 'Ambiente e agricoltura', 'Moda', 'Motori', 'Svago e intrattenimento', 'Salute e bellezza', 'Servizi comunali e altri']
   },
   pt: { 
     m: ['Início', 'Notícias', 'Praias', 'Património', 'Experiências', 'Gastronomia', 'Lojas', 'Saúde', 'Serviços', 'Eventos', 'Fórum', 'PH Explorar', 'Guia IA', 'Perfil', 'Mapa', 'Admin'], 
     c: ['Patrocinado', 'Sem resultados', 'Voltar', 'Partilhar', 'Detalhes', 'Aberto', 'Fechado', 'Mapa', 'Perto de si', 'Procurar...', 'Adicionar', 'Subir', 'Copiar', 'Copiado', 'Erro', 'A carregar...', 'A pensar...', 'Detalhes', 'Todos'], 
     h: 'Paraíso mediterrânico.',
-    profile: { my_events: 'Meus Eventos', favorites: 'Favoritos', alerts: 'Alertas', logout: 'Sair' }
+    profile: { my_events: 'Meus Eventos', favorites: 'Favoritos', alerts: 'Alertas', logout: 'Sair' },
+    mc: ['Alimentação', 'Alojamento', 'Comunicação e publicidade', 'Educação', 'Serviços prof. e bancários', 'Casa', 'Hotelaria e restauração', 'Animais', 'Meio ambiente e agricultura', 'Moda', 'Motor', 'Lazer e entretenimento', 'Saúde e beleza', 'Serviços municipais e outros']
   }
 };
 
@@ -104,6 +110,7 @@ const createLang = (code: string, langLabel: string): any => {
   const c = data.c || en.c;
   const s = data.s || en.s;
   const f = data.f || en.f;
+  const mc = data.mc || en.mc; // Map Categories
 
   const get = (obj: any, path: string, fallback: any) => {
     const parts = path.split('.');
@@ -165,7 +172,23 @@ const createLang = (code: string, langLabel: string): any => {
     health: data.health || en.health,
     profile: data.profile || en.profile,
     forum: data.forum || en.forum,
-    event_detail: { pilar_event: 'EVENTO PH', date_time: 'FECHA Y HORA', main_location: 'UBICACIÓN' }
+    event_detail: { pilar_event: 'EVENTO PH', date_time: 'FECHA Y HORA', main_location: 'UBICACIÓN' },
+    map_categories: {
+        food: mc[0],
+        accommodation: mc[1],
+        communication: mc[2],
+        education: mc[3],
+        professional: mc[4],
+        home: mc[5],
+        hospitality: mc[6],
+        pets: mc[7],
+        environment: mc[8],
+        fashion: mc[9],
+        motor: mc[10],
+        leisure: mc[11],
+        health: mc[12],
+        municipal: mc[13]
+    }
   };
 };
 
