@@ -38,6 +38,15 @@ const UI_RESOURCES: Record<string, any> = {
     postcard: { title: 'AI MOMENTOS', subtitle: 'Imagina Pilar de la Horadada', desc: 'Nuestra IA creativa creará una postal única.', save: 'Guardar', create: 'Crear Otra', placeholder: 'Escribe tu visión de Pilar...', generating: 'Generando tu visión...', suggestions: ["Atardecer Higuericas", "Torre futurista", "Río Seco mágico", "Plaza Iglesia"] },
     beaches_page: { title: 'Nuestras Playas', coastal: 'El Litoral del Pilar', blue_flag: 'Bandera Azul', open: 'Abierta Ahora', fact_title: 'Excelencia Mediterránea', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'Paraíso de arena blanca.' } } },
     sightseeing_page: { title: 'Joyas del Patrimonio', list: { 'torre-vigia': { name: 'Torre de la Horadada', desc: 'Símbolo de nuestra costa.' } } },
+    activities_page: { 
+      title: 'Experiencias Únicas', 
+      subtitle: 'Vive el Pilar intensamente', 
+      participate_btn: 'Cómo participar',
+      difficulty: { easy: 'Fácil', medium: 'Medio', hard: 'Difícil' },
+      categories: { hiking: 'Senderismo', water: 'Acuático', culture: 'Cultural' },
+      sport: { title: 'Pilar es Deporte', nautical_title: 'Náutica', nautical_desc: 'Cursos municipales de vela y deportes de viento durante todo el año.' },
+      list: { 'rio-seco': { name: 'Ruta Río Seco', desc: 'Senderismo entre cañones de arenisca.' } } 
+    },
     health: { title: 'Pilar Saludable', subtitle: 'Salud y Bienestar', emergency: 'Emergencias', center: 'Centro Salud', pharmacy: 'Farmacia de Guardia' },
     forum: { title: 'Comunidad Pilar', subtitle: 'Conecta con tus vecinos', categories: ['Recomendaciones', 'General', 'Mascotas', 'Mercadillo'] },
     profile: { my_events: 'Mis Eventos', favorites: 'Favoritos', alerts: 'Alertas y Notificaciones', logout: 'Cerrar Sesión' },
@@ -66,6 +75,15 @@ const UI_RESOURCES: Record<string, any> = {
     postcard: { title: 'AI MOMENTS', subtitle: 'Imagine Pilar de la Horadada', desc: 'Our AI will create a unique postcard based on your description.', save: 'Save', create: 'Create Another', placeholder: 'Write your vision of Pilar...', generating: 'Generating vision...', suggestions: ["Higuericas Sunset", "Futuristic Tower", "Magic Dry River", "Church Square"] },
     beaches_page: { title: 'Our Beaches', coastal: 'Pilar Coastline', blue_flag: 'Blue Flag', open: 'Open Now', fact_title: 'Excellence', list: { milpalmeras: { name: 'Mil Palmeras', desc: 'A white sand paradise.' } } },
     sightseeing_page: { title: 'Heritage Jewels', list: { 'torre-vigia': { name: 'Watchtower', desc: 'Symbol of our coast.' } } },
+    activities_page: { 
+      title: 'Unique Experiences', 
+      subtitle: 'Live Pilar intensely', 
+      participate_btn: 'How to participate',
+      difficulty: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
+      categories: { hiking: 'Hiking', water: 'Water Sports', culture: 'Cultural' },
+      sport: { title: 'Pilar is Sport', nautical_title: 'Nautical', nautical_desc: 'Municipal sailing and wind sports courses all year round.' },
+      list: { 'rio-seco': { name: 'Rio Seco Route', desc: 'Hiking through sandstone canyons.' } } 
+    },
     health: { title: 'Healthy Pilar', subtitle: 'Health & Wellness', emergency: 'Emergencies', center: 'Health Center', pharmacy: 'Pharmacy on Duty' },
     forum: { title: 'Pilar Community', subtitle: 'Connect with neighbors', categories: ['Recommendations', 'General', 'Pets', 'Marketplace'] },
     profile: { my_events: 'My Events', favorites: 'Favorites', alerts: 'Alerts & Notifications', logout: 'Log Out' },
@@ -76,6 +94,15 @@ const UI_RESOURCES: Record<string, any> = {
     c: ['Sponsorisé', 'Aucun résultat', 'Retour', 'Partager', 'Détails', 'Ouvert', 'Fermé', 'Carte', 'Près de vous', 'Chercher...', 'Ajouter', 'Télécharger', 'Copier', 'Copié', 'Erreur', 'Chargement...', 'Réflexion...', 'Détails', 'Tout'], 
     h: 'Paradis méditerranéen.',
     profile: { my_events: 'Mes Événements', favorites: 'Favoris', alerts: 'Alertes', logout: 'Déconnexion' },
+    activities_page: { 
+      title: 'Expériences Uniques', 
+      subtitle: 'Vivez Pilar intensément', 
+      participate_btn: 'Comment participer',
+      difficulty: { easy: 'Facile', medium: 'Moyen', hard: 'Difficile' },
+      categories: { hiking: 'Randonnée', water: 'Sports nautiques', culture: 'Culturel' },
+      sport: { title: 'Pilar est Sport', nautical_title: 'Nautisme', nautical_desc: 'Cours municipaux de voile et sports de vent toute l\'année.' },
+      list: { 'rio-seco': { name: 'Route Río Seco', desc: 'Randonnée à travers des canyons de grès.' } } 
+    },
     mc: ['Alimentation', 'Hébergement', 'Communication et publicité', 'Éducation', 'Services pro. et bancaires', 'Maison', 'Hôtellerie et restauration', 'Animaux', 'Environnement et agriculture', 'Mode', 'Automobile', 'Loisirs et divertissement', 'Santé et beauté', 'Services municipaux et autres'],
     f: ['Contact', 'Liens utiles', 'Suivez-nous', 'L\'application officielle de la ville.', 'Mairie de Pilar de la Horadada', 'Place Campoamor, 2', '03190', 'Alicante, Espagne', 'Tous droits réservés', 'Politique de Confidentialité', 'Conditions d\'Utilisation']
   },
@@ -84,6 +111,15 @@ const UI_RESOURCES: Record<string, any> = {
     c: ['Gesponsert', 'Keine Ergebnisse', 'Zurück', 'Teilen', 'Details', 'Offen', 'Geschlossen', 'Karte', 'In der Nähe', 'Suche...', 'Hinzufügen', 'Hochladen', 'Kopieren', 'Kopiert', 'Fehler', 'Laden...', 'Denken...', 'Details', 'Alle'], 
     h: 'Mediterranes Paradies.',
     profile: { my_events: 'Meine Events', favorites: 'Favoriten', alerts: 'Benachrichtigungen', logout: 'Abmelden' },
+    activities_page: { 
+      title: 'Einzigartige Erlebnisse', 
+      subtitle: 'Erleben Sie Pilar intensiv', 
+      participate_btn: 'Teilnahme',
+      difficulty: { easy: 'Leicht', medium: 'Mittel', hard: 'Schwer' },
+      categories: { hiking: 'Wandern', water: 'Wassersport', culture: 'Kulturell' },
+      sport: { title: 'Pilar ist Sport', nautical_title: 'Wassersport', nautical_desc: 'Kommunale Segel- und Windsportkurse das ganze Jahr über.' },
+      list: { 'rio-seco': { name: 'Río Seco Route', desc: 'Wandern durch Sandsteinschluchten.' } } 
+    },
     mc: ['Lebensmittel', 'Unterkunft', 'Kommunikation & Werbung', 'Bildung', 'Profi- & Bankdienste', 'Zuhause', 'Gastgewerbe & Gastro', 'Haustiere', 'Umwelt & Landwirtschaft', 'Mode', 'Motor', 'Freizeit & Unterhaltung', 'Gesundheit & Schönheit', 'Kommunale & Sonstige'],
     f: ['Kontakt', 'Nützliche Links', 'Folgen Sie uns', 'Die offizielle App der Stadt.', 'Rathaus Pilar de la Horadada', 'Campoamor Platz, 2', '03190', 'Alicante, Spanien', 'Alle Rechte vorbehalten', 'Datenschutzerklärung', 'Nutzungsbedingungen']
   },
@@ -92,6 +128,15 @@ const UI_RESOURCES: Record<string, any> = {
     c: ['Sponsorizzato', 'Nessun risultato', 'Indietro', 'Condividi', 'Dettagli', 'Aperto', 'Chiuso', 'Mappa', 'Vicino a te', 'Cerca...', 'Aggiungi', 'Carica', 'Copia', 'Copiato', 'Errore', 'Caricamento...', 'Pensando...', 'Dettagli', 'Tutti'], 
     h: 'Paradiso mediterraneo.',
     profile: { my_events: 'I Miei Eventi', favorites: 'Preferiti', alerts: 'Avvisi', logout: 'Disconnetti' },
+    activities_page: { 
+      title: 'Esperienze Uniche', 
+      subtitle: 'Vivi Pilar intensamente', 
+      participate_btn: 'Come partecipare',
+      difficulty: { easy: 'Facile', medium: 'Medio', hard: 'Difficile' },
+      categories: { hiking: 'Escursionismo', water: 'Sport acquatici', culture: 'Culturale' },
+      sport: { title: 'Pilar è Sport', nautical_title: 'Nautica', nautical_desc: 'Corsi comunali di vela e sport eolici tutto l\'anno.' },
+      list: { 'rio-seco': { name: 'Percorso Río Seco', desc: 'Escursionismo tra canyon di arenaria.' } } 
+    },
     mc: ['Alimentari', 'Alloggio', 'Comunicazione e pubblicità', 'Istruzione', 'Servizi prof. e bancari', 'Casa', 'Ospitalità e ristorazione', 'Animali', 'Ambiente e agricoltura', 'Moda', 'Motori', 'Svago e intrattenimento', 'Salute e bellezza', 'Servizi comunali e altri'],
     f: ['Contatto', 'Link utili', 'Seguici', 'L\'app ufficiale della città.', 'Municipio di Pilar de la Horadada', 'Piazza Campoamor, 2', '03190', 'Alicante, Spagna', 'Tutti i diritti riservati', 'Informativa sulla Privacy', 'Termini di Utilizzo']
   },
@@ -100,6 +145,15 @@ const UI_RESOURCES: Record<string, any> = {
     c: ['Patrocinado', 'Sem resultados', 'Voltar', 'Partilhar', 'Detalhes', 'Aberto', 'Fechado', 'Mapa', 'Perto de si', 'Procurar...', 'Adicionar', 'Subir', 'Copiar', 'Copiado', 'Erro', 'A carregar...', 'A pensar...', 'Detalhes', 'Todos'], 
     h: 'Paraíso mediterrânico.',
     profile: { my_events: 'Meus Eventos', favorites: 'Favoritos', alerts: 'Alertas', logout: 'Sair' },
+    activities_page: { 
+      title: 'Experiências Únicas', 
+      subtitle: 'Viva Pilar intensamente', 
+      participate_btn: 'Como participar',
+      difficulty: { easy: 'Fácil', medium: 'Médio', hard: 'Difícil' },
+      categories: { hiking: 'Caminhada', water: 'Desportos aquáticos', culture: 'Cultural' },
+      sport: { title: 'Pilar é Desporto', nautical_title: 'Náutica', nautical_desc: 'Cursos municipais de vela e desportos de vento durante todo o ano.' },
+      list: { 'rio-seco': { name: 'Rota Río Seco', desc: 'Caminhada por desfiladeiros de arenito.' } } 
+    },
     mc: ['Alimentação', 'Alojamento', 'Comunicação e publicidade', 'Educação', 'Serviços prof. e bancários', 'Casa', 'Hotelaria e restauração', 'Animais', 'Meio ambiente e agricultura', 'Moda', 'Motor', 'Lazer e entretenimento', 'Saúde e beleza', 'Serviços municipais e outros'],
     f: ['Contato', 'Links úteis', 'Siga-nos', 'O aplicativo oficial da cidade.', 'Câmara Municipal Pilar de la Horadada', 'Praça Campoamor, 2', '03190', 'Alicante, Espanha', 'Todos os direitos reservados', 'Política de Privacidade', 'Termos de Uso']
   }
@@ -174,6 +228,7 @@ const createLang = (code: string, langLabel: string): any => {
     events_data: data.ed || en.ed,
     beaches_page: data.beaches_page || en.beaches_page,
     sightseeing_page: data.sightseeing_page || en.sightseeing_page,
+    activities_page: data.activities_page || en.activities_page,
     health: data.health || en.health,
     profile: data.profile || en.profile,
     forum: data.forum || en.forum,

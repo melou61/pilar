@@ -443,7 +443,7 @@ export const MOCK_SIGHTSEEING = [
 ];
 
 export const ACTIVITIES_LIST = [
-  { id: 'rio-seco', title: 'Río Seco', image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', category: 'Senderismo', duration: '2h', rating: 4.8, difficulty: 'Fácil', location: 'Campoverde', lat: 37.8932, lng: -0.8432 }
+  { id: 'rio-seco', title: 'Río Seco', image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', category: 'hiking', duration: '2h', rating: 4.8, difficulty: 'easy', location: 'Campoverde', lat: 37.8932, lng: -0.8432 }
 ];
 
 // --- SIMULACIÓN DE IMÁGENES REALISTAS POR CATEGORÍA ---

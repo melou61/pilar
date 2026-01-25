@@ -135,6 +135,11 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         </section>
       </div>
 
+      {/* 5. PUBLICIDAD INFERIOR (Antes del Footer) */}
+      <div className="max-w-6xl mx-auto w-full px-6 relative z-20 pb-10">
+         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.HOME} />
+      </div>
+
       {/* FOOTER */}
       <div className="relative z-10">
         <Footer t={t} />

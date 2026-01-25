@@ -290,6 +290,11 @@ export const VoiceConcierge: React.FC<VoiceConciergeProps> = ({ onClose, t, ads,
         </button>
       )}
 
+      {/* ANUNCIO INFERIOR */}
+      <div className="px-8 py-4 shrink-0 relative z-20">
+         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.AI_CHAT} />
+      </div>
+
       <div className="relative z-20 mt-auto">
         <Footer t={t} />
       </div>

@@ -52,6 +52,9 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
       <div className="px-6 -mt-10 space-y-10 relative z-10">
         {ACTIVITIES_LIST.map((activity) => {
           const activityLangData = content.list[activity.id as keyof typeof content.list] || { name: activity.title, desc: '' };
+          const categoryLabel = content.categories?.[activity.category as keyof typeof content.categories] || activity.category;
+          const difficultyLabel = content.difficulty?.[activity.difficulty as keyof typeof content.difficulty] || activity.difficulty;
+
           return (
             <div 
               key={activity.id} 
@@ -67,7 +70,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
                   <div className="absolute top-8 left-8 flex flex-col gap-2">
                       <div className="bg-emerald-600 text-white px-5 py-2.5 rounded-[20px] flex items-center gap-2.5 shadow-2xl border border-white/20">
                          <Trophy size={16} className="fill-white" />
-                         <span className="text-[11px] font-black uppercase tracking-widest">{activity.category}</span>
+                         <span className="text-[11px] font-black uppercase tracking-widest">{categoryLabel}</span>
                       </div>
                       <div className="bg-white/95 backdrop-blur-md text-emerald-600 px-5 py-2.5 rounded-[20px] flex items-center gap-2.5 shadow-2xl border border-gray-100">
                          <Clock size={16} />
@@ -85,7 +88,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
                  <div className="flex justify-between items-start mb-6">
                     <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">{activityLangData.name}</h2>
                     <div className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
-                       {activity.difficulty}
+                       {difficultyLabel}
                     </div>
                  </div>
                  
@@ -105,7 +108,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
                     className="w-full py-5 bg-[#0f172a] text-white rounded-[32px] font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-2xl hover:bg-emerald-700 transition-all active:scale-95"
                  >
                     <Search size={22} className="text-emerald-500" />
-                    Cómo participar
+                    {content.participate_btn}
                  </button>
                </div>
             </div>
@@ -116,15 +119,15 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
            <div className="bg-white border border-emerald-100 rounded-[50px] p-12 shadow-2xl shadow-emerald-900/5 overflow-hidden relative group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full translate-x-1/2 -translate-y-1/2 opacity-50 group-hover:scale-110 transition-transform duration-1000" />
               <div className="relative z-10">
-                 <h3 className="text-3xl font-black mb-6 tracking-tighter text-gray-900">Pilar es Deporte</h3>
+                 <h3 className="text-3xl font-black mb-6 tracking-tighter text-gray-900">{content.sport?.title || 'Pilar es Deporte'}</h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div className="flex gap-4">
                        <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center shrink-0">
                           <Waves size={24} />
                        </div>
                        <div>
-                          <h4 className="font-black text-gray-900 text-lg tracking-tight">Náutica</h4>
-                          <p className="text-gray-500 text-sm font-medium">Cursos municipales de vela y deportes de viento durante todo el año.</p>
+                          <h4 className="font-black text-gray-900 text-lg tracking-tight">{content.sport?.nautical_title || 'Náutica'}</h4>
+                          <p className="text-gray-500 text-sm font-medium">{content.sport?.nautical_desc || 'Cursos municipales...'}</p>
                        </div>
                     </div>
                  </div>
