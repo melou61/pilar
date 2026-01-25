@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, ViewState } from '../types';
+import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, ViewState, LocalizedContent } from '../types';
 import { 
   Trash2, Plus, Calendar, Image as ImageIcon, Save, X, 
   Zap, Tag, Edit3, ShoppingBag, Globe, MapPin, 
@@ -8,7 +8,7 @@ import {
   Facebook, Instagram, Twitter, Video, Eye,
   Users, UserPlus, Shield, Lock, Settings2, Phone, Clock,
   MessageCircle, Rss, Link as LinkIcon, RefreshCw, ToggleLeft, ToggleRight, CheckCircle,
-  BarChart3, MousePointer2, Layout, Filter, ArrowRight
+  BarChart3, MousePointer2, Layout, Filter, ArrowRight, Signal, Cpu, Wifi, Battery, Minus
 } from './Icons';
 import { MOCK_NEWS } from '../data';
 
@@ -71,6 +71,8 @@ const viewStateLabels: Record<string, string> = {
   SIDEBAR: 'Menú Lateral'
 };
 
+const LANGUAGES_CONFIG = ['es', 'en', 'fr', 'de', 'it'];
+
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
     ads, setAds, events, setEvents, businesses, setBusinesses, admins, setAdmins, onLogout, currentUserRole
 }) => {
@@ -87,6 +89,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [currentBiz, setCurrentBiz] = useState<Partial<CensusItem>>({});
   const [currentAdmin, setCurrentAdmin] = useState<Partial<AdminUser>>({});
   const [currentAd, setCurrentAd] = useState<Partial<Ad>>({});
+  
+  // Beacon State
+  const [editingBeaconId, setEditingBeaconId] = useState<string | null>(null);
+  const [beaconLangTab, setBeaconLangTab] = useState<string>('es');
 
   // Lógica de Permisos por Rol (RBAC)
   const isSuperAdmin = currentUserRole === 'SUPER_ADMIN';
@@ -122,6 +128,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   // --- HANDLERS COMERCIOS ---
   const saveBiz = () => {
+    // Si estamos editando un beacon dentro de un comercio, la lógica es diferente
+    if (activeTab === 'beacons' && editingBeaconId) {
+        setBusinesses(prev => prev.map(b => b.id === editingBeaconId ? { ...b, promotion: currentBiz.promotion } : b));
+        setEditMode('none');
+        setEditingBeaconId(null);
+        return;
+    }
+
     const item = {
       ...currentBiz,
       id: currentBiz.id || `biz-${Date.now()}`,
@@ -183,6 +197,78 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       case 'RSS': return <Rss className="text-orange-500" />;
       default: return <Globe className="text-gray-500" />;
     }
+  };
+
+  // --- HANDLERS BEACONS ---
+  const toggleBeaconStatus = (bizId: string) => {
+    setBusinesses(prev => prev.map(b => {
+        if (b.id === bizId && b.promotion) {
+            return { ...b, promotion: { ...b.promotion, isActive: !b.promotion.isActive } };
+        }
+        return b;
+    }));
+  };
+
+  const createBeacon = (bizId: string) => {
+      // Iniciar un beacon por defecto para un negocio que no tiene
+      const defaultBeacon: Promotion = {
+          isActive: false,
+          range: 'NEAR',
+          maxDistanceMeters: 20,
+          frequencyRules: { maxPerHour: 1, maxPerDay: 3, maxPerWeek: 7 },
+          multilingualContent: {
+              es: { title: '¡Bienvenido!', description: 'Oferta especial cercana.' },
+              en: { title: 'Welcome!', description: 'Special offer nearby.' }
+          },
+          hardwareId: `BEACON-${Math.floor(Math.random()*10000)}`
+      };
+      
+      setBusinesses(prev => prev.map(b => b.id === bizId ? { ...b, promotion: defaultBeacon } : b));
+      // Luego abrir editor
+      const biz = businesses.find(b => b.id === bizId);
+      if (biz) {
+          setCurrentBiz({ ...biz, promotion: defaultBeacon });
+          setEditingBeaconId(bizId);
+          setEditMode('beacon');
+      }
+  };
+
+  const updateBeaconContent = (lang: string, field: 'title' | 'description', value: string) => {
+      if (!currentBiz.promotion) return;
+      
+      const newContent = { 
+          ...currentBiz.promotion.multilingualContent,
+          [lang]: {
+              ...(currentBiz.promotion.multilingualContent?.[lang] || { title: '', description: '' }),
+              [field]: value
+          }
+      };
+
+      setCurrentBiz({
+          ...currentBiz,
+          promotion: {
+              ...currentBiz.promotion,
+              multilingualContent: newContent
+          }
+      });
+  };
+
+  const updateFrequency = (type: 'maxPerHour' | 'maxPerDay' | 'maxPerWeek', increment: boolean) => {
+      if (!currentBiz.promotion?.frequencyRules) return;
+      
+      const currentValue = currentBiz.promotion.frequencyRules[type];
+      const newValue = increment ? currentValue + 1 : Math.max(1, currentValue - 1);
+
+      setCurrentBiz({
+          ...currentBiz,
+          promotion: {
+              ...currentBiz.promotion,
+              frequencyRules: {
+                  ...currentBiz.promotion.frequencyRules,
+                  [type]: newValue
+              }
+          }
+      });
   };
 
   // --- HANDLERS ADS ---
@@ -282,6 +368,332 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         <main className="animate-in fade-in duration-500">
           
+          {/* 1. SECCIÓN BEACONS (REDISEÑADA) */}
+          {activeTab === 'beacons' && canAccessTab('beacons') && (
+            <div className="space-y-8">
+                {editMode === 'beacon' ? (
+                    // --- FORMULARIO DE CONFIGURACIÓN BEACON ---
+                    <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-14 h-14 ${currentBiz.promotion?.isActive ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'} rounded-2xl flex items-center justify-center`}>
+                                    <Radar size={32} className={currentBiz.promotion?.isActive ? 'animate-pulse' : ''} />
+                                </div>
+                                <div>
+                                    <h3 className="text-3xl font-black text-gray-900 tracking-tighter">Configuración Beacon</h3>
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
+                                        Dispositivo en: {currentBiz.name}
+                                    </p>
+                                </div>
+                            </div>
+                            <button onClick={() => setEditMode('none')} className="p-3 bg-gray-50 hover:bg-gray-100 rounded-full transition-all"><X /></button>
+                        </div>
+
+                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
+                            {/* Columna Izquierda: Configuración Técnica */}
+                            <div className="space-y-8">
+                                <h4 className="text-xs font-black text-blue-600 uppercase tracking-widest border-b border-blue-100 pb-2 flex items-center gap-2">
+                                    <Cpu size={16} /> Hardware & Cobertura
+                                </h4>
+                                
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">UUID / ID Hardware</label>
+                                        <input 
+                                            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-mono text-xs font-bold outline-none" 
+                                            value={currentBiz.promotion?.hardwareId || ''}
+                                            onChange={e => setCurrentBiz({...currentBiz, promotion: {...currentBiz.promotion!, hardwareId: e.target.value}})}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Estado</label>
+                                        <button 
+                                            onClick={() => setCurrentBiz({...currentBiz, promotion: {...currentBiz.promotion!, isActive: !currentBiz.promotion?.isActive}})}
+                                            className={`w-full p-3.5 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${currentBiz.promotion?.isActive ? 'bg-green-500 text-white shadow-lg shadow-green-200' : 'bg-gray-200 text-gray-500'}`}
+                                        >
+                                            {currentBiz.promotion?.isActive ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
+                                            {currentBiz.promotion?.isActive ? 'EMITIENDO' : 'APAGADO'}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Slider de Distancia Visual */}
+                                <div className="space-y-4 bg-slate-50 p-6 rounded-[30px] border border-slate-100">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-2"><Wifi size={14} /> Alcance de Señal</label>
+                                        <span className="text-xl font-black text-blue-600">{currentBiz.promotion?.maxDistanceMeters || 20}m</span>
+                                    </div>
+                                    
+                                    <input 
+                                        type="range" 
+                                        min="1" 
+                                        max="100" 
+                                        value={currentBiz.promotion?.maxDistanceMeters || 20} 
+                                        onChange={(e) => {
+                                            const val = parseInt(e.target.value);
+                                            let rangeType: 'IMMEDIATE' | 'NEAR' | 'FAR' = 'FAR';
+                                            if (val <= 5) rangeType = 'IMMEDIATE';
+                                            else if (val <= 30) rangeType = 'NEAR';
+                                            
+                                            setCurrentBiz({...currentBiz, promotion: {...currentBiz.promotion!, maxDistanceMeters: val, range: rangeType}});
+                                        }}
+                                        className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                    />
+                                    
+                                    {/* Visual Radar Feedback */}
+                                    <div className="h-24 relative flex items-center justify-center mt-6 overflow-hidden rounded-2xl bg-white border border-gray-100">
+                                        <div className="absolute inset-0 grid grid-cols-10 opacity-10">
+                                            {[...Array(10)].map((_, i) => <div key={i} className="border-r border-gray-400 h-full"></div>)}
+                                        </div>
+                                        <div className="absolute w-4 h-4 bg-black rounded-full z-10 shadow-xl"></div>
+                                        <div 
+                                            className={`absolute rounded-full transition-all duration-300 opacity-30 ${
+                                                (currentBiz.promotion?.maxDistanceMeters || 20) <= 5 ? 'bg-red-500' :
+                                                (currentBiz.promotion?.maxDistanceMeters || 20) <= 30 ? 'bg-blue-500' : 'bg-green-500'
+                                            }`}
+                                            style={{
+                                                width: `${(currentBiz.promotion?.maxDistanceMeters || 20) * 2}%`,
+                                                height: `${(currentBiz.promotion?.maxDistanceMeters || 20) * 4}%`, // Visual approximation
+                                                maxWidth: '100%',
+                                                maxHeight: '100%'
+                                            }}
+                                        ></div>
+                                        <span className="absolute bottom-1 right-2 text-[8px] font-black uppercase text-gray-300">{currentBiz.promotion?.range}</span>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4 pt-4 border-t border-gray-50">
+                                    <h4 className="text-xs font-black text-orange-600 uppercase tracking-widest border-b border-orange-100 pb-2 flex items-center gap-2">
+                                        <Clock size={16} /> Frecuencia (Límite Envío)
+                                    </h4>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {['maxPerHour', 'maxPerDay', 'maxPerWeek'].map((type) => {
+                                            const label = type === 'maxPerHour' ? 'Hora' : type === 'maxPerDay' ? 'Día' : 'Semana';
+                                            return (
+                                                <div key={type} className="bg-orange-50 p-3 rounded-2xl text-center border border-orange-100">
+                                                    <span className="text-[8px] font-black text-orange-400 uppercase block mb-2">{label}</span>
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        <button onClick={() => updateFrequency(type as any, false)} className="w-6 h-6 bg-white rounded-full text-orange-600 flex items-center justify-center shadow-sm hover:scale-110 transition-transform"><Minus size={12} /></button>
+                                                        <span className="text-lg font-black text-gray-800 w-6">{currentBiz.promotion?.frequencyRules?.[type as keyof typeof currentBiz.promotion.frequencyRules]}</span>
+                                                        <button onClick={() => updateFrequency(type as any, true)} className="w-6 h-6 bg-white rounded-full text-orange-600 flex items-center justify-center shadow-sm hover:scale-110 transition-transform"><Plus size={12} /></button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Columna Derecha: Contenido Visual & Preview */}
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between border-b border-purple-100 pb-2 mb-4">
+                                    <h4 className="text-xs font-black text-purple-600 uppercase tracking-widest flex items-center gap-2">
+                                        <Globe size={16} /> Contenido Visual
+                                    </h4>
+                                    <div className="flex gap-1">
+                                        {LANGUAGES_CONFIG.map(lang => (
+                                            <button 
+                                                key={lang} 
+                                                onClick={() => setBeaconLangTab(lang)}
+                                                className={`w-8 h-8 rounded-lg font-black text-[10px] uppercase transition-all ${beaconLangTab === lang ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'}`}
+                                            >
+                                                {lang}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-6 items-start">
+                                    {/* Editor Form */}
+                                    <div className="flex-1 space-y-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Imagen Promoción (URL)</label>
+                                            <div className="flex gap-2">
+                                                <input 
+                                                    className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-xs outline-none" 
+                                                    placeholder="https://..."
+                                                    value={currentBiz.promotion?.imageUrl || ''}
+                                                    onChange={e => setCurrentBiz({...currentBiz, promotion: {...currentBiz.promotion!, imageUrl: e.target.value}})}
+                                                />
+                                                <button 
+                                                    onClick={() => setCurrentBiz({...currentBiz, promotion: {...currentBiz.promotion!, imageUrl: currentBiz.images?.[0] || ''}})}
+                                                    className="p-3 bg-gray-100 rounded-xl text-gray-500 hover:bg-gray-200"
+                                                    title="Usar imagen del comercio"
+                                                >
+                                                    <ImageIcon size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold text-purple-400 uppercase ml-2">Título ({beaconLangTab.toUpperCase()})</label>
+                                            <input 
+                                                className="w-full p-4 bg-white border border-purple-100 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-purple-200" 
+                                                placeholder="Título..."
+                                                value={currentBiz.promotion?.multilingualContent?.[beaconLangTab]?.title || ''}
+                                                onChange={e => updateBeaconContent(beaconLangTab, 'title', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold text-purple-400 uppercase ml-2">Mensaje ({beaconLangTab.toUpperCase()})</label>
+                                            <textarea 
+                                                className="w-full p-4 bg-white border border-purple-100 rounded-2xl font-medium outline-none focus:ring-2 focus:ring-purple-200 h-24 resize-none" 
+                                                placeholder="Descripción..."
+                                                value={currentBiz.promotion?.multilingualContent?.[beaconLangTab]?.description || ''}
+                                                onChange={e => updateBeaconContent(beaconLangTab, 'description', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Código Descuento</label>
+                                            <input 
+                                                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-mono text-center font-black tracking-widest uppercase outline-none" 
+                                                placeholder="SALE2026"
+                                                value={currentBiz.promotion?.discountCode || ''}
+                                                onChange={e => setCurrentBiz({...currentBiz, promotion: {...currentBiz.promotion!, discountCode: e.target.value}})}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Mobile Preview */}
+                                    <div className="w-48 shrink-0 hidden md:block">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase mb-2 block text-center">Live Preview</label>
+                                        <div className="bg-black rounded-[24px] p-2 shadow-2xl border-4 border-gray-800 relative">
+                                            {/* Notch */}
+                                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-black rounded-b-xl z-20"></div>
+                                            
+                                            {/* Screen Content */}
+                                            <div className="bg-white rounded-[18px] overflow-hidden h-80 flex flex-col relative">
+                                                {/* Header Mock */}
+                                                <div className="bg-blue-600 h-16 w-full flex items-center justify-center pt-4">
+                                                    <Zap size={16} className="text-white fill-current" />
+                                                </div>
+                                                
+                                                {/* Card Mock */}
+                                                <div className="p-3 -mt-6 relative z-10">
+                                                    <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 pb-4">
+                                                        <div className="h-20 bg-gray-200">
+                                                            <img 
+                                                                src={currentBiz.promotion?.imageUrl || currentBiz.images?.[0] || ''} 
+                                                                className="w-full h-full object-cover" 
+                                                                alt="Preview"
+                                                            />
+                                                        </div>
+                                                        <div className="p-2 text-center">
+                                                            <h5 className="font-black text-[10px] text-gray-900 leading-tight mb-1">
+                                                                {currentBiz.promotion?.multilingualContent?.[beaconLangTab]?.title || 'Título'}
+                                                            </h5>
+                                                            <p className="text-[8px] text-gray-500 leading-tight line-clamp-3">
+                                                                {currentBiz.promotion?.multilingualContent?.[beaconLangTab]?.description || 'Descripción...'}
+                                                            </p>
+                                                            {currentBiz.promotion?.discountCode && (
+                                                                <div className="mt-2 bg-blue-50 text-blue-600 text-[8px] font-black py-1 rounded border border-blue-100 border-dashed">
+                                                                    {currentBiz.promotion.discountCode}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-10 pt-6 border-t border-gray-100 flex justify-end">
+                            <button onClick={saveBiz} className="bg-[#0f172a] text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] transition-all flex items-center gap-3 shadow-xl">
+                                <Save size={18} /> Guardar Configuración
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    // --- LISTADO DE BEACONS ---
+                    <>
+                        <div className="flex flex-col md:flex-row justify-between items-center bg-white p-8 rounded-[35px] shadow-xl border border-slate-100 gap-4">
+                            <div className="flex items-center gap-5">
+                                <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200 text-white"><Radar size={28}/></div>
+                                <div>
+                                    <h2 className="text-xl font-black tracking-tighter uppercase leading-none">Red de Beacons</h2>
+                                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-2">
+                                        {businesses.filter(b => b.promotion).length} Dispositivos Configurados
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-4">
+                            {/* Listado de comercios con o sin beacons */}
+                            {businesses.map(biz => {
+                                const hasBeacon = !!biz.promotion;
+                                const isActive = biz.promotion?.isActive;
+
+                                return (
+                                    <div key={biz.id} className={`bg-white p-6 rounded-[30px] border flex items-center gap-6 transition-all group ${hasBeacon ? (isActive ? 'border-emerald-200 shadow-lg' : 'border-gray-200 opacity-80') : 'border-dashed border-gray-200 opacity-60 hover:opacity-100'}`}>
+                                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 transition-colors ${hasBeacon ? (isActive ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400') : 'bg-slate-50 text-slate-300'}`}>
+                                            {hasBeacon ? <Signal size={28} className={isActive ? 'animate-pulse' : ''} /> : <Plus size={24} />}
+                                        </div>
+                                        
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-black text-slate-900 text-lg tracking-tight truncate">{biz.name}</h4>
+                                            <div className="flex items-center gap-3 mt-1">
+                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                                                    <MapPin size={10} /> {biz.address}
+                                                </span>
+                                                {hasBeacon && (
+                                                    <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                                                        {isActive ? 'Activo' : 'Inactivo'}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {hasBeacon && (
+                                            <div className="hidden md:flex gap-4 text-xs font-mono text-slate-400">
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[8px] uppercase font-bold text-slate-300">ID</span>
+                                                    <span>{biz.promotion?.hardwareId?.substring(0, 6)}...</span>
+                                                </div>
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[8px] uppercase font-bold text-slate-300">Dist.</span>
+                                                    <span>{biz.promotion?.maxDistanceMeters || 20}m</span>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="flex items-center gap-3">
+                                            {hasBeacon ? (
+                                                <>
+                                                    <button 
+                                                        onClick={() => toggleBeaconStatus(biz.id)}
+                                                        className={`p-3 rounded-xl transition-all ${isActive ? 'text-green-500 bg-green-50 hover:bg-green-100' : 'text-gray-400 bg-gray-50 hover:bg-gray-100'}`}
+                                                    >
+                                                        {isActive ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => { setCurrentBiz(biz); setEditingBeaconId(biz.id); setEditMode('beacon'); }}
+                                                        className="bg-slate-900 text-white p-3 rounded-xl hover:bg-blue-600 transition-all shadow-lg"
+                                                    >
+                                                        <Settings2 size={20} />
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <button 
+                                                    onClick={() => createBeacon(biz.id)}
+                                                    className="bg-blue-50 text-blue-600 px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all flex items-center gap-2"
+                                                >
+                                                    <Plus size={14} /> Asignar Beacon
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </>
+                )}
+            </div>
+          )}
+
           {/* 1. SECCIÓN PUBLICIDAD (RENOVADA) */}
           {activeTab === 'ads' && canAccessTab('ads') && (
             <div className="space-y-8">
@@ -596,8 +1008,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {/* 2. SECCIÓN COMERCIOS */}
           {activeTab === 'businesses' && canAccessTab('businesses') && (
             <div className="space-y-6">
-              
-              {editMode === 'biz' ? (
+              {/* ... (Business code unchanged but abbreviated for clarity in this response as requested focus was Beacons) ... */}
+              {editMode === 'biz' && !editingBeaconId ? (
                 // --- FORMULARIO DE EDICIÓN / CREACIÓN ---
                 <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
                    <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
@@ -816,6 +1228,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               {editMode === 'source' ? (
                 // --- FORMULARIO EDICIÓN SYNC ---
                 <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                   {/* ... (Sync News Form content unchanged) ... */}
+                   {/* For brevity, reusing logic but ensuring it matches previous snippet */}
                    <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center">

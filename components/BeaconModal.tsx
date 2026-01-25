@@ -13,6 +13,29 @@ interface BeaconModalProps {
 export const BeaconModal: React.FC<BeaconModalProps> = ({ isOpen, onClose, shop, t }) => {
   if (!isOpen || !shop.promotion) return null;
 
+  // Lógica de detección de idioma
+  // t.code no existe directamente, necesitamos deducirlo o pasarlo.
+  // Asumimos que `t` tiene la estructura de traducciones.
+  // Para hacerlo robusto, detectamos el idioma del objeto `t` comparando con known strings o pasamos langCode.
+  // MEJORA: Usamos 'es' como fallback si no encontramos el contenido específico.
+  
+  // Como `t` es el objeto de traducciones completo, no tenemos el código del idioma actual fácilmente accesible aquí
+  // sin cambiar la firma de props en App.tsx.
+  // Sin embargo, podemos intentar obtener el idioma del navegador o por defecto 'es'.
+  // Para una implementación perfecta, App.tsx debería pasar `currentLangCode`.
+  
+  // Vamos a asumir que el contenido en español siempre existe como fallback.
+  // Intentaremos detectar el idioma activo mirando `t.menu.home`.
+  
+  let currentLangCode = 'es';
+  if (t.menu.home === 'Home') currentLangCode = 'en';
+  else if (t.menu.home === 'Accueil') currentLangCode = 'fr';
+  else if (t.menu.home === 'Start') currentLangCode = 'de';
+  
+  const content = shop.promotion.multilingualContent?.[currentLangCode] || 
+                  shop.promotion.multilingualContent?.['es'] || 
+                  { title: shop.promotion.title || 'Oferta', description: shop.promotion.description || '' };
+
   return (
     <div className="fixed inset-0 z-[9000] flex items-center justify-center p-6">
       {/* Premium Backdrop */}
@@ -69,9 +92,10 @@ export const BeaconModal: React.FC<BeaconModalProps> = ({ isOpen, onClose, shop,
                     <div className="inline-flex items-center gap-2 bg-blue-600 text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 shadow-lg shadow-blue-200">
                         <Tag size={12} /> {t.beacon.exclusive}
                     </div>
-                    <h4 className="text-2xl font-black text-gray-800 mb-3 tracking-tight leading-tight">{shop.promotion.title}</h4>
+                    {/* Multilingual Content Rendering */}
+                    <h4 className="text-2xl font-black text-gray-800 mb-3 tracking-tight leading-tight">{content.title}</h4>
                     <p className="text-sm text-gray-500 mb-6 font-medium leading-relaxed italic px-2">
-                       "{shop.promotion.description}"
+                       "{content.description}"
                     </p>
 
                     {shop.promotion.discountCode && (

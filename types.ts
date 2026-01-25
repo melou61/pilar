@@ -72,17 +72,43 @@ export interface Event {
   endDateTime?: string;   
 }
 
-export interface Promotion {
+export interface LocalizedContent {
   title: string;
   description: string;
+}
+
+export interface Promotion {
+  // Legacy fields (optional for backward compatibility)
+  title?: string;
+  description?: string;
+  
+  // Beacon Configuration
+  isActive: boolean;
+  hardwareId?: string; // MAC address or Serial
+  uuid?: string; // iBeacon UUID
+  major?: number;
+  minor?: number;
+  
+  // Signal Settings
+  range: 'IMMEDIATE' | 'NEAR' | 'FAR'; // Defines TX Power
+  transmissionPower?: number; // dBm
+  broadcastInterval?: number; // ms
+  maxDistanceMeters: number; // Slider value 1-100m
+  
+  // Frequency Capping Rules
+  frequencyRules: {
+    maxPerHour: number;
+    maxPerDay: number;
+    maxPerWeek: number;
+  };
+
+  // Content
+  imageUrl?: string; // Custom image for the notification
   discountCode?: string;
   expiresAt?: string;
-  beaconUuid?: string;
-  beaconHardwareId?: string;
-  proximityRange: 'IMMEDIATE' | 'NEAR' | 'FAR';
-  frequencyPerDay: number; 
-  maxDistanceMeters: number; 
-  activeTimeMinutes: number; 
+  multilingualContent: Record<string, LocalizedContent>; // Key: 'es', 'en', etc.
+  
+  // Stats
   interactionsCount?: number;
 }
 
