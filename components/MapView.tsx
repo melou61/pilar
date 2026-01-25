@@ -97,13 +97,25 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
 
     const itemsToAdd: any[] = [];
 
-    // Lógica de mapeo de color por categoría general
+    // Paleta de colores distintiva por categoría
     const getCategoryColor = (cat: string) => {
-      if (['Hostelería y restauración', 'Alimentación'].includes(cat)) return '#f97316';
-      if (['Salud y belleza'].includes(cat)) return '#ec4899';
-      if (['Moda', 'Hogar'].includes(cat)) return '#2563eb';
-      if (['Servicios municipales y otros servicios'].includes(cat)) return '#64748b';
-      return '#3b82f6';
+      switch (cat) {
+        case 'Alimentación': return '#ef4444'; // Rojo claro
+        case 'Alojamiento': return '#4f46e5'; // Índigo
+        case 'Comunicación y publicidad': return '#0ea5e9'; // Azul cielo
+        case 'Educación': return '#fbbf24'; // Ámbar
+        case 'Gestiones profesionales y bancarias': return '#64748b'; // Gris pizarra
+        case 'Hogar': return '#0d9488'; // Verde azulado (Teal)
+        case 'Hostelería y restauración': return '#f97316'; // Naranja
+        case 'Mascotas': return '#a16207'; // Marrón/Dorado
+        case 'Medio Ambiente y agricultura': return '#16a34a'; // Verde
+        case 'Moda': return '#db2777'; // Rosa fucsia
+        case 'Motor': return '#dc2626'; // Rojo intenso
+        case 'Ocio y entretenimiento': return '#7c3aed'; // Violeta
+        case 'Salud y belleza': return '#e11d48'; // Rosa rojizo (Rose)
+        case 'Servicios municipales y otros servicios': return '#2563eb'; // Azul estándar
+        default: return '#3b82f6'; // Azul fallback
+      }
     };
 
     // Filtrado de negocios
@@ -113,12 +125,12 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
     
     itemsToAdd.push(...filteredBusinesses.map(i => ({ ...i, type: 'BIZ', color: getCategoryColor(i.category) })));
 
-    // Si es "Todos", incluimos también playas, monumentos y eventos
+    // Si es "Todos", incluimos también playas, monumentos y eventos con sus propios colores
     if (filter === 'all') {
-      itemsToAdd.push(...MOCK_EVENTS.map(i => ({ ...i, type: 'EVENT', color: '#9333ea' })));
-      itemsToAdd.push(...MOCK_BEACHES.map(i => ({ ...i, type: 'BEACH', color: '#06b6d4' })));
-      itemsToAdd.push(...MOCK_SIGHTSEEING.map(i => ({ ...i, type: 'CULTURE', color: '#d97706' })));
-      itemsToAdd.push(...ACTIVITIES_LIST.map(i => ({ ...i, type: 'ACTIVE', color: '#10b981' })));
+      itemsToAdd.push(...MOCK_EVENTS.map(i => ({ ...i, type: 'EVENT', color: '#9333ea' }))); // Morado
+      itemsToAdd.push(...MOCK_BEACHES.map(i => ({ ...i, type: 'BEACH', color: '#06b6d4' }))); // Cian
+      itemsToAdd.push(...MOCK_SIGHTSEEING.map(i => ({ ...i, type: 'CULTURE', color: '#d97706' }))); // Ámbar oscuro
+      itemsToAdd.push(...ACTIVITIES_LIST.map(i => ({ ...i, type: 'ACTIVE', color: '#10b981' }))); // Esmeralda
     }
 
     itemsToAdd.forEach(item => {

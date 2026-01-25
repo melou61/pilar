@@ -264,7 +264,7 @@ export const PRIVACY_POLICY: Record<string, string> = {
   <h3 class="text-lg font-bold text-gray-900">5. Cookie</h3>
   <p>Utilizziamo cookie essenziali, di prestazione e funzionali.</p>
   <h3 class="text-lg font-bold text-gray-900">6. Sicurezza</h3>
-  <p>Implementiamo misure di sicurezza tecniche per proteggere i tuoi dati.</p>
+  <p>Implementamos misure di sicurezza tecniche per proteggere i tuoi dati.</p>
   <h3 class="text-lg font-bold text-gray-900">7. I Tuoi Diritti</h3>
   <p>Hai diritto di accesso, rettifica e cancellazione dei tuoi dati. Contattaci a ayto@pilardelahoradada.org.</p>
   <h3 class="text-lg font-bold text-gray-900">8. Contatto</h3>
@@ -439,7 +439,7 @@ export const ACTIVITIES_LIST = [
   { id: 'rio-seco', title: 'Río Seco', image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', category: 'Senderismo', duration: '2h', rating: 4.8, difficulty: 'Fácil', location: 'Campoverde', lat: 37.8932, lng: -0.8432 }
 ];
 
-// --- FUNCIONES DE ASIGNACIÓN DE IMÁGENES REALISTAS ---
+// --- SIMULACIÓN DE IMÁGENES REALISTAS POR CATEGORÍA ---
 
 const CATEGORY_IMAGES: Record<string, string[]> = {
   'Moda': [
@@ -452,174 +452,188 @@ const CATEGORY_IMAGES: Record<string, string[]> = {
     'https://images.unsplash.com/photo-1530124560676-44b24e64f26a',
     'https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8'
   ],
+  'Hogar': [
+    'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92', // Muebles
+    'https://images.unsplash.com/photo-1513161455079-7dc1de15ef3e', // Decor
+    'https://images.unsplash.com/photo-1616486338812-3dadae4b4f9d'
+  ],
   'Supermercado': [
     'https://images.unsplash.com/photo-1578916171728-46686eac8d58',
     'https://images.unsplash.com/photo-1542838132-92c53300491e',
     'https://images.unsplash.com/photo-1506484381205-f7945653044d'
   ],
+  'Alimentación': [
+    'https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8', // Grocery
+    'https://images.unsplash.com/photo-1606787366850-de6330128bfc'  // Market
+  ],
   'Farmacia': [
     'https://images.unsplash.com/photo-1587854680352-936b22b91030',
     'https://images.unsplash.com/photo-1631549916768-4119b2e55c06'
+  ],
+  'Salud y belleza': [
+    'https://images.unsplash.com/photo-1560066984-138dadb4c035', // Salon
+    'https://images.unsplash.com/photo-1522337660859-02fbefca4702', // Makeup
+    'https://images.unsplash.com/photo-1512496015851-a90fb38ba796'  // Spa
   ],
   'Inmobiliaria': [
     'https://images.unsplash.com/photo-1560518883-ce09059eeffa',
     'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab'
   ],
-  'Bazar': [
-    'https://images.unsplash.com/photo-1513885559034-7740df6317b9',
-    'https://images.unsplash.com/photo-1601924582970-9238bcb495d9'
+  'Gestiones profesionales y bancarias': [
+    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40', // Office
+    'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d'  // Bank
   ],
-  'Peluquería': [
-    'https://images.unsplash.com/photo-1560066984-138dadb4c035',
-    'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f'
+  'Ocio y entretenimiento': [
+    'https://images.unsplash.com/photo-1543007630-9710e4a00a20', // Cinema/Fun
+    'https://images.unsplash.com/photo-1526676037777-05a232554f77'  // Gym/Activity
   ],
-  'Óptica': [
-    'https://images.unsplash.com/photo-1511499767150-a48a237f0083',
-    'https://images.unsplash.com/photo-1574258495973-f010dfbb5371'
+  'Mascotas': [
+    'https://images.unsplash.com/photo-1583337130417-3346a1be7dee', // Pet shop
+    'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7'  // Vet
+  ],
+  'Motor': [
+    'https://images.unsplash.com/photo-1487754180451-c456f719a1fc', // Workshop
+    'https://images.unsplash.com/photo-1503376763036-066120622c74'  // Cars
   ],
   'Restaurante': [
     'https://images.unsplash.com/photo-1517248135467-4c7ed9d8607c',
-    'https://images.unsplash.com/photo-1552566626-52f8b828add9',
-    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5'
+    'https://images.unsplash.com/photo-1552566626-52f8b828add9'
   ],
-  'Italiano': [
-    'https://images.unsplash.com/photo-1574071318508-1cdbad80ad50',
-    'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3'
-  ],
-  'Chiringuito': [
-    'https://images.unsplash.com/photo-1533777857419-b2b3095f2ff8',
-    'https://images.unsplash.com/photo-1519046904884-53103b34b206'
-  ],
-  'Tapas': [
-    'https://images.unsplash.com/photo-1563805042-7684c019e1cb',
-    'https://images.unsplash.com/photo-1534353436294-0dbd4bdac845'
-  ],
-  'Arroces': [
-    'https://images.unsplash.com/photo-1512058564366-18510be2db19',
-    'https://images.unsplash.com/photo-1534080564583-6be75777b70a'
-  ],
-  'Heladería': [
-    'https://images.unsplash.com/photo-1501443762994-82bd5dabb892',
-    'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f'
-  ],
-  'Cafetería': [
-    'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085',
-    'https://images.unsplash.com/photo-1509042239860-f550ce710b93'
+  'Hostelería y restauración': [
+    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5',
+    'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b'
   ]
 };
 
 const getRealisticImage = (cat: string, index: number) => {
-  const pool = CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Moda']; // Fallback a Moda
+  const pool = CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Moda']; // Fallback
   const base = pool[index % pool.length];
   return `${base}?auto=format&fit=crop&w=800&q=80`;
 };
 
-// --- CENSO COMPLETO (125 ITEMS ACTUALIZADOS CON IMÁGENES REALES) ---
+// --- SIMULACIÓN DEL CENSO COMPLETO ---
+// Datos generados para simular el contenido de pilardelahoradada.org/areas/comercio/censo
+// Categorías alineadas con MapView: 
+// Alimentación, Alojamiento, Comunicación y publicidad, Educación, Gestiones profesionales y bancarias,
+// Hogar, Hostelería y restauración, Mascotas, Medio Ambiente y agricultura, Moda, Motor, Ocio y entretenimiento,
+// Salud y belleza, Servicios municipales y otros servicios.
 
 const generateId = (prefix: string, index: number) => `${prefix}-${index}`;
 
 const SHOP_DATA = [
+  // Alimentación
+  { name: 'Supermercado Dialprix', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8643, lng: -0.7941 },
+  { name: 'Mercadona', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8610, lng: -0.7950 },
+  { name: 'Consum', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8670, lng: -0.7960 },
+  { name: 'Aldi', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8630, lng: -0.7980 },
+  { name: 'Supermercado Saura', cat: 'Alimentación', zone: 'LA_TORRE', lat: 37.8644, lng: -0.7858 },
+  { name: 'Overseas Supermarket', cat: 'Alimentación', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7600 },
+  { name: 'Carnicería El Chuleton', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8662, lng: -0.7938 },
+  { name: 'Pescadería Paco', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8659, lng: -0.7935 },
+  { name: 'Frutería La Huerta', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8655, lng: -0.7925 },
+  { name: 'Panadería La Tahona', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8660, lng: -0.7930 },
+
+  // Salud y belleza
+  { name: 'Farmacia Lda. Maria', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8660, lng: -0.7920 },
+  { name: 'Farmacia Torre', cat: 'Salud y belleza', zone: 'LA_TORRE', lat: 37.8600, lng: -0.7820 },
+  { name: 'Clínica Dental Sonrisas', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8665, lng: -0.7925 },
+  { name: 'Peluquería Stylo', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8655, lng: -0.7922 },
+  { name: 'Centro Estética Zen', cat: 'Salud y belleza', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7610 },
+  { name: 'Fisioterapia Pilar', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8650, lng: -0.7920 },
+  { name: 'Barbería Moderna', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8657, lng: -0.7923 },
+  { name: 'Herbolario Natural', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8663, lng: -0.7921 },
+  { name: 'Perfumería Aroma', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8661, lng: -0.7929 },
+  { name: 'Óptica Horadada', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8658, lng: -0.7925 },
+
+  // Hogar
+  { name: 'Ferretería El Pilar', cat: 'Hogar', zone: 'CENTRO', lat: 37.8651, lng: -0.7915 },
+  { name: 'Muebles Hnos Garcia', cat: 'Hogar', zone: 'CENTRO', lat: 37.8640, lng: -0.7945 },
+  { name: 'Bazar Victoria', cat: 'Hogar', zone: 'CENTRO', lat: 37.8665, lng: -0.7935 },
+  { name: 'Pinturas y Decoración', cat: 'Hogar', zone: 'CENTRO', lat: 37.8642, lng: -0.7928 },
+  { name: 'Electrodomésticos PH', cat: 'Hogar', zone: 'CENTRO', lat: 37.8658, lng: -0.7918 },
+  { name: 'Floristería Azahar', cat: 'Hogar', zone: 'CENTRO', lat: 37.8659, lng: -0.7920 },
+  { name: 'Muebles Pinar', cat: 'Hogar', zone: 'CAMPOVERDE', lat: 37.8942, lng: -0.8415 },
+  { name: 'Ferretería Campoverde', cat: 'Hogar', zone: 'CAMPOVERDE', lat: 37.8935, lng: -0.8425 },
+
+  // Moda
   { name: 'Modas Lucía', cat: 'Moda', zone: 'CENTRO', lat: 37.8662, lng: -0.7928 },
-  { name: 'Ferretería El Pilar', cat: 'Ferretería', zone: 'CENTRO', lat: 37.8651, lng: -0.7915 },
-  { name: 'Supermercado Dialprix', cat: 'Supermercado', zone: 'CENTRO', lat: 37.8643, lng: -0.7941 },
+  { name: 'Zapatería Calzados Carmen', cat: 'Moda', zone: 'CENTRO', lat: 37.8660, lng: -0.7931 },
   { name: 'Boutique Playa', cat: 'Moda', zone: 'LA_TORRE', lat: 37.8648, lng: -0.7848 },
-  { name: 'Peluquería Stylo', cat: 'Peluquería', zone: 'CENTRO', lat: 37.8655, lng: -0.7922 },
-  { name: 'Bazar Victoria', cat: 'Bazar', zone: 'CENTRO', lat: 37.8665, lng: -0.7935 },
-  { name: 'Inmobiliaria Pilar', cat: 'Inmobiliaria', zone: 'MIL_PALMERAS', lat: 37.8860, lng: -0.7610 },
-  { name: 'Óptica Horadada', cat: 'Óptica', zone: 'CENTRO', lat: 37.8658, lng: -0.7925 },
-  { name: 'Regalos Marina', cat: 'Bazar', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7832 },
-  { name: 'Estanco Nº1', cat: 'Bazar', zone: 'CENTRO', lat: 37.8652, lng: -0.7930 },
-  { name: 'Floristería Azahar', cat: 'Bazar', zone: 'CENTRO', lat: 37.8659, lng: -0.7920 },
-  { name: 'PC Pilar', cat: 'Bazar', zone: 'CENTRO', lat: 37.8647, lng: -0.7933 },
-  { name: 'Muebles Pinar', cat: 'Inmobiliaria', zone: 'CAMPOVERDE', lat: 37.8942, lng: -0.8415 },
-  { name: 'Zapatería Paso', cat: 'Moda', zone: 'CENTRO', lat: 37.8660, lng: -0.7931 },
-  { name: 'Farmacia Lda. Maria', cat: 'Farmacia', zone: 'CENTRO', lat: 37.8660, lng: -0.7920 },
-  { name: 'Farmacia Torre', cat: 'Farmacia', zone: 'LA_TORRE', lat: 37.8600, lng: -0.7820 },
-  { name: 'Supermercado Mercadona', cat: 'Supermercado', zone: 'CENTRO', lat: 37.8610, lng: -0.7950 },
-  { name: 'Bazar El Mojón', cat: 'Bazar', zone: 'EL_MOJON', lat: 37.8520, lng: -0.7840 },
-  { name: 'Taller Mecánico PH', cat: 'Bazar', zone: 'CENTRO', lat: 37.8680, lng: -0.7960 },
-  { name: 'Tienda de Pesca', cat: 'Bazar', zone: 'LA_TORRE', lat: 37.8640, lng: -0.7850 },
-  { name: 'InmoTorre', cat: 'Inmobiliaria', zone: 'LA_TORRE', lat: 37.8650, lng: -0.7830 },
-  { name: 'Peluquería Masculina', cat: 'Peluquería', zone: 'CENTRO', lat: 37.8657, lng: -0.7923 },
-  { name: 'Perfumería Aroma', cat: 'Moda', zone: 'CENTRO', lat: 37.8661, lng: -0.7929 },
-  { name: 'Papelería Pilar', cat: 'Bazar', zone: 'CENTRO', lat: 37.8654, lng: -0.7932 },
-  { name: 'Pescadería Paco', cat: 'Supermercado', zone: 'CENTRO', lat: 37.8659, lng: -0.7935 },
-  { name: 'Carnicería El Chuleton', cat: 'Supermercado', zone: 'CENTRO', lat: 37.8662, lng: -0.7938 },
   { name: 'Modas Paula', cat: 'Moda', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7615 },
-  { name: 'Librería Central', cat: 'Bazar', zone: 'CENTRO', lat: 37.8655, lng: -0.7925 },
-  { name: 'Herbolario Salud', cat: 'Farmacia', zone: 'CENTRO', lat: 37.8663, lng: -0.7921 },
+  { name: 'Tienda de Deportes Sport', cat: 'Moda', zone: 'CENTRO', lat: 37.8645, lng: -0.7934 },
   { name: 'Joyería Horadada', cat: 'Moda', zone: 'CENTRO', lat: 37.8658, lng: -0.7926 },
-  { name: 'Tienda de Deportes', cat: 'Moda', zone: 'CENTRO', lat: 37.8645, lng: -0.7934 },
-  { name: 'Viveros PH', cat: 'Bazar', zone: 'CAMPOVERDE', lat: 37.8930, lng: -0.8420 },
-  { name: 'InmoCampoverde', cat: 'Inmobiliaria', zone: 'CAMPOVERDE', lat: 37.8945, lng: -0.8410 },
-  { name: 'Bazar El Pinar', cat: 'Bazar', zone: 'CAMPOVERDE', lat: 37.8940, lng: -0.8405 },
-  { name: 'Supermercado SPAR', cat: 'Supermercado', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7600 },
-  { name: 'Farmacia Pinar', cat: 'Farmacia', zone: 'CAMPOVERDE', lat: 37.8940, lng: -0.8410 },
-  { name: 'Clínica Dental', cat: 'Farmacia', zone: 'CENTRO', lat: 37.8665, lng: -0.7925 },
-  { name: 'Podología Pilar', cat: 'Farmacia', zone: 'CENTRO', lat: 37.8650, lng: -0.7920 },
-  { name: 'Estética Avanzada', cat: 'Peluquería', zone: 'CENTRO', lat: 37.8658, lng: -0.7930 },
-  { name: 'Gimnasio Municipal', cat: 'Bazar', zone: 'CENTRO', lat: 37.8695, lng: -0.7975 },
-  { name: 'Papelería La Torre', cat: 'Bazar', zone: 'LA_TORRE', lat: 37.8642, lng: -0.7855 },
-  { name: 'Souvenirs Beach', cat: 'Bazar', zone: 'MIL_PALMERAS', lat: 37.8862, lng: -0.7605 },
-  { name: 'Inmo Palmeras', cat: 'Inmobiliaria', zone: 'MIL_PALMERAS', lat: 37.8868, lng: -0.7612 },
-  { name: 'Tienda de Juguetes', cat: 'Bazar', zone: 'CENTRO', lat: 37.8661, lng: -0.7936 },
-  { name: 'Ferretería Campoverde', cat: 'Ferretería', zone: 'CAMPOVERDE', lat: 37.8935, lng: -0.8425 },
-  { name: 'Lavandería Self', cat: 'Bazar', zone: 'CENTRO', lat: 37.8652, lng: -0.7940 },
-  { name: 'Pinturas Pilar', cat: 'Ferretería', zone: 'CENTRO', lat: 37.8640, lng: -0.7945 },
-  { name: 'Electro Hogar', cat: 'Bazar', zone: 'CENTRO', lat: 37.8658, lng: -0.7918 },
   { name: 'Modas Vintage', cat: 'Moda', zone: 'CENTRO', lat: 37.8666, lng: -0.7924 },
-  { name: 'Peluquería Kids', cat: 'Peluquería', zone: 'CENTRO', lat: 37.8653, lng: -0.7927 },
-  { name: 'Bazar Suerte', cat: 'Bazar', zone: 'LA_TORRE', lat: 37.8638, lng: -0.7842 },
-  { name: 'Inmobiliaria Beach', cat: 'Inmobiliaria', zone: 'EL_MOJON', lat: 37.8515, lng: -0.7845 },
-  { name: 'Muebles Jardín', cat: 'Inmobiliaria', zone: 'LA_TORRE', lat: 37.8625, lng: -0.7835 },
-  { name: 'Óptica Palmeras', cat: 'Óptica', zone: 'MIL_PALMERAS', lat: 37.8864, lng: -0.7608 },
-  { name: 'Regalos El Pilar', cat: 'Bazar', zone: 'CENTRO', lat: 37.8668, lng: -0.7932 },
-  { name: 'Estanco La Torre', cat: 'Bazar', zone: 'LA_TORRE', lat: 37.8646, lng: -0.7852 },
-  { name: 'Floristería Marina', cat: 'Bazar', zone: 'LA_TORRE', lat: 37.8630, lng: -0.7825 },
-  { name: 'Informática PH', cat: 'Bazar', zone: 'CENTRO', lat: 37.8642, lng: -0.7928 },
-  { name: 'Modas Mar', cat: 'Moda', zone: 'LA_TORRE', lat: 37.8652, lng: -0.7840 },
-  { name: 'Zapatería Elche', cat: 'Moda', zone: 'CENTRO', lat: 37.8663, lng: -0.7937 },
-  { name: 'Farmacia Mojón', cat: 'Farmacia', zone: 'EL_MOJON', lat: 37.8525, lng: -0.7838 },
-  { name: 'Pescadería Marina', cat: 'Supermercado', zone: 'LA_TORRE', lat: 37.8644, lng: -0.7858 },
-  { name: 'Carnicería Selecta', cat: 'Supermercado', zone: 'MIL_PALMERAS', lat: 37.8872, lng: -0.7618 },
-  { name: 'Bazar Central', cat: 'Bazar', zone: 'CENTRO', lat: 37.8657, lng: -0.7934 },
-  { name: 'Inmo Horadada', cat: 'Inmobiliaria', zone: 'CENTRO', lat: 37.8660, lng: -0.7940 }
+
+  // Motor
+  { name: 'Taller Mecánico El Tuercas', cat: 'Motor', zone: 'CENTRO', lat: 37.8680, lng: -0.7960 },
+  { name: 'Lavadero de Coches Splash', cat: 'Motor', zone: 'CENTRO', lat: 37.8690, lng: -0.7970 },
+  { name: 'Repuestos Auto PH', cat: 'Motor', zone: 'CENTRO', lat: 37.8675, lng: -0.7955 },
+
+  // Mascotas
+  { name: 'Clínica Veterinaria San Francisco', cat: 'Mascotas', zone: 'CENTRO', lat: 37.8650, lng: -0.7910 },
+  { name: 'Tienda de Animales Fauna', cat: 'Mascotas', zone: 'CENTRO', lat: 37.8645, lng: -0.7915 },
+  { name: 'Peluquería Canina Guau', cat: 'Mascotas', zone: 'LA_TORRE', lat: 37.8630, lng: -0.7840 },
+
+  // Gestiones profesionales y bancarias
+  { name: 'Gestoría Martinez', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8655, lng: -0.7930 },
+  { name: 'Banco Sabadell', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8660, lng: -0.7940 },
+  { name: 'CaixaBank', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8658, lng: -0.7938 },
+  { name: 'Inmobiliaria Pilar', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8660, lng: -0.7940 },
+  { name: 'Abogados Garcia & Asoc.', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8652, lng: -0.7935 },
+  { name: 'Seguros Mapfre', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8648, lng: -0.7930 },
+
+  // Educación
+  { name: 'Autoescuela Pilar', cat: 'Educación', zone: 'CENTRO', lat: 37.8640, lng: -0.7920 },
+  { name: 'Academia de Idiomas English', cat: 'Educación', zone: 'CENTRO', lat: 37.8635, lng: -0.7925 },
+  { name: 'Papelería y Librería Central', cat: 'Educación', zone: 'CENTRO', lat: 37.8655, lng: -0.7925 },
+
+  // Ocio y entretenimiento
+  { name: 'Gimnasio Municipal', cat: 'Ocio y entretenimiento', zone: 'CENTRO', lat: 37.8695, lng: -0.7975 },
+  { name: 'Cine de Verano (Temp)', cat: 'Ocio y entretenimiento', zone: 'LA_TORRE', lat: 37.8620, lng: -0.7850 },
+  { name: 'Tienda de Pesca Mar', cat: 'Ocio y entretenimiento', zone: 'LA_TORRE', lat: 37.8640, lng: -0.7850 },
+
+  // Servicios municipales y otros
+  { name: 'Correos', cat: 'Servicios municipales y otros servicios', zone: 'CENTRO', lat: 37.8670, lng: -0.7950 },
+  { name: 'Lavandería Self Service', cat: 'Servicios municipales y otros servicios', zone: 'CENTRO', lat: 37.8652, lng: -0.7940 }
 ];
 
 const SHOPPING_ITEMS: CensusItem[] = SHOP_DATA.map((shop, i) => ({
   id: generateId('shop', i),
   name: shop.name,
-  address: `Calle ${shop.name}, Pilar de la Horadada`,
+  address: `Calle ${shop.name} s/n, Pilar de la Horadada`,
   phone: `96535${1000 + i}`,
-  category: shop.cat,
+  category: shop.cat, // Mantiene la categoría exacta para el filtro
   zone: shop.zone as any,
-  description: `Tu tienda de confianza ${shop.name} en ${shop.zone}. Ofrecemos los mejores productos de ${shop.cat} con una atención personalizada y profesional. Ven a visitarnos y descubre la calidad del comercio local de Pilar de la Horadada.`,
+  description: `Negocio local especializado en ${shop.cat.toLowerCase()}. Ofrecemos calidad y servicio cercano en ${shop.zone}.`,
   rating: 4.5 + (i % 5) / 10,
-  reviewCount: 50 + i * 2,
+  reviewCount: 20 + i * 3,
   isOpen: true,
   hours: { weekdays: '09:00-14:00, 17:00-20:00', weekend: '09:00-14:00' },
   images: [getRealisticImage(shop.cat, i)],
   lat: shop.lat,
   lng: shop.lng,
-  promotion: undefined // Se eliminó la inyección automática
+  promotion: undefined 
 }));
 
 const DINING_DATA = [
-  { name: 'Mesón El Puerto', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8645, lng: -0.7850 },
-  { name: 'Restaurante Los Arcos', cat: 'Mediterráneo', zone: 'CENTRO', lat: 37.8655, lng: -0.7930 },
-  { name: 'Pizzería La Plaza', cat: 'Italiano', zone: 'CENTRO', lat: 37.8660, lng: -0.7925 },
-  { name: 'Chiringuito Pirata', cat: 'Chiringuito', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7605 },
-  { name: 'Bar Central', cat: 'Tapas', zone: 'CENTRO', lat: 37.8650, lng: -0.7935 },
-  { name: 'Asador El Toril', cat: 'Carnes', zone: 'CAMPOVERDE', lat: 37.8935, lng: -0.8420 },
-  { name: 'Marisquería La Lonja', cat: 'Pescados', zone: 'LA_TORRE', lat: 37.8640, lng: -0.7845 },
-  { name: 'Cafetería Sol', cat: 'Cafetería', zone: 'CENTRO', lat: 37.8658, lng: -0.7922 },
-  { name: 'Restaurante Asiático Gran China', cat: 'Internacional', zone: 'CENTRO', lat: 37.8648, lng: -0.7940 },
-  { name: 'Heladería Artesana', cat: 'Postres', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7610 },
-  { name: 'La Cabaña del Mar', cat: 'Restaurante', zone: 'EL_MOJON', lat: 37.8520, lng: -0.7842 },
-  { name: 'Burger Station', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8665, lng: -0.7938 },
-  { name: 'Tapería El Rincón', cat: 'Tapas', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7838 },
-  { name: 'Arrocería El Caldeo', cat: 'Arroces', zone: 'MIL_PALMERAS', lat: 37.8860, lng: -0.7615 },
-  { name: 'Gastrobar Fusión', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8652, lng: -0.7928 }
+  { name: 'Mesón El Puerto', cat: 'Hostelería y restauración', zone: 'LA_TORRE', lat: 37.8645, lng: -0.7850 },
+  { name: 'Restaurante Los Arcos', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8655, lng: -0.7930 },
+  { name: 'Pizzería La Plaza', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8660, lng: -0.7925 },
+  { name: 'Chiringuito Pirata', cat: 'Hostelería y restauración', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7605 },
+  { name: 'Bar Central', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8650, lng: -0.7935 },
+  { name: 'Asador El Toril', cat: 'Hostelería y restauración', zone: 'CAMPOVERDE', lat: 37.8935, lng: -0.8420 },
+  { name: 'Marisquería La Lonja', cat: 'Hostelería y restauración', zone: 'LA_TORRE', lat: 37.8640, lng: -0.7845 },
+  { name: 'Cafetería Sol', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8658, lng: -0.7922 },
+  { name: 'Restaurante Asiático Gran China', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8648, lng: -0.7940 },
+  { name: 'Heladería Artesana', cat: 'Hostelería y restauración', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7610 },
+  { name: 'La Cabaña del Mar', cat: 'Hostelería y restauración', zone: 'EL_MOJON', lat: 37.8520, lng: -0.7842 },
+  { name: 'Burger Station', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8665, lng: -0.7938 },
+  { name: 'Tapería El Rincón', cat: 'Hostelería y restauración', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7838 },
+  { name: 'Arrocería El Caldeo', cat: 'Hostelería y restauración', zone: 'MIL_PALMERAS', lat: 37.8860, lng: -0.7615 },
+  { name: 'Gastrobar Fusión', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8652, lng: -0.7928 },
+  { name: 'Chocolatería Valor', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8659, lng: -0.7929 },
+  { name: 'Bar La Esquina', cat: 'Hostelería y restauración', zone: 'CAMPOVERDE', lat: 37.8940, lng: -0.8410 },
+  { name: 'Restaurante Nostrussa', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8640, lng: -0.7930 }
 ];
 
 const DINING_ITEMS: CensusItem[] = DINING_DATA.map((dining, i) => ({
@@ -629,17 +643,17 @@ const DINING_ITEMS: CensusItem[] = DINING_DATA.map((dining, i) => ({
   phone: `96535${2000 + i}`,
   category: dining.cat,
   zone: dining.zone as any,
-  description: `Disfruta de la mejor gastronomía en ${dining.name}. Especialistas en ${dining.cat}, utilizamos productos frescos de la zona para ofrecerte una experiencia culinaria única en ${dining.zone}. Calidad y tradición mediterránea en cada plato.`,
+  description: `Disfruta de la mejor gastronomía en ${dining.name}. Especialistas en cocina local, utilizamos productos frescos de la zona para ofrecerte una experiencia culinaria única en ${dining.zone}.`,
   rating: 4.6 + (i % 4) / 10,
   reviewCount: 150 + i * 5,
   isOpen: true,
   priceRange: (i % 3 === 0) ? '€€€' : (i % 2 === 0) ? '€€' : '€',
   hours: { weekdays: '12:00-16:00, 19:30-23:30', weekend: '12:00-24:00' },
-  images: [getRealisticImage(dining.cat, i)],
+  images: [getRealisticImage('Restaurante', i)],
   lat: dining.lat,
   lng: dining.lng,
   featuredItems: ['Especialidad de la casa', 'Vino de la zona', 'Postre artesano'],
-  promotion: undefined // Se eliminó la inyección automática
+  promotion: undefined 
 }));
 
 export const COMMERCIAL_CENSUS: CensusCategory[] = [ 
