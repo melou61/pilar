@@ -1,5 +1,5 @@
 
-import { Event, CensusCategory, CensusItem, NewsItem } from './types';
+import { Event, CensusCategory, CensusItem, NewsItem, ForumPost } from './types';
 
 // --- TEXTOS LEGALES MULTI-IDIOMA ---
 
@@ -250,49 +250,49 @@ export const PRIVACY_POLICY: Record<string, string> = {
   it: `
 <div class="space-y-6">
   <p class="text-sm text-gray-500">Ultimo aggiornamento: 25 gennaio 2026</p>
-  <p>In Pilar Vivo prendiamo molto sul serio la privacy dei nostri utenti. Questa Informativa sulla Privacy descrive come raccogliamo e proteggiamo i tuoi dati.</p>
-  <h3 class="text-lg font-bold text-gray-900">1. Titolare del Trattamento</h3>
-  <p><strong>Pilar Vivo / Municipio di Pilar de la Horadada</strong><br/>
-  Indirizzo: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spagna<br/>
-  Email: ayto@pilardelahoradada.org</p>
-  <h3 class="text-lg font-bold text-gray-900">2. Informazioni Raccolte</h3>
-  <p>Raccogliamo dati di registrazione (nome, email), utilizzo della piattaforma, posizione approssimativa e dati tecnici.</p>
-  <h3 class="text-lg font-bold text-gray-900">3. Uso delle Informazioni</h3>
-  <p>Utilizziamo i tuoi dati per fornire il servizio e gestire il tuo account.</p>
-  <h3 class="text-lg font-bold text-gray-900">4. Condivisione delle Informazioni</h3>
-  <p>Non vendiamo i tuoi dati. Condividiamo informazioni con fornitori di servizi necessari (hosting, analisi).</p>
-  <h3 class="text-lg font-bold text-gray-900">5. Cookie</h3>
-  <p>Utilizziamo cookie essenziali, di prestazione e funzionali.</p>
-  <h3 class="text-lg font-bold text-gray-900">6. Sicurezza</h3>
-  <p>Implementamos misure di sicurezza tecniche per proteggere i tuoi dati.</p>
-  <h3 class="text-lg font-bold text-gray-900">7. I Tuoi Diritti</h3>
-  <p>Hai diritto di accesso, rettifica e cancellazione dei tuoi dati. Contattaci a ayto@pilardelahoradada.org.</p>
+  <p>Benvenuti su Pilar Vivo. Accedendo e utilizzando la nostra piattaforma web, accetti di rispettare i seguenti termini e condizioni.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Accettazione</h3>
+  <p>Registrandoti o utilizzando Pilar Vivo, accetti questi Termini. Se non sei d'accordo, non utilizzare la piattaforma.</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Servizio</h3>
+  <p>Pilar Vivo è una piattaforma digitale per la gestione delle informazioni locali.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Account</h3>
+  <p>Sei responsabile della riservatezza del tuo account e di tutte le attività svolte con esso.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Uso Accettabile</h3>
+  <p>Ti impegni a utilizzare la piattaforma legalmente e a non danneggiare il servizio o terzi.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Proprietà Intellettuale</h3>
+  <p>Il contenuto è di proprietà di Pilar Vivo o dei suoi licenziatari. È vietata la copia senza autorizzazione.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Privacy</h3>
+  <p>La tua privacy è importante. Consulta la nostra Informativa sulla Privacy.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Responsabilità</h3>
+  <p>Il servizio è fornito "così com'è". Non garantiamo la disponibilità ininterrotta.</p>
   <h3 class="text-lg font-bold text-gray-900">8. Contatto</h3>
-  <p>Per domande: ayto@pilardelahoradada.org. AEPD: www.aepd.es</p>
+  <p><strong>Municipio di Pilar de la Horadada</strong><br/>
+  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spagna<br/>
+  Email: ayto@pilardelahoradada.org</p>
 </div>
 `,
   pt: `
 <div class="space-y-6">
   <p class="text-sm text-gray-500">Última atualização: 25 de janeiro de 2026</p>
-  <p>No Pilar Vivo, levamos muito a sério a privacidade dos nossos usuários. Esta Política de Privacidade descreve como coletamos e protegemos seus dados.</p>
-  <h3 class="text-lg font-bold text-gray-900">1. Responsável pelo Tratamento</h3>
-  <p><strong>Pilar Vivo / Câmara Municipal Pilar de la Horadada</strong><br/>
-  Endereço: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Espanha<br/>
-  Email: ayto@pilardelahoradada.org</p>
-  <h3 class="text-lg font-bold text-gray-900">2. Informações Coletadas</h3>
-  <p>Coletamos dados de registro (nome, email), uso da plataforma, localização aproximada e dados técnicos.</p>
-  <h3 class="text-lg font-bold text-gray-900">3. Uso das Informações</h3>
-  <p>Usamos seus dados para fornecer o serviço e gerenciar sua conta.</p>
-  <h3 class="text-lg font-bold text-gray-900">4. Compartilhamento de Informações</h3>
-  <p>Não vendemos seus dados. Compartilhamos informações com provedores de serviços necessários (hospedagem, análise).</p>
-  <h3 class="text-lg font-bold text-gray-900">5. Cookies</h3>
-  <p>Utilizamos cookies essenciais, de desempenho e funcionais.</p>
-  <h3 class="text-lg font-bold text-gray-900">6. Segurança</h3>
-  <p>Implementamos medidas de segurança técnicas para proteger seus dados.</p>
-  <h3 class="text-lg font-bold text-gray-900">7. Seus Direitos</h3>
-  <p>Você tem o direito de acessar, retificar e excluir seus dados. Contate-nos em ayto@pilardelahoradada.org.</p>
+  <p>Bem-vindo ao Pilar Vivo. Ao acessar e usar nossa plataforma web, você concorda em cumprir os seguintes termos e condições.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Aceitação</h3>
+  <p>Ao se registrar ou usar o Pilar Vivo, você concorda com estes Termos. Se não concordar, não use a plataforma.</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Serviço</h3>
+  <p>Pilar Vivo é uma plataforma digital para gestão de informações locais.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Conta</h3>
+  <p>Você é responsável por manter a confidencialidade da sua conta e por todas as atividades nela.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Uso Aceitável</h3>
+  <p>Você concorda em usar a plataforma legalmente e não prejudicar o serviço ou terceiros.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Propriedade Intelectual</h3>
+  <p>O conteúdo é propriedade do Pilar Vivo ou de seus licenciadores. A cópia sem autorização é proibida.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Privacidade</h3>
+  <p>Sua privacidade é importante. Consulte nossa Política de Privacidade.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Responsabilidade</h3>
+  <p>O serviço é fornecido "como está". Não garantimos disponibilidade ininterrupta.</p>
   <h3 class="text-lg font-bold text-gray-900">8. Contato</h3>
-  <p>Para dúvidas: ayto@pilardelahoradada.org. AEPD: www.aepd.es</p>
+  <p><strong>Câmara Municipal Pilar de la Horadada</strong><br/>
+  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Espanha<br/>
+  Email: ayto@pilardelahoradada.org</p>
 </div>
 `
 };
@@ -302,6 +302,13 @@ export const MOCK_NEWS: NewsItem[] = [
   { id: 'n2', source: 'Funeraria PH', sourceType: 'official', icon: 'flower', date: 'Hoy', title: 'D. Antonio García Martínez', content: 'Funeral mañana 11:00h en la Parroquia.', category: 'DIFUNTOS', url: '#' },
   { id: 'n3', source: 'Empleo PH', sourceType: 'official', icon: 'briefcase', date: 'Ayer', title: 'Oferta: Camareros Mil Palmeras', content: 'Se busca personal para temporada de verano.', category: 'TRABAJO', url: '#' },
   { id: 'n4', source: 'Policía Local', sourceType: 'official', icon: 'shield', date: 'Hoy', title: 'Corte Calle Mayor', content: 'Obras de mejora hasta el viernes.', category: 'GENERAL', url: '#' }
+];
+
+export const MOCK_FORUM_POSTS: ForumPost[] = [
+  { id: 'p1', user: 'Antonio G.', avatar: 'AG', category: 'Recomendaciones', title: '¿Mejor sitio para arroz en La Torre?', content: 'Estamos de visita y buscamos algo auténtico frente al mar. ¡Gracias!', likes: 12, replies: 5, time: 'Hace 2h', badge: 'Vecino Activo' },
+  { id: 'p2', user: 'Marta PH', avatar: 'M', category: 'General', title: 'Aviso: Corte de agua en Calle Mayor', content: 'He visto operarios trabajando cerca de la plaza, por si a alguien le sirve.', likes: 8, replies: 2, time: 'Hace 4h' },
+  { id: 'p3', user: 'Carlos L.', avatar: 'CL', category: 'Mascotas', title: 'Perro encontrado en Higuericas', content: 'Es un podenco joven con collar rojo pero sin chapa. Lo tengo yo ahora mismo.', likes: 45, replies: 12, time: 'Hace 10h', badge: 'Protector' },
+  { id: 'p4', user: 'User92', avatar: 'U', category: 'Mercadillo', title: 'Vendo tabla de surf casi nueva', content: 'Ideal para principiantes. Entrega en mano en Mil Palmeras.', likes: 3, replies: 0, time: 'Ayer' },
 ];
 
 export const MOCK_EVENTS: Event[] = [

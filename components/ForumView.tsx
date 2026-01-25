@@ -1,30 +1,11 @@
 
 import React, { useState } from 'react';
 import { MessageSquare, Heart, Share2, Plus, Filter, User, Clock, ArrowRight, MessageCircle } from './Icons';
-import { Ad, ViewState } from '../types';
+import { Ad, ViewState, ForumPost } from '../types';
+import { MOCK_FORUM_POSTS } from '../data';
 import { AdSpot } from './AdSpot';
 import { Header } from './Header';
 import { Footer } from './Footer';
-
-interface ForumPost {
-  id: string;
-  user: string;
-  avatar: string;
-  category: string;
-  title: string;
-  content: string;
-  likes: number;
-  replies: number;
-  time: string;
-  badge?: string;
-}
-
-const MOCK_POSTS: ForumPost[] = [
-  { id: 'p1', user: 'Antonio G.', avatar: 'AG', category: 'Recomendaciones', title: '¿Mejor sitio para arroz en La Torre?', content: 'Estamos de visita y buscamos algo auténtico frente al mar. ¡Gracias!', likes: 12, replies: 5, time: 'Hace 2h', badge: 'Vecino Activo' },
-  { id: 'p2', user: 'Marta PH', avatar: 'M', category: 'General', title: 'Aviso: Corte de agua en Calle Mayor', content: 'He visto operarios trabajando cerca de la plaza, por si a alguien le sirve.', likes: 8, replies: 2, time: 'Hace 4h' },
-  { id: 'p3', user: 'Carlos L.', avatar: 'CL', category: 'Mascotas', title: 'Perro encontrado en Higuericas', content: 'Es un podenco joven con collar rojo pero sin chapa. Lo tengo yo ahora mismo.', likes: 45, replies: 12, time: 'Hace 10h', badge: 'Protector' },
-  { id: 'p4', user: 'User92', avatar: 'U', category: 'Mercadillo', title: 'Vendo tabla de surf casi nueva', content: 'Ideal para principiantes. Entrega en mano en Mil Palmeras.', likes: 3, replies: 0, time: 'Ayer' },
-];
 
 interface ForumViewProps {
   t: any;
@@ -34,7 +15,7 @@ interface ForumViewProps {
 
 export const ForumView: React.FC<ForumViewProps> = ({ t, ads, headerProps }) => {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [posts, setPosts] = useState(MOCK_POSTS);
+  const [posts, setPosts] = useState<ForumPost[]>(MOCK_FORUM_POSTS);
 
   const filteredPosts = activeCategory === 'all' 
     ? posts 

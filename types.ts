@@ -157,13 +157,26 @@ export interface NewsItem {
   isSyncing?: boolean;
 }
 
+export interface ForumPost {
+  id: string;
+  user: string;
+  avatar: string;
+  category: string;
+  title: string;
+  content: string;
+  likes: number;
+  replies: number;
+  time: string;
+  badge?: string;
+}
+
 export interface CensusCategory {
   id: string;
   title: string;
   items: CensusItem[];
 }
 
-export type AdminRole = 'SUPER_ADMIN' | 'ADMIN_GENERAL' | 'ADMIN_CULTURE' | 'ADMIN_SPORTS' | 'ADMIN_COMMERCE';
+export type AdminRole = 'SUPER_ADMIN' | 'ADMIN_GENERAL' | 'ADMIN_CULTURE' | 'ADMIN_SPORTS' | 'ADMIN_COMMERCE' | 'EDITOR_CONTENT' | 'EDITOR_NEWS' | 'EDITOR_FORUM';
 
 export interface AdminUser {
   id: string;

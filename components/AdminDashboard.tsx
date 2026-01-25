@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, ViewState, LocalizedContent } from '../types';
+import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, ViewState, LocalizedContent, ForumPost } from '../types';
 import { 
   Trash2, Plus, Calendar, Image as ImageIcon, Save, X, 
   Zap, Tag, Edit3, ShoppingBag, Globe, MapPin, 
@@ -8,9 +8,9 @@ import {
   Facebook, Instagram, Twitter, Video, Eye,
   Users, UserPlus, Shield, Lock, Settings2, Phone, Clock,
   MessageCircle, Rss, Link as LinkIcon, RefreshCw, ToggleLeft, ToggleRight, CheckCircle,
-  BarChart3, MousePointer2, Layout, Filter, ArrowRight, Signal, Cpu, Wifi, Battery, Minus
+  BarChart3, MousePointer2, Layout, Filter, ArrowRight, Signal, Cpu, Wifi, Battery, Minus, MessageSquare
 } from './Icons';
-import { MOCK_NEWS } from '../data';
+import { MOCK_NEWS, MOCK_FORUM_POSTS } from '../data';
 
 interface AdminDashboardProps {
   ads: Ad[];
@@ -76,11 +76,14 @@ const LANGUAGES_CONFIG = ['es', 'en', 'fr', 'de', 'it'];
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
     ads, setAds, events, setEvents, businesses, setBusinesses, admins, setAdmins, onLogout, currentUserRole
 }) => {
-  const [activeTab, setActiveTab] = useState<'businesses' | 'news' | 'ads' | 'beacons' | 'team'>('businesses');
+  const [activeTab, setActiveTab] = useState<'businesses' | 'news' | 'ads' | 'beacons' | 'team' | 'forum'>('businesses');
   
   // Estado para Sync Sources
   const [syncSources, setSyncSources] = useState<SyncSource[]>(MOCK_SOURCES);
   const [currentSource, setCurrentSource] = useState<Partial<SyncSource>>({});
+
+  // Estado para Forum
+  const [forumPosts, setForumPosts] = useState<ForumPost[]>(MOCK_FORUM_POSTS);
 
   // Estados de Edición Generales
   const [editMode, setEditMode] = useState<'none' | 'biz' | 'news' | 'ad' | 'beacon' | 'admin' | 'source'>('none');
@@ -100,10 +103,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const canAccessTab = (tab: string) => {
     if (isSuperAdmin) return true;
     switch (currentUserRole) {
-      case 'ADMIN_GENERAL': return ['businesses', 'news', 'ads'].includes(tab);
+      case 'ADMIN_GENERAL': return ['businesses', 'news', 'ads', 'forum'].includes(tab);
       case 'ADMIN_COMMERCE': return ['businesses', 'beacons'].includes(tab);
       case 'ADMIN_CULTURE': return ['news', 'events'].includes(tab);
       case 'ADMIN_SPORTS': return ['news'].includes(tab);
+      case 'EDITOR_CONTENT': return ['news', 'forum'].includes(tab);
+      case 'EDITOR_NEWS': return ['news'].includes(tab);
+      case 'EDITOR_FORUM': return ['forum'].includes(tab);
       default: return false;
     }
   };
@@ -114,16 +120,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       case 'ADMIN_GENERAL': return 'bg-blue-100 text-blue-700 border-blue-200';
       case 'ADMIN_COMMERCE': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
       case 'ADMIN_CULTURE': return 'bg-amber-100 text-amber-700 border-amber-200';
+      case 'EDITOR_CONTENT': return 'bg-indigo-100 text-indigo-700 border-indigo-200';
+      case 'EDITOR_NEWS': return 'bg-teal-100 text-teal-700 border-teal-200';
+      case 'EDITOR_FORUM': return 'bg-pink-100 text-pink-700 border-pink-200';
       default: return 'bg-slate-100 text-slate-700 border-slate-200';
     }
   };
 
   const roleLabels: Record<AdminRole, string> = {
-    SUPER_ADMIN: 'Super Administrador (Acceso Total)',
-    ADMIN_GENERAL: 'Administrador General (Contenido y Censo)',
-    ADMIN_COMMERCE: 'Administrador de Comercio (Tiendas y Beacons)',
-    ADMIN_CULTURE: 'Administrador de Cultura (Noticias y Eventos)',
-    ADMIN_SPORTS: 'Administrador de Deportes (Noticias Deportivas)'
+    SUPER_ADMIN: 'Super Administrador (Total)',
+    ADMIN_GENERAL: 'Administrador General',
+    ADMIN_COMMERCE: 'Admin Comercio & Beacons',
+    ADMIN_CULTURE: 'Admin Cultura & Eventos',
+    ADMIN_SPORTS: 'Admin Deportes',
+    EDITOR_CONTENT: 'Editor General (Noticias + Foro)',
+    EDITOR_NEWS: 'Editor de Noticias',
+    EDITOR_FORUM: 'Administrador de Foros'
   };
 
   // --- HANDLERS COMERCIOS ---
@@ -319,6 +331,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setEditMode('none');
   };
 
+  // --- HANDLERS FORUM ---
+  const deletePost = (id: string) => {
+    if (window.confirm('¿Eliminar esta publicación del foro permanentemente?')) {
+      setForumPosts(prev => prev.filter(p => p.id !== id));
+    }
+  };
+
   // Listas para desplegables
   const categories = ['Alimentación', 'Moda', 'Hogar', 'Salud y belleza', 'Hostelería y restauración', 'Motor', 'Servicios municipales y otros servicios'];
   const zones = ['CENTRO', 'LA_TORRE', 'MIL_PALMERAS', 'CAMPOVERDE', 'EL_MOJON'];
@@ -349,6 +368,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {[
             { id: 'businesses', label: 'Censo Comercial', icon: ShoppingBag },
             { id: 'news', label: 'Sync News', icon: Globe },
+            { id: 'forum', label: 'Moderar Foro', icon: MessageSquare },
             { id: 'ads', label: 'Publicidad Pro', icon: Tag },
             { id: 'beacons', label: 'Red Beacons', icon: Radar },
             { id: 'team', label: 'Equipo PH', icon: Users, restricted: true }
@@ -945,12 +965,51 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                     <div className="space-y-4">
                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nivel de Privilegio</label>
-                       <select className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" value={currentAdmin.role} onChange={e => setCurrentAdmin({...currentAdmin, role: e.target.value as AdminRole})}>
+                       <select 
+                          className="w-full p-5 bg-slate-50 rounded-2xl font-bold border outline-none focus:ring-2 focus:ring-blue-500/20" 
+                          value={['EDITOR_CONTENT', 'EDITOR_NEWS', 'EDITOR_FORUM'].includes(currentAdmin.role!) ? 'EDITOR' : currentAdmin.role} 
+                          onChange={(e) => {
+                             if (e.target.value === 'EDITOR') {
+                                // Default to CONTENT (All) when switching to EDITOR
+                                setCurrentAdmin({...currentAdmin, role: 'EDITOR_CONTENT'});
+                             } else {
+                                setCurrentAdmin({...currentAdmin, role: e.target.value as AdminRole});
+                             }
+                          }}
+                       >
                           <option value="ADMIN_GENERAL">Administrador General</option>
                           <option value="ADMIN_COMMERCE">Administrador de Comercio</option>
                           <option value="ADMIN_CULTURE">Administrador de Cultura</option>
+                          <option value="EDITOR">Editor de Contenidos / Moderador</option>
                           <option value="SUPER_ADMIN">Super Administrador</option>
                        </select>
+
+                       {/* Selector de Alcance para Editores */}
+                       {['EDITOR_CONTENT', 'EDITOR_NEWS', 'EDITOR_FORUM'].includes(currentAdmin.role!) && (
+                          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 animate-in slide-in-from-top-2">
+                             <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-3">Alcance de Permisos</label>
+                             <div className="flex gap-2">
+                                <button 
+                                   onClick={() => setCurrentAdmin({...currentAdmin, role: 'EDITOR_NEWS'})}
+                                   className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentAdmin.role === 'EDITOR_NEWS' ? 'bg-teal-500 text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200 hover:bg-slate-100'}`}
+                                >
+                                   Solo Noticias
+                                </button>
+                                <button 
+                                   onClick={() => setCurrentAdmin({...currentAdmin, role: 'EDITOR_FORUM'})}
+                                   className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentAdmin.role === 'EDITOR_FORUM' ? 'bg-pink-500 text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200 hover:bg-slate-100'}`}
+                                >
+                                   Solo Foro
+                                </button>
+                                <button 
+                                   onClick={() => setCurrentAdmin({...currentAdmin, role: 'EDITOR_CONTENT'})}
+                                   className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentAdmin.role === 'EDITOR_CONTENT' ? 'bg-indigo-500 text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200 hover:bg-slate-100'}`}
+                                >
+                                   Todo (Full)
+                                </button>
+                             </div>
+                          </div>
+                       )}
                     </div>
                   </div>
                   <button onClick={saveAdmin} className="w-full mt-10 py-6 bg-[#0f172a] text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 hover:bg-black transition-all">
@@ -988,7 +1047,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         </div>
                         <div className="hidden md:block">
                            <span className={`px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest border ${getRoleBadgeColor(admin.role)}`}>
-                              {admin.role.replace('_', ' ')}
+                              {roleLabels[admin.role] || admin.role.replace('_', ' ')}
                            </span>
                         </div>
                         <div className="flex gap-2">
@@ -1003,6 +1062,56 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </>
               )}
             </div>
+          )}
+
+          {/* 4. SECCIÓN FORUM (NUEVA) */}
+          {activeTab === 'forum' && canAccessTab('forum') && (
+             <div className="space-y-6">
+                <div className="flex flex-col md:flex-row justify-between items-center bg-white p-8 rounded-[35px] shadow-xl border border-slate-100 gap-4">
+                    <div className="flex items-center gap-5">
+                       <div className="w-14 h-14 bg-pink-500 rounded-2xl flex items-center justify-center shadow-lg shadow-pink-200 text-white"><MessageSquare size={28}/></div>
+                       <div>
+                          <h2 className="text-xl font-black tracking-tighter uppercase leading-none">Moderación de Foro</h2>
+                          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-2">{forumPosts.length} Publicaciones Activas</p>
+                       </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                   {forumPosts.map(post => (
+                      <div key={post.id} className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-sm flex items-start gap-6 group hover:shadow-md transition-all">
+                         <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center shrink-0 font-black text-slate-400 text-xs uppercase">
+                            {post.avatar}
+                         </div>
+                         <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-2">
+                               <span className="bg-slate-100 text-slate-500 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest">{post.category}</span>
+                               <span className="text-[10px] font-bold text-slate-300">{post.time}</span>
+                            </div>
+                            <h4 className="font-black text-slate-900 text-sm leading-tight mb-2">{post.title}</h4>
+                            <p className="text-xs text-slate-500 line-clamp-2">{post.content}</p>
+                            <div className="mt-4 flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                               <span>Por: {post.user}</span>
+                               <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
+                               <span>{post.replies} Respuestas</span>
+                            </div>
+                         </div>
+                         <button 
+                            onClick={() => deletePost(post.id)}
+                            className="bg-red-50 text-red-500 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all self-center"
+                            title="Eliminar Publicación"
+                         >
+                            <Trash2 size={18} />
+                         </button>
+                      </div>
+                   ))}
+                   {forumPosts.length === 0 && (
+                      <div className="text-center py-20 bg-white rounded-[30px] border border-dashed border-gray-200 text-gray-400 text-sm font-bold uppercase tracking-widest">
+                         No hay publicaciones para moderar
+                      </div>
+                   )}
+                </div>
+             </div>
           )}
 
           {/* 2. SECCIÓN COMERCIOS */}
