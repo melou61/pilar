@@ -52,6 +52,8 @@ export interface Ad {
   endDate: string;   
   isActive: boolean;
   category?: 'General' | 'Commerce' | 'Tourism';
+  impressions?: number;
+  clicks?: number;
 }
 
 export interface Event {

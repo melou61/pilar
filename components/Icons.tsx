@@ -113,7 +113,12 @@ import {
   Maximize,
   Ruler,
   // Added Lock icon for AdminDashboard
-  Lock
+  Lock,
+  RefreshCw,
+  ToggleLeft,
+  ToggleRight,
+  CheckCircle,
+  Layout
 } from 'lucide-react';
 
 export {
@@ -230,6 +235,10 @@ export {
   Upload,
   Maximize,
   Ruler,
-  // Added Lock icon to exports
-  Lock
+  Lock,
+  RefreshCw,
+  ToggleLeft,
+  ToggleRight,
+  CheckCircle,
+  Layout
 };

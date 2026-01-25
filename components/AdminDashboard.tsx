@@ -1,13 +1,14 @@
 
-import React, { useState, useMemo } from 'react';
-import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, NewsCategory, ViewState } from '../types';
+import React, { useState } from 'react';
+import { Ad, Event, AdminUser, AdminRole, Promotion, CensusItem, NewsItem, ViewState } from '../types';
 import { 
-  Trash2, Plus, Calendar, Image as ImageIcon, Save, X, LogOut, 
+  Trash2, Plus, Calendar, Image as ImageIcon, Save, X, 
   Zap, Tag, Edit3, ShoppingBag, Globe, MapPin, 
-  Radio, Clock, Check, Phone, Filter,
-  ShieldCheck, TrendingUp, Newspaper, Radar, AlertCircle, Share2,
-  Facebook, Instagram, Twitter, Video, Eye, MousePointer2, Activity, BarChart3,
-  Battery, Wifi, Settings2, Signal, Cpu, Layers, Users, UserPlus, Shield, Lock, ChevronRight
+  Radar, ShieldCheck, Newspaper,
+  Facebook, Instagram, Twitter, Video, Eye,
+  Users, UserPlus, Shield, Lock, Settings2, Phone, Clock,
+  MessageCircle, Rss, Link as LinkIcon, RefreshCw, ToggleLeft, ToggleRight, CheckCircle,
+  BarChart3, MousePointer2, Layout, Filter, ArrowRight
 } from './Icons';
 import { MOCK_NEWS } from '../data';
 
@@ -24,24 +25,68 @@ interface AdminDashboardProps {
   currentUserRole: AdminRole;
 }
 
+// Tipos locales para Sync Sources
+type SyncPlatform = 'FACEBOOK' | 'INSTAGRAM' | 'TWITTER' | 'RSS' | 'WHATSAPP' | 'TELEGRAM';
+
+interface SyncSource {
+  id: string;
+  name: string;
+  platform: SyncPlatform;
+  status: 'ACTIVE' | 'INACTIVE';
+  url: string;
+  apiKey?: string;
+  frequency: number; // minutos
+  lastSync: string;
+}
+
+const MOCK_SOURCES: SyncSource[] = [
+  { id: 's1', name: 'Ayuntamiento Facebook', platform: 'FACEBOOK', status: 'ACTIVE', url: 'https://facebook.com/pilardelahoradada', frequency: 60, lastSync: 'Hace 5 min' },
+  { id: 's2', name: 'Turismo Instagram', platform: 'INSTAGRAM', status: 'ACTIVE', url: 'https://instagram.com/visitpilar', frequency: 120, lastSync: 'Hace 1 hora' },
+  { id: 's3', name: 'Policía Local Alertas', platform: 'TWITTER', status: 'ACTIVE', url: 'https://twitter.com/policiapilar', frequency: 15, lastSync: 'Hace 2 min' },
+  { id: 's4', name: 'Bando WhatsApp Vecinos', platform: 'WHATSAPP', status: 'INACTIVE', url: 'chat.whatsapp.com/...', frequency: 240, lastSync: 'Ayer' }
+];
+
+// Mapa de traducción para las Vistas (Páginas)
+const viewStateLabels: Record<string, string> = {
+  HOME: 'Inicio',
+  NEWS: 'Noticias',
+  BEACHES: 'Playas',
+  SIGHTSEEING: 'Patrimonio',
+  ACTIVITIES: 'Experiencias',
+  DINING: 'Gastronomía',
+  SHOPPING: 'Tiendas',
+  HEALTH: 'Salud',
+  SERVICES: 'Servicios',
+  EVENTS: 'Eventos',
+  FORUM: 'Foro',
+  CITIZEN_SERVICES: 'Sede Electrónica',
+  MAP: 'Mapa',
+  CONTACT: 'Contacto',
+  ADMIN: 'Admin',
+  AI_CHAT: 'Chat IA',
+  PROFILE: 'Perfil',
+  SEARCH: 'Buscador',
+  POSTCARD: 'Postales',
+  LENS: 'PH Lens',
+  SIDEBAR: 'Menú Lateral'
+};
+
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
     ads, setAds, events, setEvents, businesses, setBusinesses, admins, setAdmins, onLogout, currentUserRole
 }) => {
   const [activeTab, setActiveTab] = useState<'businesses' | 'news' | 'ads' | 'beacons' | 'team'>('businesses');
-  const [newsList, setNewsList] = useState<NewsItem[]>(MOCK_NEWS);
   
-  // Estados de Sincronización
-  const [syncSocials, setSyncSocials] = useState({ facebook: true, instagram: true, tiktok: true, twitter: false });
+  // Estado para Sync Sources
+  const [syncSources, setSyncSources] = useState<SyncSource[]>(MOCK_SOURCES);
+  const [currentSource, setCurrentSource] = useState<Partial<SyncSource>>({});
 
   // Estados de Edición Generales
-  const [editMode, setEditMode] = useState<'none' | 'biz' | 'news' | 'ad' | 'beacon' | 'admin'>('none');
+  const [editMode, setEditMode] = useState<'none' | 'biz' | 'news' | 'ad' | 'beacon' | 'admin' | 'source'>('none');
   
   // Formularios
   const [currentBiz, setCurrentBiz] = useState<Partial<CensusItem>>({});
-  const [currentNews, setCurrentNews] = useState<Partial<NewsItem>>({});
-  const [currentAd, setCurrentAd] = useState<Partial<Ad>>({});
-  const [currentBeacon, setCurrentBeacon] = useState<{bizId: string, promo: Partial<Promotion & { cooldownMinutes?: number } >}>({bizId: '', promo: {}});
   const [currentAdmin, setCurrentAdmin] = useState<Partial<AdminUser>>({});
+  const [currentAd, setCurrentAd] = useState<Partial<Ad>>({});
 
   // Lógica de Permisos por Rol (RBAC)
   const isSuperAdmin = currentUserRole === 'SUPER_ADMIN';
@@ -75,44 +120,105 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     ADMIN_SPORTS: 'Administrador de Deportes (Noticias Deportivas)'
   };
 
-  // --- HANDLERS ---
+  // --- HANDLERS COMERCIOS ---
   const saveBiz = () => {
     const item = {
       ...currentBiz,
       id: currentBiz.id || `biz-${Date.now()}`,
-      images: currentBiz.images || ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80'],
-      hours: { weekdays: '09:00-14:00', weekend: 'Cerrado' },
-      rating: 5.0,
-      reviewCount: 0
+      rating: currentBiz.rating || 5.0,
+      reviewCount: currentBiz.reviewCount || 0,
+      images: currentBiz.images && currentBiz.images.length > 0 ? currentBiz.images : ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800'],
+      hours: currentBiz.hours || { weekdays: '09:00 - 14:00', weekend: 'Cerrado' }
     } as CensusItem;
-    if (currentBiz.id) setBusinesses(prev => prev.map(b => b.id === item.id ? item : b));
-    else setBusinesses(prev => [item, ...prev]);
+
+    if (currentBiz.id) {
+      setBusinesses(prev => prev.map(b => b.id === item.id ? item : b));
+    } else {
+      setBusinesses(prev => [item, ...prev]);
+    }
     setEditMode('none');
   };
 
-  const saveNews = () => {
+  const deleteBiz = (id: string) => {
+    if (window.confirm('¿Estás seguro de eliminar este comercio del censo?')) {
+      setBusinesses(prev => prev.filter(b => b.id !== id));
+      setEditMode('none');
+    }
+  };
+
+  // --- HANDLERS SYNC SOURCES ---
+  const toggleSourceStatus = (id: string) => {
+    setSyncSources(prev => prev.map(s => s.id === id ? { ...s, status: s.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE' } : s));
+  };
+
+  const saveSource = () => {
     const item = {
-      ...currentNews,
-      id: currentNews.id || `news-${Date.now()}`,
-      source: 'Ayuntamiento PH', sourceType: 'official', date: 'Ahora', icon: 'megaphone', url: '#'
-    } as NewsItem;
-    if (currentNews.id) setNewsList(prev => prev.map(n => n.id === item.id ? item : n));
-    else setNewsList(prev => [item, ...prev]);
+      ...currentSource,
+      id: currentSource.id || `sync-${Date.now()}`,
+      lastSync: currentSource.lastSync || 'Pendiente',
+      status: currentSource.status || 'ACTIVE'
+    } as SyncSource;
+
+    if (currentSource.id) {
+      setSyncSources(prev => prev.map(s => s.id === item.id ? item : s));
+    } else {
+      setSyncSources(prev => [...prev, item]);
+    }
     setEditMode('none');
   };
 
+  const deleteSource = (id: string) => {
+    if (window.confirm('¿Eliminar esta fuente de sincronización?')) {
+      setSyncSources(prev => prev.filter(s => s.id !== id));
+      setEditMode('none');
+    }
+  };
+
+  const getPlatformIcon = (p: SyncPlatform) => {
+    switch(p) {
+      case 'FACEBOOK': return <Facebook className="text-blue-600" />;
+      case 'INSTAGRAM': return <Instagram className="text-pink-600" />;
+      case 'TWITTER': return <Twitter className="text-sky-500" />;
+      case 'WHATSAPP': return <MessageCircle className="text-green-500" />;
+      case 'RSS': return <Rss className="text-orange-500" />;
+      default: return <Globe className="text-gray-500" />;
+    }
+  };
+
+  // --- HANDLERS ADS ---
   const saveAd = () => {
     const item = {
-      ...currentAd, id: currentAd.id || `ad-${Date.now()}`, isActive: true,
+      ...currentAd,
+      id: currentAd.id || `ad-${Date.now()}`,
+      isActive: currentAd.isActive !== undefined ? currentAd.isActive : true,
+      impressions: currentAd.impressions || 0,
+      clicks: currentAd.clicks || 0,
+      position: currentAd.position || 'page-top',
+      view: currentAd.view || ViewState.HOME,
       startDate: currentAd.startDate || new Date().toISOString().split('T')[0],
-      endDate: currentAd.endDate || '2026-12-31',
-      view: currentAd.view || ViewState.HOME
+      endDate: currentAd.endDate || new Date(new Date().getFullYear() + 1, 0, 1).toISOString().split('T')[0]
     } as Ad;
-    if (currentAd.id) setAds(prev => prev.map(a => a.id === item.id ? item : a));
-    else setAds(prev => [item, ...prev]);
+
+    if (currentAd.id) {
+        setAds(prev => prev.map(a => a.id === item.id ? item : a));
+    } else {
+        setAds(prev => [...prev, item]);
+    }
     setEditMode('none');
   };
 
+  const deleteAd = (id: string) => {
+      if(window.confirm('¿Borrar este anuncio permanentemente?')) {
+          setAds(prev => prev.filter(a => a.id !== id));
+          setEditMode('none');
+      }
+  };
+
+  const toggleAdStatus = (id: string) => {
+      setAds(prev => prev.map(a => a.id === id ? {...a, isActive: !a.isActive} : a));
+  };
+
+  // --- HANDLERS ADMINS ---
   const saveAdmin = () => {
     const item = {
       ...currentAdmin,
@@ -126,6 +232,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     else setAdmins(prev => [...prev, item]);
     setEditMode('none');
   };
+
+  // Listas para desplegables
+  const categories = ['Alimentación', 'Moda', 'Hogar', 'Salud y belleza', 'Hostelería y restauración', 'Motor', 'Servicios municipales y otros servicios'];
+  const zones = ['CENTRO', 'LA_TORRE', 'MIL_PALMERAS', 'CAMPOVERDE', 'EL_MOJON'];
 
   return (
     <div className="min-h-screen bg-[#f1f5f9] text-slate-900 pb-40">
@@ -172,7 +282,241 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         <main className="animate-in fade-in duration-500">
           
-          {/* 1. SECCIÓN EQUIPO (AJUSTADA: LAYOUT Y BOTÓN) */}
+          {/* 1. SECCIÓN PUBLICIDAD (RENOVADA) */}
+          {activeTab === 'ads' && canAccessTab('ads') && (
+            <div className="space-y-8">
+                
+                {/* Métricas Generales */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-sm flex items-center gap-4">
+                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><Tag size={24} /></div>
+                        <div>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ads Activos</p>
+                            <p className="text-2xl font-black text-slate-900">{ads.filter(a => a.isActive).length} / {ads.length}</p>
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-sm flex items-center gap-4">
+                        <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center"><Eye size={24} /></div>
+                        <div>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Impresiones Totales</p>
+                            <p className="text-2xl font-black text-slate-900">{(ads.reduce((acc, curr) => acc + (curr.impressions || 0), 0) / 1000).toFixed(1)}k</p>
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-sm flex items-center gap-4">
+                        <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center"><MousePointer2 size={24} /></div>
+                        <div>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Clicks Totales</p>
+                            <p className="text-2xl font-black text-slate-900">{ads.reduce((acc, curr) => acc + (curr.clicks || 0), 0)}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {editMode === 'ad' ? (
+                    // --- FORMULARIO DE EDICIÓN DE ANUNCIO ---
+                    <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+                            <div>
+                                <h3 className="text-3xl font-black text-gray-900 tracking-tighter">
+                                    {currentAd.id ? 'Modificar Anuncio' : 'Nueva Campaña Publicitaria'}
+                                </h3>
+                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
+                                    Configuración de visibilidad y contrato
+                                </p>
+                            </div>
+                            <button onClick={() => setEditMode('none')} className="p-3 bg-gray-50 hover:bg-gray-100 rounded-full transition-all"><X /></button>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                            <div className="space-y-6">
+                                <h4 className="text-xs font-black text-blue-600 uppercase tracking-widest border-b border-blue-100 pb-2 mb-4">Creatividad</h4>
+                                
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Cliente / Anunciante</label>
+                                    <input className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" placeholder="Ej: Restaurante El Puerto" value={currentAd.clientName || ''} onChange={e => setCurrentAd({...currentAd, clientName: e.target.value})} />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">URL Imagen (Banner)</label>
+                                    <div className="flex gap-2">
+                                        <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden border">
+                                            {currentAd.imageUrl ? <img src={currentAd.imageUrl} className="w-full h-full object-cover" /> : <ImageIcon size={20} className="text-gray-400" />}
+                                        </div>
+                                        <input className="flex-1 p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none text-xs" placeholder="https://..." value={currentAd.imageUrl || ''} onChange={e => setCurrentAd({...currentAd, imageUrl: e.target.value})} />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Enlace de Destino</label>
+                                    <div className="flex gap-2">
+                                        <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400"><LinkIcon size={20} /></div>
+                                        <input className="flex-1 p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none text-xs" placeholder="https://..." value={currentAd.linkUrl || ''} onChange={e => setCurrentAd({...currentAd, linkUrl: e.target.value})} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6">
+                                <h4 className="text-xs font-black text-purple-600 uppercase tracking-widest border-b border-purple-100 pb-2 mb-4">Segmentación y Contrato</h4>
+                                
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Página (Vista)</label>
+                                        <select 
+                                            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none text-sm" 
+                                            value={currentAd.view || 'HOME'} 
+                                            onChange={e => setCurrentAd({...currentAd, view: e.target.value as ViewState})}
+                                        >
+                                            {Object.values(ViewState).map(v => (
+                                                <option key={v} value={v}>
+                                                    {viewStateLabels[v] || v}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Posición</label>
+                                        <select className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none text-sm" value={currentAd.position || 'page-top'} onChange={e => setCurrentAd({...currentAd, position: e.target.value as any})}>
+                                            <option value="page-top">Superior (Page Top)</option>
+                                            <option value="page-bottom">Inferior (Page Bottom)</option>
+                                            <option value="menu-top">Menú (Arriba)</option>
+                                            <option value="menu-bottom">Menú (Abajo)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Filtro Contextual (Opcional)</label>
+                                    <div className="flex gap-2">
+                                        <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400"><Filter size={20} /></div>
+                                        <input className="flex-1 p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" placeholder="Ej: 'Hostelería' (déjalo vacío para todos)" value={currentAd.filterContext || ''} onChange={e => setCurrentAd({...currentAd, filterContext: e.target.value})} />
+                                    </div>
+                                    <p className="text-[9px] text-gray-400 ml-2">Útil para mostrar anuncios solo cuando se selecciona una categoría específica en Mapa o Tiendas.</p>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Inicio Contrato</label>
+                                        <input type="date" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" value={currentAd.startDate || ''} onChange={e => setCurrentAd({...currentAd, startDate: e.target.value})} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Fin Contrato</label>
+                                        <input type="date" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" value={currentAd.endDate || ''} onChange={e => setCurrentAd({...currentAd, endDate: e.target.value})} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-10 pt-6 border-t border-gray-100 flex gap-4">
+                            {currentAd.id && (
+                                <button onClick={() => deleteAd(currentAd.id!)} className="bg-red-50 text-red-500 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-100 transition-all flex items-center gap-2">
+                                    <Trash2 size={18} /> Eliminar
+                                </button>
+                            )}
+                            <button onClick={saveAd} className="flex-1 bg-[#0f172a] text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.01] transition-all flex items-center justify-center gap-2 shadow-xl">
+                                <Save size={18} /> Guardar Campaña
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    // --- LISTADO DE ANUNCIOS ---
+                    <>
+                        <div className="flex flex-col md:flex-row justify-between items-center bg-white p-8 rounded-[35px] shadow-xl border border-slate-100 gap-4">
+                            <div className="flex items-center gap-5">
+                                <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg text-white"><BarChart3 size={28}/></div>
+                                <div>
+                                    <h2 className="text-xl font-black tracking-tighter uppercase leading-none">Ad Manager</h2>
+                                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-2">Gestión de espacios publicitarios</p>
+                                </div>
+                            </div>
+                            <button 
+                                onClick={() => { setCurrentAd({ isActive: true, impressions: 0, clicks: 0 }); setEditMode('ad'); }} 
+                                className="w-full md:w-auto bg-blue-50 text-blue-600 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-sm flex items-center justify-center gap-2 hover:bg-blue-100 transition-all"
+                            >
+                                <Plus size={16} /> Crear Anuncio
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                            {ads.map(ad => {
+                                const startDate = new Date(ad.startDate);
+                                const endDate = new Date(ad.endDate);
+                                const today = new Date();
+                                const progress = Math.min(100, Math.max(0, ((today.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())) * 100));
+                                const isExpired = today > endDate;
+
+                                return (
+                                    <div key={ad.id} className={`bg-white p-6 rounded-[35px] shadow-sm border flex flex-col sm:flex-row gap-6 transition-all group ${ad.isActive ? 'border-slate-100 hover:shadow-xl' : 'border-gray-100 opacity-60'}`}>
+                                        {/* Thumbnail */}
+                                        <div className="w-full sm:w-40 h-40 bg-gray-100 rounded-[25px] overflow-hidden shrink-0 relative border border-gray-100">
+                                            <img src={ad.imageUrl} className="w-full h-full object-cover" alt={ad.clientName} />
+                                            <div className="absolute bottom-2 right-2 bg-black/50 backdrop-blur-md text-white text-[8px] font-black px-2 py-1 rounded-lg uppercase">
+                                                {viewStateLabels[ad.view] || ad.view}
+                                            </div>
+                                        </div>
+
+                                        {/* Info & Controls */}
+                                        <div className="flex-1 flex flex-col justify-between">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="font-black text-slate-900 text-lg leading-tight">{ad.clientName}</h3>
+                                                    <div className="flex flex-wrap gap-2 mt-2">
+                                                        <span className="bg-slate-50 text-slate-500 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-slate-100 flex items-center gap-1">
+                                                            <Layout size={10} /> {ad.position}
+                                                        </span>
+                                                        {ad.filterContext && (
+                                                            <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-blue-100 flex items-center gap-1">
+                                                                <Filter size={10} /> {ad.filterContext}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <button onClick={() => toggleAdStatus(ad.id)} className={`transition-colors ${ad.isActive ? 'text-green-500' : 'text-gray-300'}`}>
+                                                    {ad.isActive ? <ToggleRight size={32} /> : <ToggleLeft size={32} />}
+                                                </button>
+                                            </div>
+
+                                            {/* Metrics Row */}
+                                            <div className="flex items-center gap-6 mt-4 py-3 border-t border-b border-gray-50">
+                                                <div className="flex items-center gap-2 text-slate-400">
+                                                    <Eye size={16} />
+                                                    <span className="text-xs font-bold text-slate-700">{ad.impressions || 0}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-slate-400">
+                                                    <MousePointer2 size={16} />
+                                                    <span className="text-xs font-bold text-slate-700">{ad.clicks || 0}</span>
+                                                </div>
+                                                <div className="flex-1 text-right">
+                                                    <span className={`text-[9px] font-black uppercase tracking-widest ${isExpired ? 'text-red-500' : 'text-emerald-500'}`}>
+                                                        {isExpired ? 'Expirado' : 'En curso'}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Footer Actions & Date */}
+                                            <div className="flex justify-between items-center mt-4">
+                                                <div className="flex flex-col gap-1 w-full mr-4">
+                                                    <div className="flex justify-between text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+                                                        <span>{ad.startDate}</span>
+                                                        <span>{ad.endDate}</span>
+                                                    </div>
+                                                    <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                                                        <div className={`h-full rounded-full ${isExpired ? 'bg-red-400' : 'bg-blue-500'}`} style={{width: `${progress}%`}}></div>
+                                                    </div>
+                                                </div>
+                                                <button onClick={() => { setCurrentAd(ad); setEditMode('ad'); }} className="bg-slate-50 text-slate-600 p-2.5 rounded-xl hover:bg-blue-600 hover:text-white transition-all shrink-0">
+                                                    <Edit3 size={18} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </>
+                )}
+            </div>
+          )}
+
+          {/* 1. SECCIÓN EQUIPO */}
           {activeTab === 'team' && isSuperAdmin && (
             <div className="space-y-6">
               {editMode === 'admin' ? (
@@ -193,20 +537,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           <option value="ADMIN_GENERAL">Administrador General</option>
                           <option value="ADMIN_COMMERCE">Administrador de Comercio</option>
                           <option value="ADMIN_CULTURE">Administrador de Cultura</option>
-                          <option value="ADMIN_SPORTS">Administrador de Deportes</option>
-                          <option value="SUPER_ADMIN">Super Administrador (Peligro: Máximo Poder)</option>
+                          <option value="SUPER_ADMIN">Super Administrador</option>
                        </select>
-                       <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                          <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-2 flex items-center gap-2">
-                             <Shield size={14}/> Permisos del Rol:
-                          </p>
-                          <ul className="text-[10px] space-y-1 text-blue-800 font-medium list-disc pl-4">
-                             {currentAdmin.role === 'ADMIN_COMMERCE' && <li>Gestión de Comercios, Ofertas y Red de Beacons.</li>}
-                             {currentAdmin.role === 'ADMIN_CULTURE' && <li>Gestión de Noticias, Eventos Culturales y Agenda.</li>}
-                             {currentAdmin.role === 'ADMIN_GENERAL' && <li>Noticias, Censo y Publicidad (No puede gestionar equipo).</li>}
-                             {currentAdmin.role === 'SUPER_ADMIN' && <li>Acceso total al sistema, gestión de equipo y borrado técnico.</li>}
-                          </ul>
-                       </div>
                     </div>
                   </div>
                   <button onClick={saveAdmin} className="w-full mt-10 py-6 bg-[#0f172a] text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 hover:bg-black transition-all">
@@ -215,7 +547,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               ) : (
                 <>
-                  {/* AJUSTADO: flex-col en móvil, sm:flex-row en desktop */}
                   <div className="flex flex-col sm:flex-row justify-between items-center bg-[#0f172a] p-8 sm:p-10 rounded-[35px] shadow-xl text-white gap-8 sm:gap-4">
                     <div className="flex items-center gap-5 w-full sm:w-auto">
                        <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shrink-0"><Shield size={28}/></div>
@@ -224,8 +555,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           <p className="text-[9px] font-black text-blue-400 uppercase tracking-widest mt-2">Acceso exclusivo SuperAdmin</p>
                        </div>
                     </div>
-                    
-                    {/* BOTÓN AJUSTADO: whitespace-nowrap y layout centrado */}
                     <button 
                       onClick={() => { setCurrentAdmin({role: 'ADMIN_GENERAL'}); setEditMode('admin'); }} 
                       className="w-full sm:w-auto bg-blue-600 text-white px-8 py-5 rounded-[22px] font-black text-[11px] uppercase tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 hover:bg-blue-700 transition-all active:scale-95 whitespace-nowrap"
@@ -242,20 +571,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                            {admin.name.charAt(0)}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-black text-slate-900 tracking-tight flex items-center gap-2">
-                             {admin.name}
-                             {admin.id === 'adm-1' && <Lock size={12} className="text-blue-500" title="Admin Maestro" />}
-                          </h4>
+                          <h4 className="font-black text-slate-900 tracking-tight flex items-center gap-2">{admin.name}</h4>
                           <p className="text-[10px] font-bold text-slate-400 truncate max-w-xs">{admin.email}</p>
                         </div>
                         <div className="hidden md:block">
                            <span className={`px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest border ${getRoleBadgeColor(admin.role)}`}>
                               {admin.role.replace('_', ' ')}
                            </span>
-                        </div>
-                        <div className="text-right px-6 hidden sm:block">
-                           <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest">Última Conexión</p>
-                           <p className="text-[10px] font-bold text-slate-500">{admin.lastSeen}</p>
                         </div>
                         <div className="flex gap-2">
                           <button onClick={() => { setCurrentAdmin(admin); setEditMode('admin'); }} className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><Edit3 size={18} /></button>
@@ -271,28 +593,410 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           )}
 
-          {/* ... El resto del componente se mantiene igual ... */}
+          {/* 2. SECCIÓN COMERCIOS */}
           {activeTab === 'businesses' && canAccessTab('businesses') && (
             <div className="space-y-6">
-              {/* Contenido de comercios */}
-              <div className="flex justify-between items-center bg-white p-8 rounded-[35px] shadow-xl border border-slate-100">
-                <h2 className="text-xl font-black tracking-tighter uppercase">Comercios Registrados ({businesses.length})</h2>
-                <button onClick={() => { setCurrentBiz({}); setEditMode('biz'); }} className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2">
-                  <Plus size={16} /> Alta Nuevo
-                </button>
-              </div>
-              {/* ... resto de la lógica de negocios ... */}
+              
+              {editMode === 'biz' ? (
+                // --- FORMULARIO DE EDICIÓN / CREACIÓN ---
+                <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                   <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+                      <div>
+                        <h3 className="text-3xl font-black text-gray-900 tracking-tighter">
+                           {currentBiz.id ? 'Ajustes del Comercio' : 'Alta Nuevo Comercio'}
+                        </h3>
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
+                           Gestión del Censo Digital
+                        </p>
+                      </div>
+                      <button onClick={() => setEditMode('none')} className="p-3 bg-gray-50 hover:bg-gray-100 rounded-full transition-all"><X /></button>
+                   </div>
+
+                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                      {/* Columna Izquierda: Info Básica */}
+                      <div className="space-y-6">
+                         <h4 className="text-xs font-black text-blue-600 uppercase tracking-widest border-b border-blue-100 pb-2 mb-4">Información General</h4>
+                         
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Nombre Comercial</label>
+                            <input 
+                                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold focus:ring-2 focus:ring-blue-500 outline-none" 
+                                placeholder="Ej: Cafetería Central" 
+                                value={currentBiz.name || ''} 
+                                onChange={e => setCurrentBiz({...currentBiz, name: e.target.value})} 
+                            />
+                         </div>
+
+                         <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Categoría</label>
+                                <select 
+                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none"
+                                    value={currentBiz.category || ''}
+                                    onChange={e => setCurrentBiz({...currentBiz, category: e.target.value})}
+                                >
+                                    <option value="">Seleccionar...</option>
+                                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                                </select>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Zona</label>
+                                <select 
+                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none"
+                                    value={currentBiz.zone || ''}
+                                    onChange={e => setCurrentBiz({...currentBiz, zone: e.target.value as any})}
+                                >
+                                    <option value="">Seleccionar...</option>
+                                    {zones.map(z => <option key={z} value={z}>{z}</option>)}
+                                </select>
+                            </div>
+                         </div>
+
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Descripción</label>
+                            <textarea 
+                                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-medium outline-none h-32 resize-none" 
+                                placeholder="Descripción corta del negocio..." 
+                                value={currentBiz.description || ''} 
+                                onChange={e => setCurrentBiz({...currentBiz, description: e.target.value})} 
+                            />
+                         </div>
+                      </div>
+
+                      {/* Columna Derecha: Ubicación y Multimedia */}
+                      <div className="space-y-6">
+                         <h4 className="text-xs font-black text-emerald-600 uppercase tracking-widest border-b border-emerald-100 pb-2 mb-4">Ubicación y Media</h4>
+                         
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Dirección Física</label>
+                            <div className="flex gap-2">
+                                <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400"><MapPin size={20} /></div>
+                                <input 
+                                    className="flex-1 p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" 
+                                    placeholder="C/ Mayor, 12" 
+                                    value={currentBiz.address || ''} 
+                                    onChange={e => setCurrentBiz({...currentBiz, address: e.target.value})} 
+                                />
+                            </div>
+                         </div>
+
+                         <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Latitud</label>
+                                <input 
+                                    type="number" step="0.0001"
+                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none"
+                                    placeholder="37.8..."
+                                    value={currentBiz.lat || ''}
+                                    onChange={e => setCurrentBiz({...currentBiz, lat: parseFloat(e.target.value)})}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Longitud</label>
+                                <input 
+                                    type="number" step="0.0001"
+                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none"
+                                    placeholder="-0.7..."
+                                    value={currentBiz.lng || ''}
+                                    onChange={e => setCurrentBiz({...currentBiz, lng: parseFloat(e.target.value)})}
+                                />
+                            </div>
+                         </div>
+
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Imagen Principal (URL)</label>
+                            <div className="flex gap-2">
+                                <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 overflow-hidden">
+                                    {currentBiz.images?.[0] ? <img src={currentBiz.images[0]} className="w-full h-full object-cover" /> : <ImageIcon size={20} />}
+                                </div>
+                                <input 
+                                    className="flex-1 p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" 
+                                    placeholder="https://..." 
+                                    value={currentBiz.images?.[0] || ''} 
+                                    onChange={e => setCurrentBiz({...currentBiz, images: [e.target.value]})} 
+                                />
+                            </div>
+                         </div>
+
+                         <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Teléfono</label>
+                                <input 
+                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" 
+                                    placeholder="965..." 
+                                    value={currentBiz.phone || ''} 
+                                    onChange={e => setCurrentBiz({...currentBiz, phone: e.target.value})} 
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Horario L-V</label>
+                                <input 
+                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" 
+                                    placeholder="09:00 - 14:00" 
+                                    value={currentBiz.hours?.weekdays || ''} 
+                                    onChange={e => setCurrentBiz({...currentBiz, hours: { ...currentBiz.hours!, weekdays: e.target.value } })} 
+                                />
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+
+                   <div className="mt-10 flex gap-4">
+                      {currentBiz.id && (
+                          <button 
+                            onClick={() => deleteBiz(currentBiz.id!)}
+                            className="bg-red-50 text-red-500 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-100 transition-all flex items-center gap-2"
+                          >
+                             <Trash2 size={18} /> Eliminar Comercio
+                          </button>
+                      )}
+                      <button 
+                        onClick={saveBiz}
+                        className="flex-1 bg-[#0f172a] text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.01] transition-all flex items-center justify-center gap-2 shadow-xl"
+                      >
+                         <Save size={18} /> Guardar Cambios
+                      </button>
+                   </div>
+                </div>
+              ) : (
+                // --- VISTA DE LISTA COMPLETA ---
+                <>
+                  <div className="flex justify-between items-center bg-white p-8 rounded-[35px] shadow-xl border border-slate-100">
+                    <div>
+                        <h2 className="text-xl font-black tracking-tighter uppercase">Censo Oficial ({businesses.length})</h2>
+                        <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">Directorio de empresas registradas</p>
+                    </div>
+                    <button onClick={() => { setCurrentBiz({}); setEditMode('biz'); }} className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2 hover:bg-blue-700 transition-all">
+                      <Plus size={16} /> Alta Nuevo
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {businesses.map(biz => (
+                      <div key={biz.id} className="bg-white p-6 rounded-[30px] shadow-sm border border-slate-100 hover:shadow-xl transition-all group flex flex-col justify-between h-full">
+                         <div>
+                             <div className="relative h-40 rounded-[20px] overflow-hidden mb-5">
+                                 <img src={biz.images?.[0]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={biz.name} />
+                                 <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm">
+                                     {biz.zone}
+                                 </div>
+                             </div>
+                             <h3 className="font-black text-lg text-slate-900 leading-tight mb-2">{biz.name}</h3>
+                             <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-1.5">
+                                 <Tag size={12} /> {biz.category}
+                             </p>
+                             <div className="space-y-2 mb-6">
+                                 <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                                     <MapPin size={14} className="text-slate-300" /> <span className="truncate">{biz.address}</span>
+                                 </div>
+                                 <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                                     <Phone size={14} className="text-slate-300" /> {biz.phone}
+                                 </div>
+                             </div>
+                         </div>
+                         <div className="flex gap-2 pt-4 border-t border-slate-50">
+                             <button 
+                                onClick={() => { setCurrentBiz(biz); setEditMode('biz'); }}
+                                className="flex-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                             >
+                                <Settings2 size={14} /> Ajustes
+                             </button>
+                         </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* 3. SECCIÓN SYNC NEWS (NUEVA) */}
+          {activeTab === 'news' && canAccessTab('news') && (
+            <div className="space-y-6">
+              {editMode === 'source' ? (
+                // --- FORMULARIO EDICIÓN SYNC ---
+                <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200 animate-in zoom-in-95">
+                   <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center">
+                           <RefreshCw size={24} />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-black text-gray-900 tracking-tighter">
+                             {currentSource.id ? 'Configurar Fuente' : 'Nueva Conexión'}
+                          </h3>
+                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
+                             Parámetros de API y Sincronización
+                          </p>
+                        </div>
+                      </div>
+                      <button onClick={() => setEditMode('none')} className="p-3 bg-gray-50 hover:bg-gray-100 rounded-full transition-all"><X /></button>
+                   </div>
+
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-6">
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Plataforma</label>
+                            <select 
+                                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-colors"
+                                value={currentSource.platform || 'RSS'}
+                                onChange={e => setCurrentSource({...currentSource, platform: e.target.value as SyncPlatform})}
+                            >
+                                <option value="FACEBOOK">Facebook</option>
+                                <option value="INSTAGRAM">Instagram</option>
+                                <option value="TWITTER">Twitter (X)</option>
+                                <option value="WHATSAPP">WhatsApp Channel</option>
+                                <option value="RSS">RSS Feed</option>
+                            </select>
+                         </div>
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Nombre Identificativo</label>
+                            <input 
+                                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" 
+                                placeholder="Ej: Noticias Ayuntamiento" 
+                                value={currentSource.name || ''} 
+                                onChange={e => setCurrentSource({...currentSource, name: e.target.value})} 
+                            />
+                         </div>
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Enlace Público (URL)</label>
+                            <div className="flex gap-2">
+                               <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400"><LinkIcon size={20} /></div>
+                               <input 
+                                   className="flex-1 p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" 
+                                   placeholder="https://..." 
+                                   value={currentSource.url || ''} 
+                                   onChange={e => setCurrentSource({...currentSource, url: e.target.value})} 
+                               />
+                            </div>
+                         </div>
+                      </div>
+
+                      <div className="space-y-6">
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">API Key / Token (Opcional)</label>
+                            <div className="flex gap-2">
+                               <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400"><Lock size={20} /></div>
+                               <input 
+                                   type="password"
+                                   className="flex-1 p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" 
+                                   placeholder="••••••••••••••••" 
+                                   value={currentSource.apiKey || ''} 
+                                   onChange={e => setCurrentSource({...currentSource, apiKey: e.target.value})} 
+                               />
+                            </div>
+                         </div>
+                         <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Frecuencia de Sync (Minutos)</label>
+                            <input 
+                                type="number"
+                                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl font-bold outline-none" 
+                                placeholder="60" 
+                                value={currentSource.frequency || ''} 
+                                onChange={e => setCurrentSource({...currentSource, frequency: parseInt(e.target.value)})} 
+                            />
+                         </div>
+                      </div>
+                   </div>
+
+                   <div className="mt-10 pt-6 border-t border-gray-100 flex gap-4">
+                      {currentSource.id && (
+                          <button 
+                            onClick={() => deleteSource(currentSource.id!)}
+                            className="bg-red-50 text-red-500 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-100 transition-all flex items-center gap-2"
+                          >
+                             <Trash2 size={18} /> Eliminar
+                          </button>
+                      )}
+                      <button 
+                        onClick={saveSource}
+                        className="flex-1 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 shadow-xl shadow-indigo-200"
+                      >
+                         <Save size={18} /> Guardar Conexión
+                      </button>
+                   </div>
+                </div>
+              ) : (
+                <>
+                  <div className="flex flex-col md:flex-row justify-between items-center bg-white p-8 rounded-[35px] shadow-xl border border-slate-100 gap-4">
+                    <div className="flex items-center gap-5">
+                       <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 text-white"><Globe size={28}/></div>
+                       <div>
+                          <h2 className="text-xl font-black tracking-tighter uppercase leading-none">Sync News Manager</h2>
+                          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-2">Fuentes de Noticias ({syncSources.length})</p>
+                       </div>
+                    </div>
+                    <button 
+                      onClick={() => { setCurrentSource({ status: 'ACTIVE', frequency: 60 }); setEditMode('source'); }} 
+                      className="w-full md:w-auto bg-indigo-50 text-indigo-600 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-sm flex items-center justify-center gap-2 hover:bg-indigo-100 transition-all"
+                    >
+                      <Plus size={16} /> Añadir Fuente
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {syncSources.map(source => (
+                      <div key={source.id} className={`bg-white p-6 rounded-[35px] shadow-sm border transition-all relative overflow-hidden group ${source.status === 'ACTIVE' ? 'border-green-100' : 'border-gray-200 opacity-75'}`}>
+                         
+                         {/* Header Tarjeta */}
+                         <div className="flex items-start justify-between mb-6 relative z-10">
+                            <div className="flex items-center gap-4">
+                               <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-xl shadow-inner">
+                                  {getPlatformIcon(source.platform)}
+                               </div>
+                               <div>
+                                  <h3 className="font-black text-slate-900 tracking-tight leading-tight">{source.name}</h3>
+                                  <div className="flex items-center gap-2 mt-1">
+                                     <span className={`w-2 h-2 rounded-full ${source.status === 'ACTIVE' ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`}></span>
+                                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{source.platform}</span>
+                                  </div>
+                               </div>
+                            </div>
+                            
+                            {/* Toggle ON/OFF */}
+                            <button 
+                               onClick={() => toggleSourceStatus(source.id)}
+                               className={`transition-colors duration-300 ${source.status === 'ACTIVE' ? 'text-green-500 hover:text-green-600' : 'text-gray-300 hover:text-gray-400'}`}
+                            >
+                               {source.status === 'ACTIVE' ? <ToggleRight size={36} strokeWidth={2.5} /> : <ToggleLeft size={36} strokeWidth={2.5} />}
+                            </button>
+                         </div>
+
+                         {/* Detalles */}
+                         <div className="space-y-3 mb-6 relative z-10">
+                            <div className="flex items-center gap-3 text-xs font-medium text-slate-500 bg-slate-50 p-3 rounded-xl">
+                               <LinkIcon size={14} className="text-slate-400 shrink-0" />
+                               <span className="truncate">{source.url}</span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                               <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                  <RefreshCw size={12} /> Cada {source.frequency} min
+                               </div>
+                               <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                  <CheckCircle size={12} /> Sync: {source.lastSync}
+                               </div>
+                            </div>
+                         </div>
+
+                         {/* Botón Editar */}
+                         <button 
+                            onClick={() => { setCurrentSource(source); setEditMode('source'); }}
+                            className="w-full py-3 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 relative z-10"
+                         >
+                            <Settings2 size={14} /> Configurar
+                         </button>
+
+                         {/* Decoración Fondo */}
+                         <div className={`absolute -right-6 -bottom-6 w-32 h-32 rounded-full opacity-5 pointer-events-none transition-colors ${source.status === 'ACTIVE' ? 'bg-green-500' : 'bg-gray-500'}`}></div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
         </main>
       </div>
     </div>
   );
-};
-
-const socialConfig: Record<string, { icon: any, activeClass: string }> = {
-  facebook: { icon: Facebook, activeClass: 'bg-[#1877F2] shadow-[#1877F2]/40' },
-  instagram: { icon: Instagram, activeClass: 'bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] shadow-pink-500/40' },
-  tiktok: { icon: Video, activeClass: 'bg-black ring-1 ring-cyan-400 shadow-cyan-400/20' },
-  twitter: { icon: Twitter, activeClass: 'bg-black shadow-slate-800' }
 };
