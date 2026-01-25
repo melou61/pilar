@@ -29,7 +29,7 @@ const UI_RESOURCES: Record<string, any> = {
       views: 'vistas',
       shorts_titles: ['Amanecer en Las Higuericas', 'Ruta por Río Seco', 'Tarde de Compras', 'Fiestas del Pilar']
     },
-    f: ['Contacto', 'Enlaces de interés', 'Síguenos', 'La App oficial del municipio.', 'Oficina de Turismo', 'Calle Mayor, 1', '03190', 'Alicante, España', 'Todos los derechos reservados'],
+    f: ['Contacto', 'Enlaces de interés', 'Síguenos', 'La App oficial del municipio.', 'Ayuntamiento Pilar de la Horadada', 'Plaza Campoamor, 2', '03190', 'Alicante, España', 'Todos los derechos reservados', 'Política de Privacidad', 'Términos de Uso'],
     search: { badge: 'Buscador Inteligente', subtitle1: 'Encuentra comercios, eventos', subtitle2: 'y servicios municipales.', placeholder: '¿Qué buscas hoy?', noResults: 'No hay resultados para' },
     ai: { welcome: 'Hola, soy tu conserje virtual de Pilar de la Horadada. ¿En qué puedo ayudarte?', system: 'Eres PH Concierge, la guía oficial de Pilar de la Horadada.', online: 'En línea', voice_btn: 'Hablar ahora' },
     header: { selectLanguage: 'Seleccionar Idioma' },
@@ -57,7 +57,7 @@ const UI_RESOURCES: Record<string, any> = {
       views: 'views',
       shorts_titles: ['Sunrise at Higuericas', 'Rio Seco Route', 'Shopping Day', 'Town Festivals']
     },
-    f: ['Contact', 'Useful Links', 'Follow Us', 'The official town application.', 'Tourism Office', '1 Mayor St.', '03190', 'Alicante, Spain', 'All rights reserved'],
+    f: ['Contact', 'Useful Links', 'Follow Us', 'The official town application.', 'Pilar de la Horadada Town Hall', '2 Campoamor Sq.', '03190', 'Alicante, Spain', 'All rights reserved', 'Privacy Policy', 'Terms of Use'],
     search: { badge: 'Smart Search', subtitle1: 'Find shops, events', subtitle2: 'and citizen services.', placeholder: 'What are you looking for?', noResults: 'No results for' },
     ai: { welcome: 'Hello, I am your Pilar de la Horadada virtual concierge. How can I help you?', system: 'You are PH Concierge, the official guide for Pilar de la Horadada.', online: 'Online', voice_btn: 'Speak now' },
     header: { selectLanguage: 'Select Language' },
@@ -76,28 +76,32 @@ const UI_RESOURCES: Record<string, any> = {
     c: ['Sponsorisé', 'Aucun résultat', 'Retour', 'Partager', 'Détails', 'Ouvert', 'Fermé', 'Carte', 'Près de vous', 'Chercher...', 'Ajouter', 'Télécharger', 'Copier', 'Copié', 'Erreur', 'Chargement...', 'Réflexion...', 'Détails', 'Tout'], 
     h: 'Paradis méditerranéen.',
     profile: { my_events: 'Mes Événements', favorites: 'Favoris', alerts: 'Alertes', logout: 'Déconnexion' },
-    mc: ['Alimentation', 'Hébergement', 'Communication et publicité', 'Éducation', 'Services pro. et bancaires', 'Maison', 'Hôtellerie et restauration', 'Animaux', 'Environnement et agriculture', 'Mode', 'Automobile', 'Loisirs et divertissement', 'Santé et beauté', 'Services municipaux et autres']
+    mc: ['Alimentation', 'Hébergement', 'Communication et publicité', 'Éducation', 'Services pro. et bancaires', 'Maison', 'Hôtellerie et restauration', 'Animaux', 'Environnement et agriculture', 'Mode', 'Automobile', 'Loisirs et divertissement', 'Santé et beauté', 'Services municipaux et autres'],
+    f: ['Contact', 'Liens utiles', 'Suivez-nous', 'L\'application officielle de la ville.', 'Mairie de Pilar de la Horadada', 'Place Campoamor, 2', '03190', 'Alicante, Espagne', 'Tous droits réservés', 'Politique de Confidentialité', 'Conditions d\'Utilisation']
   },
   de: { 
     m: ['Start', 'Nachrichten', 'Strände', 'Kulturerbe', 'Erlebnisse', 'Gastronomie', 'Geschäfte', 'Gesundheit', 'Dienste', 'Events', 'Forum', 'PH Erkunden', 'KI Guide', 'Profil', 'Karte', 'Admin'], 
     c: ['Gesponsert', 'Keine Ergebnisse', 'Zurück', 'Teilen', 'Details', 'Offen', 'Geschlossen', 'Karte', 'In der Nähe', 'Suche...', 'Hinzufügen', 'Hochladen', 'Kopieren', 'Kopiert', 'Fehler', 'Laden...', 'Denken...', 'Details', 'Alle'], 
     h: 'Mediterranes Paradies.',
     profile: { my_events: 'Meine Events', favorites: 'Favoriten', alerts: 'Benachrichtigungen', logout: 'Abmelden' },
-    mc: ['Lebensmittel', 'Unterkunft', 'Kommunikation & Werbung', 'Bildung', 'Profi- & Bankdienste', 'Zuhause', 'Gastgewerbe & Gastro', 'Haustiere', 'Umwelt & Landwirtschaft', 'Mode', 'Motor', 'Freizeit & Unterhaltung', 'Gesundheit & Schönheit', 'Kommunale & Sonstige']
+    mc: ['Lebensmittel', 'Unterkunft', 'Kommunikation & Werbung', 'Bildung', 'Profi- & Bankdienste', 'Zuhause', 'Gastgewerbe & Gastro', 'Haustiere', 'Umwelt & Landwirtschaft', 'Mode', 'Motor', 'Freizeit & Unterhaltung', 'Gesundheit & Schönheit', 'Kommunale & Sonstige'],
+    f: ['Kontakt', 'Nützliche Links', 'Folgen Sie uns', 'Die offizielle App der Stadt.', 'Rathaus Pilar de la Horadada', 'Campoamor Platz, 2', '03190', 'Alicante, Spanien', 'Alle Rechte vorbehalten', 'Datenschutzerklärung', 'Nutzungsbedingungen']
   },
   it: { 
     m: ['Inizio', 'Notizie', 'Spiagge', 'Patrimonio', 'Esperienze', 'Gastronomia', 'Negozi', 'Salute', 'Servizi', 'Eventi', 'Forum', 'PH Esplora', 'Guida IA', 'Profilo', 'Mappa', 'Admin'], 
     c: ['Sponsorizzato', 'Nessun risultato', 'Indietro', 'Condividi', 'Dettagli', 'Aperto', 'Chiuso', 'Mappa', 'Vicino a te', 'Cerca...', 'Aggiungi', 'Carica', 'Copia', 'Copiato', 'Errore', 'Caricamento...', 'Pensando...', 'Dettagli', 'Tutti'], 
     h: 'Paradiso mediterraneo.',
     profile: { my_events: 'I Miei Eventi', favorites: 'Preferiti', alerts: 'Avvisi', logout: 'Disconnetti' },
-    mc: ['Alimentari', 'Alloggio', 'Comunicazione e pubblicità', 'Istruzione', 'Servizi prof. e bancari', 'Casa', 'Ospitalità e ristorazione', 'Animali', 'Ambiente e agricoltura', 'Moda', 'Motori', 'Svago e intrattenimento', 'Salute e bellezza', 'Servizi comunali e altri']
+    mc: ['Alimentari', 'Alloggio', 'Comunicazione e pubblicità', 'Istruzione', 'Servizi prof. e bancari', 'Casa', 'Ospitalità e ristorazione', 'Animali', 'Ambiente e agricoltura', 'Moda', 'Motori', 'Svago e intrattenimento', 'Salute e bellezza', 'Servizi comunali e altri'],
+    f: ['Contatto', 'Link utili', 'Seguici', 'L\'app ufficiale della città.', 'Municipio di Pilar de la Horadada', 'Piazza Campoamor, 2', '03190', 'Alicante, Spagna', 'Tutti i diritti riservati', 'Informativa sulla Privacy', 'Termini di Utilizzo']
   },
   pt: { 
     m: ['Início', 'Notícias', 'Praias', 'Património', 'Experiências', 'Gastronomia', 'Lojas', 'Saúde', 'Serviços', 'Eventos', 'Fórum', 'PH Explorar', 'Guia IA', 'Perfil', 'Mapa', 'Admin'], 
     c: ['Patrocinado', 'Sem resultados', 'Voltar', 'Partilhar', 'Detalhes', 'Aberto', 'Fechado', 'Mapa', 'Perto de si', 'Procurar...', 'Adicionar', 'Subir', 'Copiar', 'Copiado', 'Erro', 'A carregar...', 'A pensar...', 'Detalhes', 'Todos'], 
     h: 'Paraíso mediterrânico.',
     profile: { my_events: 'Meus Eventos', favorites: 'Favoritos', alerts: 'Alertas', logout: 'Sair' },
-    mc: ['Alimentação', 'Alojamento', 'Comunicação e publicidade', 'Educação', 'Serviços prof. e bancários', 'Casa', 'Hotelaria e restauração', 'Animais', 'Meio ambiente e agricultura', 'Moda', 'Motor', 'Lazer e entretenimento', 'Saúde e beleza', 'Serviços municipais e outros']
+    mc: ['Alimentação', 'Alojamento', 'Comunicação e publicidade', 'Educação', 'Serviços prof. e bancários', 'Casa', 'Hotelaria e restauração', 'Animais', 'Meio ambiente e agricultura', 'Moda', 'Motor', 'Lazer e entretenimento', 'Saúde e beleza', 'Serviços municipais e outros'],
+    f: ['Contato', 'Links úteis', 'Siga-nos', 'O aplicativo oficial da cidade.', 'Câmara Municipal Pilar de la Horadada', 'Praça Campoamor, 2', '03190', 'Alicante, Espanha', 'Todos os direitos reservados', 'Política de Privacidade', 'Termos de Uso']
   }
 };
 
@@ -162,7 +166,8 @@ const createLang = (code: string, langLabel: string): any => {
     },
     footer: { 
         contact: f[0], links: f[1], follow: f[2], desc: f[3],
-        officeName: f[4], addressLine1: f[5], addressLine2: f[6], addressLine3: f[7], rights: f[8]
+        officeName: f[4], addressLine1: f[5], addressLine2: f[6], addressLine3: f[7], rights: f[8],
+        privacy: f[9], terms: f[10]
     },
     search: data.search || en.search,
     share: { title: 'Share', subtitle: 'Platform', apps: { whatsapp: 'WhatsApp', facebook: 'Facebook', twitter: 'Twitter', linkedin: 'LinkedIn', email: 'Email', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' } },

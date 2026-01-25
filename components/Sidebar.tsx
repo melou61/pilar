@@ -139,7 +139,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="p-10 bg-gray-50 border-t border-gray-100 text-center">
             <div className="text-[11px] text-gray-400 font-black uppercase tracking-[0.5em]">
-                PH-APP • v1.0.25
+                PH-APP • v1.0.26
             </div>
         </div>
       </div>

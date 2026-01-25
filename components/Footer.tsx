@@ -9,6 +9,11 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ t }) => {
   const f = t.footer;
 
+  const openLegal = (e: React.MouseEvent, type: 'privacy' | 'terms') => {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent('open-legal', { detail: type }));
+  };
+
   return (
     <footer className="bg-[#0f172a] text-white pt-20 pb-12 px-8">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
@@ -41,11 +46,11 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
                 </div>
                 <span className="font-bold">+34 965 35 22 25</span>
               </a>
-              <a href="mailto:turismo@pilardelahoradada.org" className="flex items-center gap-4 text-gray-400 hover:text-blue-400 transition-all group">
+              <a href="mailto:ayto@pilardelahoradada.org" className="flex items-center gap-4 text-gray-400 hover:text-blue-400 transition-all group">
                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-all">
                   <Mail size={18} />
                 </div>
-                <span className="font-bold">turismo@pilardelahoradada.org</span>
+                <span className="font-bold">ayto@pilardelahoradada.org</span>
               </a>
               <a href="https://www.visitpilardelahoradada.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-gray-400 hover:text-blue-400 transition-all group">
                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-all">
@@ -71,8 +76,14 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
         </div>
       </div>
 
-      <div className="mt-20 pt-8 border-t border-white/5 text-[10px] text-center text-gray-500 tracking-wider font-medium">
-          Pilar App 2025 © by <a href="https://vortexdigital-ai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 font-bold transition-colors">https://vortexdigital-ai.com</a>. Al rights reserved.
+      <div className="mt-20 pt-8 border-t border-white/5 text-[10px] text-center text-gray-500 tracking-wider font-medium flex flex-col sm:flex-row items-center justify-center gap-4">
+          <span>Pilar App 2026 © by <a href="https://vortexdigital-ai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 font-bold transition-colors">https://vortexdigital-ai.com</a>. {f.rights}.</span>
+          <div className="hidden sm:block w-px h-3 bg-white/10"></div>
+          <div className="flex gap-4">
+            <a href="#" onClick={(e) => openLegal(e, 'privacy')} className="hover:text-blue-400 transition-colors">{f.privacy || 'Privacy Policy'}</a>
+            <span className="text-white/10">•</span>
+            <a href="#" onClick={(e) => openLegal(e, 'terms')} className="hover:text-blue-400 transition-colors">{f.terms || 'Terms of Use'}</a>
+          </div>
       </div>
     </footer>
   );

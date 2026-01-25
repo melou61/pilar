@@ -30,14 +30,15 @@ import { HealthView } from './components/HealthView';
 import { BeaconModal } from './components/BeaconModal';
 import { PHLensView } from './components/PHLensView';
 import { MobileNav } from './components/MobileNav';
+import { LegalModal } from './components/LegalModal';
 import { translations, languages } from './translations';
-import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS } from './data';
+import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS, TERMS_OF_SERVICE, PRIVACY_POLICY } from './data';
 
 const INITIAL_ADS: Ad[] = [
-  { id: 'ad-1', clientName: 'Mesón El Puerto', position: 'menu-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true, view: ViewState.SIDEBAR },
-  { id: 'ad-2', clientName: 'Turismo Pilar', position: 'menu-bottom', imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true, view: ViewState.SIDEBAR },
-  { id: 'ad-3', clientName: 'Modas Lucía', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true, view: ViewState.HOME },
-  { id: 'ad-4', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2024-01-01', endDate: '2025-12-31', isActive: true, view: ViewState.HOME }
+  { id: 'ad-1', clientName: 'Mesón El Puerto', position: 'menu-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR },
+  { id: 'ad-2', clientName: 'Turismo Pilar', position: 'menu-bottom', imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR },
+  { id: 'ad-3', clientName: 'Modas Lucía', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
+  { id: 'ad-4', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME }
 ];
 
 const MOCK_ADMINS: AdminUser[] = [
@@ -74,6 +75,9 @@ const App: React.FC = () => {
   const [shareData, setShareData] = useState({ title: '', text: '', url: '' });
   const [activeBeaconShop, setActiveBeaconShop] = useState<CensusItem | null>(null);
   const [beaconsEnabled, setBeaconsEnabled] = useState(true);
+  
+  // Legal Modal State
+  const [legalState, setLegalState] = useState<{isOpen: boolean, type: 'privacy' | 'terms' | null}>({isOpen: false, type: null});
 
   const t = translations[currentLang.code] || translations.en;
 
@@ -97,6 +101,12 @@ const App: React.FC = () => {
       return () => clearTimeout(timer);
     }
   }, [currentView, beaconsEnabled, businesses]);
+
+  useEffect(() => {
+    const handleLegal = (e: any) => setLegalState({isOpen: true, type: e.detail});
+    window.addEventListener('open-legal', handleLegal);
+    return () => window.removeEventListener('open-legal', handleLegal);
+  }, []);
 
   const handleNavigate = (view: ViewState, id?: string) => {
     setSidebarOpen(false);
@@ -223,6 +233,13 @@ const App: React.FC = () => {
       {activeBeaconShop && <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} t={t} />}
       <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={handleLogin} onLoginSuperAdmin={() => handleLogin()} t={t} />
       <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
+      
+      <LegalModal 
+        isOpen={legalState.isOpen} 
+        onClose={() => setLegalState({isOpen: false, type: null})}
+        title={legalState.type === 'privacy' ? (t.footer?.privacy || 'Privacidad') : (t.footer?.terms || 'Términos')}
+        content={legalState.type === 'privacy' ? PRIVACY_POLICY : TERMS_OF_SERVICE}
+      />
 
       {!isImmersiveView && <Header {...headerProps} />}
 

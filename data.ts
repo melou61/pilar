@@ -1,5 +1,247 @@
 
+
 import { Event, CensusCategory, CensusItem, NewsItem } from './types';
+
+export const TERMS_OF_SERVICE = `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Última actualización: 25 de enero de 2026</p>
+  <p>Bienvenido a Pilar Vivo. Al acceder y utilizar nuestra plataforma web en pilarapp.vortexdigital-ai.com, aceptas cumplir con los siguientes términos y condiciones. Por favor, léelos detenidamente antes de utilizar nuestros servicios.</p>
+  
+  <h3 class="text-lg font-bold text-gray-900">1. Aceptación de los Términos</h3>
+  <p>Al registrarte, acceder o utilizar Pilar Vivo, aceptas estar vinculado por estos Términos del Servicio y todas las leyes y regulaciones aplicables. Si no estás de acuerdo con alguno de estos términos, no debes utilizar nuestra plataforma.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">2. Descripción del Servicio</h3>
+  <p>Pilar Vivo es una plataforma web que proporciona servicios digitales y funcionalidades relacionadas con la gestión y organización de información. Nuestros servicios pueden incluir herramientas de productividad, almacenamiento de datos, gestión de contenidos y otras funcionalidades según se describan en la plataforma.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">3. Registro y Cuenta de Usuario</h3>
+  <p>Para acceder a ciertas funcionalidades de nuestra plataforma, deberás crear una cuenta proporcionando información precisa, actualizada y completa. Eres responsable de mantener la confidencialidad de tus credenciales de acceso y de todas las actividades que ocurran bajo tu cuenta. Te comprometes a notificarnos inmediatamente cualquier uso no autorizado de tu cuenta o cualquier otra violación de seguridad.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">4. Uso Aceptable</h3>
+  <p>Al utilizar Pilar Vivo, te comprometes a:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Utilizar la plataforma únicamente para fines legales y de acuerdo con estos términos.</li>
+    <li>No utilizar el servicio de manera que pueda dañar, deshabilitar o sobrecargar nuestros servidores.</li>
+    <li>No intentar acceder de manera no autorizada a ninguna parte de la plataforma.</li>
+    <li>No transmitir contenido ilegal, amenazante, abusivo, difamatorio u ofensivo.</li>
+    <li>No utilizar la plataforma para actividades fraudulentas o engañosas.</li>
+    <li>No utilizar bots, scrapers u otras herramientas automatizadas sin autorización previa.</li>
+  </ul>
+
+  <h3 class="text-lg font-bold text-gray-900">5. Propiedad Intelectual</h3>
+  <p>Todo el contenido presente en Pilar Vivo, incluyendo textos, gráficos, logotipos, imágenes, vídeos, software y otros materiales, está protegido por derechos de autor y otras leyes de propiedad intelectual. Este contenido es propiedad de Pilar Vivo o de sus licenciantes. No está permitido copiar, modificar, distribuir, transmitir, mostrar, reproducir o crear trabajos derivados de nuestro contenido sin autorización previa por escrito.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">6. Contenido Generado por el Usuario</h3>
+  <p>Si compartes contenido en nuestra plataforma (documentos, comentarios, archivos, datos, etc.), nos concedes una licencia mundial, no exclusiva, libre de regalías para usar, reproducir, procesar y almacenar dicho contenido en relación con el funcionamiento del servicio. Eres responsable del contenido que compartes y garantizas que tienes todos los derechos necesarios para hacerlo. No compartas contenido que infrinja derechos de terceros o que sea ilegal.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">7. Privacidad y Protección de Datos</h3>
+  <p>El uso de tu información personal está regulado por nuestra Política de Privacidad, que forma parte integral de estos términos. Te recomendamos leerla detenidamente para entender cómo recopilamos, utilizamos y protegemos tus datos.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">8. Pagos y Suscripciones</h3>
+  <p>Si la plataforma ofrece servicios de pago o suscripciones premium, aceptas pagar todas las tarifas asociadas según los precios vigentes en el momento de la contratación. Los pagos se procesarán a través de proveedores de pago terceros seguros. Las suscripciones se renovarán automáticamente a menos que canceles antes del período de renovación. Puedes cancelar tu suscripción en cualquier momento desde la configuración de tu cuenta. Los reembolsos se manejarán de acuerdo con nuestra política de reembolsos, que se comunicará en el momento de la compra.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">9. Disponibilidad del Servicio</h3>
+  <p>Aunque nos esforzamos por mantener la plataforma disponible en todo momento, no garantizamos que el servicio será ininterrumpido o libre de errores. Podemos suspender temporalmente el acceso por mantenimiento, actualizaciones o circunstancias fuera de nuestro control. No seremos responsables por ninguna interrupción del servicio, pérdida de datos o daños resultantes de dichas interrupciones.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">10. Respaldo de Datos</h3>
+  <p>Aunque implementamos medidas de seguridad y respaldo, te recomendamos mantener copias de seguridad de tu contenido importante. No seremos responsables por la pérdida de datos causada por fallos técnicos, errores de usuario o cualquier otra circunstancia.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">11. Cancelación y Terminación</h3>
+  <p>Puedes cancelar tu cuenta en cualquier momento contactándonos o a través de la configuración de tu cuenta. Nos reservamos el derecho de suspender o terminar tu acceso a Pilar Vivo en cualquier momento, sin previo aviso, si determinamos que has violado estos términos o por cualquier otra razón que consideremos apropiada. En caso de terminación, tu derecho a utilizar el servicio cesará inmediatamente. Podemos eliminar tu contenido después de un período razonable, salvo que la ley nos obligue a conservarlo.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">12. Limitación de Responsabilidad</h3>
+  <p>Pilar Vivo se proporciona "tal cual" y "según disponibilidad". No garantizamos que el servicio será ininterrumpido, seguro o libre de errores. En la máxima medida permitida por la ley, Pilar Vivo no será responsable por daños indirectos, incidentales, especiales, consecuentes o punitivos, o por cualquier pérdida de beneficios, ingresos, datos, uso o cualquier otro intangible.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">13. Indemnización</h3>
+  <p>Aceptas indemnizar y mantener indemne a Pilar Vivo, sus directivos, empleados y agentes de cualquier reclamación, daño, pérdida o gasto (incluyendo honorarios legales razonables) que surja de tu uso del servicio, tu violación de estos términos o tu violación de cualquier derecho de terceros.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">14. Modificaciones del Servicio y de los Términos</h3>
+  <p>Nos reservamos el derecho de modificar, suspender o descontinuar cualquier aspecto de Pilar Vivo en cualquier momento, con o sin previo aviso. También podemos actualizar estos Términos del Servicio periódicamente. Te notificaremos sobre cambios significativos mediante un aviso en la plataforma o por correo electrónico, y la fecha de "última actualización" se modificará en consecuencia. Tu uso continuado del servicio después de dichos cambios constituye tu aceptación de los nuevos términos.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">15. Ley Aplicable y Jurisdicción</h3>
+  <p>Estos términos se regirán e interpretarán de acuerdo con las leyes de España. Cualquier disputa relacionada con estos términos estará sujeta a la jurisdicción exclusiva de los tribunales de Madrid, España.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">16. Divisibilidad</h3>
+  <p>Si alguna disposición de estos términos se considera inválida o inaplicable, dicha disposición se modificará e interpretará para lograr los objetivos de dicha disposición en la mayor medida posible, y las disposiciones restantes continuarán en pleno vigor y efecto.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">17. Renuncia</h3>
+  <p>Ninguna renuncia por nuestra parte a cualquier término o condición establecida en estos Términos del Servicio se considerará una renuncia adicional o continua de dicho término o condición.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">18. Contacto</h3>
+  <p>Si tienes preguntas sobre estos Términos del Servicio, puedes contactarnos en:<br/>
+  <strong>Ayuntamiento Pilar de la Horadada</strong><br/>
+  Dirección: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante)<br/>
+  Email: ayto@pilardelahoradada.org<br/>
+  Sitio web: pilarapp.vortexdigital-ai.com</p>
+</div>
+`;
+
+export const PRIVACY_POLICY = `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Última actualización: 25 de enero de 2026</p>
+  <p>En Pilar Vivo, nos tomamos muy en serio la privacidad de nuestros usuarios. Esta Política de Privacidad describe cómo recopilamos, utilizamos, almacenamos y protegemos tu información personal cuando utilizas nuestra plataforma web pilarapp.vortexdigital-ai.com.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">1. Responsable del Tratamiento</h3>
+  <p>El responsable del tratamiento de tus datos personales es:<br/>
+  <strong>Pilar Vivo / Ayuntamiento Pilar de la Horadada</strong><br/>
+  Dirección: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante)<br/>
+  Email: ayto@pilardelahoradada.org<br/>
+  Sitio web: pilarapp.vortexdigital-ai.com</p>
+
+  <h3 class="text-lg font-bold text-gray-900">2. Información que Recopilamos</h3>
+  <p><strong>2.1 Información que nos proporcionas directamente:</strong></p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Datos de registro: nombre, apellidos, dirección de correo electrónico, contraseña</li>
+    <li>Información de perfil: datos personales opcionales que decidas compartir</li>
+    <li>Contenido del usuario: documentos, archivos, datos y cualquier información que subas o crees en la plataforma</li>
+    <li>Información de pago: datos de facturación y transacciones (procesados por proveedores terceros seguros)</li>
+    <li>Comunicaciones: cuando nos contactas, guardamos el contenido de tus mensajes y correspondencia</li>
+  </ul>
+  <p><strong>2.2 Información recopilada automáticamente:</strong></p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Datos de uso: páginas visitadas, funcionalidades utilizadas, tiempo de navegación, interacciones con la plataforma</li>
+    <li>Información del dispositivo: tipo de dispositivo, sistema operativo, navegador, dirección IP, identificadores únicos</li>
+    <li>Datos de ubicación: ubicación aproximada basada en tu dirección IP</li>
+    <li>Cookies y tecnologías similares: utilizamos cookies y tecnologías de seguimiento para mejorar tu experiencia</li>
+    <li>Registros del servidor: información técnica sobre tu conexión y uso del servicio</li>
+  </ul>
+
+  <h3 class="text-lg font-bold text-gray-900">3. Cómo Utilizamos tu Información</h3>
+  <p>Utilizamos la información recopilada para los siguientes propósitos:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Proporcionar, mantener, operar y mejorar nuestros servicios</li>
+    <li>Crear y gestionar tu cuenta de usuario</li>
+    <li>Procesar transacciones y gestionar suscripciones</li>
+    <li>Personalizar tu experiencia en la plataforma</li>
+    <li>Comunicarnos contigo sobre tu cuenta, actualizaciones del servicio, notificaciones importantes y promociones</li>
+    <li>Proporcionar atención al cliente y responder a tus consultas</li>
+    <li>Analizar el uso de la plataforma para mejorar nuestros servicios y desarrollar nuevas funcionalidades</li>
+    <li>Detectar, prevenir y abordar problemas técnicos, fraudes y actividades maliciosas</li>
+    <li>Cumplir con obligaciones legales y proteger nuestros derechos</li>
+    <li>Realizar investigación y análisis para comprender mejor cómo se utiliza nuestra plataforma</li>
+  </ul>
+
+  <h3 class="text-lg font-bold text-gray-900">4. Base Legal para el Tratamiento de Datos</h3>
+  <p>Procesamos tus datos personales bajo las siguientes bases legales según el Reglamento General de Protección de Datos (RGPD):</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Ejecución de un contrato: para proporcionar los servicios que has solicitado y gestionar tu cuenta</li>
+    <li>Consentimiento: cuando nos has dado tu consentimiento explícito para procesar tus datos</li>
+    <li>Interés legítimo: para mejorar nuestros servicios, garantizar la seguridad de la plataforma y comunicarnos contigo</li>
+    <li>Obligación legal: cuando debemos cumplir con requisitos legales o regulatorios</li>
+  </ul>
+
+  <h3 class="text-lg font-bold text-gray-900">5. Compartir tu Información</h3>
+  <p>No vendemos tu información personal a terceros. Podemos compartir tu información en las siguientes circunstancias:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Proveedores de servicios: compartimos información con proveedores que nos ayudan a operar nuestra plataforma, incluyendo servicios de alojamiento web (Vortex Digital AI), procesadores de pago, servicios de email, análisis y soporte técnico</li>
+    <li>Cumplimiento legal: cuando sea requerido por ley, orden judicial, proceso legal o solicitud gubernamental</li>
+    <li>Protección de derechos: para proteger nuestros derechos, propiedad o seguridad, así como los de nuestros usuarios u otros</li>
+    <li>Transferencias empresariales: en caso de fusión, adquisición, venta de activos o procedimiento de quiebra</li>
+    <li>Con tu consentimiento: cuando nos autorices explícitamente a compartir tu información con terceros específicos</li>
+  </ul>
+  <p>Todos nuestros proveedores de servicios están obligados contractualmente a proteger tu información y a utilizarla únicamente para los fines especificados.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">6. Cookies y Tecnologías de Seguimiento</h3>
+  <p>Utilizamos cookies y tecnologías similares para:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Mantener tu sesión activa y recordar tus preferencias</li>
+    <li>Entender cómo utilizas la plataforma</li>
+    <li>Mejorar el rendimiento y la funcionalidad del servicio</li>
+    <li>Personalizar contenido y experiencias</li>
+    <li>Realizar análisis y mediciones</li>
+  </ul>
+  <p>Tipos de cookies que utilizamos:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Cookies esenciales: necesarias para el funcionamiento básico del sitio y para mantener tu sesión activa</li>
+    <li>Cookies de rendimiento: nos ayudan a entender cómo los usuarios interactúan con la plataforma mediante análisis agregados</li>
+    <li>Cookies de funcionalidad: recuerdan tus preferencias y configuraciones</li>
+    <li>Cookies de marketing: utilizadas para mostrar publicidad relevante (si aplica)</li>
+  </ul>
+  <p>Puedes gestionar las preferencias de cookies a través de la configuración de tu navegador. Ten en cuenta que deshabilitar ciertas cookies puede afectar la funcionalidad de la plataforma.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">7. Transferencias Internacionales de Datos</h3>
+  <p>Tus datos pueden ser transferidos y procesados en servidores ubicados fuera del Espacio Económico Europeo (EEE), incluyendo pero no limitado a servicios de alojamiento proporcionados por Vortex Digital AI.</p>
+  <p>En tales casos, nos aseguramos de que existan salvaguardas adecuadas para proteger tu información, como:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Cláusulas contractuales estándar aprobadas por la Comisión Europea</li>
+    <li>Certificaciones de privacidad reconocidas</li>
+    <li>Medidas técnicas y organizativas apropiadas</li>
+  </ul>
+
+  <h3 class="text-lg font-bold text-gray-900">8. Seguridad de Datos</h3>
+  <p>Implementamos medidas técnicas y organizativas apropiadas para proteger tu información personal contra acceso no autorizado, pérdida, destrucción, alteración o divulgación. Estas medidas incluyen:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Encriptación de datos en tránsito y en reposo</li>
+    <li>Controles de acceso estrictos y autenticación de usuarios</li>
+    <li>Servidores seguros con protección mediante firewall</li>
+    <li>Monitoreo continuo de seguridad</li>
+    <li>Auditorías de seguridad periódicas</li>
+    <li>Formación del personal en protección de datos</li>
+    <li>Políticas de seguridad de la información</li>
+  </ul>
+  <p>Sin embargo, ningún método de transmisión por internet o almacenamiento electrónico es 100% seguro. Aunque nos esforzamos por proteger tu información, no podemos garantizar seguridad absoluta.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">9. Retención de Datos</h3>
+  <p>Conservamos tu información personal durante el tiempo necesario para cumplir con los propósitos descritos en esta política, a menos que la ley requiera o permita un período de retención más largo.</p>
+  <p>Los criterios utilizados para determinar nuestros períodos de retención incluyen:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>El tiempo que mantienes una cuenta activa con nosotros</li>
+    <li>Si existe una obligación legal de conservar los datos</li>
+    <li>Si la retención es recomendable debido a nuestra posición legal (por ejemplo, plazos de prescripción, litigios o investigaciones regulatorias)</li>
+  </ul>
+  <p>Cuando cierres tu cuenta, eliminaremos o anonimizaremos tu información personal dentro de un plazo razonable, excepto cuando debamos conservarla por obligaciones legales, contables o de seguridad.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">10. Tus Derechos</h3>
+  <p>De acuerdo con el RGPD y la legislación española de protección de datos, tienes los siguientes derechos:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Derecho de acceso: puedes solicitar información sobre los datos personales que tenemos sobre ti</li>
+    <li>Derecho de rectificación: puedes solicitar la corrección de datos inexactos o incompletos</li>
+    <li>Derecho de supresión: puedes solicitar la eliminación de tus datos personales ("derecho al olvido")</li>
+    <li>Derecho de limitación: puedes solicitar la limitación del procesamiento de tus datos en ciertas circunstancias</li>
+    <li>Derecho de portabilidad: puedes solicitar recibir tus datos en formato estructurado, de uso común y lectura mecánica</li>
+    <li>Derecho de oposición: puedes oponerte al procesamiento de tus datos en determinadas situaciones</li>
+    <li>Derecho a retirar el consentimiento: puedes retirar tu consentimiento en cualquier momento cuando el procesamiento se base en el consentimiento</li>
+    <li>Derecho a no ser objeto de decisiones automatizadas: derecho a no ser objeto de una decisión basada únicamente en el tratamiento automatizado</li>
+  </ul>
+  <p>Para ejercer estos derechos, puedes:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Acceder a la configuración de tu cuenta en la plataforma</li>
+    <li>Contactarnos directamente en ayto@pilardelahoradada.org</li>
+    <li>Enviarnos una solicitud por escrito a nuestra dirección postal</li>
+  </ul>
+  <p>Responderemos a tu solicitud dentro del plazo legal de un mes, que puede extenderse a dos meses adicionales en casos complejos.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">11. Menores de Edad</h3>
+  <p>Pilar Vivo no está dirigido a menores de 16 años. No recopilamos intencionalmente información personal de menores de 16 años sin el consentimiento de los padres o tutores legales. Si eres padre o tutor y crees que tu hijo nos ha proporcionado información personal, contáctanos inmediatamente.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">12. Enlaces a Sitios Terceros</h3>
+  <p>Nuestra plataforma puede contener enlaces a sitios web, aplicaciones o servicios de terceros que no son operados por nosotros. No somos responsables de las prácticas de privacidad de estos sitios.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">13. Cambios a esta Política de Privacidad</h3>
+  <p>Podemos actualizar esta Política de Privacidad periódicamente. Te notificaremos sobre cambios significativos mediante:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>Un aviso destacado en nuestra plataforma</li>
+    <li>Notificación por correo electrónico</li>
+    <li>Actualización de la fecha de "última actualización"</li>
+  </ul>
+
+  <h3 class="text-lg font-bold text-gray-900">14. Medidas Adicionales de Privacidad</h3>
+  <p><strong>14.1 Seguridad de contraseñas</strong>: Las contraseñas se almacenan utilizando técnicas de hash y encriptación.</p>
+  <p><strong>14.2 Autenticación de dos factores</strong>: Ofrecemos opciones de autenticación de dos factores para mejorar la seguridad.</p>
+  <p><strong>14.3 Notificaciones de violación de datos</strong>: En caso de una violación de seguridad que afecte a tus datos personales, te notificaremos de acuerdo con las leyes aplicables.</p>
+
+  <h3 class="text-lg font-bold text-gray-900">15. Contacto y Reclamaciones</h3>
+  <p>Si tienes preguntas, inquietudes o deseas ejercer tus derechos relacionados con la privacidad, contáctanos en:<br/>
+  <strong>Pilar Vivo / Ayuntamiento Pilar de la Horadada</strong><br/>
+  Email: ayto@pilardelahoradada.org<br/>
+  Dirección: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante)<br/>
+  Sitio web: pilarapp.vortexdigital-ai.com</p>
+  <p>También tienes derecho a presentar una reclamación ante la autoridad de protección de datos competente:<br/>
+  <strong>Agencia Española de Protección de Datos (AEPD)</strong><br/>
+  Web: www.aepd.es<br/>
+  Dirección: C/ Jorge Juan, 6, 28001 Madrid<br/>
+  Teléfono: 901 100 099 / 912 663 517</p>
+</div>
+`;
 
 export const MOCK_NEWS: NewsItem[] = [
   { id: 'n1', source: 'Ayuntamiento', sourceType: 'official', icon: 'megaphone', date: 'Hace 1h', title: '🎉 Gran Charanga este Sábado', content: 'Desfile de carrozas artesanas por las calles del centro.', image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800&q=80', url: '#', category: 'GENERAL' },
@@ -9,8 +251,8 @@ export const MOCK_NEWS: NewsItem[] = [
 ];
 
 export const MOCK_EVENTS: Event[] = [
-  { id: 'fiestas-patronales', title: 'Fiestas del Pilar', category: 'TRADICIÓN', date: 'Octubre 2025', location: 'Centro', description: 'Carrozas y ofrendas.', longDescription: 'El Desfile de Carrozas es único.', imageUrl: 'https://images.unsplash.com/photo-1467810563316-b5476525c0f9?auto=format&fit=crop&w=1200&q=80', isFestival: true, lat: 37.8653, lng: -0.7932 },
-  { id: 'semana-santa', title: 'Semana Santa', category: 'RELIGIOSO', date: 'Abril 2025', location: 'Centro', description: 'Procesiones solemnes.', longDescription: 'Tallas de Sánchez Lozano.', imageUrl: 'https://images.unsplash.com/photo-1545653701-d853757659bc?auto=format&fit=crop&w=1200&q=80', isFestival: true, lat: 37.8655, lng: -0.7928 }
+  { id: 'fiestas-patronales', title: 'Fiestas del Pilar', category: 'TRADICIÓN', date: 'Octubre 2026', location: 'Centro', description: 'Carrozas y ofrendas.', longDescription: 'El Desfile de Carrozas es único.', imageUrl: 'https://images.unsplash.com/photo-1467810563316-b5476525c0f9?auto=format&fit=crop&w=1200&q=80', isFestival: true, lat: 37.8653, lng: -0.7932 },
+  { id: 'semana-santa', title: 'Semana Santa', category: 'RELIGIOSO', date: 'Abril 2026', location: 'Centro', description: 'Procesiones solemnes.', longDescription: 'Tallas de Sánchez Lozano.', imageUrl: 'https://images.unsplash.com/photo-1545653701-d853757659bc?auto=format&fit=crop&w=1200&q=80', isFestival: true, lat: 37.8655, lng: -0.7928 }
 ];
 
 export const MOCK_BEACHES = [
@@ -290,68 +532,6 @@ const SHOP_DATA = [
   { name: 'Inmo Horadada', cat: 'Inmobiliaria', zone: 'CENTRO', lat: 37.8660, lng: -0.7940 }
 ];
 
-const DINING_DATA = [
-  { name: 'Mesón El Puerto', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8643, lng: -0.7835 },
-  { name: 'Restaurante El Pilar', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8655, lng: -0.7925 },
-  { name: 'La Mamma Pizzeria', cat: 'Italiano', zone: 'CENTRO', lat: 37.8640, lng: -0.7930 },
-  { name: 'Chiringuito El Pirata', cat: 'Chiringuito', zone: 'LA_TORRE', lat: 37.8645, lng: -0.7842 },
-  { name: 'Restaurante Nautico', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8632, lng: -0.7828 },
-  { name: 'Heladería La Torre', cat: 'Heladería', zone: 'LA_TORRE', lat: 37.8647, lng: -0.7850 },
-  { name: 'Popeye Mil Palmeras', cat: 'Restaurante', zone: 'MIL_PALMERAS', lat: 37.8864, lng: -0.7605 },
-  { name: 'Restaurante Olympia', cat: 'Restaurante', zone: 'MIL_PALMERAS', lat: 37.8858, lng: -0.7620 },
-  { name: 'Bar El Galeón', cat: 'Tapas', zone: 'LA_TORRE', lat: 37.8638, lng: -0.7838 },
-  { name: 'Cafetería Plaza', cat: 'Cafetería', zone: 'CENTRO', lat: 37.8658, lng: -0.7928 },
-  { name: 'Hamburguesería PH', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8648, lng: -0.7935 },
-  { name: 'Tapería El Rincón', cat: 'Tapas', zone: 'CENTRO', lat: 37.8662, lng: -0.7932 },
-  { name: 'Arrocería El Puerto', cat: 'Arroces', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7830 },
-  { name: 'Restaurante Campoverde', cat: 'Restaurante', zone: 'CAMPOVERDE', lat: 37.8940, lng: -0.8412 },
-  { name: 'Pub El Mojón', cat: 'Tapas', zone: 'EL_MOJON', lat: 37.8522, lng: -0.7842 },
-  { name: 'Pizzería Palmeras', cat: 'Italiano', zone: 'MIL_PALMERAS', lat: 37.8866, lng: -0.7610 },
-  { name: 'Restaurante Las Villas', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8620, lng: -0.7850 },
-  { name: 'Bar El Tapeo', cat: 'Tapas', zone: 'CENTRO', lat: 37.8652, lng: -0.7924 },
-  { name: 'Café Del Sol', cat: 'Cafetería', zone: 'LA_TORRE', lat: 37.8655, lng: -0.7845 },
-  { name: 'Wok Pilar', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8605, lng: -0.7960 },
-  { name: 'Asador La Parilla', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8665, lng: -0.7938 },
-  { name: 'Bar La Esquina', cat: 'Tapas', zone: 'CENTRO', lat: 37.8659, lng: -0.7915 },
-  { name: 'Restaurante Los Arcos', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8650, lng: -0.7945 },
-  { name: 'Heladería Xixona', cat: 'Heladería', zone: 'CENTRO', lat: 37.8656, lng: -0.7929 },
-  { name: 'Bar El Cruce', cat: 'Tapas', zone: 'CENTRO', lat: 37.8670, lng: -0.7950 },
-  { name: 'Cafetería Royal', cat: 'Cafetería', zone: 'CENTRO', lat: 37.8654, lng: -0.7931 },
-  { name: 'Restaurante Chino', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8645, lng: -0.7940 },
-  { name: 'Bar La Plaza', cat: 'Tapas', zone: 'LA_TORRE', lat: 37.8649, lng: -0.7852 },
-  { name: 'Pizzería Napol', cat: 'Italiano', zone: 'LA_TORRE', lat: 37.8638, lng: -0.7840 },
-  { name: 'Chiringuito El Conde', cat: 'Chiringuito', zone: 'LA_TORRE', lat: 37.8640, lng: -0.7845 },
-  { name: 'Bar El Mirador', cat: 'Tapas', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7835 },
-  { name: 'Restaurante El Mojón', cat: 'Restaurante', zone: 'EL_MOJON', lat: 37.8525, lng: -0.7845 },
-  { name: 'Bar El Chiringuito', cat: 'Chiringuito', zone: 'EL_MOJON', lat: 37.8518, lng: -0.7848 },
-  { name: 'Restaurante Pinar', cat: 'Restaurante', zone: 'CAMPOVERDE', lat: 37.8935, lng: -0.8415 },
-  { name: 'Cafetería Campoverde', cat: 'Cafetería', zone: 'CAMPOVERDE', lat: 37.8942, lng: -0.8408 },
-  { name: 'Bar El Bosque', cat: 'Tapas', zone: 'CAMPOVERDE', lat: 37.8938, lng: -0.8410 },
-  { name: 'Restaurante Palmeras', cat: 'Restaurante', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7602 },
-  { name: 'Chiringuito Mil Palmeras', cat: 'Chiringuito', zone: 'MIL_PALMERAS', lat: 37.8862, lng: -0.7608 },
-  { name: 'Bar El Sol', cat: 'Tapas', zone: 'MIL_PALMERAS', lat: 37.8868, lng: -0.7612 },
-  { name: 'Café de la Mar', cat: 'Cafetería', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7615 },
-  { name: 'Arrocería El Pilar', cat: 'Arroces', zone: 'CENTRO', lat: 37.8662, lng: -0.7925 },
-  { name: 'Tapería Central', cat: 'Tapas', zone: 'CENTRO', lat: 37.8660, lng: -0.7930 },
-  { name: 'Bar Restaurante PH', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8652, lng: -0.7928 },
-  { name: 'Hamburguesería Palmeras', cat: 'Restaurante', zone: 'MIL_PALMERAS', lat: 37.8860, lng: -0.7618 },
-  { name: 'Pizzería Central', cat: 'Italiano', zone: 'CENTRO', lat: 37.8658, lng: -0.7935 },
-  { name: 'Bar La Torre', cat: 'Tapas', zone: 'LA_TORRE', lat: 37.8645, lng: -0.7848 },
-  { name: 'Restaurante Mediterráneo', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8638, lng: -0.7832 },
-  { name: 'Cafetería El Faro', cat: 'Cafetería', zone: 'LA_TORRE', lat: 37.8642, lng: -0.7840 },
-  { name: 'Heladería Marina', cat: 'Heladería', zone: 'LA_TORRE', lat: 37.8646, lng: -0.7846 },
-  { name: 'Bar El Pescador', cat: 'Tapas', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7838 },
-  { name: 'Restaurante Las Brisas', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8625, lng: -0.7845 },
-  { name: 'Cafetería Central', cat: 'Cafetería', zone: 'CENTRO', lat: 37.8657, lng: -0.7922 },
-  { name: 'Bar El Norte', cat: 'Tapas', zone: 'CENTRO', lat: 37.8668, lng: -0.7935 },
-  { name: 'Hamburguesería Torre', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8644, lng: -0.7850 },
-  { name: 'Pizzería Campoverde', cat: 'Italiano', zone: 'CAMPOVERDE', lat: 37.8932, lng: -0.8420 },
-  { name: 'Restaurante El Patio', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8661, lng: -0.7933 },
-  { name: 'Bar La Ola', cat: 'Tapas', zone: 'MIL_PALMERAS', lat: 37.8871, lng: -0.7611 },
-  { name: 'Café Imperial', cat: 'Cafetería', zone: 'CENTRO', lat: 37.8653, lng: -0.7929 },
-  { name: 'Bar San Pedro', cat: 'Tapas', zone: 'EL_MOJON', lat: 37.8520, lng: -0.7845 }
-];
-
 const SHOPPING_ITEMS: CensusItem[] = SHOP_DATA.map((shop, i) => ({
   id: generateId('shop', i),
   name: shop.name,
@@ -369,6 +549,24 @@ const SHOPPING_ITEMS: CensusItem[] = SHOP_DATA.map((shop, i) => ({
   lng: shop.lng,
   promotion: undefined // Se eliminó la inyección automática
 }));
+
+const DINING_DATA = [
+  { name: 'Mesón El Puerto', cat: 'Restaurante', zone: 'LA_TORRE', lat: 37.8645, lng: -0.7850 },
+  { name: 'Restaurante Los Arcos', cat: 'Mediterráneo', zone: 'CENTRO', lat: 37.8655, lng: -0.7930 },
+  { name: 'Pizzería La Plaza', cat: 'Italiano', zone: 'CENTRO', lat: 37.8660, lng: -0.7925 },
+  { name: 'Chiringuito Pirata', cat: 'Chiringuito', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7605 },
+  { name: 'Bar Central', cat: 'Tapas', zone: 'CENTRO', lat: 37.8650, lng: -0.7935 },
+  { name: 'Asador El Toril', cat: 'Carnes', zone: 'CAMPOVERDE', lat: 37.8935, lng: -0.8420 },
+  { name: 'Marisquería La Lonja', cat: 'Pescados', zone: 'LA_TORRE', lat: 37.8640, lng: -0.7845 },
+  { name: 'Cafetería Sol', cat: 'Cafetería', zone: 'CENTRO', lat: 37.8658, lng: -0.7922 },
+  { name: 'Restaurante Asiático Gran China', cat: 'Internacional', zone: 'CENTRO', lat: 37.8648, lng: -0.7940 },
+  { name: 'Heladería Artesana', cat: 'Postres', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7610 },
+  { name: 'La Cabaña del Mar', cat: 'Restaurante', zone: 'EL_MOJON', lat: 37.8520, lng: -0.7842 },
+  { name: 'Burger Station', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8665, lng: -0.7938 },
+  { name: 'Tapería El Rincón', cat: 'Tapas', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7838 },
+  { name: 'Arrocería El Caldeo', cat: 'Arroces', zone: 'MIL_PALMERAS', lat: 37.8860, lng: -0.7615 },
+  { name: 'Gastrobar Fusión', cat: 'Restaurante', zone: 'CENTRO', lat: 37.8652, lng: -0.7928 }
+];
 
 const DINING_ITEMS: CensusItem[] = DINING_DATA.map((dining, i) => ({
   id: generateId('dining', i),
