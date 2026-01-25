@@ -208,6 +208,9 @@ const App: React.FC = () => {
     setIsShareOpen(true);
   };
 
+  // Construcción dinámica del menú: Admin solo aparece si tienes rol de administrador
+  const isAdmin = ['SUPER_ADMIN', 'ADMIN_GENERAL', 'ADMIN_CULTURE', 'ADMIN_SPORTS', 'ADMIN_COMMERCE'].includes(userRole as any);
+  
   const menuItems: NavItem[] = [
     { id: ViewState.HOME, label: t.menu.home, icon: Home },
     { id: ViewState.LENS, label: 'PH Lens', icon: Scan },
@@ -223,8 +226,11 @@ const App: React.FC = () => {
     { id: ViewState.HEALTH, label: t.menu.health, icon: Heart },
     { id: ViewState.EVENTS, label: t.menu.events, icon: Calendar },
     { id: ViewState.FORUM, label: t.menu.forum, icon: MessageSquare },
-    { id: ViewState.ADMIN, label: t.menu.admin, icon: ShieldCheck },
   ];
+
+  if (isAdmin) {
+    menuItems.push({ id: ViewState.ADMIN, label: t.menu.admin, icon: ShieldCheck });
+  }
 
   const isImmersiveView = [
     ViewState.HOME,
@@ -320,7 +326,7 @@ const App: React.FC = () => {
         {renderContent()}
       </main>
 
-      {!isImmersiveView && <Footer t={t} />}
+      {!isImmersiveView && <Footer t={t} onOpenAdminLogin={() => setLoginOpen(true)} />}
       <MobileNav currentView={currentView} onNavigate={handleNavigate} t={t} />
     </div>
   );

@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { Facebook, Instagram, Twitter, Youtube, MapPin, Mail, Phone, Globe } from './Icons';
+import { Facebook, Instagram, Twitter, Youtube, MapPin, Mail, Phone, Globe, Lock } from './Icons';
 
 interface FooterProps {
   t: any;
+  onOpenAdminLogin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ t }) => {
+export const Footer: React.FC<FooterProps> = ({ t, onOpenAdminLogin }) => {
   const f = t.footer;
 
   const openLegal = (e: React.MouseEvent, type: 'privacy' | 'terms') => {
@@ -77,7 +78,17 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
       </div>
 
       <div className="mt-20 pt-8 border-t border-white/5 text-[10px] text-center text-gray-500 tracking-wider font-medium flex flex-col sm:flex-row items-center justify-center gap-4">
-          <span>Pilar App 2026 © by <a href="https://vortexdigital-ai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 font-bold transition-colors">https://vortexdigital-ai.com</a>. {f.rights}.</span>
+          <div className="flex items-center gap-2">
+            <span>Pilar App 2026 © by <a href="https://vortexdigital-ai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 font-bold transition-colors">https://vortexdigital-ai.com</a>. {f.rights}.</span>
+            {/* Secret Admin Trigger */}
+            <button 
+              onClick={onOpenAdminLogin} 
+              className="opacity-20 hover:opacity-100 transition-opacity p-1 text-gray-400 hover:text-white"
+              title="Admin Access"
+            >
+              <Lock size={10} />
+            </button>
+          </div>
           <div className="hidden sm:block w-px h-3 bg-white/10"></div>
           <div className="flex gap-4">
             <a href="#" onClick={(e) => openLegal(e, 'privacy')} className="hover:text-blue-400 transition-colors">{f.privacy || 'Privacy Policy'}</a>
