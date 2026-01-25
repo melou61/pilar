@@ -12,9 +12,10 @@ interface DiningViewProps {
   businesses: CensusItem[];
   ads: Ad[]; 
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads, headerProps }) => {
+export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads, headerProps, onOpenAdminLogin }) => {
   const [selectedBusiness, setSelectedBusiness] = useState<CensusItem | null>(null);
   const [activeZone, setActiveZone] = useState<string>('all');
 
@@ -122,7 +123,7 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads, head
 
       {/* 6. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

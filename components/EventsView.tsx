@@ -17,10 +17,11 @@ interface EventsViewProps {
   toggleMyEvent?: (id: string) => void;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
 export const EventsView: React.FC<EventsViewProps> = ({ 
-    t, events, onShare, onAddToCalendar, initialEventId, myEvents = [], toggleMyEvent, ads, headerProps
+    t, events, onShare, onAddToCalendar, initialEventId, myEvents = [], toggleMyEvent, ads, headerProps, onOpenAdminLogin
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(initialEventId || null);
@@ -138,7 +139,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
       {/* 5. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

@@ -11,9 +11,10 @@ interface ForumViewProps {
   t: any;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const ForumView: React.FC<ForumViewProps> = ({ t, ads, headerProps }) => {
+export const ForumView: React.FC<ForumViewProps> = ({ t, ads, headerProps, onOpenAdminLogin }) => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [posts, setPosts] = useState<ForumPost[]>(MOCK_FORUM_POSTS);
 
@@ -96,7 +97,7 @@ export const ForumView: React.FC<ForumViewProps> = ({ t, ads, headerProps }) => 
 
       {/* 6. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
 
       <button className="fixed bottom-32 right-8 w-16 h-16 bg-blue-600 text-white rounded-3xl shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-[100]">

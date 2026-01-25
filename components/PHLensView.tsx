@@ -12,9 +12,10 @@ interface PHLensViewProps {
   onBack: () => void;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerProps }) => {
+export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerProps, onOpenAdminLogin }) => {
   const [image, setImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<any | null>(null);
@@ -124,7 +125,7 @@ export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerPr
       </div>
 
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `@keyframes scan { 0% { top: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }` }} />

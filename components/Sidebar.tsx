@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { NavItem, ViewState, Ad } from '../types';
-import { X, ChevronRight, Sun, Cloud, CloudRain, Wind, LogOut } from './Icons';
+import { X, ChevronRight, Sun, Cloud, CloudRain, Wind, LogOut, LogIn, UserPlus } from './Icons';
 import { AdSpot } from './AdSpot';
 
 interface SidebarProps {
@@ -15,6 +15,7 @@ interface SidebarProps {
   sponsoredText: string;
   isLoggedIn: boolean;
   onLogout: () => void;
+  onLogin: () => void;
   t: any;
 }
 
@@ -67,7 +68,7 @@ const WeatherWidget = ({ t }: { t: any }) => {
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
-  isOpen, onClose, menuItems, currentView, onNavigate, ads, title, sponsoredText, isLoggedIn, onLogout, t
+  isOpen, onClose, menuItems, currentView, onNavigate, ads, title, sponsoredText, isLoggedIn, onLogout, onLogin, t
 }) => {
   if (!isOpen) return null;
 
@@ -95,6 +96,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
              {/* Cambiado a ViewState.SIDEBAR para segmentación global del menú */}
              <AdSpot ads={ads} position="menu-top" label={sponsoredText} view={ViewState.SIDEBAR} />
           </div>
+
+          {!isLoggedIn && (
+             <div className="px-6">
+                <button 
+                  onClick={() => { onLogin(); onClose(); }}
+                  className="w-full flex items-center gap-5 px-6 py-5 rounded-[22px] bg-emerald-600 text-white font-black hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-200"
+                >
+                  <LogIn size={24} />
+                  <span className="flex-1 text-left text-sm uppercase tracking-[0.2em]">Acceder / Registro</span>
+                  <ChevronRight size={18} className="text-white/50" />
+                </button>
+             </div>
+          )}
 
           <ul className="space-y-2 px-6">
             {menuItems.map((item) => {

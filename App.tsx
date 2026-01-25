@@ -261,21 +261,23 @@ const App: React.FC = () => {
     t
   };
 
+  const handleOpenAdminLogin = () => setLoginOpen(true);
+
   const renderContent = () => {
     switch (currentView) {
-      case ViewState.HOME: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} headerProps={headerProps} />;
-      case ViewState.NEWS: return <NewsView t={t} ads={ads} headerProps={headerProps} />;
-      case ViewState.BEACHES: return <BeachesView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} />;
-      case ViewState.SIGHTSEEING: return <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} />;
-      case ViewState.ACTIVITIES: return <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} />;
-      case ViewState.DINING: return <DiningView t={t} businesses={businesses} ads={ads} headerProps={headerProps} />;
-      case ViewState.SHOPPING: return <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} headerProps={headerProps} />;
-      case ViewState.HEALTH: return <HealthView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} />;
-      case ViewState.CITIZEN_SERVICES: return <CitizenServicesView t={t} ads={ads} onBack={() => handleNavigate(ViewState.HOME)} headerProps={headerProps} />;
-      case ViewState.EVENTS: return <EventsView t={t} events={events} onShare={handleShare} onAddToCalendar={(e) => alert(t.common.addToCalendar)} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={toggleMyEvent} ads={ads} headerProps={headerProps} />;
-      case ViewState.FORUM: return <ForumView t={t} ads={ads} headerProps={headerProps} />;
+      case ViewState.HOME: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.NEWS: return <NewsView t={t} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.BEACHES: return <BeachesView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.SIGHTSEEING: return <SightseeingView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.ACTIVITIES: return <ActivitiesView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.DINING: return <DiningView t={t} businesses={businesses} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.SHOPPING: return <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.HEALTH: return <HealthView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.CITIZEN_SERVICES: return <CitizenServicesView t={t} ads={ads} onBack={() => handleNavigate(ViewState.HOME)} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.EVENTS: return <EventsView t={t} events={events} onShare={handleShare} onAddToCalendar={(e) => alert(t.common.addToCalendar)} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={toggleMyEvent} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.FORUM: return <ForumView t={t} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
       case ViewState.MAP: return <MapView t={t} onNavigate={handleNavigate} businesses={businesses} ads={ads} />;
-      case ViewState.AI_CHAT: return <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} langCode={currentLang.code} langLabel={currentLang.label} ads={ads} headerProps={headerProps} />;
+      case ViewState.AI_CHAT: return <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} langCode={currentLang.code} langLabel={currentLang.label} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
       case ViewState.ADMIN: return (
         <AdminDashboard 
           ads={ads} setAds={setAds} 
@@ -287,17 +289,16 @@ const App: React.FC = () => {
         />
       );
       case ViewState.PROFILE: return <ProfileView userName={userName} onLogout={handleLogout} onNavigate={handleNavigate} favorites={favorites} myEvents={myEvents} t={t} />;
-      case ViewState.SEARCH: return <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} headerProps={headerProps} />;
+      case ViewState.SEARCH: return <SearchView t={t} events={events} businesses={businesses} onNavigate={handleNavigate} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
       case ViewState.POSTCARD: return <PostcardCreator t={t} onBack={() => handleNavigate(ViewState.HOME)} />;
-      case ViewState.LENS: return <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} ads={ads} headerProps={headerProps} />;
-      default: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} headerProps={headerProps} />;
+      case ViewState.LENS: return <PHLensView t={t} onBack={() => handleNavigate(ViewState.HOME)} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      default: return <HomeView t={t} events={events} onNavigate={handleNavigate} heroImages={heroImages} currentHeroIndex={currentHeroIndex} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
     }
   };
 
   const getLegalContent = () => {
     const lang = currentLang.code;
     const policyMap = legalState.type === 'privacy' ? PRIVACY_POLICY : TERMS_OF_SERVICE;
-    // Fallback to English if translation is missing, then Spanish
     return policyMap[lang] || policyMap['en'] || policyMap['es'];
   };
 
@@ -319,14 +320,14 @@ const App: React.FC = () => {
       <Sidebar 
         isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} 
         onNavigate={handleNavigate} ads={ads} title={t.menu.title || 'PH App'} sponsoredText={t.common.sponsored} 
-        isLoggedIn={isLoggedIn} onLogout={handleLogout} t={t} 
+        isLoggedIn={isLoggedIn} onLogout={handleLogout} onLogin={() => setLoginOpen(true)} t={t} 
       />
 
       <main className={isImmersiveView ? "" : "pt-24 min-h-screen"}>
         {renderContent()}
       </main>
 
-      {!isImmersiveView && <Footer t={t} onOpenAdminLogin={() => setLoginOpen(true)} />}
+      {!isImmersiveView && <Footer t={t} onOpenAdminLogin={handleOpenAdminLogin} />}
       <MobileNav currentView={currentView} onNavigate={handleNavigate} t={t} />
     </div>
   );

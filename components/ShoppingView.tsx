@@ -15,9 +15,10 @@ interface ShoppingViewProps {
   toggleFavorite: (id: string) => void;
   ads: Ad[]; 
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highlightedBusinessId, favorites, toggleFavorite, ads, headerProps }) => {
+export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highlightedBusinessId, favorites, toggleFavorite, ads, headerProps, onOpenAdminLogin }) => {
   const [selectedBusiness, setSelectedBusiness] = useState<CensusItem | null>(null);
   const [activeZone, setActiveZone] = useState<string>('all');
   
@@ -129,7 +130,7 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
 
         {/* 5. FOOTER GLOBAL */}
         <div className="relative z-10">
-          <Footer t={t} />
+          <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
         </div>
     </div>
   );

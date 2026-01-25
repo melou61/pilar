@@ -14,9 +14,10 @@ interface SightseeingViewProps {
   onNavigate?: (view: ViewState, id?: string) => void;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate, ads, headerProps }) => {
+export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate, ads, headerProps, onOpenAdminLogin }) => {
   const content = t.sightseeing_page;
 
   const getCrowdColor = (level: string) => {
@@ -206,7 +207,7 @@ export const SightseeingView: React.FC<SightseeingViewProps> = ({ t, onNavigate,
 
       {/* 5. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

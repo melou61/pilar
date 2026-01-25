@@ -14,9 +14,10 @@ interface CitizenServicesViewProps {
   ads: Ad[];
   onBack: () => void;
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads, onBack, headerProps }) => {
+export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads, onBack, headerProps, onOpenAdminLogin }) => {
   const [activeModal, setActiveModal] = useState<'none' | 'appointment' | 'incident' | 'success'>('none');
 
   const handleDownload = (name: string) => {
@@ -140,7 +141,7 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads
 
       {/* 6. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

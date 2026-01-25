@@ -17,6 +17,7 @@ interface HomeViewProps {
   currentHeroIndex: number;
   ads: Ad[]; 
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
 const SHORTS_BASE = [
@@ -33,7 +34,7 @@ const MOMENTS_GALLERY = [
   'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80', 
 ];
 
-export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroImages, currentHeroIndex, ads, headerProps }) => {
+export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroImages, currentHeroIndex, ads, headerProps, onOpenAdminLogin }) => {
   const hp = t.home_page;
 
   return (
@@ -142,7 +143,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
 
       {/* FOOTER */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

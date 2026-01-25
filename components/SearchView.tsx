@@ -15,9 +15,10 @@ interface SearchViewProps {
   toggleFavorite: (id: string) => void;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const SearchView: React.FC<SearchViewProps> = ({ t, events, businesses, onNavigate, favorites, toggleFavorite, ads, headerProps }) => {
+export const SearchView: React.FC<SearchViewProps> = ({ t, events, businesses, onNavigate, favorites, toggleFavorite, ads, headerProps, onOpenAdminLogin }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<{events: Event[], business: CensusItem[]}>({ events: [], business: [] });
   const inputRef = useRef<HTMLInputElement>(null);
@@ -163,7 +164,7 @@ export const SearchView: React.FC<SearchViewProps> = ({ t, events, businesses, o
 
       {/* 5. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

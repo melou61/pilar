@@ -14,9 +14,10 @@ interface ActivitiesViewProps {
   onNavigate?: (view: ViewState, id?: string) => void;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, ads, headerProps }) => {
+export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, ads, headerProps, onOpenAdminLogin }) => {
   const content = t.activities_page;
 
   return (
@@ -143,7 +144,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({ t, onNavigate, a
 
       {/* 5. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

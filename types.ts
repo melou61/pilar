@@ -186,4 +186,5 @@ export interface AdminUser {
   createdAt: string;
   active?: boolean;
   lastSeen?: string;
+  password?: string;
 }

@@ -14,9 +14,10 @@ interface BeachesViewProps {
   onNavigate?: (view: ViewState, id?: string) => void;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, headerProps }) => {
+export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, headerProps, onOpenAdminLogin }) => {
   const content = t.beaches_page;
 
   const getOccupancyColor = (level: string) => {
@@ -208,7 +209,7 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
 
       {/* 5. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

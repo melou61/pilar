@@ -14,6 +14,7 @@ interface HealthViewProps {
   onNavigate: (view: ViewState, id?: string) => void;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
 const PHARMACIES = [
@@ -22,7 +23,7 @@ const PHARMACIES = [
   { id: 'f3', name: 'Farmacia Pinar', address: 'Av. Mediterráneo', phone: '965352222', lat: 37.894, lng: -0.841, onDutyDays: [2, 5] }
 ];
 
-export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, headerProps }) => {
+export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, headerProps, onOpenAdminLogin }) => {
   const today = new Date().getDay();
   const onDutyPharmacy = PHARMACIES.find(f => f.onDutyDays.includes(today)) || PHARMACIES[0];
   const h = t.health;
@@ -88,7 +89,7 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, head
 
       {/* 6. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

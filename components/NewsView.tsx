@@ -14,9 +14,10 @@ interface NewsViewProps {
   t: any;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const NewsView: React.FC<NewsViewProps> = ({ t, ads, headerProps }) => {
+export const NewsView: React.FC<NewsViewProps> = ({ t, ads, headerProps, onOpenAdminLogin }) => {
   const [activeCategory, setActiveCategory] = useState<NewsCategory | 'ALL'>('ALL');
 
   const getCategoryIcon = (cat: NewsCategory) => {
@@ -153,7 +154,7 @@ export const NewsView: React.FC<NewsViewProps> = ({ t, ads, headerProps }) => {
 
       {/* 6. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

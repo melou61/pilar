@@ -18,11 +18,23 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
   const [name, setName] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Estado para el truco secreto
+  const [secretClicks, setSecretClicks] = useState(0);
 
   const getStoredUser = () => {
     const stored = localStorage.getItem('pilar_user_db');
     return stored ? JSON.parse(stored) : null;
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      // Resetear el contador al cerrar
+      setSecretClicks(0);
+      setError(null);
+      setPassword('');
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -83,6 +95,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
     setError(null);
   };
 
+  const handleSecretClick = () => {
+    setSecretClicks(prev => prev + 1);
+  };
+
   return (
     <div className="fixed inset-0 z-[7500] flex items-center justify-center p-4">
       <div 
@@ -91,8 +107,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
       />
       
       <div className="relative w-full max-w-sm bg-white rounded-[45px] shadow-2xl p-10 animate-in zoom-in-95 duration-200 border border-white/20">
-        <div className="flex items-center gap-4 mb-8">
-           <div className={`w-14 h-14 ${view === 'login' ? 'bg-blue-600' : 'bg-emerald-600'} text-white rounded-[24px] flex items-center justify-center shadow-xl transition-all`}>
+        <div className="flex items-center gap-4 mb-8 select-none">
+           <div 
+             onClick={handleSecretClick}
+             className={`w-14 h-14 ${view === 'login' ? 'bg-blue-600' : 'bg-emerald-600'} text-white rounded-[24px] flex items-center justify-center shadow-xl transition-all cursor-pointer active:scale-90`}
+           >
              {view === 'login' ? <LogIn size={28} /> : <UserPlus size={28} />}
            </div>
            <div>
@@ -176,8 +195,9 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
             </button>
         </div>
 
-        {view === 'login' && (
-          <div className="mt-8 pt-6 border-t border-gray-100">
+        {/* Solo visible si se ha hecho click 5 veces en el icono y estamos en vista login */}
+        {view === 'login' && secretClicks >= 5 && (
+          <div className="mt-8 pt-6 border-t border-gray-100 animate-in slide-in-from-bottom-2 fade-in">
             <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] text-center mb-4 leading-tight">Acceso Rápido Administrador</p>
             <button 
                 onClick={() => { setEmail('admin@pilarhoradada.com'); setPassword('admin'); }}

@@ -21,9 +21,10 @@ interface AIChatViewProps {
   langLabel: string;
   ads: Ad[];
   headerProps: any;
+  onOpenAdminLogin: () => void;
 }
 
-export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, langLabel, ads, headerProps }) => {
+export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, langLabel, ads, headerProps, onOpenAdminLogin }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -154,7 +155,7 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ t, onBack, langCode, lan
 
       {/* 5. FOOTER GLOBAL */}
       <div className="relative z-10">
-        <Footer t={t} />
+        <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
     </div>
   );

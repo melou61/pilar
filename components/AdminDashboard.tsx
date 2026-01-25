@@ -962,6 +962,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Identidad del Administrador</label>
                        <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="Nombre completo" value={currentAdmin.name || ''} onChange={e => setCurrentAdmin({...currentAdmin, name: e.target.value})} />
                        <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" placeholder="Email institucional" value={currentAdmin.email || ''} onChange={e => setCurrentAdmin({...currentAdmin, email: e.target.value})} />
+                       <input className="w-full p-5 bg-slate-50 rounded-2xl font-bold border" type="password" placeholder="Contraseña de acceso" value={currentAdmin.password || ''} onChange={e => setCurrentAdmin({...currentAdmin, password: e.target.value})} />
                     </div>
                     <div className="space-y-4">
                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nivel de Privilegio</label>
