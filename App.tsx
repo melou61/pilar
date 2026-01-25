@@ -261,7 +261,9 @@ const App: React.FC = () => {
     t
   };
 
-  const handleOpenAdminLogin = () => setLoginOpen(true);
+  const handleOpenAdminLogin = () => {
+    setLoginOpen(true);
+  };
 
   const renderContent = () => {
     switch (currentView) {
@@ -305,7 +307,13 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 pb-20">
       {activeBeaconShop && <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} t={t} />}
-      <LoginModal isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} onLogin={handleLogin} onLoginSuperAdmin={() => handleLogin()} t={t} />
+      <LoginModal 
+        isOpen={isLoginOpen} 
+        onClose={() => { setLoginOpen(false); }} 
+        onLogin={handleLogin} 
+        onLoginSuperAdmin={() => handleLogin()} 
+        t={t}
+      />
       <ShareModal isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} data={shareData} t={t.share} />
       
       <LegalModal 
@@ -320,7 +328,7 @@ const App: React.FC = () => {
       <Sidebar 
         isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} 
         onNavigate={handleNavigate} ads={ads} title={t.menu.title || 'PH App'} sponsoredText={t.common.sponsored} 
-        isLoggedIn={isLoggedIn} onLogout={handleLogout} onLogin={() => setLoginOpen(true)} t={t} 
+        isLoggedIn={isLoggedIn} onLogout={handleLogout} onLogin={() => { setLoginOpen(true); }} t={t} 
       />
 
       <main className={isImmersiveView ? "" : "pt-24 min-h-screen"}>

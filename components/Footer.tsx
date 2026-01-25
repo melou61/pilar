@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Facebook, Instagram, Twitter, Youtube, MapPin, Mail, Phone, Globe, Lock } from './Icons';
 
 interface FooterProps {
@@ -9,10 +9,27 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ t, onOpenAdminLogin }) => {
   const f = t.footer;
+  const [clicks, setClicks] = useState(0);
+  const timeoutRef = useRef<any>(null);
 
   const openLegal = (e: React.MouseEvent, type: 'privacy' | 'terms') => {
     e.preventDefault();
     window.dispatchEvent(new CustomEvent('open-legal', { detail: type }));
+  };
+
+  const handleSecretAdminClick = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    
+    const newClicks = clicks + 1;
+    setClicks(newClicks);
+
+    if (newClicks >= 5) {
+      onOpenAdminLogin?.();
+      setClicks(0);
+    } else {
+      // Reducido a 300ms para requerir clicks rápidos e intencionales
+      timeoutRef.current = setTimeout(() => setClicks(0), 300);
+    }
   };
 
   return (
@@ -80,11 +97,11 @@ export const Footer: React.FC<FooterProps> = ({ t, onOpenAdminLogin }) => {
       <div className="mt-20 pt-8 border-t border-white/5 text-[10px] text-center text-gray-500 tracking-wider font-medium flex flex-col sm:flex-row items-center justify-center gap-4">
           <div className="flex items-center gap-2">
             <span>Pilar App 2026 © by <a href="https://vortexdigital-ai.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 font-bold transition-colors">https://vortexdigital-ai.com</a>. {f.rights}.</span>
-            {/* Secret Admin Trigger */}
+            {/* Secret Admin Trigger (Requires 5 fast clicks to open modal) */}
             <button 
-              onClick={onOpenAdminLogin} 
-              className="opacity-20 hover:opacity-100 transition-opacity p-1 text-gray-400 hover:text-white"
-              title="Admin Access"
+              onClick={handleSecretAdminClick}
+              className={`opacity-20 hover:opacity-100 transition-all p-1 text-gray-400 hover:text-white active:scale-90 active:text-blue-500 ${clicks > 0 ? 'text-white opacity-50' : ''}`}
+              title="Protected System"
             >
               <Lock size={10} />
             </button>
