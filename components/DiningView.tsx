@@ -6,6 +6,7 @@ import { BusinessDetailView } from './BusinessDetailView';
 import { AdSpot } from './AdSpot';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { SecureText } from './Security';
 
 interface DiningViewProps {
   t: any;
@@ -106,7 +107,7 @@ export const DiningView: React.FC<DiningViewProps> = ({ t, businesses, ads, head
                       <div className="mt-8 pt-8 border-t border-gray-50 flex items-center justify-between text-[10px] text-gray-400 font-black uppercase tracking-widest">
                           <div className="flex flex-wrap gap-6">
                               <span className="flex items-center gap-2"><Clock size={16} className="text-blue-500" /> <span className="text-green-600">Abierto</span></span>
-                              <span className="flex items-center gap-2"><MapPin size={16} className="text-red-500" /> {place.address}</span>
+                              <span className="flex items-center gap-2"><MapPin size={16} className="text-red-500" /> <SecureText text={place.address} /></span>
                           </div>
                       </div>
                   </div>

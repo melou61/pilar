@@ -19,6 +19,7 @@ interface BeachesViewProps {
 
 export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, headerProps, onOpenAdminLogin }) => {
   const content = t.beaches_page;
+  const labels = t.beach_labels;
 
   const getOccupancyColor = (level: string) => {
     switch(level.toLowerCase()) {
@@ -31,24 +32,20 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
 
   return (
     <div className="fixed inset-0 z-[450] bg-[#f8fafc] flex flex-col animate-in fade-in duration-500 overflow-y-auto no-scrollbar">
-      
-      {/* 1. HEADER GLOBAL */}
       <div className="relative z-[220] shrink-0">
          <Header {...headerProps} />
       </div>
 
-      {/* 2. ANUNCIO SUPERIOR (Full Width) */}
       <div className="w-full pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
          <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.BEACHES} />
       </div>
 
-      {/* 3. TOURISM HEADER */}
       <div className="bg-[#0f172a] px-8 pt-20 pb-28 rounded-b-[70px] shadow-2xl relative overflow-hidden shrink-0 mt-4">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10 max-w-4xl mx-auto">
           <div className="flex items-center gap-3 text-blue-400 font-black text-[10px] uppercase tracking-[0.4em] mb-4">
             <Waves size={20} />
-            {content.coastal}
+            {labels.coastal}
           </div>
           <h1 className="text-6xl sm:text-7xl font-black text-white tracking-tighter mb-6 leading-[0.9]">
             {content.title}
@@ -62,7 +59,7 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
       <div className="px-6 -mt-12 space-y-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
           {MOCK_BEACHES.map((beach) => {
-            const beachLangData = content.list[beach.id as keyof typeof content.list] || { name: beach.name, desc: '' };
+            const beachLangData = content.list?.[beach.id as keyof typeof content.list] || { name: beach.name, desc: '' };
             return (
               <div 
                 key={beach.id} 
@@ -79,12 +76,12 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
                        {beach.blueFlag && (
                           <div className="bg-blue-600 text-white px-5 py-2.5 rounded-[22px] flex items-center gap-2.5 shadow-2xl border border-white/20">
                              <Flag size={16} className="fill-white" />
-                             <span className="text-[11px] font-black uppercase tracking-widest">{content.blue_flag}</span>
+                             <span className="text-[11px] font-black uppercase tracking-widest">{labels.blue_flag}</span>
                           </div>
                        )}
                        <div className="bg-white/95 backdrop-blur-md text-emerald-600 px-5 py-2.5 rounded-[22px] flex items-center gap-2.5 shadow-2xl border border-gray-100">
                           <ShieldCheck size={16} />
-                          <span className="text-[11px] font-black uppercase tracking-widest">{content.open}</span>
+                          <span className="text-[11px] font-black uppercase tracking-widest">{labels.open}</span>
                        </div>
                     </div>
 
@@ -93,21 +90,21 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
                           <div className="flex items-center gap-2 px-4 border-r border-gray-100">
                              <Thermometer size={18} className="text-blue-500" />
                              <div className="flex flex-col">
-                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Agua</span>
+                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">{labels.water}</span>
                                 <span className="text-sm font-black text-gray-900">{beach.waterTemp}</span>
                              </div>
                           </div>
                           <div className="flex items-center gap-2 px-4 border-r border-gray-100">
                              <Sun size={18} className="text-orange-500" />
                              <div className="flex flex-col">
-                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">UV</span>
+                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">{labels.uv}</span>
                                 <span className="text-sm font-black text-gray-900">{beach.uvIndex}</span>
                              </div>
                           </div>
                           <div className="flex items-center gap-2 px-4">
                              <Users size={18} className="text-purple-500" />
                              <div className="flex flex-col">
-                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Gente</span>
+                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">{labels.crowd}</span>
                                 <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-lg ${getOccupancyColor(beach.occupancy)}`}>{beach.occupancy}</span>
                              </div>
                           </div>
@@ -133,14 +130,14 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
                       <div className="bg-slate-50 p-5 rounded-[30px] flex items-center gap-4 border border-slate-100/50">
                          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm"><Ruler size={18}/></div>
                          <div>
-                            <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest block mb-0.5">Longitud</span>
+                            <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest block mb-0.5">{labels.length}</span>
                             <span className="text-sm font-black text-gray-900">{beach.length}</span>
                          </div>
                       </div>
                       <div className="bg-slate-50 p-5 rounded-[30px] flex items-center gap-4 border border-slate-100/50">
                          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-orange-600 shadow-sm"><Droplets size={18}/></div>
                          <div>
-                            <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest block mb-0.5">Arena</span>
+                            <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest block mb-0.5">{labels.sand}</span>
                             <span className="text-sm font-black text-gray-900">{beach.sandType}</span>
                          </div>
                       </div>
@@ -148,7 +145,7 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
 
                    <div className="mb-10">
                       <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                         <Info size={14} /> Servicios Destacados
+                         <Info size={14} /> {labels.services}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {beach.services.map((service, idx) => (
@@ -164,7 +161,7 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
                       className="w-full py-6 bg-[#0f172a] text-white rounded-[32px] font-black text-sm uppercase tracking-widest flex items-center justify-center gap-4 shadow-2xl hover:bg-blue-600 transition-all active:scale-95 group/btn"
                    >
                       <MapPin size={22} className="text-blue-500 group-hover/btn:text-white transition-colors" />
-                      Explorar en el Mapa
+                      {labels.map}
                       <ChevronRight size={20} className="ml-auto opacity-30" />
                    </button>
                  </div>
@@ -179,35 +176,17 @@ export const BeachesView: React.FC<BeachesViewProps> = ({ t, onNavigate, ads, he
               <div className="relative z-10">
                  <h3 className="text-4xl font-black mb-6 tracking-tighter">{content.fact_title}</h3>
                  <p className="text-blue-100 text-xl font-medium leading-relaxed max-w-2xl mx-auto mb-10">
-                    {content.fact_desc} Todas nuestras playas cuentan con accesibilidad total y servicios de primer nivel para asegurar tus mejores vacaciones mediterráneas.
+                    {content.fact_desc}
                  </p>
-                 <div className="flex flex-wrap justify-center gap-8">
-                    <div className="flex flex-col items-center">
-                       <span className="text-4xl font-black">10</span>
-                       <span className="text-[10px] font-black uppercase tracking-widest text-blue-300">Playas & Calas</span>
-                    </div>
-                    <div className="w-px h-12 bg-white/10 hidden sm:block" />
-                    <div className="flex flex-col items-center">
-                       <span className="text-4xl font-black">+4km</span>
-                       <span className="text-[10px] font-black uppercase tracking-widest text-blue-300">De Litoral</span>
-                    </div>
-                    <div className="w-px h-12 bg-white/10 hidden sm:block" />
-                    <div className="flex flex-col items-center">
-                       <span className="text-4xl font-black">7</span>
-                       <span className="text-[10px] font-black uppercase tracking-widest text-blue-300">Banderas Azules</span>
-                    </div>
-                 </div>
               </div>
            </div>
         </div>
       </div>
 
-      {/* 4. ANUNCIO INFERIOR (Full Width) */}
       <div className="w-full py-6 shrink-0 opacity-90 relative z-10 bg-white">
          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.BEACHES} />
       </div>
 
-      {/* 5. FOOTER GLOBAL */}
       <div className="relative z-10">
         <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>

@@ -1,4 +1,5 @@
 
+
 import { Event, CensusCategory, CensusItem, NewsItem, ForumPost } from './types';
 
 // --- TEXTOS LEGALES MULTI-IDIOMA ---
@@ -79,25 +80,25 @@ export const TERMS_OF_SERVICE: Record<string, string> = {
   de: `
 <div class="space-y-6">
   <p class="text-sm text-gray-500">Zuletzt aktualisiert: 25. Januar 2026</p>
-  <p>Willkommen bei Pilar Vivo. Durch den Zugriff und die Nutzung unserer Webplattform erklären Sie sich mit den folgenden Bedingungen einverstanden.</p>
-  <h3 class="text-lg font-bold text-gray-900">1. Annahme</h3>
-  <p>Durch die Registrierung oder Nutzung von Pilar Vivo stimmen Sie diesen Bedingungen zu.</p>
-  <h3 class="text-lg font-bold text-gray-900">2. Dienstleistung</h3>
-  <p>Pilar Vivo ist eine digitale Plattform für lokales Informationsmanagement.</p>
-  <h3 class="text-lg font-bold text-gray-900">3. Konto</h3>
-  <p>Sie sind verantwortlich für die Vertraulichkeit Ihres Kontos und alle Aktivitäten darunter.</p>
-  <h3 class="text-lg font-bold text-gray-900">4. Zulässige Nutzung</h3>
-  <p>Sie verpflichten sich, die Plattform legal zu nutzen und weder dem Dienst noch Dritten zu schaden.</p>
-  <h3 class="text-lg font-bold text-gray-900">5. Geistiges Eigentum</h3>
-  <p>Der Inhalt ist Eigentum von Pilar Vivo oder seinen Lizenzgebern. Kopieren ohne Genehmigung ist verboten.</p>
-  <h3 class="text-lg font-bold text-gray-900">6. Datenschutz</h3>
-  <p>Ihre Privatsphäre ist wichtig. Bitte beachten Sie unsere Datenschutzerklärung.</p>
-  <h3 class="text-lg font-bold text-gray-900">7. Haftung</h3>
-  <p>Der Dienst wird "wie besehen" bereitgestellt. Wir garantieren keine ununterbrochene Verfügbarkeit.</p>
-  <h3 class="text-lg font-bold text-gray-900">8. Kontakt</h3>
-  <p><strong>Rathaus Pilar de la Horadada</strong><br/>
-  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spanien<br/>
+  <p>Bei Pilar Vivo nehmen wir den Datenschutz sehr ernst. Diese Datenschutzerklärung beschreibt, wie wir Ihre persönlichen Daten sammeln und schützen.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Verantwortlicher</h3>
+  <p><strong>Pilar Vivo / Rathaus Pilar de la Horadada</strong><br/>
+  Adresse: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spanien<br/>
   E-Mail: ayto@pilardelahoradada.org</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Gesammelte Informationen</h3>
+  <p>Wir sammeln Registrierungsdaten (Name, E-Mail), Plattformnutzung, ungefähren Standort und technische Daten.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Nutzung der Informationen</h3>
+  <p>Wir nutzen Ihre Daten zur Bereitstellung des Dienstes und zur Verwaltung Ihres Kontos.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Weitergabe von Informationen</h3>
+  <p>Wir verkaufen Ihre Daten nicht. Wir teilen Informationen mit notwendigen Dienstleistern (Hosting, Analyse).</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Cookies</h3>
+  <p>Wir verwenden essentielle, Leistungs- und funktionale Cookies.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Sicherheit</h3>
+  <p>Wir setzen technische Sicherheitsmaßnahmen ein, um Ihre Daten zu schützen.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Ihre Rechte</h3>
+  <p>Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer Daten. Kontakt: ayto@pilardelahoradada.org.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Kontakt</h3>
+  <p>Bei Fragen: ayto@pilardelahoradada.org. AEPD: www.aepd.es</p>
 </div>
 `,
   it: `
@@ -305,10 +306,10 @@ export const MOCK_NEWS: NewsItem[] = [
 ];
 
 export const MOCK_FORUM_POSTS: ForumPost[] = [
-  { id: 'p1', user: 'Antonio G.', avatar: 'AG', category: 'Recomendaciones', title: '¿Mejor sitio para arroz en La Torre?', content: 'Estamos de visita y buscamos algo auténtico frente al mar. ¡Gracias!', likes: 12, replies: 5, time: 'Hace 2h', badge: 'Vecino Activo' },
-  { id: 'p2', user: 'Marta PH', avatar: 'M', category: 'General', title: 'Aviso: Corte de agua en Calle Mayor', content: 'He visto operarios trabajando cerca de la plaza, por si a alguien le sirve.', likes: 8, replies: 2, time: 'Hace 4h' },
-  { id: 'p3', user: 'Carlos L.', avatar: 'CL', category: 'Mascotas', title: 'Perro encontrado en Higuericas', content: 'Es un podenco joven con collar rojo pero sin chapa. Lo tengo yo ahora mismo.', likes: 45, replies: 12, time: 'Hace 10h', badge: 'Protector' },
-  { id: 'p4', user: 'User92', avatar: 'U', category: 'Mercadillo', title: 'Vendo tabla de surf casi nueva', content: 'Ideal para principiantes. Entrega en mano en Mil Palmeras.', likes: 3, replies: 0, time: 'Ayer' },
+  { id: 'p1', user: 'Antonio G.', avatar: 'AG', category: 'Recomendaciones', title: '¿Mejor sitio para arroz en La Torre?', content: 'Estamos de visita y buscamos algo auténtico frente al mar. ¡Gracias!', likes: 12, replies: 5, time: 'Hace 2h', badge: 'Vecino Activo', status: 'APPROVED' },
+  { id: 'p2', user: 'Marta PH', avatar: 'M', category: 'General', title: 'Aviso: Corte de agua en Calle Mayor', content: 'He visto operarios trabajando cerca de la plaza, por si a alguien le sirve.', likes: 8, replies: 2, time: 'Hace 4h', status: 'APPROVED' },
+  { id: 'p3', user: 'Carlos L.', avatar: 'CL', category: 'Mascotas', title: 'Perro encontrado en Higuericas', content: 'Es un podenco joven con collar rojo pero sin chapa. Lo tengo yo ahora mismo.', likes: 45, replies: 12, time: 'Hace 10h', badge: 'Protector', status: 'APPROVED' },
+  { id: 'p4', user: 'User92', avatar: 'U', category: 'Mercadillo', title: 'Vendo tabla de surf casi nueva', content: 'Ideal para principiantes. Entrega en mano en Mil Palmeras.', likes: 3, replies: 0, time: 'Ayer', status: 'PENDING' },
 ];
 
 export const MOCK_EVENTS: Event[] = [
@@ -318,15 +319,79 @@ export const MOCK_EVENTS: Event[] = [
 
 export const MOCK_BEACHES = [
   { 
+    id: 'higuericas', 
+    name: 'Las Higuericas', 
+    image: 'https://images.unsplash.com/photo-1509233725247-49e657c54213?auto=format&fit=crop&w=1200&q=80', 
+    blueFlag: true, 
+    status: 'Abierta', 
+    rating: 4.9, 
+    services: ['Dunas', 'Chiringuitos', 'Pasarelas', 'Parking', 'Música en vivo'],
+    lat: 37.8590, lng: -0.7720,
+    length: '976m',
+    sandType: 'Arena Blanca',
+    occupancy: 'Alta',
+    waterTemp: '24°C',
+    uvIndex: 7,
+    seaState: 'Calma'
+  },
+  { 
     id: 'milpalmeras', 
     name: 'Mil Palmeras', 
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', 
     blueFlag: true, 
     status: 'Abierta', 
     rating: 4.9, 
-    services: ['Duchas', 'Parking', 'Cruz Roja', 'Chiringuito', 'Accesible', 'Alquiler Hamacas'],
-    lat: 37.8864, lng: -0.7607,
+    services: ['Duchas', 'Parking', 'Cruz Roja', 'Chiringuito', 'Accesible', 'Juegos Infantiles'],
+    lat: 37.8890, lng: -0.7590,
     length: '346m',
+    sandType: 'Arena Fina',
+    occupancy: 'Alta',
+    waterTemp: '24°C',
+    uvIndex: 7,
+    seaState: 'Calma'
+  },
+  { 
+    id: 'jesuitas', 
+    name: 'Playa de los Jesuitas', 
+    image: 'https://images.unsplash.com/photo-1544949116-7e8894129f6d?auto=format&fit=crop&w=1200&q=80', 
+    blueFlag: true, 
+    status: 'Abierta', 
+    rating: 4.8, 
+    services: ['Vóley Playa', 'Redes', 'Footing', 'Duchas'],
+    lat: 37.8680, lng: -0.7790,
+    length: '465m',
+    sandType: 'Arena Dorada',
+    occupancy: 'Media',
+    waterTemp: '24°C',
+    uvIndex: 7,
+    seaState: 'Bandera Verde'
+  },
+  { 
+    id: 'elconde', 
+    name: 'Playa del Conde', 
+    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', 
+    blueFlag: true, 
+    status: 'Abierta', 
+    rating: 4.9, 
+    services: ['Torre Vigía', 'Historia', 'Cine de Verano', 'Parking'],
+    lat: 37.8650, lng: -0.7830,
+    length: '210m',
+    sandType: 'Arena Dorada',
+    occupancy: 'Media',
+    waterTemp: '23°C',
+    uvIndex: 6,
+    seaState: 'Calma'
+  },
+  { 
+    id: 'elpuerto', 
+    name: 'Playa del Puerto', 
+    image: 'https://images.unsplash.com/photo-1562592534-754d209d843e?auto=format&fit=crop&w=1200&q=80', 
+    blueFlag: true, 
+    status: 'Abierta', 
+    rating: 4.7, 
+    services: ['Club Náutico', 'Rampas', 'Restaurantes', 'Paseo Marítimo'],
+    lat: 37.8630, lng: -0.7820,
+    length: '300m',
     sandType: 'Arena Fina',
     occupancy: 'Media',
     waterTemp: '24°C',
@@ -340,45 +405,13 @@ export const MOCK_BEACHES = [
     blueFlag: false, 
     status: 'Abierta', 
     rating: 4.8, 
-    services: ['Escaleras', 'Snorkel', 'Calas Naturales'],
+    services: ['Escaleras', 'Snorkel', 'Calas Naturales', 'Tranquilidad'],
     lat: 37.8760, lng: -0.7680,
     length: '100m',
     sandType: 'Roca/Arena',
     occupancy: 'Baja',
     waterTemp: '25°C',
     uvIndex: 8,
-    seaState: 'Calma'
-  },
-  { 
-    id: 'jesuitas', 
-    name: 'Jesuitas', 
-    image: 'https://images.unsplash.com/photo-1544949116-7e8894129f6d?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.8, 
-    services: ['Vóley Playa', 'Redes', 'Footing', 'Duchas'],
-    lat: 37.8690, lng: -0.7780,
-    length: '465m',
-    sandType: 'Arena Blanca',
-    occupancy: 'Alta',
-    waterTemp: '24°C',
-    uvIndex: 7,
-    seaState: 'Bandera Verde'
-  },
-  { 
-    id: 'elconde', 
-    name: 'El Conde', 
-    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.9, 
-    services: ['Torre Vigía', 'Chiringuito', 'Historia', 'Parking'],
-    lat: 37.8645, lng: -0.7840,
-    length: '210m',
-    sandType: 'Arena Dorada',
-    occupancy: 'Media',
-    waterTemp: '23°C',
-    uvIndex: 6,
     seaState: 'Calma'
   }
 ];
@@ -414,7 +447,7 @@ export const MOCK_SIGHTSEEING = [
   },
   { 
     id: 'museo-etnologico', 
-    name: 'Museo Arqueológico PH', 
+    name: 'Museo Arqueológico Etnológico', 
     image: 'https://images.unsplash.com/photo-1518998053574-53ee81be84ac?auto=format&fit=crop&w=1200&q=80', 
     category: 'Museo', 
     century: 'Contemporáneo', 
@@ -423,8 +456,8 @@ export const MOCK_SIGHTSEEING = [
     material: 'Vidrio y Hormigón',
     visitTime: '1.5 h',
     crowdLevel: 'Baja',
-    status: 'Abierto',
-    amenities: ['Aire Acondicionado', 'Accesible', 'Visitas Guiadas', 'Tienda de Recuerdos']
+    status: 'Gratuito',
+    amenities: ['Aire Acondicionado', 'Accesible', 'Visitas Guiadas', 'Historia Local']
   },
   { 
     id: 'canteras-romanas', 
@@ -432,18 +465,61 @@ export const MOCK_SIGHTSEEING = [
     image: 'https://images.unsplash.com/photo-1449156001931-828332736075?auto=format&fit=crop&w=1200&q=80', 
     category: 'Yacimiento', 
     century: 'I a.C.', 
-    lat: 37.8540, lng: -0.7850,
+    lat: 37.8870, lng: -0.7580, 
     style: 'Ingeniería Romana',
     material: 'Roca Natural',
     visitTime: '1 h',
     crowdLevel: 'Baja',
     status: 'Visitable',
-    amenities: ['Senderos Marítimos', 'Panel Informativo', 'Snorkel Cercano', 'Espacio Natural']
+    amenities: ['Junto al Mar', 'Panel Informativo', 'Snorkel Cercano', 'Espacio Natural']
   }
 ];
 
 export const ACTIVITIES_LIST = [
-  { id: 'rio-seco', title: 'Río Seco', image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80', category: 'hiking', duration: '2h', rating: 4.8, difficulty: 'easy', location: 'Campoverde', lat: 37.8932, lng: -0.8432 }
+  { 
+    id: 'rio-seco', 
+    title: 'Ruta de Senderismo Río Seco', 
+    image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80', 
+    category: 'hiking', 
+    duration: '3h', 
+    rating: 4.9, 
+    difficulty: 'medium', 
+    location: 'Pinar de Campoverde', 
+    lat: 37.8990, lng: -0.8400 
+  },
+  { 
+    id: 'loromero', 
+    title: 'Lo Romero Golf', 
+    image: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1200&q=80', 
+    category: 'sport', 
+    duration: '4h', 
+    rating: 4.8, 
+    difficulty: 'medium', 
+    location: 'Ctra. Orihuela', 
+    lat: 37.8750, lng: -0.8150 
+  },
+  { 
+    id: 'sailing', 
+    title: 'Vela y Kayak CN Torre', 
+    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80', 
+    category: 'water', 
+    duration: '2h', 
+    rating: 4.7, 
+    difficulty: 'easy', 
+    location: 'Puerto Deportivo', 
+    lat: 37.8635, lng: -0.7815 
+  },
+  { 
+    id: 'cycling', 
+    title: 'Cicloturismo Costa', 
+    image: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&w=1200&q=80', 
+    category: 'sport', 
+    duration: '1.5h', 
+    rating: 4.6, 
+    difficulty: 'easy', 
+    location: 'Paseo Marítimo', 
+    lat: 37.8700, lng: -0.7700 
+  }
 ];
 
 // --- SIMULACIÓN DE IMÁGENES REALISTAS POR CATEGORÍA ---

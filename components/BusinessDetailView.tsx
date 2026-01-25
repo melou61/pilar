@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { CensusItem } from '../types';
-import { ArrowLeft, MapPin, Phone, Star, Share2, Clock, Globe, X, Heart } from './Icons';
+import { ArrowLeft, MapPin, Phone, Star, Share2, Globe, Heart } from './Icons';
+import { SecureText } from './Security';
 
 interface BusinessDetailViewProps {
   business: CensusItem;
@@ -14,6 +15,7 @@ interface BusinessDetailViewProps {
 export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({ 
     business, onClose, t, isFavorite, onToggleFavorite 
 }) => {
+  const bT = t.business || {};
   return (
     <div className="fixed inset-0 z-[110] bg-white flex flex-col animate-in slide-in-from-bottom duration-500 overflow-y-auto pb-44">
       {/* Gallery Hero */}
@@ -53,7 +55,7 @@ export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({
           </div>
           <h1 className="text-6xl font-black tracking-tighter mb-2">{business.name}</h1>
           <p className="text-white/80 font-medium text-lg flex items-center gap-2">
-            <MapPin size={20} /> {business.address}
+            <MapPin size={20} /> <SecureText text={business.address} />
           </p>
         </div>
       </div>
@@ -66,7 +68,7 @@ export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({
               <span className="text-4xl font-black text-gray-900">{business.rating}</span>
             </div>
             <span className="text-gray-400 font-bold ml-1 uppercase tracking-widest text-[10px]">
-              {business.reviewCount} Reseñas Reales
+              {business.reviewCount} {bT.reviews}
             </span>
           </div>
           <div className="flex gap-4">
@@ -93,13 +95,13 @@ export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({
         </div>
 
         <div className="space-y-6">
-          <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">Nuestra Historia</h3>
+          <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">{bT.history}</h3>
           <p className="text-gray-700 text-2xl leading-relaxed font-medium">{business.description}</p>
         </div>
 
         {business.featuredItems && business.featuredItems.length > 0 && (
           <div className="space-y-10">
-            <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">Imprescindibles</h3>
+            <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">{bT.essentials}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {business.featuredItems.map(item => (
                 <div key={item} className="p-8 bg-white rounded-[35px] border border-gray-100 shadow-xl shadow-gray-200/40 flex items-center justify-between group hover:border-blue-200 transition-all">
@@ -114,14 +116,14 @@ export const BusinessDetailView: React.FC<BusinessDetailViewProps> = ({
         )}
 
         <div className="space-y-8">
-          <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">Horarios y Contacto</h3>
+          <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">{bT.schedule}</h3>
           <div className="bg-gray-50 rounded-[40px] p-10 space-y-6 border border-gray-100">
             <div className="flex justify-between items-center text-lg font-bold">
-              <span className="text-gray-500">Lunes - Viernes</span>
+              <span className="text-gray-500">{bT.weekdays}</span>
               <span className="text-gray-900">{business.hours.weekdays}</span>
             </div>
             <div className="flex justify-between items-center text-lg font-bold">
-              <span className="text-gray-500">Fines de Semana</span>
+              <span className="text-gray-500">{bT.weekend}</span>
               <span className="text-gray-900">{business.hours.weekend}</span>
             </div>
           </div>

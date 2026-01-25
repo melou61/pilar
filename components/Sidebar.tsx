@@ -93,7 +93,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <WeatherWidget t={t} />
 
           <div className="px-6">
-             {/* Cambiado a ViewState.SIDEBAR para segmentación global del menú */}
              <AdSpot ads={ads} position="menu-top" label={sponsoredText} view={ViewState.SIDEBAR} />
           </div>
 
@@ -104,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   className="w-full flex items-center gap-5 px-6 py-5 rounded-[22px] bg-emerald-600 text-white font-black hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-200"
                 >
                   <LogIn size={24} />
-                  <span className="flex-1 text-left text-sm uppercase tracking-[0.2em]">Acceder / Registro</span>
+                  <span className="flex-1 text-left text-sm uppercase tracking-[0.2em]">{t.auth?.login_trigger || 'Acceder / Registro'}</span>
                   <ChevronRight size={18} className="text-white/50" />
                 </button>
              </div>
@@ -134,7 +133,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </ul>
 
           <div className="px-6 py-4 border-t border-gray-50 mt-4">
-             {/* Cambiado a ViewState.SIDEBAR para segmentación global del menú */}
              <AdSpot ads={ads} position="menu-bottom" label={sponsoredText} view={ViewState.SIDEBAR} />
           </div>
 
@@ -153,7 +151,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="p-10 bg-gray-50 border-t border-gray-100 text-center">
             <div className="text-[11px] text-gray-400 font-black uppercase tracking-[0.5em]">
-                PH-APP • v1.0.26
+                PH-APP • v1.0.27
             </div>
         </div>
       </div>

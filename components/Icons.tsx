@@ -118,7 +118,10 @@ import {
   ToggleLeft,
   ToggleRight,
   CheckCircle,
-  Layout
+  Layout,
+  Server,
+  Key,
+  DollarSign
 } from 'lucide-react';
 
 export {
@@ -240,5 +243,8 @@ export {
   ToggleLeft,
   ToggleRight,
   CheckCircle,
-  Layout
+  Layout,
+  Server,
+  Key,
+  DollarSign
 };

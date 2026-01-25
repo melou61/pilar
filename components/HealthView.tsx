@@ -8,6 +8,7 @@ import { ViewState, Ad } from '../types';
 import { AdSpot } from './AdSpot';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { SecureText } from './Security';
 
 interface HealthViewProps {
   t: any;
@@ -56,7 +57,7 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, head
              </a>
              <a href="tel:+34965352355" className="flex-1 bg-[#0f172a] text-white p-5 rounded-[26px] shadow-xl flex flex-col items-center justify-center gap-1">
                 <span className="text-[10px] font-black uppercase tracking-widest opacity-80">{h.center}</span>
-                <span className="text-xl font-black mt-1">965 35 23 55</span>
+                <span className="text-xl font-black mt-1"><SecureText text="965 35 23 55" /></span>
              </a>
           </div>
         </div>
@@ -72,8 +73,8 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, head
              </div>
              <h2 className="text-4xl font-black tracking-tighter mb-4">{onDutyPharmacy.name}</h2>
              <div className="space-y-3 mb-10">
-                <div className="flex items-center gap-3 text-emerald-100 font-medium"><MapPin size={18} /> {onDutyPharmacy.address}</div>
-                <div className="flex items-center gap-3 text-emerald-100 font-medium"><Phone size={18} /> {onDutyPharmacy.phone}</div>
+                <div className="flex items-center gap-3 text-emerald-100 font-medium"><MapPin size={18} /> <SecureText text={onDutyPharmacy.address} /></div>
+                <div className="flex items-center gap-3 text-emerald-100 font-medium"><Phone size={18} /> <SecureText text={onDutyPharmacy.phone} /></div>
              </div>
              <button onClick={() => onNavigate(ViewState.MAP, onDutyPharmacy.id)} className="bg-white text-emerald-800 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center gap-2">
                 <Navigation size={16} /> {t.common.fullMap}

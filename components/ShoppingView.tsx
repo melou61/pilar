@@ -31,12 +31,12 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
     : shoppingList.filter(s => s.zone === activeZone);
 
   const zones = [
-    { id: 'all', label: 'Todo el municipio' },
-    { id: 'CENTRO', label: 'Pilar Centro' },
-    { id: 'LA_TORRE', label: 'La Torre' },
-    { id: 'MIL_PALMERAS', label: 'Mil Palmeras' },
-    { id: 'CAMPOVERDE', label: 'Campoverde' },
-    { id: 'EL_MOJON', label: 'El Mojón' }
+    { id: 'all', label: t.zones.all },
+    { id: 'CENTRO', label: t.zones.centro },
+    { id: 'LA_TORRE', label: t.zones.latorre },
+    { id: 'MIL_PALMERAS', label: t.zones.milpalmeras },
+    { id: 'CAMPOVERDE', label: t.zones.campoverde },
+    { id: 'EL_MOJON', label: t.zones.elmojon }
   ];
 
   useEffect(() => {
@@ -52,23 +52,20 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
           <BusinessDetailView 
             business={selectedBusiness} 
             onClose={() => setSelectedBusiness(null)} 
-            t={t.business} 
+            t={t}
             isFavorite={favorites.includes(selectedBusiness.id)}
             onToggleFavorite={() => toggleFavorite(selectedBusiness.id)}
           />
         )}
 
-        {/* 1. HEADER GLOBAL */}
         <div className="relative z-[220] shrink-0">
            <Header {...headerProps} />
         </div>
 
-        {/* 2. ANUNCIO SUPERIOR (w-full) */}
         <div className="w-full pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
           <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.SHOPPING} currentFilter={activeZone} />
         </div>
         
-        {/* 3. CONTENT */}
         <div className="px-6 py-12 flex-1">
           <div className="mb-12">
             <h2 className="text-5xl font-black text-gray-900 tracking-tighter mb-2">{t.sections.shopping.title}</h2>
@@ -91,7 +88,6 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
 
           <div className="grid grid-cols-1 gap-10">
               {filteredShops.length > 0 ? filteredShops.map(biz => {
-                  const isFav = favorites.includes(biz.id);
                   return (
                       <div 
                           key={biz.id} 
@@ -118,17 +114,15 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
                       </div>
                   );
               }) : (
-                <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">No hay comercios en esta zona.</div>
+                <div className="text-center py-20 text-gray-400 font-black uppercase tracking-widest">{t.common.noResults}</div>
               )}
           </div>
         </div>
 
-        {/* 4. ANUNCIO INFERIOR (w-full) */}
         <div className="w-full py-6 shrink-0 opacity-90 relative z-10 bg-white">
           <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.SHOPPING} currentFilter={activeZone} />
         </div>
 
-        {/* 5. FOOTER GLOBAL */}
         <div className="relative z-10">
           <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
         </div>

@@ -52,8 +52,11 @@ export interface Ad {
   endDate: string;   
   isActive: boolean;
   category?: 'General' | 'Commerce' | 'Tourism';
+  // Metrics
   impressions?: number;
   clicks?: number;
+  budget?: number; // Total budget for ROI calc
+  costPerClick?: number;
 }
 
 export interface Event {
@@ -168,6 +171,7 @@ export interface ForumPost {
   replies: number;
   time: string;
   badge?: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED'; // Added for moderation
 }
 
 export interface CensusCategory {
