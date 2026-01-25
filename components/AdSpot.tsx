@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Ad, ViewState } from '../types';
+import { Plus } from './Icons';
 
 interface AdSpotProps {
   ads: Ad[];
@@ -36,23 +37,34 @@ export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top', view
 
   // Clases responsivas para asegurar Full Width y Aspect Ratio correcto por dispositivo
   // Móvil: Más alto (21/9) | Tablet: (3/1) | Desktop: Panorámico (4/1)
-  const containerClasses = "w-full block relative overflow-hidden shadow-xl bg-gray-100 hover:brightness-95 transition-all duration-300 md:rounded-2xl";
+  const containerClasses = "w-full block relative overflow-hidden shadow-sm transition-all duration-300 md:rounded-2xl";
   const aspectClasses = "aspect-[2/1] sm:aspect-[3/1] md:aspect-[4/1]";
 
+  // --- FALLBACK: ESPACIO DISPONIBLE ---
+  // Si no hay anuncios activos, mostramos un placeholder para que se vea el espacio disponible.
   if (activeAds.length === 0) {
-    // Espacio reservado si no hay anuncios (opcional, para mantener layout)
-    return null; 
+    return (
+      <div className={`w-full flex flex-col gap-4 px-4 md:px-0 opacity-60 hover:opacity-100 transition-opacity duration-300`}>
+         <div className={`${containerClasses} ${aspectClasses} bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 group cursor-pointer`}>
+            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-3 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">
+                <Plus size={24} />
+            </div>
+            <span className="font-black uppercase tracking-[0.2em] text-[10px] mb-1 group-hover:text-blue-600">Espacio Disponible</span>
+            <span className="text-[9px] font-bold opacity-60">Posición: {position?.replace('-', ' ').toUpperCase()}</span>
+         </div>
+      </div>
+    ); 
   }
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 px-0 md:px-0">
         {activeAds.slice(0, 1).map(ad => (
           <a 
             key={ad.id} 
             href={ad.linkUrl} 
             target="_blank" 
             rel="noreferrer" 
-            className={`${containerClasses} ${aspectClasses}`}
+            className={`${containerClasses} ${aspectClasses} bg-gray-100 hover:brightness-95 shadow-xl`}
           >
              {!imgLoaded && (
                  <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse flex items-center justify-center">
