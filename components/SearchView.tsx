@@ -52,8 +52,8 @@ export const SearchView: React.FC<SearchViewProps> = ({ t, events, businesses, o
          <Header {...headerProps} />
       </div>
 
-      {/* 2. ANUNCIO SUPERIOR */}
-      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white border-b border-gray-50">
+      {/* 2. ANUNCIO SUPERIOR (Full Width) */}
+      <div className="w-full pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white border-b border-gray-50">
         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.SEARCH} />
       </div>
 
@@ -154,8 +154,8 @@ export const SearchView: React.FC<SearchViewProps> = ({ t, events, businesses, o
           </div>
       </div>
 
-      {/* 4. ANUNCIO INFERIOR */}
-      <div className="px-8 py-8 shrink-0 opacity-90 relative z-10 bg-white border-t border-gray-50">
+      {/* 4. ANUNCIO INFERIOR (Full Width) */}
+      <div className="w-full py-8 shrink-0 opacity-90 relative z-10 bg-white border-t border-gray-50">
         <div className="max-w-4xl mx-auto">
             <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.SEARCH} />
         </div>

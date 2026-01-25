@@ -71,7 +71,8 @@ export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerPr
          <Header {...headerProps} />
       </div>
 
-      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-[#020617]">
+      {/* ANUNCIO SUPERIOR (Full Width) */}
+      <div className="w-full pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-[#020617]">
          <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.LENS} />
       </div>
 
@@ -117,7 +118,8 @@ export const PHLensView: React.FC<PHLensViewProps> = ({ t, onBack, ads, headerPr
         )}
       </div>
 
-      <div className="px-8 py-6 shrink-0 opacity-90 relative z-10 mt-auto">
+      {/* ANUNCIO INFERIOR (Full Width) */}
+      <div className="w-full py-6 shrink-0 opacity-90 relative z-10 mt-auto">
          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.LENS} />
       </div>
 

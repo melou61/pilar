@@ -35,8 +35,8 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, head
          <Header {...headerProps} />
       </div>
 
-      {/* 2. ANUNCIO SUPERIOR (mt-24) */}
-      <div className="px-8 pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
+      {/* 2. ANUNCIO SUPERIOR (Full Width) */}
+      <div className="w-full pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HEALTH} />
       </div>
 
@@ -81,8 +81,8 @@ export const HealthView: React.FC<HealthViewProps> = ({ t, onNavigate, ads, head
         </section>
       </div>
 
-      {/* 5. ANUNCIO INFERIOR */}
-      <div className="px-6 py-6 shrink-0 opacity-90 relative z-10 bg-white">
+      {/* 5. ANUNCIO INFERIOR (Full Width) */}
+      <div className="w-full py-6 shrink-0 opacity-90 relative z-10 bg-white">
         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.HEALTH} />
       </div>
 
