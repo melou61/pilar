@@ -43,9 +43,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
          <Header {...headerProps} />
       </div>
 
-      {/* SECCIÓN HERO: Ahora crece según su contenido para evitar espacio muerto */}
+      {/* SECCIÓN HERO */}
       <section className="relative w-full flex flex-col shrink-0 overflow-hidden min-h-[75vh]">
-        {/* FONDO ANIMADO: Se mantiene absoluto para cubrir toda la zona del contenido superior */}
+        {/* FONDO ANIMADO */}
         <div className="absolute inset-0 z-0">
           {heroImages.map((img, index) => (
             <div key={index} className={`absolute inset-0 transition-all duration-[2500ms] ease-in-out transform ${index === currentHeroIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
@@ -56,11 +56,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
         </div>
 
         {/* CONTENEDOR DE CONTENIDO PRINCIPAL */}
-        {/* pt-24 para dejar espacio al Header, pb-12 para dar aire abajo */}
         <div className="relative z-10 w-full flex flex-col items-start px-8 sm:px-12 md:px-16 lg:px-24 pt-32 sm:pt-40 pb-12">
           <div className="max-w-[120rem] mx-auto w-full">
             
-            {/* 1. BADGE SMART PH: Posición anclada respecto al Header */}
+            {/* 1. BADGE SMART PH */}
             <div className="mb-8 animate-in slide-in-from-left duration-700">
                <div className="inline-flex items-center gap-3 bg-white/15 backdrop-blur-2xl px-5 py-3 rounded-2xl border border-white/20 shadow-2xl">
                  <div className="relative">
@@ -79,14 +78,14 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
                </span>
             </div>
 
-            {/* 3. TÍTULO PRINCIPAL: Tamaños responsivos equilibrados */}
+            {/* 3. TÍTULO PRINCIPAL */}
             <h2 className="text-[72px] sm:text-[110px] md:text-[150px] lg:text-[180px] font-black leading-[0.85] tracking-tighter flex flex-col items-start text-white animate-in slide-in-from-bottom duration-1000 mb-12" style={{ textShadow: '0 10px 40px rgba(0,0,0,0.5)' }}>
               <span>PILAR</span>
               <span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.4)]">VIVO</span>
             </h2>
 
-            {/* 4. PUBLICIDAD SUPERIOR: Integrada en el flujo para mantener distancia fija con el texto */}
-            <div className="w-full max-w-4xl animate-in fade-in duration-1000 delay-500">
+            {/* 4. PUBLICIDAD SUPERIOR (Full Width Container) */}
+            <div className="w-full max-w-7xl animate-in fade-in duration-1000 delay-500">
                <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
             </div>
           </div>

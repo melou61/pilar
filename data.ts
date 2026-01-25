@@ -1,247 +1,301 @@
 
-
 import { Event, CensusCategory, CensusItem, NewsItem } from './types';
 
-export const TERMS_OF_SERVICE = `
+// --- TEXTOS LEGALES MULTI-IDIOMA ---
+
+export const TERMS_OF_SERVICE: Record<string, string> = {
+  es: `
 <div class="space-y-6">
   <p class="text-sm text-gray-500">Última actualización: 25 de enero de 2026</p>
-  <p>Bienvenido a Pilar Vivo. Al acceder y utilizar nuestra plataforma web en pilarapp.vortexdigital-ai.com, aceptas cumplir con los siguientes términos y condiciones. Por favor, léelos detenidamente antes de utilizar nuestros servicios.</p>
-  
-  <h3 class="text-lg font-bold text-gray-900">1. Aceptación de los Términos</h3>
-  <p>Al registrarte, acceder o utilizar Pilar Vivo, aceptas estar vinculado por estos Términos del Servicio y todas las leyes y regulaciones aplicables. Si no estás de acuerdo con alguno de estos términos, no debes utilizar nuestra plataforma.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">2. Descripción del Servicio</h3>
-  <p>Pilar Vivo es una plataforma web que proporciona servicios digitales y funcionalidades relacionadas con la gestión y organización de información. Nuestros servicios pueden incluir herramientas de productividad, almacenamiento de datos, gestión de contenidos y otras funcionalidades según se describan en la plataforma.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">3. Registro y Cuenta de Usuario</h3>
-  <p>Para acceder a ciertas funcionalidades de nuestra plataforma, deberás crear una cuenta proporcionando información precisa, actualizada y completa. Eres responsable de mantener la confidencialidad de tus credenciales de acceso y de todas las actividades que ocurran bajo tu cuenta. Te comprometes a notificarnos inmediatamente cualquier uso no autorizado de tu cuenta o cualquier otra violación de seguridad.</p>
-
+  <p>Bienvenido a Pilar Vivo. Al acceder y utilizar nuestra plataforma web en pilarapp.vortexdigital-ai.com, aceptas cumplir con los siguientes términos y condiciones.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Aceptación</h3>
+  <p>Al registrarte o utilizar Pilar Vivo, aceptas estos Términos. Si no estás de acuerdo, no utilices la plataforma.</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Servicio</h3>
+  <p>Pilar Vivo es una plataforma digital de gestión y organización de información local.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Cuenta</h3>
+  <p>Eres responsable de mantener la confidencialidad de tu cuenta y de toda actividad bajo la misma.</p>
   <h3 class="text-lg font-bold text-gray-900">4. Uso Aceptable</h3>
-  <p>Al utilizar Pilar Vivo, te comprometes a:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Utilizar la plataforma únicamente para fines legales y de acuerdo con estos términos.</li>
-    <li>No utilizar el servicio de manera que pueda dañar, deshabilitar o sobrecargar nuestros servidores.</li>
-    <li>No intentar acceder de manera no autorizada a ninguna parte de la plataforma.</li>
-    <li>No transmitir contenido ilegal, amenazante, abusivo, difamatorio u ofensivo.</li>
-    <li>No utilizar la plataforma para actividades fraudulentas o engañosas.</li>
-    <li>No utilizar bots, scrapers u otras herramientas automatizadas sin autorización previa.</li>
-  </ul>
-
+  <p>Te comprometes a usar la plataforma legalmente y no dañar el servicio ni a terceros.</p>
   <h3 class="text-lg font-bold text-gray-900">5. Propiedad Intelectual</h3>
-  <p>Todo el contenido presente en Pilar Vivo, incluyendo textos, gráficos, logotipos, imágenes, vídeos, software y otros materiales, está protegido por derechos de autor y otras leyes de propiedad intelectual. Este contenido es propiedad de Pilar Vivo o de sus licenciantes. No está permitido copiar, modificar, distribuir, transmitir, mostrar, reproducir o crear trabajos derivados de nuestro contenido sin autorización previa por escrito.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">6. Contenido Generado por el Usuario</h3>
-  <p>Si compartes contenido en nuestra plataforma (documentos, comentarios, archivos, datos, etc.), nos concedes una licencia mundial, no exclusiva, libre de regalías para usar, reproducir, procesar y almacenar dicho contenido en relación con el funcionamiento del servicio. Eres responsable del contenido que compartes y garantizas que tienes todos los derechos necesarios para hacerlo. No compartas contenido que infrinja derechos de terceros o que sea ilegal.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">7. Privacidad y Protección de Datos</h3>
-  <p>El uso de tu información personal está regulado por nuestra Política de Privacidad, que forma parte integral de estos términos. Te recomendamos leerla detenidamente para entender cómo recopilamos, utilizamos y protegemos tus datos.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">8. Pagos y Suscripciones</h3>
-  <p>Si la plataforma ofrece servicios de pago o suscripciones premium, aceptas pagar todas las tarifas asociadas según los precios vigentes en el momento de la contratación. Los pagos se procesarán a través de proveedores de pago terceros seguros. Las suscripciones se renovarán automáticamente a menos que canceles antes del período de renovación. Puedes cancelar tu suscripción en cualquier momento desde la configuración de tu cuenta. Los reembolsos se manejarán de acuerdo con nuestra política de reembolsos, que se comunicará en el momento de la compra.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">9. Disponibilidad del Servicio</h3>
-  <p>Aunque nos esforzamos por mantener la plataforma disponible en todo momento, no garantizamos que el servicio será ininterrumpido o libre de errores. Podemos suspender temporalmente el acceso por mantenimiento, actualizaciones o circunstancias fuera de nuestro control. No seremos responsables por ninguna interrupción del servicio, pérdida de datos o daños resultantes de dichas interrupciones.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">10. Respaldo de Datos</h3>
-  <p>Aunque implementamos medidas de seguridad y respaldo, te recomendamos mantener copias de seguridad de tu contenido importante. No seremos responsables por la pérdida de datos causada por fallos técnicos, errores de usuario o cualquier otra circunstancia.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">11. Cancelación y Terminación</h3>
-  <p>Puedes cancelar tu cuenta en cualquier momento contactándonos o a través de la configuración de tu cuenta. Nos reservamos el derecho de suspender o terminar tu acceso a Pilar Vivo en cualquier momento, sin previo aviso, si determinamos que has violado estos términos o por cualquier otra razón que consideremos apropiada. En caso de terminación, tu derecho a utilizar el servicio cesará inmediatamente. Podemos eliminar tu contenido después de un período razonable, salvo que la ley nos obligue a conservarlo.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">12. Limitación de Responsabilidad</h3>
-  <p>Pilar Vivo se proporciona "tal cual" y "según disponibilidad". No garantizamos que el servicio será ininterrumpido, seguro o libre de errores. En la máxima medida permitida por la ley, Pilar Vivo no será responsable por daños indirectos, incidentales, especiales, consecuentes o punitivos, o por cualquier pérdida de beneficios, ingresos, datos, uso o cualquier otro intangible.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">13. Indemnización</h3>
-  <p>Aceptas indemnizar y mantener indemne a Pilar Vivo, sus directivos, empleados y agentes de cualquier reclamación, daño, pérdida o gasto (incluyendo honorarios legales razonables) que surja de tu uso del servicio, tu violación de estos términos o tu violación de cualquier derecho de terceros.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">14. Modificaciones del Servicio y de los Términos</h3>
-  <p>Nos reservamos el derecho de modificar, suspender o descontinuar cualquier aspecto de Pilar Vivo en cualquier momento, con o sin previo aviso. También podemos actualizar estos Términos del Servicio periódicamente. Te notificaremos sobre cambios significativos mediante un aviso en la plataforma o por correo electrónico, y la fecha de "última actualización" se modificará en consecuencia. Tu uso continuado del servicio después de dichos cambios constituye tu aceptación de los nuevos términos.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">15. Ley Aplicable y Jurisdicción</h3>
-  <p>Estos términos se regirán e interpretarán de acuerdo con las leyes de España. Cualquier disputa relacionada con estos términos estará sujeta a la jurisdicción exclusiva de los tribunales de Madrid, España.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">16. Divisibilidad</h3>
-  <p>Si alguna disposición de estos términos se considera inválida o inaplicable, dicha disposición se modificará e interpretará para lograr los objetivos de dicha disposición en la mayor medida posible, y las disposiciones restantes continuarán en pleno vigor y efecto.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">17. Renuncia</h3>
-  <p>Ninguna renuncia por nuestra parte a cualquier término o condición establecida en estos Términos del Servicio se considerará una renuncia adicional o continua de dicho término o condición.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">18. Contacto</h3>
-  <p>Si tienes preguntas sobre estos Términos del Servicio, puedes contactarnos en:<br/>
-  <strong>Ayuntamiento Pilar de la Horadada</strong><br/>
-  Dirección: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante)<br/>
-  Email: ayto@pilardelahoradada.org<br/>
-  Sitio web: pilarapp.vortexdigital-ai.com</p>
+  <p>El contenido es propiedad de Pilar Vivo o sus licenciantes. No está permitida su copia sin autorización.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Privacidad</h3>
+  <p>Tu privacidad es importante. Consulta nuestra Política de Privacidad.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Responsabilidad</h3>
+  <p>El servicio se ofrece "tal cual". No garantizamos disponibilidad ininterrumpida.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contacto</h3>
+  <p><strong>Ayuntamiento Pilar de la Horadada</strong><br/>
+  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante)<br/>
+  Email: ayto@pilardelahoradada.org</p>
 </div>
-`;
+`,
+  en: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Last updated: January 25, 2026</p>
+  <p>Welcome to Pilar Vivo. By accessing and using our web platform at pilarapp.vortexdigital-ai.com, you agree to comply with the following terms and conditions.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Acceptance</h3>
+  <p>By registering or using Pilar Vivo, you agree to these Terms. If you do not agree, do not use the platform.</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Service</h3>
+  <p>Pilar Vivo is a digital platform for local information management and organization.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Account</h3>
+  <p>You are responsible for maintaining the confidentiality of your account and all activities under it.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Acceptable Use</h3>
+  <p>You agree to use the platform legally and not to harm the service or third parties.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Intellectual Property</h3>
+  <p>Content is owned by Pilar Vivo or its licensors. Copying without authorization is prohibited.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Privacy</h3>
+  <p>Your privacy is important. Please refer to our Privacy Policy.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Liability</h3>
+  <p>The service is provided "as is". We do not guarantee uninterrupted availability.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contact</h3>
+  <p><strong>Pilar de la Horadada Town Hall</strong><br/>
+  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spain<br/>
+  Email: ayto@pilardelahoradada.org</p>
+</div>
+`,
+  fr: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Dernière mise à jour : 25 janvier 2026</p>
+  <p>Bienvenue sur Pilar Vivo. En accédant et en utilisant notre plateforme web, vous acceptez de respecter les termes et conditions suivants.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Acceptation</h3>
+  <p>En vous inscrivant ou en utilisant Pilar Vivo, vous acceptez ces Conditions. Si vous n'êtes pas d'accord, n'utilisez pas la plateforme.</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Service</h3>
+  <p>Pilar Vivo est une plateforme numérique de gestion de l'information locale.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Compte</h3>
+  <p>Vous êtes responsable de la confidentialité de votre compte et de toutes les activités qui s'y déroulent.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Utilisation Acceptable</h3>
+  <p>Vous acceptez d'utiliser la plateforme légalement et de ne pas nuire au service ou aux tiers.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Propriété Intellectuelle</h3>
+  <p>Le contenu appartient à Pilar Vivo ou à ses concédants. La copie sans autorisation est interdite.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Confidentialité</h3>
+  <p>Votre vie privée est importante. Consultez notre Politique de Confidentialité.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Responsabilité</h3>
+  <p>Le service est fourni "tel quel". Nous ne garantissons pas une disponibilité ininterrompue.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contact</h3>
+  <p><strong>Mairie de Pilar de la Horadada</strong><br/>
+  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Espagne<br/>
+  Email : ayto@pilardelahoradada.org</p>
+</div>
+`,
+  de: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Zuletzt aktualisiert: 25. Januar 2026</p>
+  <p>Willkommen bei Pilar Vivo. Durch den Zugriff und die Nutzung unserer Webplattform erklären Sie sich mit den folgenden Bedingungen einverstanden.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Annahme</h3>
+  <p>Durch die Registrierung oder Nutzung von Pilar Vivo stimmen Sie diesen Bedingungen zu.</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Dienstleistung</h3>
+  <p>Pilar Vivo ist eine digitale Plattform für lokales Informationsmanagement.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Konto</h3>
+  <p>Sie sind verantwortlich für die Vertraulichkeit Ihres Kontos und alle Aktivitäten darunter.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Zulässige Nutzung</h3>
+  <p>Sie verpflichten sich, die Plattform legal zu nutzen und weder dem Dienst noch Dritten zu schaden.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Geistiges Eigentum</h3>
+  <p>Der Inhalt ist Eigentum von Pilar Vivo oder seinen Lizenzgebern. Kopieren ohne Genehmigung ist verboten.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Datenschutz</h3>
+  <p>Ihre Privatsphäre ist wichtig. Bitte beachten Sie unsere Datenschutzerklärung.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Haftung</h3>
+  <p>Der Dienst wird "wie besehen" bereitgestellt. Wir garantieren keine ununterbrochene Verfügbarkeit.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Kontakt</h3>
+  <p><strong>Rathaus Pilar de la Horadada</strong><br/>
+  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spanien<br/>
+  E-Mail: ayto@pilardelahoradada.org</p>
+</div>
+`,
+  it: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Ultimo aggiornamento: 25 gennaio 2026</p>
+  <p>Benvenuti su Pilar Vivo. Accedendo e utilizzando la nostra piattaforma web, accetti di rispettare i seguenti termini e condizioni.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Accettazione</h3>
+  <p>Registrandoti o utilizzando Pilar Vivo, accetti questi Termini. Se non sei d'accordo, non utilizzare la piattaforma.</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Servizio</h3>
+  <p>Pilar Vivo è una piattaforma digitale per la gestione delle informazioni locali.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Account</h3>
+  <p>Sei responsabile della riservatezza del tuo account e di tutte le attività svolte con esso.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Uso Accettabile</h3>
+  <p>Ti impegni a utilizzare la piattaforma legalmente e a non danneggiare il servizio o terzi.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Proprietà Intellettuale</h3>
+  <p>Il contenuto è di proprietà di Pilar Vivo o dei suoi licenziatari. È vietata la copia senza autorizzazione.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Privacy</h3>
+  <p>La tua privacy è importante. Consulta la nostra Informativa sulla Privacy.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Responsabilità</h3>
+  <p>Il servizio è fornito "così com'è". Non garantiamo la disponibilità ininterrotta.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contatto</h3>
+  <p><strong>Municipio di Pilar de la Horadada</strong><br/>
+  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spagna<br/>
+  Email: ayto@pilardelahoradada.org</p>
+</div>
+`,
+  pt: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Última atualização: 25 de janeiro de 2026</p>
+  <p>Bem-vindo ao Pilar Vivo. Ao acessar e usar nossa plataforma web, você concorda em cumprir os seguintes termos e condições.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Aceitação</h3>
+  <p>Ao se registrar ou usar o Pilar Vivo, você concorda com estes Termos. Se não concordar, não use a plataforma.</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Serviço</h3>
+  <p>Pilar Vivo é uma plataforma digital para gestão de informações locais.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Conta</h3>
+  <p>Você é responsável por manter a confidencialidade da sua conta e por todas as atividades nela.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Uso Aceitável</h3>
+  <p>Você concorda em usar a plataforma legalmente e não prejudicar o serviço ou terceiros.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Propriedade Intelectual</h3>
+  <p>O conteúdo é propriedade do Pilar Vivo ou de seus licenciadores. A cópia sem autorização é proibida.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Privacidade</h3>
+  <p>Sua privacidade é importante. Consulte nossa Política de Privacidade.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Responsabilidade</h3>
+  <p>O serviço é fornecido "como está". Não garantimos disponibilidade ininterrupta.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contato</h3>
+  <p><strong>Câmara Municipal Pilar de la Horadada</strong><br/>
+  Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Espanha<br/>
+  Email: ayto@pilardelahoradada.org</p>
+</div>
+`
+};
 
-export const PRIVACY_POLICY = `
+export const PRIVACY_POLICY: Record<string, string> = {
+  es: `
 <div class="space-y-6">
   <p class="text-sm text-gray-500">Última actualización: 25 de enero de 2026</p>
-  <p>En Pilar Vivo, nos tomamos muy en serio la privacidad de nuestros usuarios. Esta Política de Privacidad describe cómo recopilamos, utilizamos, almacenamos y protegemos tu información personal cuando utilizas nuestra plataforma web pilarapp.vortexdigital-ai.com.</p>
-
+  <p>En Pilar Vivo, nos tomamos muy en serio la privacidad de nuestros usuarios. Esta Política de Privacidad describe cómo recopilamos, utilizamos, almacenamos y protegemos tu información personal.</p>
   <h3 class="text-lg font-bold text-gray-900">1. Responsable del Tratamiento</h3>
-  <p>El responsable del tratamiento de tus datos personales es:<br/>
-  <strong>Pilar Vivo / Ayuntamiento Pilar de la Horadada</strong><br/>
+  <p><strong>Pilar Vivo / Ayuntamiento Pilar de la Horadada</strong><br/>
   Dirección: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante)<br/>
-  Email: ayto@pilardelahoradada.org<br/>
-  Sitio web: pilarapp.vortexdigital-ai.com</p>
-
-  <h3 class="text-lg font-bold text-gray-900">2. Información que Recopilamos</h3>
-  <p><strong>2.1 Información que nos proporcionas directamente:</strong></p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Datos de registro: nombre, apellidos, dirección de correo electrónico, contraseña</li>
-    <li>Información de perfil: datos personales opcionales que decidas compartir</li>
-    <li>Contenido del usuario: documentos, archivos, datos y cualquier información que subas o crees en la plataforma</li>
-    <li>Información de pago: datos de facturación y transacciones (procesados por proveedores terceros seguros)</li>
-    <li>Comunicaciones: cuando nos contactas, guardamos el contenido de tus mensajes y correspondencia</li>
-  </ul>
-  <p><strong>2.2 Información recopilada automáticamente:</strong></p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Datos de uso: páginas visitadas, funcionalidades utilizadas, tiempo de navegación, interacciones con la plataforma</li>
-    <li>Información del dispositivo: tipo de dispositivo, sistema operativo, navegador, dirección IP, identificadores únicos</li>
-    <li>Datos de ubicación: ubicación aproximada basada en tu dirección IP</li>
-    <li>Cookies y tecnologías similares: utilizamos cookies y tecnologías de seguimiento para mejorar tu experiencia</li>
-    <li>Registros del servidor: información técnica sobre tu conexión y uso del servicio</li>
-  </ul>
-
-  <h3 class="text-lg font-bold text-gray-900">3. Cómo Utilizamos tu Información</h3>
-  <p>Utilizamos la información recopilada para los siguientes propósitos:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Proporcionar, mantener, operar y mejorar nuestros servicios</li>
-    <li>Crear y gestionar tu cuenta de usuario</li>
-    <li>Procesar transacciones y gestionar suscripciones</li>
-    <li>Personalizar tu experiencia en la plataforma</li>
-    <li>Comunicarnos contigo sobre tu cuenta, actualizaciones del servicio, notificaciones importantes y promociones</li>
-    <li>Proporcionar atención al cliente y responder a tus consultas</li>
-    <li>Analizar el uso de la plataforma para mejorar nuestros servicios y desarrollar nuevas funcionalidades</li>
-    <li>Detectar, prevenir y abordar problemas técnicos, fraudes y actividades maliciosas</li>
-    <li>Cumplir con obligaciones legales y proteger nuestros derechos</li>
-    <li>Realizar investigación y análisis para comprender mejor cómo se utiliza nuestra plataforma</li>
-  </ul>
-
-  <h3 class="text-lg font-bold text-gray-900">4. Base Legal para el Tratamiento de Datos</h3>
-  <p>Procesamos tus datos personales bajo las siguientes bases legales según el Reglamento General de Protección de Datos (RGPD):</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Ejecución de un contrato: para proporcionar los servicios que has solicitado y gestionar tu cuenta</li>
-    <li>Consentimiento: cuando nos has dado tu consentimiento explícito para procesar tus datos</li>
-    <li>Interés legítimo: para mejorar nuestros servicios, garantizar la seguridad de la plataforma y comunicarnos contigo</li>
-    <li>Obligación legal: cuando debemos cumplir con requisitos legales o regulatorios</li>
-  </ul>
-
-  <h3 class="text-lg font-bold text-gray-900">5. Compartir tu Información</h3>
-  <p>No vendemos tu información personal a terceros. Podemos compartir tu información en las siguientes circunstancias:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Proveedores de servicios: compartimos información con proveedores que nos ayudan a operar nuestra plataforma, incluyendo servicios de alojamiento web (Vortex Digital AI), procesadores de pago, servicios de email, análisis y soporte técnico</li>
-    <li>Cumplimiento legal: cuando sea requerido por ley, orden judicial, proceso legal o solicitud gubernamental</li>
-    <li>Protección de derechos: para proteger nuestros derechos, propiedad o seguridad, así como los de nuestros usuarios u otros</li>
-    <li>Transferencias empresariales: en caso de fusión, adquisición, venta de activos o procedimiento de quiebra</li>
-    <li>Con tu consentimiento: cuando nos autorices explícitamente a compartir tu información con terceros específicos</li>
-  </ul>
-  <p>Todos nuestros proveedores de servicios están obligados contractualmente a proteger tu información y a utilizarla únicamente para los fines especificados.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">6. Cookies y Tecnologías de Seguimiento</h3>
-  <p>Utilizamos cookies y tecnologías similares para:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Mantener tu sesión activa y recordar tus preferencias</li>
-    <li>Entender cómo utilizas la plataforma</li>
-    <li>Mejorar el rendimiento y la funcionalidad del servicio</li>
-    <li>Personalizar contenido y experiencias</li>
-    <li>Realizar análisis y mediciones</li>
-  </ul>
-  <p>Tipos de cookies que utilizamos:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Cookies esenciales: necesarias para el funcionamiento básico del sitio y para mantener tu sesión activa</li>
-    <li>Cookies de rendimiento: nos ayudan a entender cómo los usuarios interactúan con la plataforma mediante análisis agregados</li>
-    <li>Cookies de funcionalidad: recuerdan tus preferencias y configuraciones</li>
-    <li>Cookies de marketing: utilizadas para mostrar publicidad relevante (si aplica)</li>
-  </ul>
-  <p>Puedes gestionar las preferencias de cookies a través de la configuración de tu navegador. Ten en cuenta que deshabilitar ciertas cookies puede afectar la funcionalidad de la plataforma.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">7. Transferencias Internacionales de Datos</h3>
-  <p>Tus datos pueden ser transferidos y procesados en servidores ubicados fuera del Espacio Económico Europeo (EEE), incluyendo pero no limitado a servicios de alojamiento proporcionados por Vortex Digital AI.</p>
-  <p>En tales casos, nos aseguramos de que existan salvaguardas adecuadas para proteger tu información, como:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Cláusulas contractuales estándar aprobadas por la Comisión Europea</li>
-    <li>Certificaciones de privacidad reconocidas</li>
-    <li>Medidas técnicas y organizativas apropiadas</li>
-  </ul>
-
-  <h3 class="text-lg font-bold text-gray-900">8. Seguridad de Datos</h3>
-  <p>Implementamos medidas técnicas y organizativas apropiadas para proteger tu información personal contra acceso no autorizado, pérdida, destrucción, alteración o divulgación. Estas medidas incluyen:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Encriptación de datos en tránsito y en reposo</li>
-    <li>Controles de acceso estrictos y autenticación de usuarios</li>
-    <li>Servidores seguros con protección mediante firewall</li>
-    <li>Monitoreo continuo de seguridad</li>
-    <li>Auditorías de seguridad periódicas</li>
-    <li>Formación del personal en protección de datos</li>
-    <li>Políticas de seguridad de la información</li>
-  </ul>
-  <p>Sin embargo, ningún método de transmisión por internet o almacenamiento electrónico es 100% seguro. Aunque nos esforzamos por proteger tu información, no podemos garantizar seguridad absoluta.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">9. Retención de Datos</h3>
-  <p>Conservamos tu información personal durante el tiempo necesario para cumplir con los propósitos descritos en esta política, a menos que la ley requiera o permita un período de retención más largo.</p>
-  <p>Los criterios utilizados para determinar nuestros períodos de retención incluyen:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>El tiempo que mantienes una cuenta activa con nosotros</li>
-    <li>Si existe una obligación legal de conservar los datos</li>
-    <li>Si la retención es recomendable debido a nuestra posición legal (por ejemplo, plazos de prescripción, litigios o investigaciones regulatorias)</li>
-  </ul>
-  <p>Cuando cierres tu cuenta, eliminaremos o anonimizaremos tu información personal dentro de un plazo razonable, excepto cuando debamos conservarla por obligaciones legales, contables o de seguridad.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">10. Tus Derechos</h3>
-  <p>De acuerdo con el RGPD y la legislación española de protección de datos, tienes los siguientes derechos:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Derecho de acceso: puedes solicitar información sobre los datos personales que tenemos sobre ti</li>
-    <li>Derecho de rectificación: puedes solicitar la corrección de datos inexactos o incompletos</li>
-    <li>Derecho de supresión: puedes solicitar la eliminación de tus datos personales ("derecho al olvido")</li>
-    <li>Derecho de limitación: puedes solicitar la limitación del procesamiento de tus datos en ciertas circunstancias</li>
-    <li>Derecho de portabilidad: puedes solicitar recibir tus datos en formato estructurado, de uso común y lectura mecánica</li>
-    <li>Derecho de oposición: puedes oponerte al procesamiento de tus datos en determinadas situaciones</li>
-    <li>Derecho a retirar el consentimiento: puedes retirar tu consentimiento en cualquier momento cuando el procesamiento se base en el consentimiento</li>
-    <li>Derecho a no ser objeto de decisiones automatizadas: derecho a no ser objeto de una decisión basada únicamente en el tratamiento automatizado</li>
-  </ul>
-  <p>Para ejercer estos derechos, puedes:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Acceder a la configuración de tu cuenta en la plataforma</li>
-    <li>Contactarnos directamente en ayto@pilardelahoradada.org</li>
-    <li>Enviarnos una solicitud por escrito a nuestra dirección postal</li>
-  </ul>
-  <p>Responderemos a tu solicitud dentro del plazo legal de un mes, que puede extenderse a dos meses adicionales en casos complejos.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">11. Menores de Edad</h3>
-  <p>Pilar Vivo no está dirigido a menores de 16 años. No recopilamos intencionalmente información personal de menores de 16 años sin el consentimiento de los padres o tutores legales. Si eres padre o tutor y crees que tu hijo nos ha proporcionado información personal, contáctanos inmediatamente.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">12. Enlaces a Sitios Terceros</h3>
-  <p>Nuestra plataforma puede contener enlaces a sitios web, aplicaciones o servicios de terceros que no son operados por nosotros. No somos responsables de las prácticas de privacidad de estos sitios.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">13. Cambios a esta Política de Privacidad</h3>
-  <p>Podemos actualizar esta Política de Privacidad periódicamente. Te notificaremos sobre cambios significativos mediante:</p>
-  <ul class="list-disc pl-5 space-y-1">
-    <li>Un aviso destacado en nuestra plataforma</li>
-    <li>Notificación por correo electrónico</li>
-    <li>Actualización de la fecha de "última actualización"</li>
-  </ul>
-
-  <h3 class="text-lg font-bold text-gray-900">14. Medidas Adicionales de Privacidad</h3>
-  <p><strong>14.1 Seguridad de contraseñas</strong>: Las contraseñas se almacenan utilizando técnicas de hash y encriptación.</p>
-  <p><strong>14.2 Autenticación de dos factores</strong>: Ofrecemos opciones de autenticación de dos factores para mejorar la seguridad.</p>
-  <p><strong>14.3 Notificaciones de violación de datos</strong>: En caso de una violación de seguridad que afecte a tus datos personales, te notificaremos de acuerdo con las leyes aplicables.</p>
-
-  <h3 class="text-lg font-bold text-gray-900">15. Contacto y Reclamaciones</h3>
-  <p>Si tienes preguntas, inquietudes o deseas ejercer tus derechos relacionados con la privacidad, contáctanos en:<br/>
-  <strong>Pilar Vivo / Ayuntamiento Pilar de la Horadada</strong><br/>
-  Email: ayto@pilardelahoradada.org<br/>
-  Dirección: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante)<br/>
-  Sitio web: pilarapp.vortexdigital-ai.com</p>
-  <p>También tienes derecho a presentar una reclamación ante la autoridad de protección de datos competente:<br/>
-  <strong>Agencia Española de Protección de Datos (AEPD)</strong><br/>
-  Web: www.aepd.es<br/>
-  Dirección: C/ Jorge Juan, 6, 28001 Madrid<br/>
-  Teléfono: 901 100 099 / 912 663 517</p>
+  Email: ayto@pilardelahoradada.org</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Información Recopilada</h3>
+  <p>Recopilamos datos de registro (nombre, email), uso de la plataforma, ubicación aproximada y datos técnicos.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Uso de la Información</h3>
+  <p>Usamos tus datos para proporcionar el servicio, gestionar tu cuenta, mejorar la plataforma y comunicarnos contigo.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Compartir Información</h3>
+  <p>No vendemos tus datos. Compartimos información con proveedores de servicios necesarios para operar (hosting, análisis) bajo estrictos contratos de confidencialidad.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Cookies</h3>
+  <p>Utilizamos cookies esenciales, de rendimiento y funcionales para mejorar tu experiencia.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Seguridad</h3>
+  <p>Implementamos medidas de seguridad técnicas para proteger tus datos, aunque ningún método es 100% seguro.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Tus Derechos</h3>
+  <p>Tienes derecho a acceder, rectificar, borrar y limitar el procesamiento de tus datos. Contáctanos en ayto@pilardelahoradada.org para ejercer tus derechos.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contacto y Reclamaciones</h3>
+  <p>Para dudas, contacta a ayto@pilardelahoradada.org. También puedes reclamar ante la AEPD (www.aepd.es).</p>
 </div>
-`;
+`,
+  en: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Last updated: January 25, 2026</p>
+  <p>At Pilar Vivo, we take our users' privacy very seriously. This Privacy Policy describes how we collect, use, store, and protect your personal information.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Data Controller</h3>
+  <p><strong>Pilar Vivo / Pilar de la Horadada Town Hall</strong><br/>
+  Address: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spain<br/>
+  Email: ayto@pilardelahoradada.org</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Collected Information</h3>
+  <p>We collect registration data (name, email), platform usage, approximate location, and technical data.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Use of Information</h3>
+  <p>We use your data to provide the service, manage your account, improve the platform, and communicate with you.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Sharing Information</h3>
+  <p>We do not sell your data. We share information with service providers necessary to operate (hosting, analytics) under strict confidentiality agreements.</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Cookies</h3>
+  <p>We use essential, performance, and functional cookies to improve your experience.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Security</h3>
+  <p>We implement technical security measures to protect your data, although no method is 100% secure.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Your Rights</h3>
+  <p>You have the right to access, rectify, erase, and limit the processing of your data. Contact us at ayto@pilardelahoradada.org to exercise your rights.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contact</h3>
+  <p>For questions, contact ayto@pilardelahoradada.org. You can also file a complaint with the AEPD (www.aepd.es).</p>
+</div>
+`,
+  fr: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Dernière mise à jour : 25 janvier 2026</p>
+  <p>Chez Pilar Vivo, nous prenons la confidentialité de nos utilisateurs très au sérieux. Cette Politique de Confidentialité décrit comment nous collectons, utilisons et protégeons vos informations personnelles.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Responsable du Traitement</h3>
+  <p><strong>Pilar Vivo / Mairie de Pilar de la Horadada</strong><br/>
+  Adresse : Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Espagne<br/>
+  Email : ayto@pilardelahoradada.org</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Informations Collectées</h3>
+  <p>Nous collectons les données d'inscription (nom, email), l'utilisation de la plateforme, la localisation approximative et les données techniques.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Utilisation de l'Information</h3>
+  <p>Nous utilisons vos données pour fournir le service, gérer votre compte et améliorer la plateforme.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Partage de l'Information</h3>
+  <p>Nous ne vendons pas vos données. Nous partageons des informations avec des prestataires nécessaires au fonctionnement (hébergement, analyse).</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Cookies</h3>
+  <p>Nous utilisons des cookies essentiels, de performance et fonctionnels.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Sécurité</h3>
+  <p>Nous mettons en œuvre des mesures techniques pour protéger vos données.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Vos Droits</h3>
+  <p>Vous avez le droit d'accéder, de rectifier et d'effacer vos données. Contactez ayto@pilardelahoradada.org.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contact</h3>
+  <p>Pour toute question : ayto@pilardelahoradada.org. AEPD : www.aepd.es</p>
+</div>
+`,
+  de: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Zuletzt aktualisiert: 25. Januar 2026</p>
+  <p>Bei Pilar Vivo nehmen wir den Datenschutz sehr ernst. Diese Datenschutzerklärung beschreibt, wie wir Ihre persönlichen Daten sammeln und schützen.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Verantwortlicher</h3>
+  <p><strong>Pilar Vivo / Rathaus Pilar de la Horadada</strong><br/>
+  Adresse: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spanien<br/>
+  E-Mail: ayto@pilardelahoradada.org</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Gesammelte Informationen</h3>
+  <p>Wir sammeln Registrierungsdaten (Name, E-Mail), Plattformnutzung, ungefähren Standort und technische Daten.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Nutzung der Informationen</h3>
+  <p>Wir nutzen Ihre Daten zur Bereitstellung des Dienstes und zur Verwaltung Ihres Kontos.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Weitergabe von Informationen</h3>
+  <p>Wir verkaufen Ihre Daten nicht. Wir teilen Informationen mit notwendigen Dienstleistern (Hosting, Analyse).</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Cookies</h3>
+  <p>Wir verwenden essentielle, Leistungs- und funktionale Cookies.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Sicherheit</h3>
+  <p>Wir setzen technische Sicherheitsmaßnahmen ein, um Ihre Daten zu schützen.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Ihre Rechte</h3>
+  <p>Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer Daten. Kontakt: ayto@pilardelahoradada.org.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Kontakt</h3>
+  <p>Bei Fragen: ayto@pilardelahoradada.org. AEPD: www.aepd.es</p>
+</div>
+`,
+  it: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Ultimo aggiornamento: 25 gennaio 2026</p>
+  <p>In Pilar Vivo prendiamo molto sul serio la privacy dei nostri utenti. Questa Informativa sulla Privacy descrive come raccogliamo e proteggiamo i tuoi dati.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Titolare del Trattamento</h3>
+  <p><strong>Pilar Vivo / Municipio di Pilar de la Horadada</strong><br/>
+  Indirizzo: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Spagna<br/>
+  Email: ayto@pilardelahoradada.org</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Informazioni Raccolte</h3>
+  <p>Raccogliamo dati di registrazione (nome, email), utilizzo della piattaforma, posizione approssimativa e dati tecnici.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Uso delle Informazioni</h3>
+  <p>Utilizziamo i tuoi dati per fornire il servizio e gestire il tuo account.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Condivisione delle Informazioni</h3>
+  <p>Non vendiamo i tuoi dati. Condividiamo informazioni con fornitori di servizi necessari (hosting, analisi).</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Cookie</h3>
+  <p>Utilizziamo cookie essenziali, di prestazione e funzionali.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Sicurezza</h3>
+  <p>Implementiamo misure di sicurezza tecniche per proteggere i tuoi dati.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. I Tuoi Diritti</h3>
+  <p>Hai diritto di accesso, rettifica e cancellazione dei tuoi dati. Contattaci a ayto@pilardelahoradada.org.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contatto</h3>
+  <p>Per domande: ayto@pilardelahoradada.org. AEPD: www.aepd.es</p>
+</div>
+`,
+  pt: `
+<div class="space-y-6">
+  <p class="text-sm text-gray-500">Última atualização: 25 de janeiro de 2026</p>
+  <p>No Pilar Vivo, levamos muito a sério a privacidade dos nossos usuários. Esta Política de Privacidade descreve como coletamos e protegemos seus dados.</p>
+  <h3 class="text-lg font-bold text-gray-900">1. Responsável pelo Tratamento</h3>
+  <p><strong>Pilar Vivo / Câmara Municipal Pilar de la Horadada</strong><br/>
+  Endereço: Plaza Campoamor nº 2, 03190 Pilar de la Horadada (Alicante), Espanha<br/>
+  Email: ayto@pilardelahoradada.org</p>
+  <h3 class="text-lg font-bold text-gray-900">2. Informações Coletadas</h3>
+  <p>Coletamos dados de registro (nome, email), uso da plataforma, localização aproximada e dados técnicos.</p>
+  <h3 class="text-lg font-bold text-gray-900">3. Uso das Informações</h3>
+  <p>Usamos seus dados para fornecer o serviço e gerenciar sua conta.</p>
+  <h3 class="text-lg font-bold text-gray-900">4. Compartilhamento de Informações</h3>
+  <p>Não vendemos seus dados. Compartilhamos informações com provedores de serviços necessários (hospedagem, análise).</p>
+  <h3 class="text-lg font-bold text-gray-900">5. Cookies</h3>
+  <p>Utilizamos cookies essenciais, de desempenho e funcionais.</p>
+  <h3 class="text-lg font-bold text-gray-900">6. Segurança</h3>
+  <p>Implementamos medidas de segurança técnicas para proteger seus dados.</p>
+  <h3 class="text-lg font-bold text-gray-900">7. Seus Direitos</h3>
+  <p>Você tem o direito de acessar, retificar e excluir seus dados. Contate-nos em ayto@pilardelahoradada.org.</p>
+  <h3 class="text-lg font-bold text-gray-900">8. Contato</h3>
+  <p>Para dúvidas: ayto@pilardelahoradada.org. AEPD: www.aepd.es</p>
+</div>
+`
+};
 
 export const MOCK_NEWS: NewsItem[] = [
   { id: 'n1', source: 'Ayuntamiento', sourceType: 'official', icon: 'megaphone', date: 'Hace 1h', title: '🎉 Gran Charanga este Sábado', content: 'Desfile de carrozas artesanas por las calles del centro.', image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800&q=80', url: '#', category: 'GENERAL' },

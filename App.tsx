@@ -38,7 +38,11 @@ const INITIAL_ADS: Ad[] = [
   { id: 'ad-1', clientName: 'Mesón El Puerto', position: 'menu-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR },
   { id: 'ad-2', clientName: 'Turismo Pilar', position: 'menu-bottom', imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR },
   { id: 'ad-3', clientName: 'Modas Lucía', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
-  { id: 'ad-4', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME }
+  { id: 'ad-4', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
+  // Anuncio para Mapa: Se muestra en general
+  { id: 'ad-map-gen', clientName: 'Pizzería La Plaza', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1574071318508-1cdbad80ad50?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.MAP, filterContext: 'all' },
+  // Anuncio para Mapa: Solo cuando el filtro es "Hostelería y restauración"
+  { id: 'ad-map-rest', clientName: 'Restaurante Los Arcos', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7ed9d8607c?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.MAP, filterContext: 'Hostelería y restauración' }
 ];
 
 const MOCK_ADMINS: AdminUser[] = [
@@ -228,6 +232,13 @@ const App: React.FC = () => {
     }
   };
 
+  const getLegalContent = () => {
+    const lang = currentLang.code;
+    const policyMap = legalState.type === 'privacy' ? PRIVACY_POLICY : TERMS_OF_SERVICE;
+    // Fallback to English if translation is missing, then Spanish
+    return policyMap[lang] || policyMap['en'] || policyMap['es'];
+  };
+
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 pb-20">
       {activeBeaconShop && <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} t={t} />}
@@ -238,7 +249,7 @@ const App: React.FC = () => {
         isOpen={legalState.isOpen} 
         onClose={() => setLegalState({isOpen: false, type: null})}
         title={legalState.type === 'privacy' ? (t.footer?.privacy || 'Privacidad') : (t.footer?.terms || 'Términos')}
-        content={legalState.type === 'privacy' ? PRIVACY_POLICY : TERMS_OF_SERVICE}
+        content={getLegalContent()}
       />
 
       {!isImmersiveView && <Header {...headerProps} />}

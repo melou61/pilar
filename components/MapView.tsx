@@ -176,13 +176,13 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
   return (
     <div className="flex flex-col bg-white relative animate-in fade-in duration-500 overflow-x-hidden min-h-screen">
       
-      {/* 1. PUBLICIDAD SUPERIOR */}
-      <div className="px-6 py-4 bg-white shrink-0">
+      {/* 1. PUBLICIDAD SUPERIOR (Full Width) */}
+      <div className="w-full bg-white shrink-0 mb-4 shadow-sm z-20 relative">
         <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.MAP} currentFilter={filter} />
       </div>
 
       {/* 2. CONTENEDOR DEL MAPA */}
-      <div className="relative h-[65vh] bg-gray-100 rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-4 mb-4">
+      <div className="relative h-[65vh] bg-gray-100 rounded-[30px] md:rounded-[40px] overflow-hidden shadow-inner border-t border-gray-200/50 mx-0 md:mx-4 mb-4">
         
         {/* BARRA DE FILTROS ACTUALIZADA */}
         <div className="absolute top-6 left-0 right-0 z-[400] flex justify-center px-4">
@@ -205,7 +205,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
         <div ref={mapContainerRef} className="w-full h-full" />
         
         {/* CONTROLES DE MAPA */}
-        <div className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-8 z-[400] flex flex-col gap-3`}>
+        <div className={`absolute ${selectedItem ? 'bottom-[340px]' : 'bottom-8'} right-4 md:right-8 z-[400] flex flex-col gap-3`}>
           <button onClick={() => mapInstanceRef.current?.zoomIn()} className="bg-white text-blue-600 p-4 rounded-2xl shadow-2xl border border-gray-50 flex items-center justify-center hover:bg-blue-50 transition-all">
             <Plus size={24} strokeWidth={3} />
           </button>
@@ -219,7 +219,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
 
         {/* Tarjeta de Detalle Seleccionado */}
         {selectedItem && (
-          <div className="absolute bottom-8 left-8 right-8 z-[410] animate-in slide-in-from-bottom-20 duration-500">
+          <div className="absolute bottom-8 left-4 right-4 md:left-8 md:right-8 z-[410] animate-in slide-in-from-bottom-20 duration-500">
             <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-w-sm mx-auto">
               <div className="relative h-40 w-full">
                 <img src={selectedItem.image || (selectedItem.images ? selectedItem.images[0] : selectedItem.imageUrl)} className="w-full h-full object-cover" alt="" />
@@ -238,8 +238,8 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
         )}
       </div>
 
-      {/* 3. PUBLICIDAD INFERIOR */}
-      <div className="px-6 py-10 bg-white shrink-0">
+      {/* 3. PUBLICIDAD INFERIOR (Full Width) */}
+      <div className="w-full bg-white shrink-0 pt-4 pb-10">
         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.MAP} currentFilter={filter} />
       </div>
 
