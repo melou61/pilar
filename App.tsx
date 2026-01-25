@@ -34,71 +34,75 @@ import { LegalModal } from './components/LegalModal';
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS, TERMS_OF_SERVICE, PRIVACY_POLICY } from './data';
 
+// --- CONSTANTES DE ANUNCIOS (MODAS Y FERRETERIA) ---
+const IMG_MODAS = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80';
+const IMG_FERRETERIA = 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80';
+
 // --- ANUNCIOS INICIALES PARA TODAS LAS VISTAS ---
 const INITIAL_ADS: Ad[] = [
-  // --- HOME ---
-  { id: 'ad-home-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
-  { id: 'ad-home-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
+  // --- HOME (Patrón: Modas TOP, Ferretería BOTTOM) ---
+  { id: 'ad-home-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
+  { id: 'ad-home-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
   
   // --- SIDEBAR (MENU) ---
   { id: 'ad-menu-1', clientName: 'Mesón El Puerto', position: 'menu-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR },
   { id: 'ad-menu-2', clientName: 'Turismo Pilar', position: 'menu-bottom', imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR },
 
-  // --- MAPA ---
+  // --- MAPA (Mantiene específicos) ---
   { id: 'ad-map-gen', clientName: 'Pizzería La Plaza', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1574071318508-1cdbad80ad50?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.MAP, filterContext: 'all' },
   { id: 'ad-map-rest', clientName: 'Restaurante Los Arcos', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7ed9d8607c?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.MAP, filterContext: 'Hostelería y restauración' },
 
-  // --- NOTICIAS ---
-  { id: 'ad-news-1', clientName: 'Diario Local', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.NEWS },
-  { id: 'ad-news-2', clientName: 'Imprenta Rápid', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1562564055-71e051d33c19?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.NEWS },
+  // --- NOTICIAS (Patrón: Ferretería TOP, Modas BOTTOM) ---
+  { id: 'ad-news-1', clientName: 'Ferretería El Pilar', position: 'page-top', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.NEWS },
+  { id: 'ad-news-2', clientName: 'Modas Lucía', position: 'page-bottom', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.NEWS },
 
-  // --- TIENDAS (SHOPPING) ---
-  { id: 'ad-shop-1', clientName: 'Boutique Center', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.SHOPPING },
-  { id: 'ad-shop-2', clientName: 'Zapatería Paso', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.SHOPPING },
+  // --- TIENDAS (Patrón: Modas TOP, Ferretería BOTTOM) ---
+  { id: 'ad-shop-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SHOPPING },
+  { id: 'ad-shop-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SHOPPING },
 
-  // --- GASTRONOMIA (DINING) ---
+  // --- GASTRONOMIA (Vinos TOP, Ferretería BOTTOM) ---
   { id: 'ad-din-1', clientName: 'Vinos de la Tierra', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.DINING },
-  { id: 'ad-din-2', clientName: 'Postres Artesanos', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.DINING },
+  { id: 'ad-din-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.DINING },
 
-  // --- EVENTOS ---
-  { id: 'ad-evt-1', clientName: 'Producciones Fiesta', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.EVENTS },
-  { id: 'ad-evt-2', clientName: 'Catering Deluxe', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.EVENTS },
+  // --- EVENTOS (Patrón: Ferretería TOP, Modas BOTTOM) ---
+  { id: 'ad-evt-1', clientName: 'Ferretería El Pilar', position: 'page-top', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.EVENTS },
+  { id: 'ad-evt-2', clientName: 'Modas Lucía', position: 'page-bottom', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.EVENTS },
 
-  // --- PLAYAS ---
-  { id: 'ad-bch-1', clientName: 'Chiringuito Blue', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1533230543714-c24773de9079?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.BEACHES },
-  { id: 'ad-bch-2', clientName: 'Escuela de Vela', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.BEACHES },
+  // --- PLAYAS (Patrón: Modas TOP, Ferretería BOTTOM) ---
+  { id: 'ad-bch-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.BEACHES },
+  { id: 'ad-bch-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.BEACHES },
 
-  // --- SALUD ---
-  { id: 'ad-hlt-1', clientName: 'Clínica Dental', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.HEALTH },
-  { id: 'ad-hlt-2', clientName: 'Seguros Salud', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.HEALTH },
+  // --- SALUD (Patrón: Ferretería TOP, Modas BOTTOM) ---
+  { id: 'ad-hlt-1', clientName: 'Ferretería El Pilar', position: 'page-top', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HEALTH },
+  { id: 'ad-hlt-2', clientName: 'Modas Lucía', position: 'page-bottom', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HEALTH },
 
-  // --- SERVICIOS CIUDADANO ---
-  { id: 'ad-cit-1', clientName: 'Gestoría Admin', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.CITIZEN_SERVICES },
-  { id: 'ad-cit-2', clientName: 'Abogados PH', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.CITIZEN_SERVICES },
+  // --- SERVICIOS CIUDADANO (Patrón: Modas TOP, Ferretería BOTTOM) ---
+  { id: 'ad-cit-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.CITIZEN_SERVICES },
+  { id: 'ad-cit-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.CITIZEN_SERVICES },
 
-  // --- FORO ---
-  { id: 'ad-for-1', clientName: 'Fibra Óptica Local', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1544197150-b99a580bbcbf?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.FORUM },
-  { id: 'ad-for-2', clientName: 'Alarmas Hogar', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1558002038-1091a1661116?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.FORUM },
+  // --- FORO (Patrón: Ferretería TOP, Modas BOTTOM) ---
+  { id: 'ad-for-1', clientName: 'Ferretería El Pilar', position: 'page-top', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.FORUM },
+  { id: 'ad-for-2', clientName: 'Modas Lucía', position: 'page-bottom', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.FORUM },
 
-  // --- PATRIMONIO (SIGHTSEEING) ---
-  { id: 'ad-see-1', clientName: 'Guías Turísticos', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.SIGHTSEEING },
-  { id: 'ad-see-2', clientName: 'Souvenirs PH', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1555662369-1c9327387e35?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.SIGHTSEEING },
+  // --- PATRIMONIO (Patrón: Modas TOP, Ferretería BOTTOM) ---
+  { id: 'ad-see-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIGHTSEEING },
+  { id: 'ad-see-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIGHTSEEING },
 
-  // --- ACTIVIDADES ---
-  { id: 'ad-act-1', clientName: 'Alquiler Bicis', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1528629297340-d1d466945dc5?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.ACTIVITIES },
-  { id: 'ad-act-2', clientName: 'Gimnasio Sport', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.ACTIVITIES },
+  // --- ACTIVIDADES (Patrón: Ferretería TOP, Modas BOTTOM) ---
+  { id: 'ad-act-1', clientName: 'Ferretería El Pilar', position: 'page-top', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.ACTIVITIES },
+  { id: 'ad-act-2', clientName: 'Modas Lucía', position: 'page-bottom', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.ACTIVITIES },
 
-  // --- BUSCADOR ---
-  { id: 'ad-sch-1', clientName: 'SEO Local Agency', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.SEARCH },
-  { id: 'ad-sch-2', clientName: 'Marketing Digital', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.SEARCH },
+  // --- BUSCADOR (Patrón: Modas TOP, Ferretería BOTTOM) ---
+  { id: 'ad-sch-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SEARCH },
+  { id: 'ad-sch-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SEARCH },
 
-  // --- AI CHAT ---
-  { id: 'ad-ai-1', clientName: 'Tech Store', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.AI_CHAT },
-  { id: 'ad-ai-2', clientName: 'Cursos Robótica', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.AI_CHAT },
+  // --- AI CHAT (Patrón: Ferretería TOP, Modas BOTTOM) ---
+  { id: 'ad-ai-1', clientName: 'Ferretería El Pilar', position: 'page-top', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.AI_CHAT },
+  { id: 'ad-ai-2', clientName: 'Modas Lucía', position: 'page-bottom', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.AI_CHAT },
 
-  // --- LENS ---
-  { id: 'ad-lens-1', clientName: 'Fotografía Pro', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.LENS },
-  { id: 'ad-lens-2', clientName: 'Visitas Guiadas', position: 'page-bottom', imageUrl: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: false, view: ViewState.LENS },
+  // --- LENS (Patrón: Modas TOP, Ferretería BOTTOM) ---
+  { id: 'ad-lens-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.LENS },
+  { id: 'ad-lens-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.LENS },
 ];
 
 const MOCK_ADMINS: AdminUser[] = [
