@@ -63,7 +63,7 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
         </div>
 
         <div className="w-full pt-4 pb-2 mt-24 shrink-0 relative z-10 bg-white">
-          <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.SHOPPING} currentFilter={activeZone} />
+          <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.SHOPPING} currentFilter={activeZone} currentLang={headerProps.currentLang.code} />
         </div>
         
         <div className="px-6 py-12 flex-1">
@@ -120,7 +120,7 @@ export const ShoppingView: React.FC<ShoppingViewProps> = ({ t, businesses, highl
         </div>
 
         <div className="w-full py-6 shrink-0 opacity-90 relative z-10 bg-white">
-          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.SHOPPING} currentFilter={activeZone} />
+          <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.SHOPPING} currentFilter={activeZone} currentLang={headerProps.currentLang.code} />
         </div>
 
         <div className="relative z-10">

@@ -10,11 +10,12 @@ interface MapViewProps {
   onNavigate: (view: ViewState, id?: string) => void;
   businesses: CensusItem[];
   ads: Ad[];
+  currentLang?: string; // New prop
 }
 
 declare const L: any; // Leaflet Global
 
-export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads }) => {
+export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads, currentLang }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const [leafletMap, setLeafletMap] = useState<any | null>(null);
@@ -190,7 +191,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
       
       {/* 1. PUBLICIDAD SUPERIOR (Full Width) */}
       <div className="w-full bg-white shrink-0 mb-4 shadow-sm z-20 relative">
-        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.MAP} currentFilter={filter} />
+        <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.MAP} currentFilter={filter} currentLang={currentLang} />
       </div>
 
       {/* 2. CONTENEDOR DEL MAPA */}
@@ -252,7 +253,7 @@ export const MapView: React.FC<MapViewProps> = ({ t, onNavigate, businesses, ads
 
       {/* 3. PUBLICIDAD INFERIOR (Full Width) */}
       <div className="w-full bg-white shrink-0 pt-4 pb-10">
-        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.MAP} currentFilter={filter} />
+        <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.MAP} currentFilter={filter} currentLang={currentLang} />
       </div>
 
     </div>

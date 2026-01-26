@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { 
   CalendarCheck, FileText, HelpCircle, MessageSquare, 
-  Camera, Send, ChevronRight, Landmark, X, Check, MapPin, Clock, ArrowRight, Sparkles, ArrowLeft
+  Camera, Send, ChevronRight, Landmark, X, Check, MapPin, Clock, ArrowRight, Sparkles, ArrowLeft, Phone, AlertTriangle
 } from './Icons';
 import { Ad, ViewState } from '../types';
 import { AdSpot } from './AdSpot';
@@ -15,13 +15,45 @@ interface CitizenServicesViewProps {
   onBack: () => void;
   headerProps: any;
   onOpenAdminLogin: () => void;
+  isLoggedIn?: boolean;
+  userPhone?: string;
+  onOpenLogin?: () => void;
+  onUpdatePhone?: (phone: string) => void;
 }
 
-export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads, onBack, headerProps, onOpenAdminLogin }) => {
+export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ 
+  t, ads, onBack, headerProps, onOpenAdminLogin, isLoggedIn, userPhone, onOpenLogin, onUpdatePhone 
+}) => {
   const [activeModal, setActiveModal] = useState<'none' | 'appointment' | 'incident' | 'success'>('none');
+  const [showPhoneModal, setShowPhoneModal] = useState(false);
+  const [tempPhone, setTempPhone] = useState('');
 
   const handleDownload = (name: string) => {
     alert(`Iniciando descarga de: ${name}.pdf`);
+  };
+
+  const handleAction = (type: 'appointment' | 'incident') => {
+    if (!isLoggedIn) {
+      if (onOpenLogin) onOpenLogin();
+      return;
+    }
+
+    if (!userPhone) {
+      setShowPhoneModal(true);
+      return;
+    }
+
+    setActiveModal(type);
+  };
+
+  const handleSavePhone = () => {
+    if (tempPhone.trim().length < 9) return; // Simple validation
+    if (onUpdatePhone) {
+      onUpdatePhone(tempPhone);
+      setShowPhoneModal(false);
+      // Automatically open the appointment/incident modal after saving if intent was clear? 
+      // For now, let user click again or we can track intent. Simpler to just close.
+    }
   };
 
   return (
@@ -55,7 +87,7 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads
         {/* Botones Principales Grid */}
         <div className="grid grid-cols-2 gap-6">
           <button 
-            onClick={() => setActiveModal('appointment')} 
+            onClick={() => handleAction('appointment')} 
             className="bg-white p-8 rounded-[40px] shadow-2xl flex flex-col items-center gap-5 border border-gray-100 group transition-all hover:-translate-y-1 active:scale-95 shadow-blue-900/5"
           >
             <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-[22px] flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
@@ -67,7 +99,7 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads
             </div>
           </button>
           <button 
-            onClick={() => setActiveModal('incident')} 
+            onClick={() => handleAction('incident')} 
             className="bg-white p-8 rounded-[40px] shadow-2xl flex flex-col items-center gap-5 border border-gray-100 group transition-all hover:-translate-y-1 active:scale-95 shadow-red-900/5"
           >
             <div className="w-16 h-16 bg-red-50 text-red-500 rounded-[22px] flex items-center justify-center group-hover:bg-red-500 group-hover:text-white transition-all">
@@ -143,6 +175,70 @@ export const CitizenServicesView: React.FC<CitizenServicesViewProps> = ({ t, ads
       <div className="relative z-10">
         <Footer t={t} onOpenAdminLogin={onOpenAdminLogin} />
       </div>
+
+      {/* PHONE REQUIREMENT MODAL */}
+      {showPhoneModal && (
+        <div className="fixed inset-0 z-[8000] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setShowPhoneModal(false)} />
+          <div className="relative bg-white w-full max-w-sm rounded-[40px] p-8 animate-in zoom-in-95 duration-300 shadow-2xl border border-white/20">
+             <div className="flex justify-between items-start mb-6">
+                <div className="p-4 bg-orange-100 rounded-2xl text-orange-600">
+                   <AlertTriangle size={32} />
+                </div>
+                <button onClick={() => setShowPhoneModal(false)} className="p-2 bg-gray-50 rounded-full hover:bg-gray-100"><X size={20} /></button>
+             </div>
+             
+             <h3 className="text-2xl font-black text-gray-900 tracking-tighter leading-none mb-2">Falta un dato clave</h3>
+             <p className="text-gray-500 font-medium text-sm mb-6 leading-relaxed">
+               Para gestionar citas o incidencias, el personal del Ayuntamiento necesita poder contactarte. Por favor, añade tu teléfono.
+             </p>
+
+             <div className="space-y-4">
+                <div>
+                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Tu Teléfono Móvil</label>
+                   <div className="relative">
+                      <input 
+                        type="tel"
+                        value={tempPhone}
+                        onChange={(e) => setTempPhone(e.target.value)}
+                        className="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-900 focus:ring-4 focus:ring-blue-100 focus:bg-white transition-all text-lg" 
+                        placeholder="600 000 000" 
+                        autoFocus
+                      />
+                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                   </div>
+                </div>
+
+                <button 
+                  onClick={handleSavePhone}
+                  className="w-full py-5 bg-[#0f172a] text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-black transition-all flex items-center justify-center gap-2 active:scale-95"
+                >
+                   Guardar y Continuar
+                </button>
+             </div>
+          </div>
+        </div>
+      )}
+
+      {/* SERVICE MODALS (Placeholder) */}
+      {activeModal !== 'none' && (
+        <div className="fixed inset-0 z-[8000] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setActiveModal('none')} />
+          <div className="relative bg-white w-full max-w-md rounded-[30px] p-10 animate-in zoom-in-95 text-center">
+             <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Check size={40} />
+             </div>
+             <h3 className="text-2xl font-black text-gray-900 mb-2">Servicio Iniciado</h3>
+             <p className="text-gray-500 mb-8">
+               Has accedido correctamente al servicio de {activeModal === 'appointment' ? 'Cita Previa' : 'Incidencias'}.
+               <br/><br/>
+               <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">Teléfono verificado: {userPhone}</span>
+             </p>
+             <button onClick={() => setActiveModal('none')} className="bg-gray-100 px-8 py-3 rounded-xl font-bold text-gray-600 hover:bg-gray-200">Cerrar Demo</button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

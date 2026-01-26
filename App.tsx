@@ -41,13 +41,14 @@ const IMG_FERRETERIA = 'https://images.unsplash.com/photo-1581244277943-fe4a9c77
 
 // --- ANUNCIOS INICIALES PARA TODAS LAS VISTAS ---
 const INITIAL_ADS: Ad[] = [
-  // --- HOME (Patrón: Modas TOP, Ferretería BOTTOM) ---
-  { id: 'ad-home-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
-  { id: 'ad-home-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME },
+  // --- HOME (Premium Spots) ---
+  { id: 'ad-home-1', clientName: 'Modas Lucía', position: 'page-top', imageUrl: IMG_MODAS, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME, isPremium: true, language: 'es' },
+  { id: 'ad-home-1-en', clientName: 'Lucía Fashion', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME, isPremium: true, language: 'en' },
+  { id: 'ad-home-2', clientName: 'Ferretería El Pilar', position: 'page-bottom', imageUrl: IMG_FERRETERIA, linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.HOME, isPremium: true },
   
-  // --- SIDEBAR (MENU) ---
-  { id: 'ad-menu-1', clientName: 'Mesón El Puerto', position: 'menu-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR },
-  { id: 'ad-menu-2', clientName: 'Turismo Pilar', position: 'menu-bottom', imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR },
+  // --- SIDEBAR (Premium Spots) ---
+  { id: 'ad-menu-1', clientName: 'Mesón El Puerto', position: 'menu-top', imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR, isPremium: true },
+  { id: 'ad-menu-2', clientName: 'Turismo Pilar', position: 'menu-bottom', imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.SIDEBAR, isPremium: true },
 
   // --- MAPA (Contextuales) ---
   { id: 'ad-map-gen', clientName: 'Pizzería La Plaza', position: 'page-top', imageUrl: 'https://images.unsplash.com/photo-1574071318508-1cdbad80ad50?auto=format&fit=crop&w=1200&q=80', linkUrl: '#', startDate: '2026-01-01', endDate: '2026-12-31', isActive: true, view: ViewState.MAP, filterContext: 'all' },
@@ -120,6 +121,7 @@ const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<AdminRole | 'USER'>('USER');
   const [userName, setUserName] = useState('');
+  const [userPhone, setUserPhone] = useState(''); // New State for Phone
   const [favorites, setFavorites] = useState<string[]>([]);
   const [myEvents, setMyEvents] = useState<string[]>([]);
   const [ads, setAds] = useState<Ad[]>(INITIAL_ADS);
@@ -187,22 +189,35 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleLogin = (userData?: { name: string, email: string, role?: AdminRole }) => {
+  const handleLogin = (userData?: { name: string, email: string, role?: AdminRole, phone?: string }) => {
     if (userData) { 
       setUserRole(userData.role || 'USER'); 
-      setUserName(userData.name); 
+      setUserName(userData.name);
+      setUserPhone(userData.phone || ''); 
     } else { 
       // Caso Super Admin desde LoginModal (master credentials)
       setUserRole('SUPER_ADMIN'); 
       setUserName('Super Administrador'); 
+      setUserPhone('');
     }
     setIsLoggedIn(true);
     setLoginOpen(false);
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false); setUserRole('USER'); setUserName('');
+    setIsLoggedIn(false); setUserRole('USER'); setUserName(''); setUserPhone('');
     setCurrentView(ViewState.HOME); setSidebarOpen(false);
+  };
+
+  const handleUpdatePhone = (phone: string) => {
+    setUserPhone(phone);
+    // Update local storage simulation
+    const stored = localStorage.getItem('pilar_user_db');
+    if (stored) {
+      const user = JSON.parse(stored);
+      user.phone = phone;
+      localStorage.setItem('pilar_user_db', JSON.stringify(user));
+    }
   };
 
   const toggleFavorite = (id: string) => setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
@@ -280,10 +295,10 @@ const App: React.FC = () => {
       case ViewState.DINING: return <DiningView t={t} businesses={businesses} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
       case ViewState.SHOPPING: return <ShoppingView t={t} businesses={businesses} highlightedBusinessId={selectedBusinessId} favorites={favorites} toggleFavorite={toggleFavorite} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
       case ViewState.HEALTH: return <HealthView t={t} onNavigate={handleNavigate} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
-      case ViewState.CITIZEN_SERVICES: return <CitizenServicesView t={t} ads={ads} onBack={() => handleNavigate(ViewState.HOME)} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
+      case ViewState.CITIZEN_SERVICES: return <CitizenServicesView t={t} ads={ads} onBack={() => handleNavigate(ViewState.HOME)} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} isLoggedIn={isLoggedIn} userPhone={userPhone} onOpenLogin={() => setLoginOpen(true)} onUpdatePhone={handleUpdatePhone} />;
       case ViewState.EVENTS: return <EventsView t={t} events={events} onShare={handleShare} onAddToCalendar={(e) => alert(t.common.addToCalendar)} initialEventId={selectedEventId} myEvents={myEvents} toggleMyEvent={toggleMyEvent} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
       case ViewState.FORUM: return <ForumView t={t} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
-      case ViewState.MAP: return <MapView t={t} onNavigate={handleNavigate} businesses={businesses} ads={ads} />;
+      case ViewState.MAP: return <MapView t={t} onNavigate={handleNavigate} businesses={businesses} ads={ads} currentLang={currentLang.code} />;
       case ViewState.AI_CHAT: return <AIChatView t={t} onBack={() => handleNavigate(ViewState.HOME)} langCode={currentLang.code} langLabel={currentLang.label} ads={ads} headerProps={headerProps} onOpenAdminLogin={handleOpenAdminLogin} />;
       case ViewState.ADMIN: return (
         <AdminDashboard 
@@ -336,6 +351,7 @@ const App: React.FC = () => {
         isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} menuItems={menuItems} currentView={currentView} 
         onNavigate={handleNavigate} ads={ads} title={t.menu.title || 'PH App'} sponsoredText={t.common.sponsored} 
         isLoggedIn={isLoggedIn} onLogout={handleLogout} onLogin={() => { setLoginOpen(true); }} t={t} 
+        currentLang={currentLang.code}
       />
 
       <main className={isImmersiveView ? "" : "pt-24 min-h-screen"}>

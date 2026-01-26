@@ -87,7 +87,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
 
             {/* 4. PUBLICIDAD SUPERIOR (Full Width Container) */}
             <div className="w-full max-w-7xl animate-in fade-in duration-1000 delay-500">
-               <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} />
+               <AdSpot ads={ads} position="page-top" label={t.common.sponsored} view={ViewState.HOME} currentLang={headerProps.currentLang.code} />
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ t, events, onNavigate, heroI
 
       {/* 5. PUBLICIDAD INFERIOR (Antes del Footer) */}
       <div className="max-w-6xl mx-auto w-full px-6 relative z-20 pb-10">
-         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.HOME} />
+         <AdSpot ads={ads} position="page-bottom" label={t.common.sponsored} view={ViewState.HOME} currentLang={headerProps.currentLang.code} />
       </div>
 
       {/* FOOTER */}

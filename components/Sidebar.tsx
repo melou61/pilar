@@ -17,6 +17,7 @@ interface SidebarProps {
   onLogout: () => void;
   onLogin: () => void;
   t: any;
+  currentLang?: string; // Added prop
 }
 
 const WeatherWidget = ({ t }: { t: any }) => {
@@ -68,7 +69,7 @@ const WeatherWidget = ({ t }: { t: any }) => {
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
-  isOpen, onClose, menuItems, currentView, onNavigate, ads, title, sponsoredText, isLoggedIn, onLogout, onLogin, t
+  isOpen, onClose, menuItems, currentView, onNavigate, ads, title, sponsoredText, isLoggedIn, onLogout, onLogin, t, currentLang
 }) => {
   if (!isOpen) return null;
 
@@ -93,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <WeatherWidget t={t} />
 
           <div className="px-6">
-             <AdSpot ads={ads} position="menu-top" label={sponsoredText} view={ViewState.SIDEBAR} />
+             <AdSpot ads={ads} position="menu-top" label={sponsoredText} view={ViewState.SIDEBAR} currentLang={currentLang} />
           </div>
 
           {!isLoggedIn && (
@@ -133,7 +134,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </ul>
 
           <div className="px-6 py-4 border-t border-gray-50 mt-4">
-             <AdSpot ads={ads} position="menu-bottom" label={sponsoredText} view={ViewState.SIDEBAR} />
+             <AdSpot ads={ads} position="menu-bottom" label={sponsoredText} view={ViewState.SIDEBAR} currentLang={currentLang} />
           </div>
 
           {isLoggedIn && (
@@ -151,7 +152,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="p-10 bg-gray-50 border-t border-gray-100 text-center">
             <div className="text-[11px] text-gray-400 font-black uppercase tracking-[0.5em]">
-                PH-APP • v1.0.27
+                PH-APP • v1.0.28
             </div>
         </div>
       </div>

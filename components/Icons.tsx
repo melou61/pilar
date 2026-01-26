@@ -123,7 +123,8 @@ import {
   Key,
   DollarSign,
   Languages,
-  Medal
+  Medal,
+  Crown
 } from 'lucide-react';
 
 export {
@@ -250,5 +251,6 @@ export {
   Key,
   DollarSign,
   Languages,
-  Medal
+  Medal,
+  Crown
 };

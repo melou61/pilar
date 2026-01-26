@@ -48,6 +48,8 @@ export interface Ad {
   position: 'page-top' | 'page-bottom' | 'menu-top' | 'menu-bottom';
   view: ViewState; // Página donde aparece
   filterContext?: string; // Filtro específico (ej: 'beaches' en MAP o 'CENTRO' en SHOPPING)
+  language?: string; // Código de idioma ('es', 'en', etc.) o undefined para todos
+  isPremium?: boolean; // Indica si es un espacio de alto valor (Home/Sidebar)
   startDate: string; 
   endDate: string;   
   isActive: boolean;
@@ -193,6 +195,7 @@ export interface AdminUser {
   active?: boolean;
   lastSeen?: string;
   password?: string;
+  phone?: string; // Added phone number
 }
 
 export interface Medal {

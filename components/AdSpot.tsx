@@ -1,28 +1,24 @@
 
 import React, { useState } from 'react';
 import { Ad, ViewState } from '../types';
-import { Plus } from './Icons';
+import { Plus, Crown } from './Icons';
 
 interface AdSpotProps {
   ads: Ad[];
   position?: 'page-top' | 'page-bottom' | 'menu-top' | 'menu-bottom';
   label?: string;
-  view: ViewState; // Obligatorio para saber en qué vista estamos
-  currentFilter?: string; // Opcional para segmentación por filtro
+  view: ViewState; 
+  currentFilter?: string;
+  currentLang?: string; // New prop for language targeting
 }
 
-export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top', view, currentFilter }) => {
+export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top', label, view, currentFilter, currentLang }) => {
   const [imgLoaded, setImgLoaded] = useState(false);
 
-  // Lógica de filtrado avanzada:
-  // 1. Coincidir posición
-  // 2. Coincidir Vista (Página)
-  // 3. Si el anuncio tiene un filterContext definido, debe coincidir con el currentFilter de la vista.
   const activeAds = ads.filter(ad => {
     const matchPos = ad.position === position;
     const matchView = ad.view === view;
     
-    // Normalización para comparación segura (insensitive case)
     const context = ad.filterContext ? ad.filterContext.toLowerCase() : 'all';
     const filter = currentFilter ? currentFilter.toLowerCase() : 'all';
     
@@ -32,16 +28,15 @@ export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top', view
       filter === 'all' || 
       context === filter;
     
-    return ad.isActive && matchPos && matchView && matchFilter;
+    // Nueva lógica de filtrado por idioma
+    const matchLang = !ad.language || !currentLang || ad.language === currentLang;
+    
+    return ad.isActive && matchPos && matchView && matchFilter && matchLang;
   });
 
-  // Clases responsivas para asegurar Full Width y Aspect Ratio correcto por dispositivo
-  // Móvil: Más alto (21/9) | Tablet: (3/1) | Desktop: Panorámico (4/1)
   const containerClasses = "w-full block relative overflow-hidden shadow-sm transition-all duration-300 md:rounded-2xl";
   const aspectClasses = "aspect-[2/1] sm:aspect-[3/1] md:aspect-[4/1]";
 
-  // --- FALLBACK: ESPACIO DISPONIBLE ---
-  // Si no hay anuncios activos, mostramos un placeholder para que se vea el espacio disponible.
   if (activeAds.length === 0) {
     return (
       <div className={`w-full flex flex-col gap-4 px-4 md:px-0 opacity-60 hover:opacity-100 transition-opacity duration-300`}>
@@ -50,7 +45,7 @@ export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top', view
                 <Plus size={24} />
             </div>
             <span className="font-black uppercase tracking-[0.2em] text-[10px] mb-1 group-hover:text-blue-600">Espacio Disponible</span>
-            <span className="text-[9px] font-bold opacity-60">Posición: {position?.replace('-', ' ').toUpperCase()}</span>
+            <span className="text-[9px] font-bold opacity-60">Posición: {position?.replace('-', ' ').toUpperCase()} {currentLang ? `(${currentLang.toUpperCase()})` : ''}</span>
          </div>
       </div>
     ); 
@@ -64,7 +59,7 @@ export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top', view
             href={ad.linkUrl} 
             target="_blank" 
             rel="noreferrer" 
-            className={`${containerClasses} ${aspectClasses} bg-gray-100 hover:brightness-95 shadow-xl`}
+            className={`${containerClasses} ${aspectClasses} bg-gray-100 hover:brightness-95 shadow-xl ${ad.isPremium ? 'ring-4 ring-yellow-400/30' : ''}`}
           >
              {!imgLoaded && (
                  <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse flex items-center justify-center">
@@ -82,13 +77,14 @@ export const AdSpot: React.FC<AdSpotProps> = ({ ads, position = 'page-top', view
              />
              
              {/* Badge Cliente */}
-             <div className="absolute top-0 right-0 bg-blue-600/90 backdrop-blur-md text-[8px] sm:text-[10px] text-white px-3 py-1.5 rounded-bl-2xl font-black uppercase tracking-widest z-10">
+             <div className={`absolute top-0 right-0 ${ad.isPremium ? 'bg-yellow-500 text-black' : 'bg-blue-600/90 text-white'} backdrop-blur-md text-[8px] sm:text-[10px] px-3 py-1.5 rounded-bl-2xl font-black uppercase tracking-widest z-10 flex items-center gap-1`}>
+               {ad.isPremium && <Crown size={10} className="fill-black" />}
                {ad.clientName}
              </div>
              
              {/* Badge Patrocinado */}
              <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black/40 backdrop-blur-sm text-[7px] sm:text-[9px] text-white/80 px-2 py-0.5 rounded-md font-bold uppercase tracking-widest">
-                Patrocinado
+                {ad.isPremium ? 'Patrocinador Gold' : (label || 'Patrocinado')}
              </div>
           </a>
         ))}

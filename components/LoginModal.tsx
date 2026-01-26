@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, LogIn, ShieldCheck, UserPlus, Check, AlertTriangle, RefreshCw, Mail, Lock, Bell } from './Icons';
+import { X, LogIn, ShieldCheck, UserPlus, Check, AlertTriangle, RefreshCw, Mail, Lock, Phone } from './Icons';
 import { AdminRole } from '../types';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogin: (userData?: { name: string, email: string, role?: AdminRole }) => void;
+  onLogin: (userData?: { name: string, email: string, role?: AdminRole, phone?: string }) => void;
   onLoginSuperAdmin: () => void;
   t: any;
 }
@@ -16,6 +16,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState(''); // New state for phone
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [secretClicks, setSecretClicks] = useState(0);
@@ -38,6 +39,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
     name: 'Nombre Completo', 
     email: 'Email', 
     pass: 'Contraseña', 
+    phone: 'Teléfono (Opcional)',
     btn_login: 'Acceder', 
     btn_register: 'Siguiente',
     btn_verify: 'Verificar y Crear',
@@ -105,7 +107,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
     if (dbUser && email.toLowerCase() === dbUser.email.toLowerCase() && password === dbUser.pass) {
       setIsSuccess(true);
       setTimeout(() => {
-        onLogin({ name: dbUser.name, email: dbUser.email, role: 'USER' as any }); 
+        onLogin({ name: dbUser.name, email: dbUser.email, role: 'USER' as any, phone: dbUser.phone }); 
         setIsSuccess(false);
         resetForm();
       }, 800);
@@ -160,7 +162,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
     setError(null);
 
     if (!name || !email || !password) {
-        setError("Completa todos los campos.");
+        setError("Completa todos los campos obligatorios.");
         return;
     }
 
@@ -187,13 +189,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
         return;
     }
 
-    const userData = { name, email, pass: password };
+    const userData = { name, email, pass: password, phone };
     localStorage.setItem('pilar_user_db', JSON.stringify(userData));
     
     setIsSuccess(true);
     setTimeout(() => {
       setIsSuccess(false);
-      onLogin({ name, email, role: 'USER' }); // Auto login
+      onLogin({ name, email, role: 'USER', phone }); // Auto login
       resetForm();
     }, 1000);
   };
@@ -202,6 +204,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
     setEmail('');
     setPassword('');
     setName('');
+    setPhone('');
     setError(null);
     setShowVerification(false);
     setUserCode('');
@@ -272,17 +275,33 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin
         {!showVerification ? (
             <form className="space-y-5" onSubmit={view === 'login' ? handleSubmit : handleRegister}>
             {view === 'register' && (
-                <div className="animate-in slide-in-from-right duration-300">
-                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">{authT.name}</label>
-                    <input 
-                    required 
-                    type="text" 
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white focus:border-emerald-500 transition-all text-base font-bold text-gray-900 placeholder-gray-300" 
-                    placeholder="..." 
-                    />
-                </div>
+                <>
+                    <div className="animate-in slide-in-from-right duration-300">
+                        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">{authT.name}</label>
+                        <input 
+                        required 
+                        type="text" 
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white focus:border-emerald-500 transition-all text-base font-bold text-gray-900 placeholder-gray-300" 
+                        placeholder="..." 
+                        />
+                    </div>
+                    <div className="animate-in slide-in-from-right duration-300 delay-100">
+                        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Teléfono (Importante)</label>
+                        <div className="relative">
+                            <input 
+                            required
+                            type="tel" 
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white focus:border-emerald-500 transition-all text-base font-bold text-gray-900 placeholder-gray-300" 
+                            placeholder="600 000 000" 
+                            />
+                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        </div>
+                    </div>
+                </>
             )}
 
             <div>
