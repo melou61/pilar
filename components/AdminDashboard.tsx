@@ -9,7 +9,7 @@ import {
   Users, Shield, Settings2, Phone,
   MessageCircle, Rss, RefreshCw, ToggleLeft, ToggleRight, CheckCircle,
   BarChart3, MousePointer2, Layout, Filter, ArrowRight, Signal, Cpu, Wifi, MessageSquare,
-  Server, Mail, Key, Link as LinkIcon, DollarSign, TrendingUp, AlertTriangle, Check, Battery, Languages, Sparkles
+  Server, Mail, Key, Link as LinkIcon, DollarSign, TrendingUp, AlertTriangle, Check, Battery, Languages, Sparkles, Crown
 } from './Icons';
 import { MOCK_FORUM_POSTS } from '../data';
 
@@ -558,7 +558,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
             )}
 
-            {/* ... Rest of existing tabs (Business, Ads, etc.) ... */}
             {/* --- CENSO COMERCIAL (Existing) --- */}
             {activeTab === 'businesses' && (
                 <div className="space-y-6">
@@ -710,7 +709,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
             )}
 
-            {/* --- ADS (Existing) --- */}
+            {/* --- ADS (Updated) --- */}
             {activeTab === 'ads' && (
                 <div>
                     {editMode === 'ad' ? (
@@ -734,6 +733,45 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                             </select>
                                         </div>
                                     </div>
+
+                                    {/* New Selectors: Type & Language */}
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="text-xs font-bold text-slate-400 uppercase">Tipo</label>
+                                            <select
+                                                className="w-full p-3 bg-slate-50 rounded-xl font-bold"
+                                                value={currentAd.isPremium ? 'premium' : 'normal'}
+                                                onChange={e => setCurrentAd({...currentAd, isPremium: e.target.value === 'premium'})}
+                                            >
+                                                <option value="normal">Estándar</option>
+                                                <option value="premium">Premium (Gold)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-slate-400 uppercase">Idioma</label>
+                                            <select
+                                                className="w-full p-3 bg-slate-50 rounded-xl"
+                                                value={currentAd.language || ''}
+                                                onChange={e => setCurrentAd({...currentAd, language: e.target.value || undefined})}
+                                            >
+                                                <option value="">Todos (Global)</option>
+                                                {LANGUAGES_CONFIG.map(l => <option key={l} value={l}>{l.toUpperCase()}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {/* Context Filter */}
+                                    <div>
+                                        <label className="text-xs font-bold text-slate-400 uppercase">Contexto / Filtro (Opcional)</label>
+                                        <input
+                                            className="w-full p-3 bg-slate-50 rounded-xl text-xs font-mono text-blue-600"
+                                            placeholder="Ej: CENTRO, TRABAJO, all..."
+                                            value={currentAd.filterContext || ''}
+                                            onChange={e => setCurrentAd({...currentAd, filterContext: e.target.value})}
+                                        />
+                                        <p className="text-[9px] text-gray-400 mt-1 font-medium">Define etiquetas específicas para segmentar (ej: zona o categoría).</p>
+                                    </div>
+
                                     <div><label className="text-xs font-bold text-slate-400 uppercase">Enlace Destino</label><input className="w-full p-3 bg-slate-50 rounded-xl text-blue-500 text-xs font-mono" value={currentAd.linkUrl} onChange={e => setCurrentAd({...currentAd, linkUrl: e.target.value})} /></div>
                                     <div><label className="text-xs font-bold text-slate-400 uppercase">Imagen Creatividad (URL)</label><input className="w-full p-3 bg-slate-50 rounded-xl text-xs" value={currentAd.imageUrl} onChange={e => setCurrentAd({...currentAd, imageUrl: e.target.value})} /></div>
                                     
@@ -757,7 +795,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Vista Previa</h4>
                                     <div className="w-full aspect-[3/1] rounded-2xl overflow-hidden shadow-2xl relative bg-white group">
                                         <img src={currentAd.imageUrl} className="w-full h-full object-cover" />
-                                        <div className="absolute top-0 right-0 bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-bl-xl uppercase">{currentAd.clientName}</div>
+                                        <div className={`absolute top-0 right-0 ${currentAd.isPremium ? 'bg-yellow-500 text-black' : 'bg-blue-600 text-white'} text-[9px] font-black px-3 py-1 rounded-bl-xl uppercase flex items-center gap-1`}>
+                                            {currentAd.isPremium && <Crown size={10} />} {currentAd.clientName}
+                                        </div>
                                         <div className="absolute bottom-2 left-2 bg-black/50 text-white text-[8px] font-bold px-2 py-0.5 rounded uppercase">Patrocinado</div>
                                     </div>
                                 </div>

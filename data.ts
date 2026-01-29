@@ -1,5 +1,4 @@
 
-
 import { Event, CensusCategory, CensusItem, NewsItem, ForumPost } from './types';
 
 // --- TEXTOS LEGALES MULTI-IDIOMA ---
@@ -318,100 +317,164 @@ export const MOCK_EVENTS: Event[] = [
 ];
 
 export const MOCK_BEACHES = [
-  { 
-    id: 'higuericas', 
-    name: 'Las Higuericas', 
-    image: 'https://images.unsplash.com/photo-1509233725247-49e657c54213?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.9, 
-    services: ['Dunas', 'Chiringuitos', 'Pasarelas', 'Parking', 'Música en vivo'],
-    lat: 37.8590, lng: -0.7720,
-    length: '976m',
+  {
+    id: 'vistamar',
+    name: 'Playa Vistamar',
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.8,
+    services: ['Pasarelas', 'Lavapiés', 'Accesible'],
+    lat: 37.8920, lng: -0.7580,
+    length: '335m',
+    sandType: 'Arena Dorada',
+    occupancy: 'Media',
+    waterTemp: '24°C',
+    uvIndex: 7,
+    seaState: 'Calma'
+  },
+  {
+    id: 'milpalmeras',
+    name: 'Playa Mil Palmeras',
+    image: 'https://images.unsplash.com/photo-1590523278135-1e4233f2480c?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.9,
+    services: ['Chiringuitos', 'Juegos', 'Vóley', 'Parking', 'Accesible'],
+    lat: 37.8890, lng: -0.7590,
+    length: '346m',
     sandType: 'Arena Blanca',
     occupancy: 'Alta',
     waterTemp: '24°C',
+    uvIndex: 8,
+    seaState: 'Calma'
+  },
+  {
+    id: 'delrio',
+    name: 'Playa del Río',
+    image: 'https://images.unsplash.com/photo-1471922694854-ff1b63b20054?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.7,
+    services: ['Vegetación', 'Senderos', 'Tranquilidad'],
+    lat: 37.8840, lng: -0.7620,
+    length: '400m',
+    sandType: 'Arena/Roca',
+    occupancy: 'Media',
+    waterTemp: '23°C',
+    uvIndex: 7,
+    seaState: 'Oleaje Moderado'
+  },
+  {
+    id: 'rocamar',
+    name: 'Calas de Rocamar',
+    image: 'https://images.unsplash.com/photo-1621293954908-351529e0215c?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: false,
+    status: 'Abierta',
+    rating: 4.8,
+    services: ['Intimidad', 'Snorkel', 'Naturaleza'],
+    lat: 37.8760, lng: -0.7680,
+    length: '100m',
+    sandType: 'Roca/Arena',
+    occupancy: 'Baja',
+    waterTemp: '22°C',
     uvIndex: 7,
     seaState: 'Calma'
   },
-  { 
-    id: 'milpalmeras', 
-    name: 'Mil Palmeras', 
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.9, 
-    services: ['Duchas', 'Parking', 'Cruz Roja', 'Chiringuito', 'Accesible', 'Juegos Infantiles'],
-    lat: 37.8890, lng: -0.7590,
-    length: '346m',
-    sandType: 'Arena Fina',
-    occupancy: 'Alta',
-    waterTemp: '24°C',
-    uvIndex: 7,
-    seaState: 'Calma'
-  },
-  { 
-    id: 'jesuitas', 
-    name: 'Playa de los Jesuitas', 
-    image: 'https://images.unsplash.com/photo-1544949116-7e8894129f6d?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.8, 
-    services: ['Vóley Playa', 'Redes', 'Footing', 'Duchas'],
+  {
+    id: 'jesuitas',
+    name: 'Playa Los Jesuitas',
+    image: 'https://images.unsplash.com/photo-1544949116-7e8894129f6d?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.8,
+    services: ['Vóley Playa', 'Redes', 'Duchas', 'Acantilados'],
     lat: 37.8680, lng: -0.7790,
     length: '465m',
     sandType: 'Arena Dorada',
     occupancy: 'Media',
     waterTemp: '24°C',
-    uvIndex: 7,
+    uvIndex: 8,
     seaState: 'Bandera Verde'
   },
-  { 
-    id: 'elconde', 
-    name: 'Playa del Conde', 
-    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.9, 
-    services: ['Torre Vigía', 'Historia', 'Cine de Verano', 'Parking'],
+  {
+    id: 'elconde',
+    name: 'Playa El Conde',
+    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.9,
+    services: ['Torre Vigía', 'Cine de Verano', 'Accesible'],
     lat: 37.8650, lng: -0.7830,
     length: '210m',
-    sandType: 'Arena Dorada',
-    occupancy: 'Media',
-    waterTemp: '23°C',
-    uvIndex: 6,
+    sandType: 'Arena Fina',
+    occupancy: 'Alta',
+    waterTemp: '24°C',
+    uvIndex: 7,
     seaState: 'Calma'
   },
-  { 
-    id: 'elpuerto', 
-    name: 'Playa del Puerto', 
-    image: 'https://images.unsplash.com/photo-1562592534-754d209d843e?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: true, 
-    status: 'Abierta', 
-    rating: 4.7, 
-    services: ['Club Náutico', 'Rampas', 'Restaurantes', 'Paseo Marítimo'],
+  {
+    id: 'elpuerto',
+    name: 'Playa El Puerto',
+    image: 'https://images.unsplash.com/photo-1562592534-754d209d843e?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.7,
+    services: ['Club Náutico', 'Juegos', 'Paseo'],
     lat: 37.8630, lng: -0.7820,
     length: '300m',
+    sandType: 'Arena Dorada',
+    occupancy: 'Media',
+    waterTemp: '24°C',
+    uvIndex: 7,
+    seaState: 'Calma'
+  },
+  {
+    id: 'lasvillas',
+    name: 'Playa Las Villas',
+    image: 'https://images.unsplash.com/photo-1533758485262-b9be9db712c9?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.6,
+    services: ['Tranquilidad', 'Familia', 'Arenas Blancas'],
+    lat: 37.8610, lng: -0.7800,
+    length: '435m',
     sandType: 'Arena Fina',
     occupancy: 'Media',
     waterTemp: '24°C',
     uvIndex: 7,
     seaState: 'Calma'
   },
-  { 
-    id: 'rocamar', 
-    name: 'Calas de Rocamar', 
-    image: 'https://images.unsplash.com/photo-1468413253725-0d5181091126?auto=format&fit=crop&w=1200&q=80', 
-    blueFlag: false, 
-    status: 'Abierta', 
-    rating: 4.8, 
-    services: ['Escaleras', 'Snorkel', 'Calas Naturales', 'Tranquilidad'],
-    lat: 37.8760, lng: -0.7680,
-    length: '100m',
-    sandType: 'Roca/Arena',
-    occupancy: 'Baja',
-    waterTemp: '25°C',
+  {
+    id: 'higuericas',
+    name: 'Playa Las Higuericas',
+    image: 'https://images.unsplash.com/photo-1509233725247-49e657c54213?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.9,
+    services: ['Dunas', 'Chiringuitos', 'Parking', 'Pasarelas'],
+    lat: 37.8590, lng: -0.7720,
+    length: '976m',
+    sandType: 'Arena Blanca',
+    occupancy: 'Alta',
+    waterTemp: '23°C',
     uvIndex: 8,
+    seaState: 'Bandera Verde'
+  },
+  {
+    id: 'elmojon',
+    name: 'Playa El Mojón',
+    image: 'https://images.unsplash.com/photo-1519812674934-2e90f23d40cc?auto=format&fit=crop&w=1200&q=80',
+    blueFlag: true,
+    status: 'Abierta',
+    rating: 4.5,
+    services: ['Paseo Marítimo', 'Pesca', 'Límite Regional'],
+    lat: 37.8520, lng: -0.7700,
+    length: '270m',
+    sandType: 'Arena Dorada',
+    occupancy: 'Media',
+    waterTemp: '23°C',
+    uvIndex: 7,
     seaState: 'Calma'
   }
 ];
@@ -436,313 +499,227 @@ export const MOCK_SIGHTSEEING = [
     name: 'Iglesia Ntra. Sra. del Pilar', 
     image: 'https://images.unsplash.com/photo-1541432999881-197771ec8021?auto=format&fit=crop&w=1200&q=80', 
     category: 'Religioso', 
-    century: 'XX (Base XVIII)', 
-    lat: 37.8655, lng: -0.7928,
-    style: 'Neoclásico / Regionalista',
-    material: 'Ladrillo y Piedra',
+    century: 'XX', 
+    lat: 37.8658, lng: -0.7930,
+    style: 'Neoclásico',
+    material: 'Ladrillo y Mampostería',
     visitTime: '30 min',
     crowdLevel: 'Baja',
-    status: 'Activo',
-    amenities: ['Entrada Libre', 'Zona Peatonal', 'Cerca de Comercios', 'Arte Sacro']
+    status: 'Bueno',
+    amenities: ['Misas Diarias', 'Rampa Acceso', 'Zona Peatonal']
   },
   { 
     id: 'museo-etnologico', 
-    name: 'Museo Arqueológico Etnológico', 
+    name: 'Museo Arqueológico', 
     image: 'https://images.unsplash.com/photo-1518998053574-53ee81be84ac?auto=format&fit=crop&w=1200&q=80', 
     category: 'Museo', 
-    century: 'Contemporáneo', 
-    lat: 37.8660, lng: -0.7930,
-    style: 'Moderno / Educativo',
-    material: 'Vidrio y Hormigón',
-    visitTime: '1.5 h',
+    century: 'XXI', 
+    lat: 37.8665, lng: -0.7940,
+    style: 'Moderno',
+    material: 'Hormigón y Cristal',
+    visitTime: '1h 30min',
     crowdLevel: 'Baja',
-    status: 'Gratuito',
-    amenities: ['Aire Acondicionado', 'Accesible', 'Visitas Guiadas', 'Historia Local']
+    status: 'Excelente',
+    amenities: ['Guía Gratuita', 'Baños', 'Climatización', 'Tienda', 'Accesible']
   },
   { 
     id: 'canteras-romanas', 
     name: 'Canteras Romanas', 
-    image: 'https://images.unsplash.com/photo-1449156001931-828332736075?auto=format&fit=crop&w=1200&q=80', 
-    category: 'Yacimiento', 
-    century: 'I a.C.', 
-    lat: 37.8870, lng: -0.7580, 
-    style: 'Ingeniería Romana',
-    material: 'Roca Natural',
-    visitTime: '1 h',
+    image: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=1200&q=80', 
+    category: 'Arqueológico', 
+    century: 'I-II d.C.', 
+    lat: 37.8880, lng: -0.7585,
+    style: 'Romano',
+    material: 'Piedra Arenisca',
+    visitTime: '20 min',
     crowdLevel: 'Baja',
-    status: 'Visitable',
-    amenities: ['Junto al Mar', 'Panel Informativo', 'Snorkel Cercano', 'Espacio Natural']
+    status: 'Natural',
+    amenities: ['Panel Informativo', 'Al Aire Libre', 'Vistas al Mar']
+  }
+];
+
+export const COMMERCIAL_CENSUS: CensusCategory[] = [
+  {
+    id: 'fashion',
+    title: 'Moda y Complementos',
+    items: [
+        {
+            id: 'modas-lucia',
+            name: 'Modas Lucía',
+            address: 'C/ Mayor, 12',
+            phone: '965 35 20 00',
+            category: 'Moda',
+            description: 'Tienda de moda mujer con las últimas tendencias y marcas exclusivas. Asesoramiento personalizado.',
+            rating: 4.8,
+            reviewCount: 42,
+            isOpen: true,
+            zone: 'CENTRO',
+            images: ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80'],
+            hours: { weekdays: '10:00 - 14:00 / 17:00 - 20:30', weekend: '10:00 - 14:00' },
+            promotion: {
+                isActive: true,
+                range: 'NEAR',
+                maxDistanceMeters: 15,
+                frequencyRules: { maxPerHour: 1, maxPerDay: 2, maxPerWeek: 5 },
+                multilingualContent: {
+                    es: { title: '20% Descuento', description: 'En nueva colección presentando este cupón.' },
+                    en: { title: '20% OFF', description: 'On new collection with this coupon.' }
+                },
+                discountCode: 'LUCIA20'
+            }
+        },
+        {
+            id: 'zapateria-pilar',
+            name: 'Zapatería El Pilar',
+            address: 'Av. Constitución, 5',
+            phone: '965 35 21 11',
+            category: 'Moda',
+            description: 'Calzado cómodo y de calidad para toda la familia. Especialistas en piel.',
+            rating: 4.5,
+            reviewCount: 28,
+            isOpen: true,
+            zone: 'CENTRO',
+            images: ['https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80'],
+            hours: { weekdays: '09:30 - 13:30 / 17:00 - 20:30', weekend: '09:30 - 13:30' }
+        }
+    ]
+  },
+  {
+    id: 'services',
+    title: 'Servicios',
+    items: [
+        {
+            id: 'ferreteria-pilar',
+            name: 'Ferretería El Pilar',
+            address: 'C/ Ramón y Cajal, 45',
+            phone: '965 35 22 33',
+            category: 'Hogar',
+            description: 'Todo para el bricolaje, hogar y jardín. Copia de llaves y mandos.',
+            rating: 4.7,
+            reviewCount: 156,
+            isOpen: true,
+            zone: 'CENTRO',
+            images: ['https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1200&q=80'],
+            hours: { weekdays: '08:00 - 14:00 / 16:00 - 20:00', weekend: '09:00 - 13:30' }
+        },
+        {
+            id: 'clinica-vet',
+            name: 'Clínica Vet. San Francisco',
+            address: 'C/ San Francisco, 10',
+            phone: '965 35 24 00',
+            category: 'Mascotas',
+            description: 'Urgencias 24h, cirugía, radiología y peluquería canina.',
+            rating: 4.9,
+            reviewCount: 210,
+            isOpen: true,
+            zone: 'CENTRO',
+            images: ['https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=1200&q=80'],
+            hours: { weekdays: '10:00 - 20:00', weekend: 'Urgencias' }
+        }
+    ]
+  }
+];
+
+export const DINING_CENSUS: CensusCategory[] = [
+  {
+    id: 'restaurants',
+    title: 'Restaurantes',
+    items: [
+        {
+            id: 'meson-el-puerto',
+            name: 'Mesón El Puerto',
+            address: 'Explanada del Puerto, s/n',
+            phone: '965 32 12 34',
+            category: 'Restaurante',
+            description: 'Especialidad en caldero y pescados frescos de la bahía. Vistas al mar.',
+            rating: 4.6,
+            reviewCount: 340,
+            isOpen: true,
+            zone: 'LA_TORRE',
+            priceRange: '€€€',
+            images: ['https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80'],
+            hours: { weekdays: '13:00 - 16:30 / 20:00 - 23:30', weekend: '13:00 - 23:30' },
+            featuredItems: ['Arroz a banda', 'Caldero', 'Lubina a la sal']
+        },
+        {
+            id: 'pizzeria-plaza',
+            name: 'Pizzería La Plaza',
+            address: 'Plaza de la Iglesia, 4',
+            phone: '965 35 11 22',
+            category: 'Italiano',
+            description: 'Pizzas artesanas en horno de leña y pasta fresca.',
+            rating: 4.5,
+            reviewCount: 180,
+            isOpen: true,
+            zone: 'CENTRO',
+            priceRange: '€€',
+            images: ['https://images.unsplash.com/photo-1574071318508-1cdbad80ad50?auto=format&fit=crop&w=1200&q=80'],
+            hours: { weekdays: '19:00 - 23:30', weekend: '13:00 - 16:00 / 19:00 - 00:00' }
+        }
+    ]
+  },
+  {
+    id: 'bars',
+    title: 'Bares y Cafeterías',
+    items: [
+        {
+            id: 'chiringuito-pirata',
+            name: 'Chiringuito Pirata',
+            address: 'Playa Mil Palmeras',
+            phone: '600 12 34 56',
+            category: 'Chiringuito',
+            description: 'Cócteles, música en vivo y el mejor ambiente a pie de playa.',
+            rating: 4.7,
+            reviewCount: 520,
+            isOpen: true,
+            zone: 'MIL_PALMERAS',
+            priceRange: '€€',
+            images: ['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'],
+            hours: { weekdays: '10:00 - 02:00', weekend: '10:00 - 03:00' }
+        }
+    ]
   }
 ];
 
 export const ACTIVITIES_LIST = [
-  { 
-    id: 'rio-seco', 
-    title: 'Ruta de Senderismo Río Seco', 
-    image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80', 
-    category: 'hiking', 
-    duration: '3h', 
-    rating: 4.9, 
-    difficulty: 'medium', 
-    location: 'Pinar de Campoverde', 
-    lat: 37.8990, lng: -0.8400 
+  {
+    id: 'rio-seco',
+    title: 'Ruta Río Seco',
+    category: 'hiking',
+    difficulty: 'Fácil',
+    duration: '2h',
+    location: 'Pinar de Campoverde',
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1471922694854-ff1b63b20054?auto=format&fit=crop&w=1200&q=80'
   },
-  { 
-    id: 'loromero', 
-    title: 'Lo Romero Golf', 
-    image: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1200&q=80', 
-    category: 'sport', 
-    duration: '4h', 
-    rating: 4.8, 
-    difficulty: 'medium', 
-    location: 'Ctra. Orihuela', 
-    lat: 37.8750, lng: -0.8150 
+  {
+    id: 'loromero',
+    title: 'Lo Romero Golf',
+    category: 'sport',
+    difficulty: 'Medio',
+    duration: '4h',
+    location: 'Ctra. Orihuela',
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1200&q=80'
   },
-  { 
-    id: 'sailing', 
-    title: 'Vela y Kayak CN Torre', 
-    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80', 
-    category: 'water', 
-    duration: '2h', 
-    rating: 4.7, 
-    difficulty: 'easy', 
-    location: 'Puerto Deportivo', 
-    lat: 37.8635, lng: -0.7815 
+  {
+    id: 'sailing',
+    title: 'Vela y Kayak',
+    category: 'water',
+    difficulty: 'Medio',
+    duration: '3h',
+    location: 'Club Náutico',
+    rating: 4.7,
+    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80'
   },
-  { 
-    id: 'cycling', 
-    title: 'Cicloturismo Costa', 
-    image: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&w=1200&q=80', 
-    category: 'sport', 
-    duration: '1.5h', 
-    rating: 4.6, 
-    difficulty: 'easy', 
-    location: 'Paseo Marítimo', 
-    lat: 37.8700, lng: -0.7700 
+  {
+    id: 'cycling',
+    title: 'Ruta Cicloturista',
+    category: 'sport',
+    difficulty: 'Fácil',
+    duration: '1.5h',
+    location: 'Torre de la Horadada',
+    rating: 4.6,
+    image: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&w=1200&q=80'
   }
-];
-
-// --- SIMULACIÓN DE IMÁGENES REALISTAS POR CATEGORÍA ---
-
-const CATEGORY_IMAGES: Record<string, string[]> = {
-  'Moda': [
-    'https://images.unsplash.com/photo-1441986300917-64674bd600d8',
-    'https://images.unsplash.com/photo-1470309634658-8398b2cd0924',
-    'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5'
-  ],
-  'Ferretería': [
-    'https://images.unsplash.com/photo-1581244277943-fe4a9c777189',
-    'https://images.unsplash.com/photo-1530124560676-44b24e64f26a',
-    'https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8'
-  ],
-  'Hogar': [
-    'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92', // Muebles
-    'https://images.unsplash.com/photo-1513161455079-7dc1de15ef3e', // Decor
-    'https://images.unsplash.com/photo-1616486338812-3dadae4b4f9d'
-  ],
-  'Supermercado': [
-    'https://images.unsplash.com/photo-1578916171728-46686eac8d58',
-    'https://images.unsplash.com/photo-1542838132-92c53300491e',
-    'https://images.unsplash.com/photo-1506484381205-f7945653044d'
-  ],
-  'Alimentación': [
-    'https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8', // Grocery
-    'https://images.unsplash.com/photo-1606787366850-de6330128bfc'  // Market
-  ],
-  'Farmacia': [
-    'https://images.unsplash.com/photo-1587854680352-936b22b91030',
-    'https://images.unsplash.com/photo-1631549916768-4119b2e55c06'
-  ],
-  'Salud y belleza': [
-    'https://images.unsplash.com/photo-1560066984-138dadb4c035', // Salon
-    'https://images.unsplash.com/photo-1522337660859-02fbefca4702', // Makeup
-    'https://images.unsplash.com/photo-1512496015851-a90fb38ba796'  // Spa
-  ],
-  'Inmobiliaria': [
-    'https://images.unsplash.com/photo-1560518883-ce09059eeffa',
-    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab'
-  ],
-  'Gestiones profesionales y bancarias': [
-    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40', // Office
-    'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d'  // Bank
-  ],
-  'Ocio y entretenimiento': [
-    'https://images.unsplash.com/photo-1543007630-9710e4a00a20', // Cinema/Fun
-    'https://images.unsplash.com/photo-1526676037777-05a232554f77'  // Gym/Activity
-  ],
-  'Mascotas': [
-    'https://images.unsplash.com/photo-1583337130417-3346a1be7dee', // Pet shop
-    'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7'  // Vet
-  ],
-  'Motor': [
-    'https://images.unsplash.com/photo-1487754180451-c456f719a1fc', // Workshop
-    'https://images.unsplash.com/photo-1503376763036-066120622c74'  // Cars
-  ],
-  'Restaurante': [
-    'https://images.unsplash.com/photo-1517248135467-4c7ed9d8607c',
-    'https://images.unsplash.com/photo-1552566626-52f8b828add9'
-  ],
-  'Hostelería y restauración': [
-    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5',
-    'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b'
-  ]
-};
-
-const getRealisticImage = (cat: string, index: number) => {
-  const pool = CATEGORY_IMAGES[cat] || CATEGORY_IMAGES['Moda']; // Fallback
-  const base = pool[index % pool.length];
-  return `${base}?auto=format&fit=crop&w=800&q=80`;
-};
-
-// --- SIMULACIÓN DEL CENSO COMPLETO ---
-// Datos generados para simular el contenido de pilardelahoradada.org/areas/comercio/censo
-// Categorías alineadas con MapView: 
-// Alimentación, Alojamiento, Comunicación y publicidad, Educación, Gestiones profesionales y bancarias,
-// Hogar, Hostelería y restauración, Mascotas, Medio Ambiente y agricultura, Moda, Motor, Ocio y entretenimiento,
-// Salud y belleza, Servicios municipales y otros servicios.
-
-const generateId = (prefix: string, index: number) => `${prefix}-${index}`;
-
-const SHOP_DATA = [
-  // Alimentación
-  { name: 'Supermercado Dialprix', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8643, lng: -0.7941 },
-  { name: 'Mercadona', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8610, lng: -0.7950 },
-  { name: 'Consum', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8670, lng: -0.7960 },
-  { name: 'Aldi', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8630, lng: -0.7980 },
-  { name: 'Supermercado Saura', cat: 'Alimentación', zone: 'LA_TORRE', lat: 37.8644, lng: -0.7858 },
-  { name: 'Overseas Supermarket', cat: 'Alimentación', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7600 },
-  { name: 'Carnicería El Chuleton', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8662, lng: -0.7938 },
-  { name: 'Pescadería Paco', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8659, lng: -0.7935 },
-  { name: 'Frutería La Huerta', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8655, lng: -0.7925 },
-  { name: 'Panadería La Tahona', cat: 'Alimentación', zone: 'CENTRO', lat: 37.8660, lng: -0.7930 },
-
-  // Salud y belleza
-  { name: 'Farmacia Lda. Maria', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8660, lng: -0.7920 },
-  { name: 'Farmacia Torre', cat: 'Salud y belleza', zone: 'LA_TORRE', lat: 37.8600, lng: -0.7820 },
-  { name: 'Clínica Dental Sonrisas', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8665, lng: -0.7925 },
-  { name: 'Peluquería Stylo', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8655, lng: -0.7922 },
-  { name: 'Centro Estética Zen', cat: 'Salud y belleza', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7610 },
-  { name: 'Fisioterapia Pilar', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8650, lng: -0.7920 },
-  { name: 'Barbería Moderna', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8657, lng: -0.7923 },
-  { name: 'Herbolario Natural', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8663, lng: -0.7921 },
-  { name: 'Perfumería Aroma', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8661, lng: -0.7929 },
-  { name: 'Óptica Horadada', cat: 'Salud y belleza', zone: 'CENTRO', lat: 37.8658, lng: -0.7925 },
-
-  // Hogar
-  { name: 'Ferretería El Pilar', cat: 'Hogar', zone: 'CENTRO', lat: 37.8651, lng: -0.7915 },
-  { name: 'Muebles Hnos Garcia', cat: 'Hogar', zone: 'CENTRO', lat: 37.8640, lng: -0.7945 },
-  { name: 'Bazar Victoria', cat: 'Hogar', zone: 'CENTRO', lat: 37.8665, lng: -0.7935 },
-  { name: 'Pinturas y Decoración', cat: 'Hogar', zone: 'CENTRO', lat: 37.8642, lng: -0.7928 },
-  { name: 'Electrodomésticos PH', cat: 'Hogar', zone: 'CENTRO', lat: 37.8658, lng: -0.7918 },
-  { name: 'Floristería Azahar', cat: 'Hogar', zone: 'CENTRO', lat: 37.8659, lng: -0.7920 },
-  { name: 'Muebles Pinar', cat: 'Hogar', zone: 'CAMPOVERDE', lat: 37.8942, lng: -0.8415 },
-  { name: 'Ferretería Campoverde', cat: 'Hogar', zone: 'CAMPOVERDE', lat: 37.8935, lng: -0.8425 },
-
-  // Moda
-  { name: 'Modas Lucía', cat: 'Moda', zone: 'CENTRO', lat: 37.8662, lng: -0.7928 },
-  { name: 'Zapatería Calzados Carmen', cat: 'Moda', zone: 'CENTRO', lat: 37.8660, lng: -0.7931 },
-  { name: 'Boutique Playa', cat: 'Moda', zone: 'LA_TORRE', lat: 37.8648, lng: -0.7848 },
-  { name: 'Modas Paula', cat: 'Moda', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7615 },
-  { name: 'Tienda de Deportes Sport', cat: 'Moda', zone: 'CENTRO', lat: 37.8645, lng: -0.7934 },
-  { name: 'Joyería Horadada', cat: 'Moda', zone: 'CENTRO', lat: 37.8658, lng: -0.7926 },
-  { name: 'Modas Vintage', cat: 'Moda', zone: 'CENTRO', lat: 37.8666, lng: -0.7924 },
-
-  // Motor
-  { name: 'Taller Mecánico El Tuercas', cat: 'Motor', zone: 'CENTRO', lat: 37.8680, lng: -0.7960 },
-  { name: 'Lavadero de Coches Splash', cat: 'Motor', zone: 'CENTRO', lat: 37.8690, lng: -0.7970 },
-  { name: 'Repuestos Auto PH', cat: 'Motor', zone: 'CENTRO', lat: 37.8675, lng: -0.7955 },
-
-  // Mascotas
-  { name: 'Clínica Veterinaria San Francisco', cat: 'Mascotas', zone: 'CENTRO', lat: 37.8650, lng: -0.7910 },
-  { name: 'Tienda de Animales Fauna', cat: 'Mascotas', zone: 'CENTRO', lat: 37.8645, lng: -0.7915 },
-  { name: 'Peluquería Canina Guau', cat: 'Mascotas', zone: 'LA_TORRE', lat: 37.8630, lng: -0.7840 },
-
-  // Gestiones profesionales y bancarias
-  { name: 'Gestoría Martinez', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8655, lng: -0.7930 },
-  { name: 'Banco Sabadell', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8660, lng: -0.7940 },
-  { name: 'CaixaBank', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8658, lng: -0.7938 },
-  { name: 'Inmobiliaria Pilar', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8660, lng: -0.7940 },
-  { name: 'Abogados Garcia & Asoc.', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8652, lng: -0.7935 },
-  { name: 'Seguros Mapfre', cat: 'Gestiones profesionales y bancarias', zone: 'CENTRO', lat: 37.8648, lng: -0.7930 },
-
-  // Educación
-  { name: 'Autoescuela Pilar', cat: 'Educación', zone: 'CENTRO', lat: 37.8640, lng: -0.7920 },
-  { name: 'Academia de Idiomas English', cat: 'Educación', zone: 'CENTRO', lat: 37.8635, lng: -0.7925 },
-  { name: 'Papelería y Librería Central', cat: 'Educación', zone: 'CENTRO', lat: 37.8655, lng: -0.7925 },
-
-  // Ocio y entretenimiento
-  { name: 'Gimnasio Municipal', cat: 'Ocio y entretenimiento', zone: 'CENTRO', lat: 37.8695, lng: -0.7975 },
-  { name: 'Cine de Verano (Temp)', cat: 'Ocio y entretenimiento', zone: 'LA_TORRE', lat: 37.8620, lng: -0.7850 },
-  { name: 'Tienda de Pesca Mar', cat: 'Ocio y entretenimiento', zone: 'LA_TORRE', lat: 37.8640, lng: -0.7850 },
-
-  // Servicios municipales y otros
-  { name: 'Correos', cat: 'Servicios municipales y otros servicios', zone: 'CENTRO', lat: 37.8670, lng: -0.7950 },
-  { name: 'Lavandería Self Service', cat: 'Servicios municipales y otros servicios', zone: 'CENTRO', lat: 37.8652, lng: -0.7940 }
-];
-
-const SHOPPING_ITEMS: CensusItem[] = SHOP_DATA.map((shop, i) => ({
-  id: generateId('shop', i),
-  name: shop.name,
-  address: `Calle ${shop.name} s/n, Pilar de la Horadada`,
-  phone: `96535${1000 + i}`,
-  category: shop.cat, // Mantiene la categoría exacta para el filtro
-  zone: shop.zone as any,
-  description: `Negocio local especializado en ${shop.cat.toLowerCase()}. Ofrecemos calidad y servicio cercano en ${shop.zone}.`,
-  rating: 4.5 + (i % 5) / 10,
-  reviewCount: 20 + i * 3,
-  isOpen: true,
-  hours: { weekdays: '09:00-14:00, 17:00-20:00', weekend: '09:00-14:00' },
-  images: [getRealisticImage(shop.cat, i)],
-  lat: shop.lat,
-  lng: shop.lng,
-  promotion: undefined 
-}));
-
-const DINING_DATA = [
-  { name: 'Mesón El Puerto', cat: 'Hostelería y restauración', zone: 'LA_TORRE', lat: 37.8645, lng: -0.7850 },
-  { name: 'Restaurante Los Arcos', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8655, lng: -0.7930 },
-  { name: 'Pizzería La Plaza', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8660, lng: -0.7925 },
-  { name: 'Chiringuito Pirata', cat: 'Hostelería y restauración', zone: 'MIL_PALMERAS', lat: 37.8865, lng: -0.7605 },
-  { name: 'Bar Central', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8650, lng: -0.7935 },
-  { name: 'Asador El Toril', cat: 'Hostelería y restauración', zone: 'CAMPOVERDE', lat: 37.8935, lng: -0.8420 },
-  { name: 'Marisquería La Lonja', cat: 'Hostelería y restauración', zone: 'LA_TORRE', lat: 37.8640, lng: -0.7845 },
-  { name: 'Cafetería Sol', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8658, lng: -0.7922 },
-  { name: 'Restaurante Asiático Gran China', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8648, lng: -0.7940 },
-  { name: 'Heladería Artesana', cat: 'Hostelería y restauración', zone: 'MIL_PALMERAS', lat: 37.8870, lng: -0.7610 },
-  { name: 'La Cabaña del Mar', cat: 'Hostelería y restauración', zone: 'EL_MOJON', lat: 37.8520, lng: -0.7842 },
-  { name: 'Burger Station', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8665, lng: -0.7938 },
-  { name: 'Tapería El Rincón', cat: 'Hostelería y restauración', zone: 'LA_TORRE', lat: 37.8635, lng: -0.7838 },
-  { name: 'Arrocería El Caldeo', cat: 'Hostelería y restauración', zone: 'MIL_PALMERAS', lat: 37.8860, lng: -0.7615 },
-  { name: 'Gastrobar Fusión', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8652, lng: -0.7928 },
-  { name: 'Chocolatería Valor', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8659, lng: -0.7929 },
-  { name: 'Bar La Esquina', cat: 'Hostelería y restauración', zone: 'CAMPOVERDE', lat: 37.8940, lng: -0.8410 },
-  { name: 'Restaurante Nostrussa', cat: 'Hostelería y restauración', zone: 'CENTRO', lat: 37.8640, lng: -0.7930 }
-];
-
-const DINING_ITEMS: CensusItem[] = DINING_DATA.map((dining, i) => ({
-  id: generateId('dining', i),
-  name: dining.name,
-  address: `Calle ${dining.name}, Pilar de la Horadada`,
-  phone: `96535${2000 + i}`,
-  category: dining.cat,
-  zone: dining.zone as any,
-  description: `Disfruta de la mejor gastronomía en ${dining.name}. Especialistas en cocina local, utilizamos productos frescos de la zona para ofrecerte una experiencia culinaria única en ${dining.zone}.`,
-  rating: 4.6 + (i % 4) / 10,
-  reviewCount: 150 + i * 5,
-  isOpen: true,
-  priceRange: (i % 3 === 0) ? '€€€' : (i % 2 === 0) ? '€€' : '€',
-  hours: { weekdays: '12:00-16:00, 19:30-23:30', weekend: '12:00-24:00' },
-  images: [getRealisticImage('Restaurante', i)],
-  lat: dining.lat,
-  lng: dining.lng,
-  featuredItems: ['Especialidad de la casa', 'Vino de la zona', 'Postre artesano'],
-  promotion: undefined 
-}));
-
-export const COMMERCIAL_CENSUS: CensusCategory[] = [ 
-  { id: 'shopping-pilar', title: 'Comercio Local', items: SHOPPING_ITEMS } 
-];
-
-export const DINING_CENSUS: CensusCategory[] = [ 
-  { id: 'restaurantes-pilar', title: 'Restauración', items: DINING_ITEMS } 
 ];

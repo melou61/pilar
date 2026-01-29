@@ -31,7 +31,8 @@ import { BeaconModal } from './components/BeaconModal';
 import { PHLensView } from './components/PHLensView';
 import { MobileNav } from './components/MobileNav';
 import { LegalModal } from './components/LegalModal';
-import { SecurityGuard } from './components/Security'; // Import Security
+import { SecurityGuard } from './components/Security';
+import { PermissionModal } from './components/PermissionModal'; // Imported PermissionModal
 import { translations, languages } from './translations';
 import { MOCK_EVENTS, COMMERCIAL_CENSUS, DINING_CENSUS, TERMS_OF_SERVICE, PRIVACY_POLICY } from './data';
 
@@ -117,7 +118,21 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>(ViewState.HOME);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState<Language>(languages[0]); 
+  const [hasConsented, setHasConsented] = useState(() => {
+    // Check if permission has been granted before
+    if (typeof localStorage !== 'undefined') {
+      return !!localStorage.getItem('pilar_permissions_granted');
+    }
+    return false;
+  });
+
+  const [currentLang, setCurrentLang] = useState<Language>(() => {
+    if (typeof navigator !== 'undefined') {
+      const browserLang = navigator.language.split('-')[0];
+      return languages.find(l => l.code === browserLang) || languages[0];
+    }
+    return languages[0];
+  }); 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<AdminRole | 'USER'>('USER');
   const [userName, setUserName] = useState('');
@@ -328,6 +343,17 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-white font-sans text-gray-900 pb-20 select-none">
       <SecurityGuard /> {/* Security Guard Mounted Globally */}
       
+      {/* Onboarding Permission Modal */}
+      {!hasConsented && (
+        <PermissionModal 
+          t={t} 
+          onAccept={() => {
+            localStorage.setItem('pilar_permissions_granted', 'true');
+            setHasConsented(true);
+          }} 
+        />
+      )}
+
       {activeBeaconShop && <BeaconModal isOpen={!!activeBeaconShop} onClose={() => setActiveBeaconShop(null)} shop={activeBeaconShop} t={t} />}
       <LoginModal 
         isOpen={isLoginOpen} 

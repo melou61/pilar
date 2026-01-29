@@ -22,6 +22,18 @@ export const languages: Language[] = [
 const UI_RESOURCES: Record<string, any> = {
   es: {
     header: { selectLanguage: 'Seleccionar Idioma' },
+    permissions: {
+      title: 'Permisos Necesarios',
+      subtitle: 'Para disfrutar de la experiencia completa de Pilar Vivo, necesitamos acceso a:',
+      loc_title: 'Ubicación',
+      loc_desc: 'Para mostrarte playas y comercios cercanos.',
+      mic_title: 'Micrófono',
+      mic_desc: 'Para hablar con el Asistente IA en tiempo real.',
+      cam_title: 'Cámara',
+      cam_desc: 'Para usar PH Lens y reconocer el entorno.',
+      btn: 'Permitir y Continuar',
+      footer: 'Puedes cambiar esto en los ajustes de tu dispositivo.'
+    },
     business: { reviews: 'Reseñas Reales', history: 'Nuestra Historia', essentials: 'Imprescindibles', schedule: 'Horarios y Contacto', weekdays: 'Lunes - Viernes', weekend: 'Fines de Semana' },
     zones: { all: 'Todo el municipio', centro: 'Centro Urbano', latorre: 'La Torre', milpalmeras: 'Mil Palmeras', campoverde: 'Campoverde', elmojon: 'El Mojón' },
     beach_labels: { water: 'Agua', uv: 'UV', crowd: 'Afluencia', length: 'Longitud', sand: 'Arena', services: 'Servicios Destacados', map: 'Explorar en Mapa', coastal: 'El Litoral del Pilar', blue_flag: 'Bandera Azul', open: 'Abierta Ahora' },
@@ -62,12 +74,16 @@ const UI_RESOURCES: Record<string, any> = {
     beaches_page: { 
       title: 'Nuestras Playas', coastal: 'El Litoral del Pilar', blue_flag: 'Bandera Azul', open: 'Abierta Ahora', fact_title: 'Excelencia Mediterránea', fact_desc: 'Pilar de la Horadada cuenta con más de 4km de playas de arena fina y aguas cristalinas.', 
       list: { 
-        higuericas: { name: 'Las Higuericas', desc: 'Famosa por sus dunas naturales y ambiente joven.' },
-        milpalmeras: { name: 'Mil Palmeras', desc: 'Paraíso de arena blanca y aguas turquesas.' },
-        jesuitas: { name: 'Playa de los Jesuitas', desc: 'Amplia cala protegida por acantilados rojizos.' },
-        elconde: { name: 'Playa del Conde', desc: 'A los pies de la Torre Vigía, historia y mar.' },
-        elpuerto: { name: 'Playa del Puerto', desc: 'Junto al club náutico, ideal para familias.' },
-        rocamar: { name: 'Calas de Rocamar', desc: 'Pequeñas calas unidas por senderos.' }
+        vistamar: { name: 'Playa Vistamar', desc: 'Playa de arena dorada que conecta con la urbanización de Mil Palmeras.' },
+        milpalmeras: { name: 'Mil Palmeras', desc: 'Una de las playas más visitadas, con arena fina y múltiples servicios.' },
+        delrio: { name: 'Playa del Río', desc: 'Situada en la desembocadura del Río Seco, ofrece un paisaje singular.' },
+        rocamar: { name: 'Calas de Rocamar', desc: 'Pequeñas calas unidas que ofrecen privacidad y aguas cristalinas.' },
+        jesuitas: { name: 'Playa de los Jesuitas', desc: 'Amplia cala delimitada por paredes de arcilla rojiza, muy característica.' },
+        elconde: { name: 'Playa del Conde', desc: 'A los pies de la Torre Vigía, perfecta para familias y con mucha historia.' },
+        elpuerto: { name: 'Playa del Puerto', desc: 'Accesible desde el puerto deportivo, con rampas y zona de juegos.' },
+        lasvillas: { name: 'Playa Las Villas', desc: 'Playa de arena blanca y ambiente tranquilo, cerca de Higuericas.' },
+        higuericas: { name: 'Las Higuericas', desc: 'Extensa playa con dunas naturales, muy popular para conciertos y deporte.' },
+        elmojon: { name: 'Playa El Mojón', desc: 'Playa abierta con un bonito paseo marítimo y zona de pesca tradicional.' }
       } 
     },
     activities_page: { 
@@ -95,6 +111,18 @@ const UI_RESOURCES: Record<string, any> = {
   },
   en: {
     header: { selectLanguage: 'Select Language' },
+    permissions: {
+      title: 'Permissions Needed',
+      subtitle: 'To enjoy the full experience of Pilar Vivo, we need access to:',
+      loc_title: 'Location',
+      loc_desc: 'To show you nearby beaches and shops.',
+      mic_title: 'Microphone',
+      mic_desc: 'To talk with the AI Assistant in real-time.',
+      cam_title: 'Camera',
+      cam_desc: 'To use PH Lens and recognize landmarks.',
+      btn: 'Allow and Continue',
+      footer: 'You can change this later in your device settings.'
+    },
     business: { reviews: 'Real Reviews', history: 'Our History', essentials: 'Essentials', schedule: 'Opening Hours', weekdays: 'Mon - Fri', weekend: 'Weekends' },
     zones: { all: 'All Areas', centro: 'City Centre', latorre: 'La Torre', milpalmeras: 'Mil Palmeras', campoverde: 'Campoverde', elmojon: 'El Mojón' },
     beach_labels: { water: 'Water', uv: 'UV', crowd: 'Crowd', length: 'Length', sand: 'Sand', services: 'Featured Services', map: 'Explore on Map', coastal: 'Pilar Coastline', blue_flag: 'Blue Flag', open: 'Open Now' },
@@ -135,12 +163,16 @@ const UI_RESOURCES: Record<string, any> = {
     beaches_page: { 
       title: 'Our Beaches', coastal: 'Pilar Coastline', blue_flag: 'Blue Flag', open: 'Open Now', fact_title: 'Excellence', fact_desc: 'Pilar de la Horadada offers over 4km of fine sandy beaches and crystal clear waters.', 
       list: { 
-        higuericas: { name: 'Las Higuericas', desc: 'Famous for its natural dunes and trendy atmosphere.' },
-        milpalmeras: { name: 'Mil Palmeras', desc: 'A white sand paradise with turquoise waters.' },
-        jesuitas: { name: 'Jesuitas Beach', desc: 'Wide cove protected by reddish cliffs.' },
-        elconde: { name: 'El Conde Beach', desc: 'At the foot of the Watchtower, history and sea.' },
-        elpuerto: { name: 'Harbour Beach', desc: 'Next to the marina, ideal for families.' },
-        rocamar: { name: 'Rocamar Coves', desc: 'Small coves connected by trails.' }
+        vistamar: { name: 'Vistamar Beach', desc: 'Golden sandy beach connecting with the Mil Palmeras urbanization.' },
+        milpalmeras: { name: 'Mil Palmeras', desc: 'One of the most visited beaches, with fine sand and multiple services.' },
+        delrio: { name: 'Del Río Beach', desc: 'Located at the mouth of the Río Seco, offering a unique landscape.' },
+        rocamar: { name: 'Rocamar Coves', desc: 'Small connected coves offering privacy and crystal clear waters.' },
+        jesuitas: { name: 'Jesuitas Beach', desc: 'Wide cove bordered by reddish clay walls, very characteristic.' },
+        elconde: { name: 'El Conde Beach', desc: 'At the foot of the Watchtower, perfect for families and full of history.' },
+        elpuerto: { name: 'The Port Beach', desc: 'Accessible from the marina, with ramps and a playground area.' },
+        lasvillas: { name: 'Las Villas Beach', desc: 'White sandy beach with a quiet atmosphere, near Higuericas.' },
+        higuericas: { name: 'Las Higuericas', desc: 'Extensive beach with natural dunes, very popular for concerts and sports.' },
+        elmojon: { name: 'El Mojón Beach', desc: 'Open beach with a beautiful promenade and traditional fishing area.' }
       } 
     },
     activities_page: { 
@@ -165,6 +197,222 @@ const UI_RESOURCES: Record<string, any> = {
     },
     forum: { title: 'Community Forum', subtitle: 'Connect with your neighbors', categories: ['General', 'Recommendations', 'Pets', 'Market'] },
     event_detail: { pilar_event: 'PH EVENT', date_time: 'DATE & TIME', main_location: 'LOCATION' }
+  },
+  va: {
+    header: { selectLanguage: 'Seleccionar Idioma' },
+    beaches_page: {
+        title: 'Les Nostres Platges',
+        coastal: 'El Litoral del Pilar',
+        blue_flag: 'Bandera Blava',
+        open: 'Oberta Ara',
+        fact_title: 'Excel·lència Mediterrània',
+        fact_desc: 'Pilar de la Horadada compta amb més de 4km de platges d\'arena fina i aigües cristal·lines.',
+        list: {
+        vistamar: { name: 'Platja Vistamar', desc: 'Platja d\'arena daurada que connecta amb la urbanització de Mil Palmeres.' },
+        milpalmeras: { name: 'Mil Palmeres', desc: 'Una de les platges més visitades, amb arena fina i múltiples serveis.' },
+        delrio: { name: 'Platja del Riu', desc: 'Situada a la desembocadura del Riu Sec, ofereix un paisatge singular.' },
+        rocamar: { name: 'Cales de Rocamar', desc: 'Xicotetes cales unides que ofereixen privacitat i aigües cristal·lines.' },
+        jesuitas: { name: 'Platja dels Jesuïtes', desc: 'Àmplia cala delimitada per parets d\'argila vermellosa, molt característica.' },
+        elconde: { name: 'Platja del Comte', desc: 'Als peus de la Torre Vigia, perfecta per a famílies i amb molta història.' },
+        elpuerto: { name: 'Platja del Port', desc: 'Accessible des del port esportiu, amb rampes i zona de jocs.' },
+        lasvillas: { name: 'Platja Les Viles', desc: 'Platja d\'arena blanca i ambient tranquil, prop de Higuericas.' },
+        higuericas: { name: 'Les Higuericas', desc: 'Extensa platja amb dunes naturals, molt popular per a concerts i esport.' },
+        elmojon: { name: 'Platja El Mojón', desc: 'Platja oberta amb un bonic passeig marítim i zona de pesca tradicional.' }
+        }
+    },
+    m: ['Inici', 'Notícies', 'Platges', 'Patrimoni', 'Experiències', 'Gastronomia', 'Botigues', 'Salut', 'Serveis', 'Esdeveniments', 'Fòrum', 'PH Explore', 'Guia IA', 'Perfil', 'Mapa', 'Admin']
+  },
+  fr: {
+    header: { selectLanguage: 'Choisir la langue' },
+    beaches_page: {
+        title: 'Nos Plages',
+        coastal: 'Littoral du Pilar',
+        blue_flag: 'Pavillon Bleu',
+        open: 'Ouvert',
+        fact_title: 'Excellence',
+        fact_desc: 'Pilar de la Horadada offre plus de 4 km de plages de sable fin et d\'eaux cristallines.',
+        list: {
+        vistamar: { name: 'Plage Vistamar', desc: 'Plage de sable doré reliant l\'urbanisation de Mil Palmeras.' },
+        milpalmeras: { name: 'Mil Palmeras', desc: 'L\'une des plages les plus visitées, avec sable fin et nombreux services.' },
+        delrio: { name: 'Plage Del Río', desc: 'Située à l\'embouchure de la rivière Seco, offrant un paysage unique.' },
+        rocamar: { name: 'Criques de Rocamar', desc: 'Petites criques reliées offrant intimité et eaux cristallines.' },
+        jesuitas: { name: 'Plage des Jésuites', desc: 'Large crique bordée de parois d\'argile rougeâtre, très caractéristique.' },
+        elconde: { name: 'Plage El Conde', desc: 'Au pied de la tour de guet, parfaite pour les familles et chargée d\'histoire.' },
+        elpuerto: { name: 'Plage du Port', desc: 'Accessible depuis le port de plaisance, avec rampes et aire de jeux.' },
+        lasvillas: { name: 'Plage Las Villas', desc: 'Plage de sable blanc à l\'atmosphère calme, près de Higuericas.' },
+        higuericas: { name: 'Las Higuericas', desc: 'Vaste plage avec dunes naturelles, très populaire pour les concerts et le sport.' },
+        elmojon: { name: 'Plage El Mojón', desc: 'Plage ouverte avec une belle promenade et une zone de pêche traditionnelle.' }
+        }
+    },
+    m: ['Accueil', 'Actualités', 'Plages', 'Patrimoine', 'Expériences', 'Gastronomie', 'Boutiques', 'Santé', 'Services', 'Événements', 'Forum', 'PH Explore', 'Guide IA', 'Profil', 'Carte', 'Admin']
+  },
+  de: {
+    header: { selectLanguage: 'Sprache wählen' },
+    beaches_page: {
+        title: 'Unsere Strände',
+        coastal: 'Küste von Pilar',
+        blue_flag: 'Blaue Flagge',
+        open: 'Geöffnet',
+        fact_title: 'Exzellenz',
+        fact_desc: 'Pilar de la Horadada bietet über 4 km feine Sandstrände und kristallklares Wasser.',
+        list: {
+        vistamar: { name: 'Strand Vistamar', desc: 'Goldener Sandstrand, der mit der Siedlung Mil Palmeras verbunden ist.' },
+        milpalmeras: { name: 'Mil Palmeras', desc: 'Einer der meistbesuchten Strände mit feinem Sand und vielen Dienstleistungen.' },
+        delrio: { name: 'Strand Del Río', desc: 'An der Mündung des Río Seco gelegen, bietet eine einzigartige Landschaft.' },
+        rocamar: { name: 'Buchten von Rocamar', desc: 'Kleine verbundene Buchten, die Privatsphäre und kristallklares Wasser bieten.' },
+        jesuitas: { name: 'Jesuitenstrand', desc: 'Breite Bucht, begrenzt von rötlichen Lehmwänden, sehr charakteristisch.' },
+        elconde: { name: 'Strand El Conde', desc: 'Am Fuße des Wachturms, perfekt für Familien und voller Geschichte.' },
+        elpuerto: { name: 'Hafenstrand', desc: 'Vom Yachthafen aus zugänglich, mit Rampen und Spielplatz.' },
+        lasvillas: { name: 'Strand Las Villas', desc: 'Weißer Sandstrand mit ruhiger Atmosphäre, in der Nähe von Higuericas.' },
+        higuericas: { name: 'Las Higuericas', desc: 'Weitläufiger Strand mit natürlichen Dünen, sehr beliebt für Konzerte und Sport.' },
+        elmojon: { name: 'Strand El Mojón', desc: 'Offener Strand mit schöner Promenade und traditionellem Fischereigebiet.' }
+        }
+    },
+    m: ['Start', 'Nachrichten', 'Strände', 'Kultur', 'Erlebnisse', 'Gastronomie', 'Einkaufen', 'Gesundheit', 'Dienste', 'Events', 'Forum', 'PH Explore', 'KI Guide', 'Profil', 'Karte', 'Admin']
+  },
+  it: {
+    header: { selectLanguage: 'Seleziona Lingua' },
+    beaches_page: {
+        title: 'Le Nostre Spiagge',
+        coastal: 'Litorale del Pilar',
+        blue_flag: 'Bandiera Blu',
+        open: 'Aperto',
+        fact_title: 'Eccellenza',
+        fact_desc: 'Pilar de la Horadada offre oltre 4 km di spiagge di sabbia fine e acque cristalline.',
+        list: {
+        vistamar: { name: 'Spiaggia Vistamar', desc: 'Spiaggia di sabbia dorata collegata all\'urbanizzazione Mil Palmeras.' },
+        milpalmeras: { name: 'Mil Palmeras', desc: 'Una delle spiagge più visitate, con sabbia fine e molti servizi.' },
+        delrio: { name: 'Spiaggia Del Río', desc: 'Situata alla foce del Río Seco, offre un paesaggio unico.' },
+        rocamar: { name: 'Cale di Rocamar', desc: 'Piccole cale collegate che offrono privacy e acque cristalline.' },
+        jesuitas: { name: 'Spiaggia dei Gesuiti', desc: 'Ampia cala delimitata da pareti di argilla rossastra, molto caratteristica.' },
+        elconde: { name: 'Spiaggia El Conde', desc: 'Ai piedi della Torre di Guardia, perfetta per le famiglie e ricca di storia.' },
+        elpuerto: { name: 'Spiaggia del Porto', desc: 'Accessibile dal porto turistico, con rampe e area giochi.' },
+        lasvillas: { name: 'Spiaggia Las Villas', desc: 'Spiaggia di sabbia bianca con atmosfera tranquilla, vicino a Higuericas.' },
+        higuericas: { name: 'Las Higuericas', desc: 'Spiaggia estesa con dune naturali, molto popolare per concerti e sport.' },
+        elmojon: { name: 'Spiaggia El Mojón', desc: 'Spiaggia aperta con un bel lungomare e zona di pesca tradizionale.' }
+        }
+    },
+    m: ['Home', 'Notizie', 'Spiagge', 'Patrimonio', 'Esperienze', 'Gastronomia', 'Negozi', 'Salute', 'Servizi', 'Eventi', 'Forum', 'PH Explore', 'Guida IA', 'Profilo', 'Mappa', 'Admin']
+  },
+  pt: {
+    header: { selectLanguage: 'Selecionar Idioma' },
+    beaches_page: {
+        title: 'As Nossas Praias',
+        coastal: 'Litoral do Pilar',
+        blue_flag: 'Bandeira Azul',
+        open: 'Aberto',
+        fact_title: 'Excelência',
+        fact_desc: 'Pilar de la Horadada tem mais de 4km de praias de areia fina e águas cristalinas.',
+        list: {
+        vistamar: { name: 'Praia Vistamar', desc: 'Praia de areia dourada ligada à urbanização Mil Palmeras.' },
+        milpalmeras: { name: 'Mil Palmeras', desc: 'Uma das praias mais visitadas, com areia fina e muitos serviços.' },
+        delrio: { name: 'Praia Del Río', desc: 'Situada na foz do Rio Seco, oferece uma paisagem única.' },
+        rocamar: { name: 'Calas de Rocamar', desc: 'Pequenas enseadas ligadas que oferecem privacidade e águas cristalinas.' },
+        jesuitas: { name: 'Praia dos Jesuítas', desc: 'Enseada larga rodeada por paredes de argila avermelhada, muito característica.' },
+        elconde: { name: 'Praia El Conde', desc: 'Aos pés da Torre de Vigia, perfeita para famílias e cheia de história.' },
+        elpuerto: { name: 'Praia do Porto', desc: 'Acessível a partir da marina, com rampas e parque infantil.' },
+        lasvillas: { name: 'Praia Las Villas', desc: 'Praia de areia branca com ambiente tranquilo, perto de Higuericas.' },
+        higuericas: { name: 'Las Higuericas', desc: 'Praia extensa com dunas naturais, muito popular para concertos e desporto.' },
+        elmojon: { name: 'Praia El Mojón', desc: 'Praia aberta com um belo passeio marítimo e zona de pesca tradicional.' }
+        }
+    },
+    m: ['Início', 'Notícias', 'Praias', 'Património', 'Experiências', 'Gastronomia', 'Lojas', 'Saúde', 'Serviços', 'Eventos', 'Fórum', 'PH Explore', 'Guia IA', 'Perfil', 'Mapa', 'Admin']
+  },
+  ru: {
+    header: { selectLanguage: 'Выберите язык' },
+    beaches_page: {
+        title: 'Наши Пляжи',
+        coastal: 'Побережье Пилар',
+        blue_flag: 'Голубой Флаг',
+        open: 'Открыто',
+        fact_title: 'Совершенство',
+        fact_desc: 'Пилар-де-ла-Орадада предлагает более 4 км пляжей с мелким песком и кристально чистой водой.',
+        list: {
+        vistamar: { name: 'Пляж Вистамар', desc: 'Пляж с золотым песком, соединяющийся с урбанизацией Миль Пальмерас.' },
+        milpalmeras: { name: 'Миль Пальмерас', desc: 'Один из самых посещаемых пляжей с мелким песком и множеством услуг.' },
+        delrio: { name: 'Пляж Дель Рио', desc: 'Расположен в устье реки Секо, предлагает уникальный пейзаж.' },
+        rocamar: { name: 'Бухты Рокамар', desc: 'Небольшие соединенные бухты, предлагающие уединение и чистую воду.' },
+        jesuitas: { name: 'Пляж Иезуитов', desc: 'Широкая бухта, ограниченная стенами из красноватой глины, очень характерная.' },
+        elconde: { name: 'Пляж Эль Конде', desc: 'У подножия Сторожевой башни, идеально подходит для семей и полон истории.' },
+        elpuerto: { name: 'Пляж Порта', desc: 'Доступен из марины, с пандусами и детской площадкой.' },
+        lasvillas: { name: 'Пляж Лас Виллас', desc: 'Пляж с белым песком и спокойной атмосферой, недалеко от Игерикас.' },
+        higuericas: { name: 'Лас Игерикас', desc: 'Обширный пляж с природными дюнами, очень популярен для концертов и спорта.' },
+        elmojon: { name: 'Пляж Эль Мохон', desc: 'Открытый пляж с красивой набережной и традиционной зоной рыбалки.' }
+        }
+    },
+    m: ['Главная', 'Новости', 'Пляжи', 'Наследие', 'Опыт', 'Еда', 'Магазины', 'Здоровье', 'Услуги', 'События', 'Форум', 'PH Explore', 'AI Гид', 'Профиль', 'Карта', 'Админ']
+  },
+  zh: {
+    header: { selectLanguage: '选择语言' },
+    beaches_page: {
+        title: '我们的海滩',
+        coastal: '皮拉尔海岸线',
+        blue_flag: '蓝旗',
+        open: '营业中',
+        fact_title: '卓越品质',
+        fact_desc: '皮拉尔德拉霍拉达达拥有超过4公里的细沙海滩和清澈的海水。',
+        list: {
+        vistamar: { name: '维斯塔玛海滩', desc: '连接米尔帕尔梅拉斯的金沙海滩。' },
+        milpalmeras: { name: '米尔帕尔梅拉斯', desc: '最受欢迎的海滩之一，拥有细沙和多种服务。' },
+        delrio: { name: '德尔里奥海滩', desc: '位于塞科河口，风景独特。' },
+        rocamar: { name: '罗卡马尔湾', desc: '连接的小海湾，提供隐私和清澈的海水。' },
+        jesuitas: { name: '耶酥会海滩', desc: '宽阔的海湾，以红粘土墙为界，极具特色。' },
+        elconde: { name: '埃尔孔德海滩', desc: '位于瞭望塔脚下，非常适合家庭，充满历史感。' },
+        elpuerto: { name: '港口海滩', desc: '可从码头进入，设有坡道和游乐区。' },
+        lasvillas: { name: '拉斯比利亚斯海滩', desc: '白沙海滩，氛围宁静，靠近伊格里卡斯。' },
+        higuericas: { name: '拉斯伊格里卡斯', desc: '拥有天然沙丘的广阔海滩，非常适合音乐会和运动。' },
+        elmojon: { name: '埃尔莫洪海滩', desc: '开放式海滩，拥有美丽的长廊和传统钓鱼区。' }
+        }
+    },
+    m: ['主页', '新闻', '海滩', '遗产', '体验', '餐饮', '购物', '健康', '服务', '活动', '论坛', 'PH探索', 'AI指南', '个人资料', '地图', '管理']
+  },
+  ro: {
+    header: { selectLanguage: 'Selectează Limba' },
+    beaches_page: {
+        title: 'Plajele Noastre',
+        coastal: 'Litoralul Pilar',
+        blue_flag: 'Steag Albastru',
+        open: 'Deschis',
+        fact_title: 'Excelență',
+        fact_desc: 'Pilar de la Horadada are peste 4 km de plaje cu nisip fin și ape cristaline.',
+        list: {
+        vistamar: { name: 'Plaja Vistamar', desc: 'Plajă cu nisip auriu care se conectează cu urbanizarea Mil Palmeras.' },
+        milpalmeras: { name: 'Mil Palmeras', desc: 'Una dintre cele mai vizitate plaje, cu nisip fin și multe servicii.' },
+        delrio: { name: 'Plaja Del Río', desc: 'Situată la gura de vărsare a râului Seco, oferind un peisaj unic.' },
+        rocamar: { name: 'Golfurile Rocamar', desc: 'Mici golfuri unite care oferă intimitate și ape cristaline.' },
+        jesuitas: { name: 'Plaja Iezuiților', desc: 'Golf larg mărginit de pereți de argilă roșiatică, foarte caracteristic.' },
+        elconde: { name: 'Plaja El Conde', desc: 'La poalele Turnului de Veghe, perfectă pentru familii și plină de istorie.' },
+        elpuerto: { name: 'Plaja Portului', desc: 'Accesibilă din portul de agrement, cu rampe și loc de joacă.' },
+        lasvillas: { name: 'Plaja Las Villas', desc: 'Plajă cu nisip alb și atmosferă liniștită, lângă Higuericas.' },
+        higuericas: { name: 'Las Higuericas', desc: 'Plajă extinsă cu dune naturale, foarte populară pentru concerte și sport.' },
+        elmojon: { name: 'Plaja El Mojón', desc: 'Plajă deschisă cu o promenadă frumoasă și zonă de pescuit tradițional.' }
+        }
+    },
+    m: ['Acasă', 'Știri', 'Plaje', 'Patrimoniu', 'Experiențe', 'Gastronomie', 'Cumpărături', 'Sănătate', 'Servicii', 'Evenimente', 'Forum', 'PH Explore', 'Ghid AI', 'Profil', 'Hartă', 'Admin']
+  },
+  fi: {
+    header: { selectLanguage: 'Valitse kieli' },
+    beaches_page: {
+        title: 'Rannat',
+        coastal: 'Pilarin Rannikko',
+        blue_flag: 'Sinilippu',
+        open: 'Avoinna',
+        fact_title: 'Laatua',
+        fact_desc: 'Pilar de la Horadadassa on yli 4 km hienohiekkaisia rantoja ja kristallinkirkasta vettä.',
+        list: {
+        vistamar: { name: 'Vistamar-ranta', desc: 'Kultahiekkainen ranta, joka yhdistyy Mil Palmerasin alueeseen.' },
+        milpalmeras: { name: 'Mil Palmeras', desc: 'Yksi suosituimmista rannoista, hienoa hiekkaa ja paljon palveluita.' },
+        delrio: { name: 'Del Río -ranta', desc: 'Sijaitsee Río Secon suulla, tarjoaa ainutlaatuisen maiseman.' },
+        rocamar: { name: 'Rocamar-poukamat', desc: 'Pieniä yhdistettyjä poukamia, jotka tarjoavat yksityisyyttä ja kirkasta vettä.' },
+        jesuitas: { name: 'Jesuitas-ranta', desc: 'Leveä poukama, jota reunustavat punertavat saviseinät, erittäin luonteenomainen.' },
+        elconde: { name: 'El Conde -ranta', desc: 'Vartiotornin juurella, täydellinen perheille ja täynnä historiaa.' },
+        elpuerto: { name: 'Satamaranta', desc: 'Pääsy venesatamasta, ramppeja ja leikkipaikka.' },
+        lasvillas: { name: 'Las Villas -ranta', desc: 'Valkohiekkainen ranta rauhallisella tunnelmalla, lähellä Higuericasia.' },
+        higuericas: { name: 'Las Higuericas', desc: 'Laaja ranta luonnollisilla dyyneillä, suosittu konserteille ja urheilulle.' },
+        elmojon: { name: 'El Mojón -ranta', desc: 'Avoin ranta kauniilla rantakadulla ja perinteisellä kalastusalueella.' }
+        }
+    },
+    m: ['Koti', 'Uutiset', 'Rannat', 'Perintö', 'Elämykset', 'Ruoka', 'Ostokset', 'Terveys', 'Palvelut', 'Tapahtumat', 'Foorumi', 'PH Explore', 'AI Opas', 'Profiili', 'Kartta', 'Admin']
   }
 };
 
@@ -215,6 +463,7 @@ const createLang = (code: string, langLabel: string): any => {
     },
     // New Comprehensive Sections with Fallbacks
     header: data.header || en.header,
+    permissions: data.permissions || en.permissions,
     business: data.business || en.business,
     zones: data.zones || en.zones,
     beach_labels: data.beach_labels || en.beach_labels,
